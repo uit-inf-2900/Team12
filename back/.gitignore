@@ -51,3 +51,6 @@ Release/
 Version.cs
 Version.h
 Version.cpp
+
+# Database
+*.db
