@@ -1,7 +1,7 @@
 -- Create the "userLogIn" table
 CREATE TABLE IF NOT EXISTS userLogIn (
     userID INTEGER PRIMARY KEY,
-    userEmail TEXT,
+    userEmail TEXT UNIQUE,
     userPwd TEXT
 );
 
