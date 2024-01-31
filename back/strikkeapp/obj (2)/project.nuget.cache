@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "TWo3mRABN9Q+lz9Mbc7xMCoBH8FuOnfogf2F7TCc7RHPA9vm53M46j6MOyfO6wEiWgWn0jMKzE4pVOVo/Ag7nw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Skjalg\\source\\repos\\uit-inf-2900\\Team12\\back\\strikkeapp\\strikkeapp\\strikkeapp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Skjalg\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.14\\microsoft.aspnetcore.openapi.7.0.14.nupkg.sha512",
+    "C:\\Users\\Skjalg\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\Skjalg\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\Skjalg\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\Skjalg\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "C:\\Users\\Skjalg\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "C:\\Users\\Skjalg\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
