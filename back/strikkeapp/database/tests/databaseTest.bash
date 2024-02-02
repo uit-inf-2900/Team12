@@ -5,6 +5,11 @@ db_file="userInfoTest.db"
 sql_file="../generateDB.sql"
 sql_test="testDB.sql"
 
+if [ -f "$db_file" ]; then
+    rm "$db_file"
+    echo "$db_file has been deleted"
+fi
+
 # Create database
 sqlite3 "$db_file" < "$sql_file"
 echo "$db_file has been created"
