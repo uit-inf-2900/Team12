@@ -13,6 +13,12 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    public class CreateUserRequest
+    {
+        public string? UserEmail { get; set; }
+        public string? UserPwd { get; set; }
+    }
+
     [HttpGet]
     [Route("/test")]
     public bool Test()
@@ -24,5 +30,21 @@ public class UsersController : ControllerBase
     //[HttpGet(Route = "/login")]
     //public
 
-    //[HttpPost(Route = "/createuser")]
+    [HttpPost]
+    [Route("/createuser")]
+    public IActionResult CreateUser([FromQuery] CreateUserRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.UserEmail) || string.IsNullOrWhiteSpace(request.UserPwd))
+        {
+            return BadRequest("Missing email or password.");
+        }
+
+        var result = _userService.CreateUser(request.UserEmail, request.UserPwd);
+        if(result == -1)
+        {
+            return StatusCode(500, "Unable to proccess user");
+        }
+
+        return Ok(result);
+    }
 }
