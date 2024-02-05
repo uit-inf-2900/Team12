@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS userLogIn (
 
 
 -- Create the "userInfo" table with a foreign key reference to "userLogIn"
-CREATE TABLE IF NOT EXISTS userInfo (
+CREATE TABLE IF NOT EXISTS userDetails (
     userID INTEGER PRIMARY KEY,
     userFullName TEXT,
     userDateOfBirth INTEGER,
