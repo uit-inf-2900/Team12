@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS userDetails (
     userID INTEGER PRIMARY KEY,
     userFullName TEXT,
     userDateOfBirth INTEGER,
-    userGender TEXT CHECK (userGender IN ('male', 'female', 'non-binary')),
     userType TEXT CHECK (userType IN ('admin', 'user')),
     FOREIGN KEY (userID) REFERENCES userLogIn(userID)
 );

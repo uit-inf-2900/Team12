@@ -25,20 +25,18 @@ VALUES('invalid@uit.no', 'GreatPassword', 'invalid');
 
 -- Tests for userInfo table
 --  Valid user entry
-INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userGender, userType)
-VALUES(1, 'Skjalg Alexander Slubowski', 03032001, 'male', 'admin');
+INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userType)
+VALUES(1, 'Skjalg Alexander Slubowski', 03032001, 'admin');
 
 -- Tests for invalid user entries
 -- Invalid userID
-INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userGender, userType)
-VALUES(6969, 'Invalid User', 01012001, 'female', 'user');
+INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userType)
+VALUES(6969, 'Invalid User', 01012001, 'user');
 
--- Invalid gender
-INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userGender, userType)
-VALUES(2, 'Satan', 0606666, 'attack helicopter', 'user');
+
 
 -- Invalid userType
-INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userGender, userType)
-VALUES(3, 'Student', 01012001, 'non-binary', 'student');
+INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userType)
+VALUES(3, 'Student', 01012001, 'student');
 
--- Total errros should be 5
+-- Total errros should be 4
