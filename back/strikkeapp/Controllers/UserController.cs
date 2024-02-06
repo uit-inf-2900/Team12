@@ -48,6 +48,10 @@ public class UsersController : ControllerBase
             return BadRequest("Unable to proccess user");
             //return StatusCode(500, "Unable to proccess user");
         }
+        if(result == -2)
+        {
+            return Conflict($"{request.UserEmail} already exsits");
+        }
 
         //return Created(result);
         return Ok(result);
