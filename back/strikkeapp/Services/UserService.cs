@@ -24,66 +24,83 @@ public class UserService : IUserService
 
     public int CreateUser(string userEmail, string userPwd, string userFullName, int? userDOB, string userGender)
     {
-        // Hash password
+        // Hash user password
         var hashedPwd = HashPassword(userPwd);
-
-        // Connection to database
-        string connectionString = "Data Source=database/userInfo.db;Version=3;";
-
-
-        // Try to insert user into database
+        
         try
         {
-            int userId = -1; // Default value indicating failure
+            // Default value indicating failure
+            int userId = -1;
+
+            // Connect to and open database
+            string connectionString = "Data Source=database/userInfo.db;Version=3;";
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
                 using (var transaction = connection.BeginTransaction())
                 {
+                    // Insert into userLogIn
                     using (var command = connection.CreateCommand())
                     {
                         command.Transaction = transaction;
                         command.CommandText = @"
-                            INSERT INTO userLogIn (userEmail, userPwd, userStatus) 
-                            VALUES (@userEmail, @userPwd, @userStatus);
-                            SELECT last_insert_rowid();";
+                        INSERT INTO userLogIn (userEmail, userPwd, userStatus) 
+                        VALUES (@userEmail, @userPwd, 'unverified');
+                        SELECT last_insert_rowid();";
                         command.Parameters.AddWithValue("@userEmail", userEmail);
                         command.Parameters.AddWithValue("@userPwd", hashedPwd);
-                        command.Parameters.AddWithValue("@userStatus", "unverified");
 
+                        // Get userID is successfull
                         var q_result = command.ExecuteScalar();
                         if (q_result != null && int.TryParse(q_result.ToString(), out userId))
                         {
-                            // Clear previous parameters and add new command
+                            // Insert into userDetails
                             command.Parameters.Clear();
                             command.CommandText = @"
-                                INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userGender, userType)
-                                VALUES(@userID, @userFullName, @userDateOfBirth, @userGender, @userType);";
-
+                            INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userGender, userType)
+                            VALUES(@userID, @userFullName, @userDateOfBirth, @userGender, 'user');";
                             command.Parameters.AddWithValue("@userID", userId);
                             command.Parameters.AddWithValue("@userFullName", userFullName);
                             command.Parameters.AddWithValue("@userDateOfBirth", userDOB);
                             command.Parameters.AddWithValue("@userGender", userGender);
-                            command.Parameters.AddWithValue("@userType", "user");
 
                             command.ExecuteNonQuery();
-                            transaction.Commit(); // Commit only if everything is successful
+                            transaction.Commit();
                         }
+
+                        // Rollback on failure
                         else
                         {
-                            transaction.Rollback(); // Rollback if the first insert fails
-                            userId = -1; // Ensure userId reflects failure
+                            transaction.Rollback();
+                            userId = -1;
                         }
                     }
                 }
             }
+
             return userId;
         }
+
+        // SQLite errors
+        catch (SQLiteException ex)
+        {
+            if (ex.ErrorCode == (int)SQLiteErrorCode.Constraint)
+            {
+                // Return -2 if email already exsists
+                Console.WriteLine("User email already exists.");
+                return -2;
+            }
+            Console.WriteLine($"An SQLite error occurred: {ex.Message}");
+            return -1; // Return -1 for general SQLite errors
+        }
+
+        // Catch other errors
         catch (Exception ex)
         {
             Console.WriteLine($"An error occurred when creating user: {ex.Message}");
             return -1;
         }
-
     }
+
+
 }
