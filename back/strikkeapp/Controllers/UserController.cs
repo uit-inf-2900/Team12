@@ -19,15 +19,13 @@ public class UsersController : ControllerBase
         public string? UserPwd { get; set; }
         public string? UserFullName { get; set; }
         public int UserDOB { get; set; }
-        public string? UserGender { get; set; }
 
         // Check that request is valid
         public bool requestOK()
         {
             return (!string.IsNullOrWhiteSpace(UserEmail) &&
            !string.IsNullOrWhiteSpace(UserPwd) &&
-           !string.IsNullOrWhiteSpace(UserFullName) &&
-           !string.IsNullOrWhiteSpace(UserGender));
+           !string.IsNullOrWhiteSpace(UserFullName));
         }
     }
  
@@ -42,7 +40,7 @@ public class UsersController : ControllerBase
             return BadRequest();
         }
 
-        var result = _userService.CreateUser(request.UserEmail, request.UserPwd, request.UserFullName, request.UserDOB, request.UserGender);
+        var result = _userService.CreateUser(request.UserEmail, request.UserPwd, request.UserFullName, request.UserDOB);
         if(result == -1)
         {
             return BadRequest("Unable to proccess user");

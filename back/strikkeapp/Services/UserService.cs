@@ -5,7 +5,7 @@ namespace strikkeapp.services;
 
 public interface IUserService
 {
-    public int CreateUser(string userEmail, string userPwd, string userFullName, int? userDOB, string userGender);
+    public int CreateUser(string userEmail, string userPwd, string userFullName, int? userDOB);
 }
 
 public class UserService : IUserService
@@ -22,7 +22,7 @@ public class UserService : IUserService
         return _passwordHasher.HashPassword(null!, password);
     }
 
-    public int CreateUser(string userEmail, string userPwd, string userFullName, int? userDOB, string userGender)
+    public int CreateUser(string userEmail, string userPwd, string userFullName, int? userDOB)
     {
         // Hash user password
         var hashedPwd = HashPassword(userPwd);
@@ -57,12 +57,11 @@ public class UserService : IUserService
                             // Insert into userDetails
                             command.Parameters.Clear();
                             command.CommandText = @"
-                            INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userGender, userType)
-                            VALUES(@userID, @userFullName, @userDateOfBirth, @userGender, 'user');";
+                            INSERT INTO userDetails(userID, userFullName, userDateOfBirth, userType)
+                            VALUES(@userID, @userFullName, @userDateOfBirth, 'user');";
                             command.Parameters.AddWithValue("@userID", userId);
                             command.Parameters.AddWithValue("@userFullName", userFullName);
                             command.Parameters.AddWithValue("@userDateOfBirth", userDOB);
-                            command.Parameters.AddWithValue("@userGender", userGender);
 
                             command.ExecuteNonQuery();
                             transaction.Commit();
