@@ -33,7 +33,7 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Route("/createuser")]
-    public IActionResult CreateUser([FromQuery] CreateUserRequest request)
+    public IActionResult CreateUser([FromBody] CreateUserRequest request)
     {
         if (!request.requestOK())
         {

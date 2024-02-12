@@ -2,6 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import './Reg.css';
 import InputField from './InputField';
+import axios from 'axios';
+
 
 const SignUp = ({ toggleForm }) => {
   const { register, handleSubmit, formState: { errors }, watch, setError } = useForm();
@@ -14,6 +16,25 @@ const SignUp = ({ toggleForm }) => {
       });
       return;
     }
+
+    const dob = data.birthday.replace(/-/g, '')
+
+    const postData = {
+      userEmail: data.email,
+      userPwd: data.password,
+      userFullName: data.Name,
+      userDOB: dob
+    };
+    console.log("User DOB: ", dob)
+
+    axios.post('http://localhost:5002/createuser', postData)
+    .then(function(response){
+      console.log("Response: ", response)
+    })
+    .catch(function(error){
+      console.error("Error: ", error)
+    })
+
     console.log('Signup Data', data);
   };
 
