@@ -1,0 +1,151 @@
+
+/* Make the date and free tect look alike */
+input[type="text"], input[type="password"], input[type="email"], input[type="date"] {
+    width: 90%; /* Responsive width relative to parent */
+    padding: 10px; /* Padding inside input fields */
+    margin-bottom: 10px; /* Space below input fields */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 5px; /* Rounded corners */
+    border: white; /* Inputs in the image have no border */
+    background-color: #f7f7f7; /* Light background for the input fields */
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); /* Inner shadow for depth */
+}
+
+/*background settings*/
+body, html {
+    background-color: rgb(159, 143, 123);
+}
+
+/* container for light and dark box */
+.box-container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    height: 100vh; /* Full viewport height */
+    max-width: 70%; /* Limit max width to 70% of the viewport */
+    margin: 0 auto; /* Center the container in the viewport */
+}
+
+/*placement for small text (forgot password)*/
+.small-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*use a when writing text with this format*/
+.small-text a {
+    color: #333; /* Link color */
+    cursor: pointer; /* Show pointer cursor on hover */
+    font-size: 10px; /* Set the desired font size */
+}
+
+/*change of colour when hovering*/
+.small-text a:hover {
+    color: #8178aa;
+}
+
+/*text that appears when you have asked to reset the password (reset password msg)*/
+.larger-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*use p when writing text with this format*/
+.larger-text p {
+    color: #333; /* Link color */
+    font-size: 12px; /* Set the desired font size */
+}
+
+/* information about each background box */
+.box {
+    /* width: 50%; Each section takes up half of the container's width */
+    padding: 50px; /* Padding around the content of each section */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack child elements vertically */
+    justify-content: center; /* Center children vertically */
+    align-items: center; /* Center children horizontally */
+    transition: transform 0.5s; /* Animate position changes smoothly */
+    border-radius: 10px;
+}
+
+/* Light purple color */
+.box.light {
+    width: 50%; /* Take up half of the container's width */
+    background-color: #ebe7f1; /* Light purple background */
+    height: 30%;
+}
+
+/* Dark purple color */
+.box.dark {
+    width: 30%; /* Take up half of the container's width */
+    background-color: #b4a7ed; /* Darker purple background */
+    height: 30%;
+}
+
+/* Text color */
+.h2 {
+    color: #333; /* Dark text for headings */
+}
+
+/* Button specifications */
+button {
+    padding: 10px 15px; /* Padding inside buttons */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin: 0 auto;
+    margin-top: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+/*black button colors*/
+.black button {
+    background-color: #333; /* Dark background */
+    color: #fff; /* White text */
+}
+
+/* purple button color */
+.purple button {
+    color: #ffffff; /* Darker text for readability */
+    background-color: #b4a7ed; /* Purple background to match the section */   
+}
+
+/* Color for purple button when hovering */
+.purple button:hover {
+    background-color: #463f65; /* Darken the button on hover */
+    opacity: 0.8; /* Slight transparency on hover */
+}
+
+/* Responsive styles for smaller screens */
+@media screen and (max-width: 900px) {
+    .button {
+        width: 90%; /* Full width for each section */
+        margin-bottom: 20px; /* Add space between the sections */
+    }
+
+    /* Larger input fields on smaller screens */
+    input[type="text"], input[type="password"], input[type="email"] {
+        width: 90%;
+    }
+}
+
+/* Adjust layout for very small screens */
+@media screen and (max-width: 600px) {
+    .button {
+        width: 100%; /* Full width for each section */
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+}
+
+/* Styling for error messages */
+.errorMsg {
+    color: #f21e08; /* Bright red color for errors */
+    margin-top: 2px; /* Space above the message */
+    font-size: 15px; /* Text size */
+    font-weight: 300; /* Text weight */
+    display: flex;
+}
