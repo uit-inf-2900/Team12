@@ -8,6 +8,7 @@ namespace strikkeapp.services;
 public interface IUserService
 {
     public UserServiceResult CreateUser(string userEmail, string userPwd, string userFullName, DateTime userDOB);
+    public UserServiceResult LogInUser(string userEmail, string userPwd);
 }
 
 public class UserService : IUserService
@@ -68,6 +69,12 @@ public class UserService : IUserService
             return UserServiceResult.ForFailure(ex.Message);
         }
     }
+
+    public UserServiceResult LogInUser(string userEmail, string userPwd)
+    {
+        return null;
+    }
 }
 
+// EKSEMPEL PÅ QUERY TIL DATABASE
 // var test = _context.UserLogIn.Where(x => x.UserStatus == "verified").Select(x => x.UserId);

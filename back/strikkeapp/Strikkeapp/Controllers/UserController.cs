@@ -39,6 +39,18 @@ public class UsersController : ControllerBase
         }
     }
 
+    public class LogInUserRequest
+    {
+        public string UserEmail { get; set; } = string.Empty;
+        public string UserPwd { get; set; } = string.Empty;
+
+        public bool requestOk()
+        {
+            return (!string.IsNullOrWhiteSpace(UserEmail) &&
+                !string.IsNullOrWhiteSpace(UserPwd));
+        }
+    }
+
 
 
     [HttpPost]
@@ -63,5 +75,13 @@ public class UsersController : ControllerBase
         }
 
         return Ok(result.UserId);
+    }
+
+    [HttpGet]
+    public IActionResult LogInUser([FromBody] LogInUserRequest request)
+    {
+
+        var result = _userService.CreateUser()
+        return Ok();
     }
 }
