@@ -1,16 +1,20 @@
-﻿using strikkeapp.services;
+using Microsoft.EntityFrameworkCore;
+using strikkeapp.services;
+using Strikkeapp.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
-builder.Services.AddSingleton<IUserService, UserService>();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<StrikkeappDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -34,4 +38,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

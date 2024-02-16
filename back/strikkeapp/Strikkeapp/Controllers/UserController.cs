@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using strikkeapp.services;
 
 namespace strikkeapp.Controllers;
@@ -15,9 +15,9 @@ public class UsersController : ControllerBase
 
     public class CreateUserRequest
     {
-        public string? UserEmail { get; set; }
-        public string? UserPwd { get; set; }
-        public string? UserFullName { get; set; }
+        public string? UserEmail { get; set; } = string.Empty;
+        public string? UserPwd { get; set; } = string.Empty;
+        public string? UserFullName { get; set; } = string.Empty;
         public int UserDOB { get; set; }
 
         // Check that request is valid
@@ -27,8 +27,18 @@ public class UsersController : ControllerBase
            !string.IsNullOrWhiteSpace(UserPwd) &&
            !string.IsNullOrWhiteSpace(UserFullName));
         }
+
+        public DateTime Dob2Dt ()
+        {
+            int year = UserDOB / 10000;
+            int month = (UserDOB / 100) % 100;
+            int day = UserDOB % 100;
+
+            DateTime dob = new DateTime(year, month, day);
+            return dob;
+        }
     }
- 
+
 
 
     [HttpPost]
@@ -40,18 +50,18 @@ public class UsersController : ControllerBase
             return BadRequest();
         }
 
-        var result = _userService.CreateUser(request.UserEmail, request.UserPwd, request.UserFullName, request.UserDOB);
-        if(result == -1)
+        var result = _userService.CreateUser(request.UserEmail, request.UserPwd, request.UserFullName, request.Dob2Dt());
+        
+        if(!result.Success)
         {
-            return BadRequest("Unable to proccess user");
-            //return StatusCode(500, "Unable to proccess user");
-        }
-        if(result == -2)
-        {
-            return Conflict($"{request.UserEmail} already exsits");
+            if(result.ErrorMessage == "Email already exsits")
+            {
+                return Conflict(result.ErrorMessage);
+            }
+
+            return BadRequest(result.ErrorMessage);
         }
 
-        //return Created(result);
-        return Ok(result);
+        return Ok(result.UserId);
     }
 }
