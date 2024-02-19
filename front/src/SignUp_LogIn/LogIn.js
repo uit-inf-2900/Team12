@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import './Reg.css';
 import validator from 'validator';
 import InputField from './InputField'; 
+import axios from 'axios';
 
 const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -11,9 +12,23 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
 
     const onSubmit = (data) => {
         // console.log('Log In Data', data);
-        setApiError('');
-        setIsLoading(true);
+        //setApiError('');
+        //setIsLoading(true);
 
+        const postData = {
+            userEmail: data.email,
+            userPwd: data.password
+        }
+
+        axios.post('http://localhost:5002/login', postData)
+        .then(function(response){
+            console.log("Response: ", response)
+        })
+        .catch(function(error){
+            console.error("Error: ", error)
+        })
+
+        /*
         //  Simulate API call
         try{
             console.log('Log In Data', data);
@@ -24,6 +39,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
         finally{
             setIsLoading(false);
         }
+        */
     };
 
     return (
