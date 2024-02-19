@@ -55,7 +55,7 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Route("/createuser")]
-    public IActionResult CreateUser([FromQuery] CreateUserRequest request)
+    public IActionResult CreateUser([FromBody] CreateUserRequest request)
     {
         if (!request.requestOK())
         {
@@ -79,7 +79,7 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Route("/login")]
-    public IActionResult LogInUser([FromQuery] LogInUserRequest request)
+    public IActionResult LogInUser([FromBody] LogInUserRequest request)
     {
 
         var result = _userService.LogInUser(request.UserEmail, request.UserPwd);
