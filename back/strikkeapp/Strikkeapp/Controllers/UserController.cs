@@ -77,7 +77,7 @@ public class UsersController : ControllerBase
         return Ok(result.UserId);
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("/login")]
     public IActionResult LogInUser([FromQuery] LogInUserRequest request)
     {
@@ -85,15 +85,17 @@ public class UsersController : ControllerBase
         var result = _userService.LogInUser(request.UserEmail, request.UserPwd);
         if (!result.Success)
         {
-            if (result.ErrorMessage == "Unable to login")
+            if (result.ErrorMessage == "Invalid login attempt")
             {
-                return NotFound(result.ErrorMessage);
+                return Unauthorized(result.ErrorMessage);
             }
 
             return StatusCode(500, result.ErrorMessage);
         }
 
 
-        return Ok();
+        return Ok(new {
+            UserID = result.UserId,
+             Token = result.Token});
     }
 }
