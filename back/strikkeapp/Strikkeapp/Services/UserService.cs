@@ -97,12 +97,20 @@ public class UserService : IUserService
         {
             var loginInfo = _context.UserLogIn
                 .Where(x => x.UserEmail == userEmail)
-                .Select(x => new { x.UserPwd, x.UserId })
+                .Select(x => new {
+                    x.UserPwd, 
+                    x.UserId,  
+                    x.UserStatus})
                 .FirstOrDefault();
 
             if (loginInfo == null)
             {
                 return UserServiceResult.ForFailure("Invalid login attempt");
+            }
+
+            if(loginInfo.UserStatus == "banned")
+            {
+                return UserServiceResult.ForFailure("User is banned");
             }
 
 
