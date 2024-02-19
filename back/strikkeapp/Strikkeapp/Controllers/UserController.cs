@@ -15,9 +15,9 @@ public class UsersController : ControllerBase
 
     public class CreateUserRequest
     {
-        public string? UserEmail { get; set; } = string.Empty;
-        public string? UserPwd { get; set; } = string.Empty;
-        public string? UserFullName { get; set; } = string.Empty;
+        public string UserEmail { get; set; } = string.Empty;
+        public string UserPwd { get; set; } = string.Empty;
+        public string UserFullName { get; set; } = string.Empty;
         public int UserDOB { get; set; }
 
         // Check that request is valid
@@ -55,7 +55,7 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     [Route("/createuser")]
-    public IActionResult CreateUser([FromBody] CreateUserRequest request)
+    public IActionResult CreateUser([FromQuery] CreateUserRequest request)
     {
         if (!request.requestOK())
         {
@@ -78,10 +78,22 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult LogInUser([FromBody] LogInUserRequest request)
+    [Route("/login")]
+    public IActionResult LogInUser([FromQuery] LogInUserRequest request)
     {
 
-        var result = _userService.CreateUser()
+        var result = _userService.LogInUser(request.UserEmail, request.UserPwd);
+        if (!result.Success)
+        {
+            if (result.ErrorMessage == "Unable to login")
+            {
+                return NotFound(result.ErrorMessage);
+            }
+
+            return StatusCode(500, result.ErrorMessage);
+        }
+
+
         return Ok();
     }
 }

@@ -16,10 +16,10 @@ public class UserService : IUserService
     private readonly StrikkeappDbContext _context;
     private readonly PasswordHasher<object> _passwordHasher = new PasswordHasher<object>();
 
-    private string HashPassword(string password)
+    private string HashPassword(string email, string password)
     {
         // Return hased password
-        return _passwordHasher.HashPassword(null!, password);
+        return _passwordHasher.HashPassword(email, password);
     }
 
     public UserService(StrikkeappDbContext context)
@@ -48,7 +48,7 @@ public class UserService : IUserService
 
             var userLogin = new UserLogIn();
             userLogin.UserEmail = userEmail;
-            var hasedPwd = HashPassword(userPwd);
+            var hasedPwd = HashPassword(userEmail, userPwd);
             userLogin.UserPwd = hasedPwd;
 
             _context.UserLogIn.Add(userLogin);
@@ -64,6 +64,7 @@ public class UserService : IUserService
 
             return UserServiceResult.ForSuccess(userLogin.UserId);
         }
+
         catch(DbUpdateException ex)
         {
             return UserServiceResult.ForFailure(ex.Message);
@@ -72,7 +73,35 @@ public class UserService : IUserService
 
     public UserServiceResult LogInUser(string userEmail, string userPwd)
     {
-        return null;
+        try
+        {
+            var loginInfo = _context.UserLogIn
+                .Where(x => x.UserEmail == userEmail)
+                .Select(x => new {x.UserPwd, x.UserId})
+                .FirstOrDefault();
+
+            if(loginInfo == null)
+            {
+                return UserServiceResult.ForFailure("Unable to login");
+            }
+
+
+            var res = _passwordHasher.VerifyHashedPassword(userEmail, loginInfo.UserPwd, userPwd);
+
+            switch (res)
+            {
+                case PasswordVerificationResult.Success:
+                    return UserServiceResult.ForSuccess(loginInfo.UserId);
+
+                default:
+                    return UserServiceResult.ForFailure("Unable to login");
+            } 
+        }
+
+        catch (DbUpdateException ex)
+        {
+            return UserServiceResult.ForFailure(ex.Message);
+        }
     }
 }
 
