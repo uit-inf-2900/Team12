@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import LogIn from './SignUp_LogIn/LogIn';
-import SignUp from './SignUp_LogIn/SignUp';
-import ResetPassword from './SignUp_LogIn/ResetPassword';
-import NavBar from './SignUp_LogIn/NavBar'
+import LogIn from './pages/SignUp_LogIn/LogIn';
+import SignUp from './pages/SignUp_LogIn/SignUp';
+import ResetPassword from './pages/SignUp_LogIn/ResetPassword';
+import NavBar from './NavBar'
 import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 
-import {About} from './SignUp_LogIn/pages/about'
-import {Home} from './SignUp_LogIn/pages/home'
+import {About} from './pages/about'
+import {Home} from './pages/home'
 
 
 export default function App() {
