@@ -1,9 +1,12 @@
 import React from "react";
+import "./SignUp_LogIn/Reg.css";
+
+
 
 export const About = () => {
   return (
     <div>
-      <h1>About</h1>
+      <header className="larger-text">About </header>      {/* Rest of the content */}
     </div>
   );
 };

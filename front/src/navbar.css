@@ -35,13 +35,6 @@
     --font-medium: 600;
     --font-semi-bold: 800;
 
-
-
-
-
-
-
-
 }
 
 @media screen and (min-width: 1023px) {
@@ -276,7 +269,6 @@ img{
 .login-title{
     font-size: var(--h2-font-size);
     color: var(--main-color);
-    
 }
 
 .login-group{

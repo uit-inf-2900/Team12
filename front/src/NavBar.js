@@ -11,7 +11,7 @@ const NavBar = () => {
           <li className="nav-item"><NavLink to="/" className="nav-link">Home</NavLink></li>
           <li className="nav-item"><NavLink to="/about" className="nav-link">About</NavLink></li>
           <li className="nav-item"><NavLink to="/oppskrifter" className="nav-link">Oppskrifter</NavLink></li>
-          <li className="nav-item"><NavLink to="/garnlager" className="nav-link">Garnlager</NavLink></li>
+          <li className="nav-item"><NavLink to="/stash" className="nav-link">Garnlager</NavLink></li>
           <li className="nav-item"><NavLink to="/kontaktoss" className="nav-link">Kontakt oss</NavLink></li>
           {/* Add more navigation items */}
         </ul>

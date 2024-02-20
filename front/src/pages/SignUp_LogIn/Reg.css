@@ -13,7 +13,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="dat
 
 /*background settings*/
 body, html {
-    background-color: rgb(159, 143, 123);
+    background-color: rgb(232, 225, 216);
 }
 
 /* container for light and dark box */
@@ -50,6 +50,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 100px;
 }
 
 /*use p when writing text with this format*/

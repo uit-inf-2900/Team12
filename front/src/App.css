@@ -7,6 +7,21 @@
   pointer-events: none;
 }
 
+/* App.css or a global CSS file */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 110vh; /* Take full height of the viewport */
+  overflow: hidden; /* Hide any overflow content */
+}
+
+.content-container {
+  padding-top: var(--header-height); /* Use the variable */
+  overflow-y: auto; /* Ensure content is scrollable */
+  height: calc(100vh - var(--header-height)); /* Adjust height to take full height minus navbar */
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -28,7 +43,7 @@
   color: #61dafb;
 }
 .pages {
-  color: #316685;
+  color: #f3f5f6;
   text-align: center;
   font-size: 3.5rem;
   margin-top: 10%;
