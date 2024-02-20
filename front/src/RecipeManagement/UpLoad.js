@@ -4,31 +4,30 @@ import { IoIosCloudUpload } from "react-icons/io"; // Import the icon
 
 const UpLoad = ({ onClose }) => {
     const [files, setFiles] = useState([]);                     // State to keep track of files
-    const [uploadProgress, setUploadProgress] = useState({});   // State to track upload progress (NOT WORKING)
+    const [uploadStatus, setUploadStatus] = useState({});   // State to track upload progress (NOT WORKING)
     const fileInputRef = useRef(null);                          // Ref for file input
 
-    // Function to handle file selection and update the state
-    const handleFiles = (selectedFiles) => {
-        // Initialize progress state
-        const initialProgress = {};
-        for (const file of selectedFiles) {
-            initialProgress[file.name] = 0; // Start with 0% for each file
-        }
-        setUploadProgress(initialProgress);
+
+    // Handles the selection of files and sets up initial upload progress
+    const handleFileSelection = (event) => {
+        const selectedFiles = event.target.files;
+        const fileStatuses = {};
+        Array.from(selectedFiles).forEach(file => {
+            fileStatuses[file.name] = { progress: 0, complete: false }; // Initial progress is 0
+        });
+        setUploadStatus(fileStatuses);
         setFiles(selectedFiles);
     };
 
     // Handle the file upload
     const uploadFiles = () => {
-        files.forEach(file => {
-            // TODO: Implement file upload logic
-        });
+        // TODO: Implement file upload logic
     };
 
     // Function to clear the file list
     const clearFiles = () => {
         setFiles([]);
-        setUploadProgress({});
+        setUploadStatus({});
     };
 
     return (
@@ -40,19 +39,20 @@ const UpLoad = ({ onClose }) => {
                     <input 
                         ref={fileInputRef}
                         type="file" 
-                        onChange={(e) => handleFiles(e.target.files)} 
+                        onChange={handleFileSelection} 
                         multiple 
                         style={{ display: 'none' }} // Hide the input - must do it like this to only be able to click the icon for uploading 
                     />
                     {/* <p>Upload Files</p> */}
                 </div>
+                
                 <div className="file-list-container">
                     {Array.from(files).map((file, index) => (
                         <div key={index} className="file-item">
                             <span className="file-name">{file.name}</span>
                             <div className="file-progress">
                                 <div className="progress-bar">
-                                    <div className="progress" style={{ width: `${uploadProgress[file.name]}%`, backgroundColor: uploadProgress[file.name] === 100 ? 'purple' : '' }}></div>
+                                    <div className="progress" style={{ width: `${uploadStatus[file.name]}%`, backgroundColor: uploadStatus[file.name] === 100 ? 'purple' : '' }}></div>
                                 </div>
                             </div>
                         </div>
