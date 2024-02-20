@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import './Reg.css';
-import InputField from './InputField'; 
+import InputField from './InputField';
+import { Link } from 'react-router-dom';
+
 
 
 const ResetPassword = ({ toggleForm }) => {
@@ -44,7 +46,7 @@ const ResetPassword = ({ toggleForm }) => {
                     
                     {!isValidEmail && (
                         <div className='small-text'>
-                            <a href="#" onClick={toggleForm}>Log In</a>
+                            <Link to="/login" className="forgot-password-link">Log In</Link>
                         </div>
                     )}
                     

@@ -4,9 +4,14 @@ import './Reg.css';
 import validator from 'validator';
 import InputField from './InputField'; 
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 
 const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
+    
     // const [isLoading, setIsLoading] = useState(false);
     // const [apiError, setApiError] = useState('');
 
@@ -65,7 +70,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         aria-label="Password"
                     />
                     <div className='small-text'>
-                        <a href="#" onClick={onForgotPasswordClick}>Forgot password?</a>
+                        <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
                     </div>
 
                     <div className="purple">
@@ -78,7 +83,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                 <h2>Hello, Friend!</h2>
                 <p>Enter your personal details and start journey with us</p>
                 <div className='black'>
-                    <button onClick={toggleForm}>Don't have an account? Sign Up</button>
+                    <button onClick={() => navigate('/signup')}>Don't have an account? Sign Up</button>
                 </div>
             </div>
         </div>

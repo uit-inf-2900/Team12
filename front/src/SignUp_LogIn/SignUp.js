@@ -1,11 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import './Reg.css';
 import InputField from './InputField';
 import axios from 'axios';
 
 
 const SignUp = ({ toggleForm }) => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch, setError } = useForm();
 
   const onSubmit = (data) => {
@@ -44,7 +46,7 @@ const SignUp = ({ toggleForm }) => {
         <h2>Hello, Friend!</h2>
         <p>Already have an account?</p>
         <div className='black'>
-          <button onClick={toggleForm} className="signin-button"> Log in</button>
+          <button onClick={() => navigate('/login')}>Log in</button>
         </div>
       </div>
       <div className="box light">
