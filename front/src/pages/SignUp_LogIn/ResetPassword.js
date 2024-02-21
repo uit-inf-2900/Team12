@@ -3,12 +3,15 @@ import { useForm } from 'react-hook-form';
 import './Reg.css';
 import InputField from './InputField';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 
 
 const ResetPassword = ({ toggleForm }) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isValidEmail, setIsValidEmail] = useState(false);
+    const navigate = useNavigate();
 
     const onSubmit = (data) => {
         console.log('Forgot Password Data', data);
@@ -52,7 +55,7 @@ const ResetPassword = ({ toggleForm }) => {
                     
                     <div className='purple'>
                         {isValidEmail ? (
-                            <button type='submit' onClick={toggleForm}>Log In</button>
+                            <button type='button' onClick={() => navigate('/login')}>Log In</button>
                         ) : (
                             <button type="submit">Reset Password</button>
                         )}

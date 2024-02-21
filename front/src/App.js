@@ -16,10 +16,9 @@ import Recipes from './pages/RecipeManagement/Recipes';
 
 export default function App() {
 
-  // ENDRE DENNE TIL FALSE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET UT 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  // ENDRE DENNE TIL FALSE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET UT OG TRUE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET INN
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Enkel funksjon for å simulere utlogging
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem('isLoggedIn'); // Oppdater localStorage
