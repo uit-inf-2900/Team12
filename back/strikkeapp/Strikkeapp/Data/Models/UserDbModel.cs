@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace Strikkeapp.Data.Models
 {
     public class UserLogIn
@@ -61,5 +62,19 @@ namespace Strikkeapp.Data.Models
             }
             return new ValidationResult("Invalid type");
         }
+    }
+
+    public class KnittingRecipes
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int KnittingRecipeId { get; set; }
+
+        [Required]
+        [ForeignKey("UserLogIn")]
+        public int UserId { get; set;}
+
+        [Required]
+        public byte[]? RecipePDF { get; set;}
     }
 }
