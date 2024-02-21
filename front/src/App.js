@@ -11,7 +11,7 @@ import {Stash} from './pages/stash'
 import ResetPassword from './pages/SignUp_LogIn/ResetPassword';
 import LogIn from './pages/SignUp_LogIn/LogIn';
 import SignUp from './pages/SignUp_LogIn/SignUp';
-import Recipes from './RecipeManagement/Recipes';
+import Recipes from './pages/RecipeManagement/Recipes';
 
 
 export default function App() {
