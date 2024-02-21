@@ -47,8 +47,7 @@ const UpLoad = ({ onClose }) => {
                             ref={fileInputRef}
                             type="file" 
                             onChange={handleFileSelection} 
-                            // multiple             // Allow multiple files to be uploaded at once (not needed)
-                            // accept='.pdf, .jpg, .jpeg, .png, .svg'
+                            accept='.pdf, .jpg, .jpeg, .png, .svg'      // Can only choose from these types 
                             style={{ display: 'none' }}
                         />
                         {uploadStatus.fileName && <p>{uploadStatus.fileName}</p>}
@@ -59,7 +58,7 @@ const UpLoad = ({ onClose }) => {
                         <input name="recipeName" placeholder="Navn på oppskrift" onChange={handleInputChange} />
                         <input name="author" placeholder="Forfatter" onChange={handleInputChange} />
                         <input name="needleSize" placeholder="Pinnestørrelse" onChange={handleInputChange} />
-                        <input name="knittingGauge" placeholder="Strikke fasthet" onChange={handleInputChange} />
+                        <input name="knittingGauge" placeholder="Strikke fasthet (XX/XX)" onChange={handleInputChange} />
                         <textarea name="notes" placeholder="Notater" onChange={handleInputChange}></textarea>
                     </div>
                 </div>

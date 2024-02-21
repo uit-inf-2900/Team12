@@ -30,6 +30,7 @@ export default function App() {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/stash" element={<Stash />} />
             <Route path="/recipes" element={<Recipes />} />
+            {/* <Route path="/profile" element={<Profile>} /> */}
             {/* Add more routes as needed */}
           </Routes>
         </div>

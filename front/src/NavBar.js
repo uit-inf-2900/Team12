@@ -13,6 +13,7 @@ const NavBar = () => {
           <li className="nav-item"><NavLink to="/recipes" className="nav-link">Oppskrifter</NavLink></li>
           <li className="nav-item"><NavLink to="/stash" className="nav-link">Garnlager</NavLink></li>
           <li className="nav-item"><NavLink to="/kontaktoss" className="nav-link">Kontakt oss</NavLink></li>
+          <li className="nav-item"><NavLink to="/profile" className="nav-link">Profile</NavLink></li>
           {/* Add more navigation items */}
         </ul>
         <div className="nav-items">
