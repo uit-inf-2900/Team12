@@ -17,6 +17,8 @@
     border-radius: 10px;
     width: 80%;
     max-width: 500px;
+    display: flex;
+    flex-direction: column;
 }
 
 .UpLoad-close {
@@ -25,6 +27,7 @@
     background: none;
     font-size: 1.5rem;
 }
+
 
 .UpLoad-area {
     border-radius: 50%; 
@@ -44,6 +47,21 @@
     width: 100px;
     height: auto;
     
+}
+.upload-flex-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: start; /* Juster elementene til toppen */
+    width: 100%; /* Bruk hele bredden for å tillate plass på siden */
+}
+
+
+.recipe-info-form {
+    /* Stil for skjemaet */
+    flex-basis: 50%; /* Juster etter behov */
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px; /* Legg til litt padding */
 }
 
 .UpLoad-input {
@@ -101,4 +119,15 @@
     height: 8px;
     border-radius: 5px;
     transition: width 0.3s ease;
+}
+
+.recipe-info-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px; /* Juster etter behov */
+}
+
+.recipe-info-form input,
+.recipe-info-form textarea {
+    margin-bottom: 10px;
 }
