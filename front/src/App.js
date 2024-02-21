@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 import './App.css';
 
@@ -15,23 +15,37 @@ import Recipes from './pages/RecipeManagement/Recipes';
 
 
 export default function App() {
+
+  // ENDRE DENNE TIL FALSE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET UT 
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  // Enkel funksjon for å simulere utlogging
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn'); // Oppdater localStorage
+  };
+
   return (
     <Router>
-      {/* Navbar for the css */}
-      <div className="app-container" > {/* New wrapper for Flex layout */}
-        <NavBar /> 
-        <div className="content-container"> {/* Container for the main content */}   
-        {/* Routes for the different pages */}
+      <div className="app-container">
+        <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+        <div className="content-container">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/signup" element={<SignUp />} />
+            {!isLoggedIn ? (
+              <>
+                <Route path="/login" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
+                <Route path="/signup" element={<SignUp />} />
+              </>
+            ) : (
+              <>
+                <Route path="/stash" element={<Stash />} />
+                <Route path="/recipes" element={<Recipes />} />
+                {/* <Route path="/profile" element={<Profile />} /> Legg til din profilside her */}
+              </>
+            )}
             <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/stash" element={<Stash />} />
-            <Route path="/recipes" element={<Recipes />} />
-            {/* <Route path="/profile" element={<Profile>} /> */}
-            {/* Add more routes as needed */}
           </Routes>
         </div>
       </div>
