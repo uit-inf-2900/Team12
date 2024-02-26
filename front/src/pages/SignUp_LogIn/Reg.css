@@ -16,6 +16,8 @@ body, html {
     background-color: rgb(232, 225, 216);
 }
 
+
+
 /* container for light and dark box */
 .box-container {
     display: flex; /* Use flexbox for layout */
@@ -150,3 +152,21 @@ button {
     font-weight: 300; /* Text weight */
     display: flex;
 }
+
+
+/* ----------------------- ABOUT  -----------------------*/
+.team-member {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .team-member-info {
+    flex: 1;
+  }
+  
+  .team-member-image {
+    width: 150px; /* Juster størrelsen etter behov */
+    height: auto;
+    margin-left: 20px; /* Legg til mellomrom mellom bildet og teksten */
+  }
+  
