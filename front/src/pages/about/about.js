@@ -7,18 +7,6 @@ import TeamImage2 from "../../images/6.png";
 
 
 
-const FAQItem = ({ question, answer }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="faq-item">
-      <button className="faq-question" onClick={() => setIsOpen(!isOpen)}>
-        {question}
-      </button>
-      {isOpen && <div className="faq-answer">{answer}</div>}
-    </div>
-  );
-};
 
 
 export const About = () => {
@@ -45,14 +33,6 @@ export const About = () => {
       </div>
 
 
-      {/* Ofte Stilte Spørsmål (FAQ) Seksjon */}
-      <section className="faq-section">
-        <h2>Ofte Stilte Spørsmål (FAQ)</h2>
-        <FAQItem question="Hvordan starter jeg et nytt prosjekt?" answer="For å starte et nytt prosjekt, gå til din prosjektplanlegger og klikk på 'Legg til nytt prosjekt'." />
-        <FAQItem question="Hvordan kan jeg lagre mine favorittoppskrifter?" answer="Oppskrifter kan lagres ved å klikke på 'Lagre som favoritt' under hver oppskrift." />
-        <FAQItem question="Hva gjør jeg hvis jeg glemmer passordet mitt?" answer="Klikk på 'Glemt passord?' på innloggingssiden for å tilbakestille passordet ditt." />
-        {/* Legg til flere FAQItem komponenter etter behov */}
-      </section>
 
       {/* Team-members */}
       <h2>Møt Teamet Bak Magien</h2>

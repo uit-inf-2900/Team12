@@ -12,6 +12,7 @@ import ResetPassword from './pages/SignUp_LogIn/ResetPassword';
 import LogIn from './pages/SignUp_LogIn/LogIn';
 import SignUp from './pages/SignUp_LogIn/SignUp';
 import Recipes from './pages/RecipeManagement/Recipes';
+import ContactUs from './pages/ContactUs/ContactUs';
 
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
+            <Route path="/kontaktoss" element={<ContactUs />} />
             {!isLoggedIn ? (
               <>
                 <Route path="/login" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />

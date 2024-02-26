@@ -64,7 +64,7 @@ const SignUp = ({ toggleForm }) => {
           {/* Use InputField component for Email input */}
           <InputField
             placeholder="Email"
-            type="text"
+            type="email"
             register={register("email", {
               required: "Email is required.",
               pattern: {
@@ -80,7 +80,7 @@ const SignUp = ({ toggleForm }) => {
             placeholder="Birthday"
             type="text"
             register={register("birthday", {
-              required: "Birthday is required.",
+              required: "Birthday is required  (YYYY-MM-DD).",
               validate: (value) => {
                 const regex = /^\d{4}-\d{2}-\d{2}$/;
                 if (!regex.test(value)) {
