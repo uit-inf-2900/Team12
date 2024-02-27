@@ -2,81 +2,141 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
 
 import "../SignUp_LogIn/Reg.css";
-import TeamImage1 from "../../images/5.png"; 
+import "./about.css";
+import TeamImage1 from "../../images/stash.png"; 
 import TeamImage2 from "../../images/6.png"; 
 
+import YarnSheep from "../../images/yarnSheep.png";
+import Basked from "../../images/yarnBasket.png";
+import Books from "../../images/books.png";
+import Planning from "../../images/reading.png";
 
+// FeatureItem component for the features section of About page
+const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
+  const imageToLeft = imagePosition === "left";
+  return (
+    <div className={`feature-item ${imageToLeft ? "image-left" : "image-right"}`}>
+      {!imageToLeft && <img src={imageSrc} alt={title} className="feature-image" />}
+      <div className="feature-info">
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </div>
+      {imageToLeft && <img src={imageSrc} alt={title} className="feature-image" />}
+    </div>
+  );
+};
 
+// TeamMember component for the team section of About page 
+const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
+  const imageToLeft = imagePosition === "left";
+  return (
+    <div className={`team-member ${imageToLeft ? "image-left" : "image-right"}`}>
+      {imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
+      <div className="team-member-info">
+        <h3>{name}</h3>
+        <p>Rolle: {role}</p>
+        <p>Bakgrunn: {background}</p>
+      </div>
+      {!imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
+    </div>
+  );
+};
 
 
 export const About = () => {
   return (
-    <div>
-      <h1 className="larger-text">Om Oss</h1>
-      <p>Velkommen til vår nettside, en nettside du som strikker kanskje ikke visste at du trengte. Men fra det øyeblikket du begynner å bruke den, vil du se hvor mye enklere og mer berikende din strikkeopplevelse kan bli.</p>
-      <p>I en verden hvor kreativitet og organisering går hånd i hånd, har vi skapt en plattform som ikke bare forenkler måten du håndterer dine strikkeprosjekter på, men også inspirerer til ny innovasjon innen håndarbeid.</p>
+    <div className="about-page-container">
+      <h1>
+        Om Oss
+      </h1>
+
+      {/* Short intro section  */}
+      <div className="about-intro-section">
+      <section >
+        <p>Velkommen til vår nettside, en nettside du som strikker kanskje ikke visste at du trengte. Men fra det øyeblikket du begynner å bruke den, vil du se hvor mye enklere og mer berikende din strikkeopplevelse kan bli.</p>
+        <p>I en verden hvor kreativitet og organisering går hånd i hånd, har vi skapt en plattform som ikke bare forenkler måten du håndterer dine strikkeprosjekter på, men også inspirerer til ny innovasjon innen håndarbeid.</p>
+      </section>
+      </div>
+
 
       <h2>Fantastiske funksjoner:</h2>
-      <ul>
-        <li>Garnlageret: Hold orden på garnsamlingen din.</li>
-        <li>Strikkepinne lager: Hold orden på Strikkepinnene dine, og få full oversikt over hvilke strikkepinner som er i bruk.</li>
-        <li>Oppskriftsbibliotek: Tilgang til et bredt utvalg av oppskrifter.</li>
-        <li>Prosjektplanlegger: Organiser dine strikkeprosjekter.</li>
-        <li>Notater: Ta notater som du får tilgang på til alle oppskriftene dine</li>
-      </ul>
+      <section className="features-container">
+      <FeatureItem
+        imageSrc={YarnSheep}
+        title="Garnlageret"
+        description="Hold orden på garnsamlingen din."
+      />
+      <FeatureItem
+        imagePosition = "left"
+        imageSrc={Basked}
+        title="Strikkepinne lager"
+        description="Hold orden på Strikkepinnene dine, og få full oversikt over hvilke strikkepinner som er i bruk."
+      />
+      <FeatureItem
+        imageSrc={Books}
+        title="Oppskriftsbibliotek"
+        description="Tilgang til et bredt utvalg av oppskrifter."
+      />
+      <FeatureItem
+        imagePosition = "left"
+        imageSrc={Planning}
+        title="Prosjektplanlegger"
+        description="Organiser dine strikkeprosjekter."
+      />
+      <FeatureItem
+        imageSrc={TeamImage1}
+        title="Notater"
+        description="Ta notater som du får tilgang på til alle oppskriftene dine."
+      />
+    </section>
+
+    
+
 
       {/* Button for registration */}
-      <div className="signup-button-container">
+      <div className="purple">
         <Link to="/signup">
           <button className="signup-button">Registrer Deg Nå</button>
         </Link>
       </div>
 
 
-
       {/* Team-members */}
       <h2>Møt Teamet Bak Magien</h2>
-      <div className="team-member">
-        <img src={TeamImage1} alt="Team Member" className="team-member-image" />
-        <div className="team-member-info">
-          <h3>Eline</h3>
-          <p>Rolle: Rolle i Prosjektet</p>
-          <p>Bakgrunn: Kort beskrivelse av bakgrunn og ekspertise</p>
-        </div>
-      </div>
-      <div className="team-member">
-        <div className="team-member-info">
-          <h3>Emilie</h3>
-          <p>Rolle: Rolle i Prosjektet</p>
-          <p>Bakgrunn: Kort beskrivelse av bakgrunn og ekspertise</p>
-        </div>
-        <img src={TeamImage2} alt="Team Member" className="team-member-image" />
-      </div>
-      <div className="team-member">
-      <img src={TeamImage1} alt="Team Member" className="team-member-image" />
-        <div className="team-member-info">
-          <h3>Marie</h3>
-          <p>Rolle: Rolle i Prosjektet</p>
-          <p>Bakgrunn: Kort beskrivelse av bakgrunn og ekspertise</p>
-        </div>
-      </div>
-      <div className="team-member">
-        <div className="team-member-info">
-          <h3>Sera</h3>
-          <p>Rolle: Rolle i Prosjektet</p>
-          <p>Bakgrunn: Kort beskrivelse av bakgrunn og ekspertise</p>
-        </div>
-        <img src={TeamImage2} alt="Team Member" className="team-member-image" />
-      </div>
-      <div className="team-member">
-        <img src={TeamImage1} alt="Team Member" className="team-member-image" />
-        <div className="team-member-info">
-          <h3>Skjalg</h3>
-          <p>Rolle: Rolle i Prosjektet</p>
-          <p>Bakgrunn: Kort beskrivelse av bakgrunn og ekspertise</p>
-        </div>
-      </div>
-
+      <section className="about-team-section">
+        <TeamMember
+          name="Eline"
+          role="Rolle i Prosjektet"
+          background="Kort beskrivelse av bakgrunn og ekspertise"
+          imageSrc={TeamImage1}
+        />
+        <TeamMember
+          imagePosition = "left"
+          name="Emilie"
+          role="Rolle i Prosjektet"
+          background="Kort beskrivelse av bakgrunn og ekspertise"
+          imageSrc={TeamImage2}
+        />
+        <TeamMember
+          imageSrc={TeamImage1}
+          name="Marie"
+          role="Rolle i Prosjektet"
+          background="Kort beskrivelse av bakgrunn og ekspertise"
+        />
+        <TeamMember
+          imagePosition = "left"
+          imageSrc={TeamImage2}
+          name="Sera"
+          role="Rolle i Prosjektet"
+          background="Kort beskrivelse av bakgrunn og ekspertise"
+        />
+        <TeamMember
+          imageSrc={TeamImage2}
+          name="Skjalg"
+          role="Rolle i Prosjektet"
+          background="Kort beskrivelse av bakgrunn og ekspertise"
+        />
+      </section>
       
     </div>
     
