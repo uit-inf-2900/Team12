@@ -11,6 +11,9 @@ import Basked from "../../images/yarnBasket.png";
 import Books from "../../images/books.png";
 import Planning from "../../images/reading.png";
 
+import { getImageByName } from '../../images/getImageByName';
+
+
 // FeatureItem component for the features section of About page
 const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
@@ -62,29 +65,29 @@ export const About = () => {
       <h2>Fantastiske funksjoner:</h2>
       <section className="features-container">
       <FeatureItem
-        imageSrc={YarnSheep}
+        imageSrc={getImageByName('yarnSheep')}
         title="Garnlageret"
         description="Hold orden på garnsamlingen din."
       />
       <FeatureItem
         imagePosition = "left"
-        imageSrc={Basked}
+        imageSrc={getImageByName('yarnBasket')}
         title="Strikkepinne lager"
         description="Hold orden på Strikkepinnene dine, og få full oversikt over hvilke strikkepinner som er i bruk."
       />
       <FeatureItem
-        imageSrc={Books}
+        imageSrc={getImageByName('books')}
         title="Oppskriftsbibliotek"
         description="Tilgang til et bredt utvalg av oppskrifter."
       />
       <FeatureItem
         imagePosition = "left"
-        imageSrc={Planning}
+        imageSrc={getImageByName('reading')}
         title="Prosjektplanlegger"
         description="Organiser dine strikkeprosjekter."
       />
       <FeatureItem
-        imageSrc={TeamImage1}
+        imageSrc={getImageByName('openBook')}
         title="Notater"
         description="Ta notater som du får tilgang på til alle oppskriftene dine."
       />
@@ -109,7 +112,7 @@ export const About = () => {
           name="Eline"
           role="Rolle i Prosjektet"
           background="Kort beskrivelse av bakgrunn og ekspertise"
-          imageSrc={TeamImage1}
+          imageSrc={getImageByName('yarnSheep')}
         />
         <TeamMember
           imagePosition = "left"
@@ -119,14 +122,14 @@ export const About = () => {
           imageSrc={TeamImage2}
         />
         <TeamMember
-          imageSrc={TeamImage1}
+          imageSrc={getImageByName('huggingYarn')}
           name="Marie"
           role="Rolle i Prosjektet"
           background="Kort beskrivelse av bakgrunn og ekspertise"
         />
         <TeamMember
           imagePosition = "left"
-          imageSrc={TeamImage2}
+          imageSrc={getImageByName('knitting')}
           name="Sera"
           role="Rolle i Prosjektet"
           background="Kort beskrivelse av bakgrunn og ekspertise"
