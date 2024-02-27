@@ -12,7 +12,10 @@
 
 /* Section Styles */
 /* Applies to all major sections for consistent spacing and alignment */
-.about-intro-section, .about-features-section, .about-team-section, .features, .features-container {
+.about-intro-section, 
+.about-team-section,  
+.features-container, 
+.feature-info {
     margin: 0 auto;
     max-width: 550px; /* Set a max-width that fits your design */
     margin-bottom: 50px; /* Adds spacing between sections for better readability */
@@ -32,14 +35,14 @@
 
 
 /* Team Member Info Styles */
-.team-member-info, .feature-info p{
+.team-member-info, .feature-info {
     flex: 1;
     max-width: 400px; /* Ensures text does not stretch too wide */
     
 }
 
 /* Team Member Image Styles */
-.team-member-image, .feature-item img {
+.team-member-image, .feature-image {
     width: 150px; /* Standardizes image size */
     border-radius: 50%; /* Rounds the corners for a circular shape */
 }
