@@ -9,14 +9,15 @@
 /* ------------- CONTACT INFO  ------------- */
 /* Overall form layout */
 .contact-form-box {
-    flex: 0 0 50%; /* Deler halvparten av bredden av flex container */
     height: 100%; /* Sett høyden til 100% av foreldrecontaineren */
     padding: 50px;
-    margin: 20px 0;
     background-color: var(--main-light); /* Lett bakgrunnsfarge */
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
 }
 
-
+/* Message box */
 .contact-form-container {
     max-width: 800px;
     margin: 0 auto;
@@ -24,24 +25,29 @@
     font-family: var( --body-font); 
     font-size: var(--normal-font-size);
     display: flex;
+    flex-direction: row;
+    align-items: stretch;
     justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Tillat vikling til neste linje hvis nødvendig */
+    flex-wrap: wrap; 
 }
 
 /* Style for contact details */
 .contact-details {
-    flex: 0 0 50%; /* Deler halvparten av bredden av flex container */
     margin-bottom: 2em;
     text-align: left;
     color: var(--primary-color);
-    height: 100%; /* Sett høyden til 100% av foreldrecontaineren */
-
+    height: 100%; 
 }
+
+/* contactdetails and message box takes 50/50 of the screen */
+.contact-details, .contact-form-box {
+    flex: 1;
+}
+
 
 /* Style for the contact details */
 .contact-details p {
-    margin: 10px 0; /* add more space around */
+    margin: 10px 0; 
 }
 
 /* For the links in the contact details */
@@ -56,15 +62,14 @@
     border-bottom: 1px solid;
 }
 
+/* Image under contact details */
 .contact-image {
     max-width: 70%; 
     height: auto;
-    display: block; /* Sett bildet som et blokkelement */
-    padding: 0; /* Fjern padding */
-    margin-right: 10px; /* Juster høyremargen etter behov */
+    display: block; 
+    padding: 0; 
     float: left;
 }
-
 
 
 
@@ -73,6 +78,7 @@
     padding-top: 2rem;
 }
 
+/* The questions that are displayes */
 .faq-question {
     background: none;
     color: var(--primary-color);
@@ -84,6 +90,7 @@
     color: var(--shadow-color);
 }
 
+/* The answers to the questions */
 .faq-answer {
     margin-left: 20px;
     padding-bottom: 1rem;
