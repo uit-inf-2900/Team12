@@ -2,9 +2,12 @@
 
 
 /* Make the date and free tect look alike */
-input[type="text"], input[type="password"], input[type="email"], input[type="date"] {
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="date"] {
     width: 90%; /* Responsive width relative to parent */
-    padding: 10px; /* Padding inside input fields */
+    padding: 10px 15px; /* Padding inside input fields */
     margin-bottom: 10px; /* Space below input fields */
     border: 1px solid #ccc; /* Light grey border */
     border-radius: 5px; /* Rounded corners */
@@ -157,46 +160,4 @@ button {
 
 
 /* ----------------------- ABOUT  -----------------------*/
-.team-member {
-    display: flex;
-    margin-bottom: 20px;
-  }
-  
-  .team-member-info {
-    flex: 1;
-  }
-  
-  .team-member-image {
-    width: 150px; /* Juster størrelsen etter behov */
-    height: auto;
-    margin-left: 20px; /* Legg til mellomrom mellom bildet og teksten */
-  }
 
-  .faq-item {
-    margin-bottom: 10px;
-  }
-  
-  .faq-question {
-    background-color: var(--main-color); 
-    color: white;
-    cursor: pointer;
-    padding: 10px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: background-color 0.4s ease;
-  }
-  
-  .faq-question:hover {
-    background-color: #463f65; /* Darken the button on hover */
-    opacity: 0.8; /* Slight transparency on hover */
-  }
-  
-  .faq-answer {
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-left: 3px solid var(--main-color);
-  }
-  

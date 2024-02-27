@@ -1,37 +1,95 @@
-.kontaktOss-container {
+@import url('../../navbar.css');
+
+.title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+}
+
+/* ------------- CONTACT INFO  ------------- */
+/* Overall form layout */
+.contact-form-box {
+    flex: 0 0 50%; /* Deler halvparten av bredden av flex container */
+    height: 100%; /* Sett høyden til 100% av foreldrecontaineren */
+    padding: 50px;
+    margin: 20px 0;
+    background-color: var(--main-light); /* Lett bakgrunnsfarge */
+}
+
+
+.contact-form-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-}
-
-
-.kontakt-form form {
+    font-family: var( --body-font); 
+    font-size: var(--normal-font-size);
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Tillat vikling til neste linje hvis nødvendig */
 }
 
-.kontakt-form label {
-    margin-top: 10px;
+/* Style for contact details */
+.contact-details {
+    flex: 0 0 50%; /* Deler halvparten av bredden av flex container */
+    margin-bottom: 2em;
+    text-align: left;
+    color: var(--primary-color);
+    height: 100%; /* Sett høyden til 100% av foreldrecontaineren */
+
 }
 
-.kontakt-form input,
-.kontakt-form textarea {
-    margin-top: 5px;
+/* Style for the contact details */
+.contact-details p {
+    margin: 10px 0; /* add more space around */
 }
 
-.kontakt-form button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
+/* For the links in the contact details */
+.contact-details a{
+    margin-bottom: 2em;
+    text-align: left;
+    color: var(--link-color);
 }
 
-.kontakt-info p {
-    margin: 5px 0;
+.contact-details a:hover {
+    color: var(--shadow-color);
+    border-bottom: 1px solid;
 }
 
-.faq h2 {
-    margin-top: 20px;
+.contact-image {
+    max-width: 70%; 
+    height: auto;
+    display: block; /* Sett bildet som et blokkelement */
+    padding: 0; /* Fjern padding */
+    margin-right: 10px; /* Juster høyremargen etter behov */
+    float: left;
 }
+
+
+
+
+/* ------------- FAQ section ------------- */
+.faq-section {
+    padding-top: 2rem;
+}
+
+.faq-question {
+    background: none;
+    color: var(--primary-color);
+    text-align: left;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+.faq-question:hover{
+    color: var(--shadow-color);
+}
+
+.faq-answer {
+    margin-left: 20px;
+    padding-bottom: 1rem;
+}
+
+
+
+
+
