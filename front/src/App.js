@@ -18,7 +18,7 @@ import ContactUs from './pages/ContactUs/ContactUs';
 export default function App() {
 
   // ENDRE DENNE TIL FALSE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET UT OG TRUE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET INN
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleLogout = () => {
     setIsLoggedIn(false);

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import "../SignUp_LogIn/Reg.css";
-import "./ContactUs.css"
 import InputField from "../SignUp_LogIn/InputField";
 import { useForm } from 'react-hook-form';
 import validator from 'validator'; // Sørg for at 'validator' er installert
 import Image from "../../images/6.png";
+
+import "../SignUp_LogIn/Reg.css";
+import "./ContactUs.css"
 
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);

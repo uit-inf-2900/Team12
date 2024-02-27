@@ -3,13 +3,6 @@ import { Link } from "react-router-dom";
 
 import "../SignUp_LogIn/Reg.css";
 import "./about.css";
-import TeamImage1 from "../../images/stash.png"; 
-import TeamImage2 from "../../images/6.png"; 
-
-import YarnSheep from "../../images/yarnSheep.png";
-import Basked from "../../images/yarnBasket.png";
-import Books from "../../images/books.png";
-import Planning from "../../images/reading.png";
 
 import { getImageByName } from '../../images/getImageByName';
 
@@ -119,7 +112,7 @@ export const About = () => {
           name="Emilie"
           role="Rolle i Prosjektet"
           background="Kort beskrivelse av bakgrunn og ekspertise"
-          imageSrc={TeamImage2}
+          imageSrc={getImageByName('yarnSheep')}
         />
         <TeamMember
           imageSrc={getImageByName('huggingYarn')}
@@ -135,7 +128,7 @@ export const About = () => {
           background="Kort beskrivelse av bakgrunn og ekspertise"
         />
         <TeamMember
-          imageSrc={TeamImage2}
+          imageSrc={getImageByName('yarnSheep')}
           name="Skjalg"
           role="Rolle i Prosjektet"
           background="Kort beskrivelse av bakgrunn og ekspertise"
