@@ -9,7 +9,7 @@
 :root{
 
 
-    --header-height: 6.5rem;
+    --header-height: 5.5rem;
 
 
     /*============= COLOURS ===================*/
@@ -165,7 +165,6 @@ img{
     display: flex;
     justify-content: space-between;
     align-items: center;
-
 }
 
 .nav-container{
