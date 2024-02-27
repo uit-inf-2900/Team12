@@ -94,12 +94,13 @@ export const About = () => {
 
 
       {/* Button for registration */}
+      <section className="features-container">
       <div className="purple">
         <Link to="/signup">
           <button className="signup-button">Registrer Deg Nå</button>
         </Link>
       </div>
-
+      </section>
 
       {/* Team-members */}
       <h2>Møt Teamet Bak Magien</h2>
