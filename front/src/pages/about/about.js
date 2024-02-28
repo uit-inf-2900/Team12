@@ -91,9 +91,9 @@ export const About = () => {
 
       {/* Button for registration */}
       <section className="features-container">
-      <div className="purple">
+      <div className="light button">
         <Link to="/signup">
-          <button className="signup-button">Registrer Deg Nå</button>
+          <button>Registrer Deg Nå</button>
         </Link>
       </div>
       </section>

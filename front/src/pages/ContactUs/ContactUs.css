@@ -12,7 +12,7 @@
 .contact-form-box {
     height: 100%; /* Sett høyden til 100% av foreldrecontaineren */
     padding: 50px;
-    background-color: var(--main-light); /* Lett bakgrunnsfarge */
+    background-color: var(--box-color-dark); /* Lett bakgrunnsfarge */
     display: flex;
     flex-direction: column;
     height: 100%; 
@@ -55,11 +55,9 @@
 .contact-details a{
     margin-bottom: 2em;
     text-align: left;
-    color: var(--link-color);
 }
 
 .contact-details a:hover {
-    color: var(--shadow-color);
     border-bottom: 1px solid;
 }
 

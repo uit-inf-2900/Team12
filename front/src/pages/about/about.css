@@ -1,6 +1,8 @@
 /* Importing global styles */
 @import url('../../navbar.css');
 @import url('../../App.css');
+@import url('../../Components/colorAndText.css');
+
 
 /* General Page Styles */
 .about-page-container {
@@ -38,7 +40,6 @@
 .team-member-info, .feature-info {
     flex: 1;
     max-width: 400px; /* Ensures text does not stretch too wide */
-    
 }
 
 /* Team Member Image Styles */
