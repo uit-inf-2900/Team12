@@ -12,6 +12,7 @@ namespace Strikkeapp.Data.Models
         // Create tables
         public DbSet<UserLogIn> UserLogIn { get; set; }
         public DbSet<UserDetails> UserDetails { get; set; }
+        public DbSet<KnittingRecipes> KnittingRecipes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,14 @@ namespace Strikkeapp.Data.Models
                 .HasOne<UserLogIn>()
                 .WithOne()
                 .HasForeignKey<UserDetails>(ud => ud.UserId);
+
+           
+            modelBuilder.Entity<KnittingRecipes>()
+                .HasOne<UserLogIn>()
+                .WithMany()
+                .HasForeignKey(kr => kr.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
