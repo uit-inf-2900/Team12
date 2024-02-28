@@ -13,7 +13,7 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
   return (
     <div className={`feature-item ${imageToLeft ? "image-left" : "image-right"}`}>
       {!imageToLeft && <img src={imageSrc} alt={title} className="feature-image" />}
-      <div className="feature-info">
+      <div className="section-container">
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
@@ -47,7 +47,7 @@ export const About = () => {
       </h1>
 
       {/* Short intro section  */}
-      <div className="about-intro-section">
+      <div className="section-container">
       <section >
         <p>Velkommen til vår nettside, en nettside du som strikker kanskje ikke visste at du trengte. Men fra det øyeblikket du begynner å bruke den, vil du se hvor mye enklere og mer berikende din strikkeopplevelse kan bli.</p>
         <p>I en verden hvor kreativitet og organisering går hånd i hånd, har vi skapt en plattform som ikke bare forenkler måten du håndterer dine strikkeprosjekter på, men også inspirerer til ny innovasjon innen håndarbeid.</p>
@@ -56,7 +56,7 @@ export const About = () => {
 
 
       <h2>Fantastiske funksjoner:</h2>
-      <section className="features-container">
+      <section className="section-container">
       <FeatureItem
         imageSrc={getImageByName('yarnSheep')}
         title="Garnlageret"
@@ -90,7 +90,7 @@ export const About = () => {
 
 
       {/* Button for registration */}
-      <section className="features-container">
+      <section className="section-container">
       <div className="light button">
         <Link to="/signup">
           <button>Registrer Deg Nå</button>
@@ -100,7 +100,7 @@ export const About = () => {
 
       {/* Team-members */}
       <h2>Møt Teamet Bak Magien</h2>
-      <section className="about-team-section">
+      <section className="section-container">
         <TeamMember
           name="Eline"
           role="Rolle i Prosjektet"

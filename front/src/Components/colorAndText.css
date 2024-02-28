@@ -49,9 +49,12 @@
     --body-font: "Syne", sans-serif;
     /*"Rigot-Regular" sans-serif;*/
     --main-font: "Rigot", sans-serif;
-    --h1-font-size: 2.0rem;
+
+    /* ====== FONT SIZE ======== */
+    --h1-font-size: 1.8rem;
     --h2-font-size: 1.5rem;
-    --normal-font-size: 1.538rem;
+    --normal-font-size: 1.2rem;
+    --small-font-size: 1.0rem;
 
 
     /*========== Font weight ==========*/
@@ -86,6 +89,13 @@
     color: var(--text-color);
     text-align: center;
     margin-bottom: 2.5rem;
+}
+
+
+/*  A smaller version of the info text. Used in e.g. reset password */
+.infoText-small{
+    font-size: var(--small-font-size);      
+    text-align: center;
 }
 
 

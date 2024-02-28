@@ -1,12 +1,6 @@
 @import url('../../navbar.css');
 @import url('../../App.css');
 
-.title {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: var(--primary-color);
-}
-
 /* ------------- CONTACT INFO  ------------- */
 /* Overall form layout */
 .contact-form-box {

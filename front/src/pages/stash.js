@@ -4,8 +4,9 @@ import "./SignUp_LogIn/Reg.css";
 
 export const Stash = () => {
     return (
-        <div>
-        <header className="larger-text"> Stash </header>      {/* Rest of the content */}
+        <div className="page-container">
+            <h1> Stash </h1>      
+            {/* Rest of the content */}
         </div>
     );
 };

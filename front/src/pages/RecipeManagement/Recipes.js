@@ -8,8 +8,8 @@ const Recipes = () => {
 
 
     return (
-        <div> 
-            <h1 className="larger-text"> Velkommen til Oppskriftssiden! </h1>
+        <div className='page-container'> 
+            <h1> Velkommen til Oppskriftssiden! </h1>
 
             {/* Upload one or several recipes */}
             <button onClick={() => setUploading(true)}>Last opp oppskrift</button>

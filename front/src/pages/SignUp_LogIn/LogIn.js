@@ -70,7 +70,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         errors={errors.password}
                         aria-label="Password"
                     />
-                    <div className='small-text'>
+                    <div className='infoText-small'>
                         <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
                     </div>
 

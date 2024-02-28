@@ -13,21 +13,12 @@
 }
 
 /* Section Styles */
-/* Applies to all major sections for consistent spacing and alignment */
-.about-intro-section, 
-.about-team-section,  
-.features-container, 
-.feature-info {
-    margin: 0 auto;
-    max-width: 550px; /* Set a max-width that fits your design */
-    margin-bottom: 50px; /* Adds spacing between sections for better readability */
-    text-align: left; /* Aligns text to the left for consistency */
-}
+
 
 /* Component Styles */
 /* Team Member Styles and Feature Item Styles */
-.about-team-section .team-member, 
-.features-container .feature-item  {
+.section-container .team-member, 
+.section-container .feature-item  {
     display: flex;
     justify-content: center;
     align-items: center;

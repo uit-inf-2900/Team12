@@ -27,7 +27,8 @@ export default function App() {
 
   return (
     <Router>
-      <div className="app-container">
+      {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
+      <div className="page-container">          
         <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
         <div className="content-container">
           <Routes>

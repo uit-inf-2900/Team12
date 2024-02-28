@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import './Reg.css';
 import InputField from './InputField';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
+import './Reg.css';
 
 
 
@@ -41,14 +41,16 @@ const ResetPassword = ({ toggleForm }) => {
                     
                     {errors.email && <p className="errorMsg">{errors.email.message}</p>}
                     
-                    <div className='larger-text'>
+                    <div className='infoText-small'>
                         {isValidEmail && (
-                            <p href="#">If you have a user with us, a new password will be sent to your email.</p>
+                            <p href="#"> 
+                                If you have a user with us, a new password will be sent to your email.
+                                </p>
                         )}
                     </div>
                     
                     {!isValidEmail && (
-                        <div className='small-text'>
+                        <div className='infoText-small'>
                             <Link to="/login" className="forgot-password-link">Log In</Link>
                         </div>
                     )}

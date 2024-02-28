@@ -1,135 +1,13 @@
 @import url('../../navbar.css');
 @import url('../../Components/colorAndText.css');
+@import url('../../Components/Buttons.css');
+@import url('../../Components/BoxAndContainers.css');
+@import url('../../Components/inputs.css');
 
 
 
-/* Make the date and free tect look alike */
-input[type="text"], 
-input[type="password"], 
-input[type="email"], 
-input[type="date"] {
-    width: 90%;                                         /* Responsive width relative to parent */
-    padding: 10px 15px;                                 /* Padding inside input fields */
-    margin-bottom: 10px;                                /* Space below input fields */
-    border: 1px solid var(--border-color);              /* Light grey border */
-    border: var(--border-color);;                       /* For prettier input boxes */
-    border-radius: 5px;                                 /* Rounded corners */
-    background-color: var(--border-background-color);   /* Light background for the input fields */
-    box-shadow: var(--box-shadow);                      /* Inner shadow for depth */
-}
 
-/*background settings*/
-body, html {
-    background-color: var(--background-color);
-}
-
-
-
-/* container for light and dark box */
-.box-container {
-    display: flex;                                  /* Use flexbox for layout */
-    justify-content: center;                        /* Center children horizontally */
-    align-items: center;                            /* Center children vertically */
-    height: 100vh;                                  /* Full viewport height */
-    max-width: 70%;                                 /* Limit max width to 70% of the viewport */
-    margin: 0 auto;                                 /* Center the container in the viewport */
-}
-
-/*placement for small text (forgot password and sign in on forgot password page)*/
-.small-text{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/*use a when writing text with this format*/
-.small-text a {
-    color: var(--link-color); /* Link color */
-    cursor: pointer; /* Show pointer cursor on hover */
-    font-size: 20px; /* Set the desired font size */
-}
-
-/*change of colour when hovering*/
-.small-text a:hover {
-    color: var(--link-color-hover); /* Change the link color on hover */
-}
-
-/*text that appears when you have asked to reset the password (reset password msg)*/
-.larger-text{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 100px;
-}
-
-/*use p when writing text with this format*/
-.larger-text p {
-    color: var(--link-color); /* Link color */
-    font-size: 12px; /* Set the desired font size */
-}
-
-/* information about each background box */
-.box {
-    /* width: 50%; Each section takes up half of the container's width */
-    padding: 50px; /* Padding around the content of each section */
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack child elements vertically */
-    justify-content: center; /* Center children vertically */
-    align-items: center; /* Center children horizontally */
-    transition: transform 0.5s; /* Animate position changes smoothly */
-    border-radius: 10px;
-}
-
-/* Light purple color */
-.box.light {
-    width: 50%; /* Take up half of the container's width */
-    background-color: var(--box-color-light); /* Light purple background */
-    height: 30%;
-}
-
-/* Dark purple color */
-.box.dark {
-    width: 30%; /* Take up half of the container's width */
-    background-color: var(--box-color-dark); /* Darker purple background */
-    height: 30%;
-}
-
-
-/* Button specifications */
-button {
-    padding: 10px 15px; /* Padding inside buttons */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    margin: 0 auto;
-    margin-top: 10px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-
-/* Dark button */
-.dark button {
-    background-color: var(--button-bg-colo-dark);   
-    color: var(--button-text-color-light);          /* Text */
-}
-
-.dark button:hover {
-    background-color: var(--button-hover-dark); /* Darken the button on hover */
-    opacity: 0.8; /* Slight transparency on hover */
-}
-
-/* Light button */
-.light button {
-    background-color: var(--button-bg-colo-light); 
-    color:  var(--button-text-color-dark); 
-}
-
-.light button:hover {
-    background-color: var(--button-hover-light); /* Darken the button on hover */
-    opacity: 0.8; /* Slight transparency on hover */
-}
-
+/* NB: TROR IKKE VI TRENGER DETTE */
 /* Responsive styles for smaller screens */
 @media screen and (max-width: 900px) {
     .button {
@@ -153,5 +31,4 @@ button {
 
 
 
-/* ----------------------- ABOUT  -----------------------*/
 
