@@ -1,0 +1,51 @@
+/* Importing global styles */
+@import url('../../navbar.css');
+@import url('../../App.css');
+@import url('../../Components/colorAndText.css');
+
+
+/* General Page Styles */
+.about-page-container {
+    max-width: 1200px; /* Set a max-width that fits your design */
+    margin: auto;
+    padding: 20px;
+    text-align: center; /* Centers text within the container */
+}
+
+/* Section Styles */
+/* Applies to all major sections for consistent spacing and alignment */
+.about-intro-section, 
+.about-team-section,  
+.features-container, 
+.feature-info {
+    margin: 0 auto;
+    max-width: 550px; /* Set a max-width that fits your design */
+    margin-bottom: 50px; /* Adds spacing between sections for better readability */
+    text-align: left; /* Aligns text to the left for consistency */
+}
+
+/* Component Styles */
+/* Team Member Styles and Feature Item Styles */
+.about-team-section .team-member, 
+.features-container .feature-item  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Space between image and text */
+    margin-bottom: 20px; /* Space between team member entries */
+}
+
+
+/* Team Member Info Styles */
+.team-member-info, .feature-info {
+    flex: 1;
+    max-width: 400px; /* Ensures text does not stretch too wide */
+}
+
+/* Team Member Image Styles */
+.team-member-image, .feature-image {
+    width: 150px; /* Standardizes image size */
+    border-radius: 50%; /* Rounds the corners for a circular shape */
+}
+
+
