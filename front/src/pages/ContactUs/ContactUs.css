@@ -2,15 +2,7 @@
 @import url('../../App.css');
 
 /* ------------- CONTACT INFO  ------------- */
-/* Overall form layout */
-.contact-form-box {
-    height: 100%; /* Sett høyden til 100% av foreldrecontaineren */
-    padding: 50px;
-    background-color: var(--box-color-dark); /* Lett bakgrunnsfarge */
-    display: flex;
-    flex-direction: column;
-    height: 100%; 
-}
+
 
 /* Message box */
 .contact-form-container {
@@ -20,48 +12,21 @@
     font-family: var( --body-font); 
     font-size: var(--normal-font-size);
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
     justify-content: space-between;
+    flex-direction: row;
     flex-wrap: wrap; 
 }
 
-/* Style for contact details */
-.contact-details {
-    margin-bottom: 2em;
-    text-align: left;
-    color: var(--primary-color);
-    height: 100%; 
-}
 
-/* contactdetails and message box takes 50/50 of the screen */
-.contact-details, .contact-form-box {
-    flex: 1;
-}
-
-
-/* Style for the contact details */
-.contact-details p {
-    margin: 10px 0; 
-}
-
-/* For the links in the contact details */
-.contact-details a{
-    margin-bottom: 2em;
-    text-align: left;
-}
-
-.contact-details a:hover {
-    border-bottom: 1px solid;
-}
 
 /* Image under contact details */
 .contact-image {
-    max-width: 70%; 
+    max-width: 75%; 
     height: auto;
     display: block; 
     padding: 0; 
     float: left;
+    margin-bottom: -70px;       /* Remove the space that is in the image*/ 
 }
 
 

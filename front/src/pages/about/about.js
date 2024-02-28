@@ -41,7 +41,7 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
 
 export const About = () => {
   return (
-    <div className="about-page-container">
+    <div className="page-container">
       <h1>
         Om Oss
       </h1>

@@ -1,5 +1,9 @@
 @import url('./colorAndText.css');
 
+:root{
+    --box-padding: 50px; 
+    --box-border-radius: 10px; 
+}
 
 .page-container{
     padding-top: var(--header-height);
@@ -37,26 +41,26 @@
 
 /* information about each background box */
 .box {
-    padding: 50px;                   /* Padding around the content of each section */
+    padding: var(--box-padding);                
     display: flex;                   /* Use flexbox for layout */
     flex-direction: column;          /* Stack child elements vertically */
     justify-content: center;         /* Center children vertically */
     align-items: center;             /* Center children horizontally */
     transition: transform 0.5s;      /* Animate position changes smoothly */
-    border-radius: 10px;
-    
+    border-radius: var(--box-border-radius);
 }
 
 /* Light purple color */
 .box.light {
-    width: 50%; /* Take up half of the container's width */
+    width: 60%; /* Take up half of the container's width */
     background-color: var(--box-color-light); /* Light purple background */
-    height: 30%;
+    height: 50%;
 }
 
 /* Dark purple color */
 .box.dark {
-    width: 30%; /* Take up half of the container's width */
+    width: 40%; /* Take up half of the container's width */
     background-color: var(--box-color-dark); /* Darker purple background */
-    height: 30%;
+    height: 50%;
+    
 }
