@@ -1,0 +1,42 @@
+/* Importing global styles */
+@import url('../../navbar.css');
+@import url('../../App.css');
+@import url('../../Components/colorAndText.css');
+
+
+/* General Page Styles */
+.about-page-container {
+    max-width: 1200px; /* Set a max-width that fits your design */
+    margin: auto;
+    padding: 20px;
+    text-align: center; /* Centers text within the container */
+}
+
+/* Section Styles */
+
+
+/* Component Styles */
+/* Team Member Styles and Feature Item Styles */
+.section-container .team-member, 
+.section-container .feature-item  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Space between image and text */
+    margin-bottom: 20px; /* Space between team member entries */
+}
+
+
+/* Team Member Info Styles */
+.team-member-info, .feature-info {
+    flex: 1;
+    max-width: 400px; /* Ensures text does not stretch too wide */
+}
+
+/* Team Member Image Styles */
+.team-member-image, .feature-image {
+    width: 150px; /* Standardizes image size */
+    border-radius: 50%; /* Rounds the corners for a circular shape */
+}
+
+

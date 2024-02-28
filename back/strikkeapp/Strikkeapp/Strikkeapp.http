@@ -1,0 +1,6 @@
+@Strikkeapp_HostAddress = http://localhost:6969
+
+GET {{Strikkeapp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

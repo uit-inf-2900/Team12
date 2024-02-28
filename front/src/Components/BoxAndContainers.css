@@ -1,0 +1,62 @@
+@import url('./colorAndText.css');
+
+
+.page-container{
+    padding-top: var(--header-height);
+    max-width: 1200px; /* Set a max-width that fits your design */
+    margin: auto;
+    padding: 20px;
+    text-align: center; /* Centers text within the container */
+
+}
+
+/* Applies to all major sections for consistent spacing and alignment */
+.section-container 
+{
+    margin: 0 auto;
+    max-width: 550px; /* Set a max-width that fits your design */
+    margin-bottom: 50px; /* Adds spacing between sections for better readability */
+    text-align: left; /* Aligns text to the left for consistency */
+}
+
+
+
+/*============= BOX CONTAINERS ===================*/
+/* Used for login, sinup and more */
+
+/* container for light and dark box */
+.box-container {
+    display: flex;                                  /* Use flexbox for layout */
+    justify-content: center;                        /* Center children horizontally */
+    align-items: center;                            /* Center children vertically */
+    height: 100vh;                                  /* Full viewport height */
+    max-width: 70%;                                 /* Limit max width to 70% of the viewport */
+    margin: 0 auto;                                 /* Center the container in the viewport */
+}
+
+
+/* information about each background box */
+.box {
+    padding: 50px;                   /* Padding around the content of each section */
+    display: flex;                   /* Use flexbox for layout */
+    flex-direction: column;          /* Stack child elements vertically */
+    justify-content: center;         /* Center children vertically */
+    align-items: center;             /* Center children horizontally */
+    transition: transform 0.5s;      /* Animate position changes smoothly */
+    border-radius: 10px;
+    
+}
+
+/* Light purple color */
+.box.light {
+    width: 50%; /* Take up half of the container's width */
+    background-color: var(--box-color-light); /* Light purple background */
+    height: 30%;
+}
+
+/* Dark purple color */
+.box.dark {
+    width: 30%; /* Take up half of the container's width */
+    background-color: var(--box-color-dark); /* Darker purple background */
+    height: 30%;
+}
