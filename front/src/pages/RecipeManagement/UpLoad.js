@@ -57,12 +57,12 @@ const UpLoad = ({ onClose }) => {
                     </div>
                     
                     {/* Skjema for oppskriftsinformasjon */}
-                    <div className="recipe-info-form">
-                        <InputField placeholder="RecipeName" name="recipeName" onChange={handleInputChange} />
-                        <InputField placeholder="Author" name="author" onChange={handleInputChange} />
-                        <InputField placeholder="Needle Sizet" name="needleSize" onChange={handleInputChange} />
-                        <InputField placeholder="Knitting Gauge" name="knittingGauge" onChange={handleInputChange}  />
-                        <InputField placeholder="Notes" name="notes" onChange={handleInputChange}  />
+                    <div className="input">
+                        <InputField placeholder="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
+                        <InputField placeholder="Author" name="author"  type="text" onChange={handleInputChange} />
+                        <InputField placeholder="Needle Size" name="needleSize"  type="text" onChange={handleInputChange} />
+                        <InputField placeholder="Knitting Gauge" name="knittingGauge"  type="text" onChange={handleInputChange}  />
+                        <InputField placeholder="Notes" name="notes"   type="text"onChange={handleInputChange}  />
                     </div>
                 </div>
                 {/* Buttons to clear and upload files. Should only be viseble if a file is uploaded */}
