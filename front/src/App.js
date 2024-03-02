@@ -18,7 +18,7 @@ import ContactUs from './pages/ContactUs/ContactUs';
 export default function App() {
 
   // ENDRE DENNE TIL FALSE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET UT OG TRUE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET INN
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -44,6 +44,7 @@ export default function App() {
               <>
                 <Route path="/stash" element={<Stash />} />
                 <Route path="/recipes" element={<Recipes />} />
+                <Route path='/prosjekter' element={<h1>Prosjekter</h1>} />
                 {/* <Route path="/profile" element={<Profile />} /> Legg til din profilside her */}
               </>
             )}

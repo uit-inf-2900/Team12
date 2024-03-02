@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react';
-import './UpLoad.css';
 import { IoIosCloudUpload } from "react-icons/io";          // Import the icon component from react icons library
+import InputField from '../SignUp_LogIn//InputField';
+import './UpLoad.css';
+
+
 
 const UpLoad = ({ onClose }) => {
     const [file, setFile] = useState(null);                 // State to keep track of files
@@ -39,7 +42,7 @@ const UpLoad = ({ onClose }) => {
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
-                <button className="UpLoad-close" onClick={onClose}>X</button>
+                <button className="close-button" onClick={onClose}>X</button>
                 <div className="upload-flex-container"> {/* Ny flex-container */}
                     <div className="UpLoad-area" onClick={() => fileInputRef.current.click()}>
                         <IoIosCloudUpload size={50} />
@@ -55,16 +58,16 @@ const UpLoad = ({ onClose }) => {
                     
                     {/* Skjema for oppskriftsinformasjon */}
                     <div className="recipe-info-form">
-                        <input name="recipeName" placeholder="Navn på oppskrift" onChange={handleInputChange} />
-                        <input name="author" placeholder="Forfatter" onChange={handleInputChange} />
-                        <input name="needleSize" placeholder="Pinnestørrelse" onChange={handleInputChange} />
-                        <input name="knittingGauge" placeholder="Strikke fasthet (XX/XX)" onChange={handleInputChange} />
-                        <textarea name="notes" placeholder="Notater" onChange={handleInputChange}></textarea>
+                        <InputField placeholder="RecipeName" name="recipeName" onChange={handleInputChange} />
+                        <InputField placeholder="Author" name="author" onChange={handleInputChange} />
+                        <InputField placeholder="Needle Sizet" name="needleSize" onChange={handleInputChange} />
+                        <InputField placeholder="Knitting Gauge" name="knittingGauge" onChange={handleInputChange}  />
+                        <InputField placeholder="Notes" name="notes" onChange={handleInputChange}  />
                     </div>
                 </div>
                 {/* Buttons to clear and upload files. Should only be viseble if a file is uploaded */}
-                {file && <button className="UpLoad-clear" onClick={clearFile}>Fjern</button>}           
-                {file && <button className="UpLoad" onClick={uploadFile}>Last opp</button>}
+                {file && <button className="dark button" onClick={clearFile}>Fjern</button>}           
+                {file && <button className="light button " onClick={uploadFile}>Last opp</button>}
             </div>
         </div>
     );

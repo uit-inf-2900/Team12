@@ -33,3 +33,10 @@ button {
     background-color: var(--button-hover-light); /* Darken the button on hover */
     opacity: 0.8; /* Slight transparency on hover */
 }
+
+.close-button {
+    float: center;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+}

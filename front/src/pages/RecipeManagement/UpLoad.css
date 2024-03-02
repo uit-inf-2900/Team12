@@ -1,4 +1,9 @@
 
+@import url('../../navbar.css');
+@import url('../../App.css');
+@import url('../../Components/colorAndText.css');
+@import url('../../Components/Buttons.css');
+
 
 /* UpLoad.css */
 .UpLoad-backdrop {
@@ -7,27 +12,20 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5);     /* Semi-transparent black */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .UpLoad-content {
-    background: white;
+    background: var(--box-color-light);
     padding: 20px;
     border-radius: 10px;
     width: 80%;
     max-width: 500px;
     display: flex;
     flex-direction: column;
-}
-
-.UpLoad-close {
-    float: center;
-    border: none;
-    background: none;
-    font-size: 1.5rem;
 }
 
 
@@ -64,15 +62,6 @@
     display: flex;
     flex-direction: column;
     padding: 0 20px; /* Legg til litt padding */
-}
-
-.UpLoad-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0; /* Hide the file input */
 }
 
 

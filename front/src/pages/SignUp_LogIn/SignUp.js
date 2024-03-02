@@ -1,9 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import './Reg.css';
 import InputField from './InputField';
 import axios from 'axios';
+
+import './Reg.css';
 
 
 const SignUp = ({ toggleForm }) => {
