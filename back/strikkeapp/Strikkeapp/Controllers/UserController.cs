@@ -85,7 +85,7 @@ public class UsersController : ControllerBase
         var result = _userService.LogInUser(request.UserEmail, request.UserPwd);
         if (!result.Success)
         {
-            if (result.ErrorMessage == "Invalid login attempt" && 
+            if (result.ErrorMessage == "Invalid login attempt" ||
                 result.ErrorMessage == "User is banned")
             {
                 return Unauthorized(result.ErrorMessage);

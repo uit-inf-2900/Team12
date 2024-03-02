@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace Strikkeapp.Data.Models
 {
     public class UserLogIn
     {
         // Define UserLogIn schema
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; } = Guid.NewGuid();
 
         [Required]
         [EmailAddress]
@@ -38,7 +38,7 @@ namespace Strikkeapp.Data.Models
         // Define UserDetails schema
         [Key]
         [ForeignKey("UserLogIn")]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         public string UserFullName { get; set; } = string.Empty;
@@ -61,5 +61,19 @@ namespace Strikkeapp.Data.Models
             }
             return new ValidationResult("Invalid type");
         }
+    }
+
+    public class KnittingRecipes
+    {
+        [Key]
+       
+        public Guid KnittingRecipeId { get; set; } = Guid.NewGuid();
+
+        [Required]
+        [ForeignKey("UserLogIn")]
+        public Guid UserId { get; set;}
+
+        [Required]
+        public byte[]? RecipePDF { get; set;}
     }
 }

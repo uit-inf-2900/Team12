@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Strikkeapp.Data.Models;
 
@@ -10,25 +11,27 @@ using Strikkeapp.Data.Models;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    partial class StrikkeappDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221102654_Recipe")]
+    partial class Recipe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
             modelBuilder.Entity("Strikkeapp.Data.Models.KnittingRecipes", b =>
                 {
-                    b.Property<Guid>("KnittingRecipeId")
+                    b.Property<int>("KnittingRecipeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("RecipePDF")
                         .IsRequired()
                         .HasColumnType("BLOB");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("KnittingRecipeId");
 
@@ -39,8 +42,8 @@ namespace Strikkeapp.Data.Migrations
 
             modelBuilder.Entity("Strikkeapp.Data.Models.UserDetails", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("TEXT");
@@ -60,9 +63,9 @@ namespace Strikkeapp.Data.Migrations
 
             modelBuilder.Entity("Strikkeapp.Data.Models.UserLogIn", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserEmail")
                         .IsRequired()

@@ -16,7 +16,7 @@ public interface IUserService
 {
     public UserServiceResult CreateUser(string userEmail, string userPwd, string userFullName, DateTime userDOB);
     public UserServiceResult LogInUser(string userEmail, string userPwd);
-    public string GenerateJwtToken(string userEmail, int userID);
+    public string GenerateJwtToken(string userEmail, Guid userID);
 }
 
 public class UserService : IUserService
@@ -40,14 +40,14 @@ public class UserService : IUserService
     public class UserServiceResult
     {
         public bool Success { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public string ErrorMessage { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;
 
-        public static UserServiceResult ForSuccess(int userId) => new UserServiceResult { 
+        public static UserServiceResult ForSuccess(Guid userId) => new UserServiceResult { 
             Success = true, 
             UserId = userId };
-        public static UserServiceResult ForSuccessToken(int userId, string token) => new UserServiceResult { 
+        public static UserServiceResult ForSuccessToken(Guid userId, string token) => new UserServiceResult { 
             Success = true,
             UserId = userId,
             Token = token };
@@ -131,7 +131,7 @@ public class UserService : IUserService
         }
     }
 
-    public string GenerateJwtToken(string userEmail, int userID)
+    public string GenerateJwtToken(string userEmail, Guid userID)
     {
         var keyString = _configuration["Jwt:Key"];
         if (string.IsNullOrWhiteSpace(keyString))
