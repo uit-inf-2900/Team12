@@ -38,9 +38,7 @@ const ResetPassword = ({ toggleForm }) => {
                         })}
                         errors={errors.email}
                     />
-                    
-                    {errors.email && <p className="errorMsg">{errors.email.message}</p>}
-                    
+                                        
                     <div className='infoText-small'>
                         {isValidEmail && (
                             <p href="#"> 
