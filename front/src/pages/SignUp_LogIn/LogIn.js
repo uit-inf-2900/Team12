@@ -74,7 +74,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
                     </div>
 
-                    <div className="light button">
+                    <div className="light-button">
                         <button type="submit">Log In</button>
                     </div>
                 </form>
@@ -83,7 +83,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
             <div className="box dark">
                 <h2>Hello, Knitter!</h2>
                 <p>Enter your personal details and start journey with us</p>
-                <div className='dark button'>
+                <div className='dark-button'>
                     <button onClick={() => navigate('/signup')}>Don't have an account? Sign Up</button>
                 </div>
             </div>

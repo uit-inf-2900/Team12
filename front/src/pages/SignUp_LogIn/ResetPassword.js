@@ -55,7 +55,7 @@ const ResetPassword = ({ toggleForm }) => {
                         </div>
                     )}
                     
-                    <div className='light button'>
+                    <div className='light-button'>
                         {isValidEmail ? (
                             <button type='button' onClick={() => navigate('/login')}>Log In</button>
                         ) : (

@@ -5,10 +5,13 @@ import './UpLoad.css';
 
 
 
-const UpLoad = ({ onClose }) => {
-    const [file, setFile] = useState(null);                 // State to keep track of files
-    const [uploadStatus, setUploadStatus] = useState({ progress: 0, fileName: '' });   // State to track upload progress (NOT WORKING)
-    const fileInputRef = useRef(null);                      // Ref for file input
+const UpLoad = ({ onClose, fetchRecipes }) => {
+    // State to control the file input and upload status 
+    const [file, setFile] = useState(null);                 
+    const [uploadStatus, setUploadStatus] = useState({ fileName: '' });  
+    const fileInputRef = useRef(null);             
+    
+    // State to control the recipe information input fields
     const [recipeInfo, setRecipeInfo] = useState({
         recipeName: '',
         author: '',
@@ -17,10 +20,12 @@ const UpLoad = ({ onClose }) => {
         notes: ''
     });
 
+    // Function to handle input change
     const handleInputChange = (e) => {
         setRecipeInfo({ ...recipeInfo, [e.target.name]: e.target.value });
     };
 
+    // Function to handle file selection
     const handleFileSelection = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
@@ -32,20 +37,26 @@ const UpLoad = ({ onClose }) => {
         // TODO: Implement file upload logic
     };
 
-    // Function to clear the file list 
-    // NOTE: do not need it if we only allow one file to be uploaded at a time
+    // Function to clear the file 
     const clearFile = () => {
         setFile(null);
-        setUploadStatus({ progress: 0, fileName: '' });
+        setUploadStatus({ fileName: '' });
     };
 
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
                 <button className="close-button" onClick={onClose}>X</button>
-                <div className="upload-flex-container"> {/* Ny flex-container */}
-                    <div className="UpLoad-area" onClick={() => fileInputRef.current.click()}>
-                        <IoIosCloudUpload size={50} />
+                <div className="upload-flex-container"> 
+                    <div className="box light" 
+                        style={{"border-radius": "50%", 
+                                "width": "200px", 
+                                "height": "200px", 
+                                "border": "2px dashed #ccc", 
+                                "cursor": "pointer", 
+                                "overflow": "hidden"}} 
+                        onClick={() => fileInputRef.current.click()}>
+                        <IoIosCloudUpload size={50} />   {/* The upload icon */}
                         <input 
                             ref={fileInputRef}
                             type="file" 
@@ -66,8 +77,8 @@ const UpLoad = ({ onClose }) => {
                     </div>
                 </div>
                 {/* Buttons to clear and upload files. Should only be viseble if a file is uploaded */}
-                {file && <button className="dark button" onClick={clearFile}>Fjern</button>}           
-                {file && <button className="light button " onClick={uploadFile}>Last opp</button>}
+                {file && <button className="dark-button" onClick={clearFile}>Cancel</button>}           
+                {file && <button className="light-button " onClick={uploadFile}>Upload</button>}
             </div>
         </div>
     );
