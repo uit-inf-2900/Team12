@@ -18,11 +18,24 @@
 .section-container 
 {
     margin: 0 auto;
-    max-width: 600px; /* Set a max-width that fits your design */
-    margin-bottom: 50px; /* Adds spacing between sections for better readability */
-    text-align: left; /* Aligns text to the left for consistency */
+    max-width: 600px; 
+    margin-bottom: 50px; 
+    padding: 20px; 
+    text-align: left; 
+    font-family: var( --body-font); 
+    font-size: var(--normal-font-size);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap; 
+
 }
 
+
+.content-container {
+  padding-top: var(--header-height); /* Use the variable */
+  overflow-y: auto; /* Ensure content is scrollable */
+}
 
 
 /*============= BOX CONTAINERS ===================*/

@@ -7,6 +7,7 @@ import Image from "../../images/6.png";
 import "../SignUp_LogIn/Reg.css";
 import "./ContactUs.css"
 
+// 
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -41,7 +42,7 @@ const ContactUs = () => {
     return (
         <div className="page-container">
             <h1>Contact Us</h1>
-            <div className="contact-form-container">
+            <div className="section-container" style={{"max-width":"800px"}}>
                 <div className="infoText" >
                     <h2>Contact Details</h2>
                     <ContactDetails />

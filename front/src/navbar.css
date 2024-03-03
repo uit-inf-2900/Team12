@@ -201,10 +201,10 @@ img{
     font-size: 2rem;
 }
   
-    .login-form {
-      max-width: 400px;
-      margin-inline: auto;
-    }
+.login-form {
+    max-width: 400px;
+    margin-inline: auto;
+}
 }
   
   /* For large devices */

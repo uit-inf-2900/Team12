@@ -11,6 +11,7 @@ import { getImageByName } from '../../images/getImageByName';
 const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
   return (
+    // Check if you want the image to be on the left or right side of the text
     <div className={`feature-item ${imageToLeft ? "image-left" : "image-right"}`}>
       {!imageToLeft && <img src={imageSrc} alt={title} className="feature-image" />}
       <div className="section-container">
@@ -28,7 +29,7 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
   return (
     <div className={`team-member ${imageToLeft ? "image-left" : "image-right"}`}>
       {imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
-      <div className="team-member-info">
+      <div style={{"flex": "1", "max-width": "400px"}}>
         <h3>{name}</h3>
         <p>Rolle: {role}</p>
         <p>Bakgrunn: {background}</p>
@@ -43,64 +44,58 @@ export const About = () => {
   return (
     <div className="page-container">
       <h1>
-        Om Oss
+        About us
       </h1>
 
       {/* Short intro section  */}
       <div className="section-container">
-      <section >
         <p>Velkommen til vår nettside, en nettside du som strikker kanskje ikke visste at du trengte. Men fra det øyeblikket du begynner å bruke den, vil du se hvor mye enklere og mer berikende din strikkeopplevelse kan bli.</p>
         <p>I en verden hvor kreativitet og organisering går hånd i hånd, har vi skapt en plattform som ikke bare forenkler måten du håndterer dine strikkeprosjekter på, men også inspirerer til ny innovasjon innen håndarbeid.</p>
-      </section>
       </div>
 
-
+      {/* Features section */}
       <h2>Fantastiske funksjoner:</h2>
-      <section className="section-container">
-      <FeatureItem
-        imageSrc={getImageByName('yarnSheep')}
-        title="Garnlageret"
-        description="Hold orden på garnsamlingen din."
-      />
-      <FeatureItem
-        imagePosition = "left"
-        imageSrc={getImageByName('yarnBasket')}
-        title="Strikkepinne lager"
-        description="Hold orden på Strikkepinnene dine, og få full oversikt over hvilke strikkepinner som er i bruk."
-      />
-      <FeatureItem
-        imageSrc={getImageByName('books')}
-        title="Oppskriftsbibliotek"
-        description="Tilgang til et bredt utvalg av oppskrifter."
-      />
-      <FeatureItem
-        imagePosition = "left"
-        imageSrc={getImageByName('reading')}
-        title="Prosjektplanlegger"
-        description="Organiser dine strikkeprosjekter."
-      />
-      <FeatureItem
-        imageSrc={getImageByName('openBook')}
-        title="Notater"
-        description="Ta notater som du får tilgang på til alle oppskriftene dine."
-      />
-    </section>
-
-    
+      <div className="section-container">
+        <FeatureItem
+          imageSrc={getImageByName('yarnSheep')}
+          title="Garnlageret"
+          description="Hold orden på garnsamlingen din."
+        />
+        <FeatureItem
+          imagePosition = "left"
+          imageSrc={getImageByName('yarnBasket')}
+          title="Strikkepinne lager"
+          description="Hold orden på Strikkepinnene dine, og få full oversikt over hvilke strikkepinner som er i bruk."
+        />
+        <FeatureItem
+          imageSrc={getImageByName('books')}
+          title="Oppskriftsbibliotek"
+          description="Tilgang til et bredt utvalg av oppskrifter."
+        />
+        <FeatureItem
+          imagePosition = "left"
+          imageSrc={getImageByName('reading')}
+          title="Prosjektplanlegger"
+          description="Organiser dine strikkeprosjekter."
+        />
+        <FeatureItem
+          imageSrc={getImageByName('openBook')}
+          title="Notater"
+          description="Ta notater som du får tilgang på til alle oppskriftene dine."
+        />
+      </div>
 
 
       {/* Button for registration */}
-      <section className="section-container">
-      <div >
-        <Link to="/signup">
-          <button className="light-button">Registrer Deg Nå</button>
-        </Link>
+      <div className="section-container" style={{"justify-content":"center"}}>
+          <Link to="/signup">
+            <button className="light-button" >Registrer Deg Nå</button>
+          </Link>
       </div>
-      </section>
 
       {/* Team-members */}
       <h2>Møt Teamet Bak Magien</h2>
-      <section className="section-container">
+      <div className="section-container">
         <TeamMember
           name="Eline"
           role="Rolle i Prosjektet"
@@ -133,9 +128,7 @@ export const About = () => {
           role="Rolle i Prosjektet"
           background="Kort beskrivelse av bakgrunn og ekspertise"
         />
-      </section>
-      
+      </div>
     </div>
-    
   );
 };

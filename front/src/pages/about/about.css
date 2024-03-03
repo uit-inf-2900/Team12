@@ -15,12 +15,6 @@
 }
 
 
-/* Team Member Info Styles */
-.team-member-info, .feature-info {
-    flex: 1;
-    max-width: 400px;       /* Ensures text does not stretch too wide */
-}
-
 /* Image Styles for this page specifically */
 .team-member-image, .feature-image {
     width: 150px;           /* Standardizes image size */
