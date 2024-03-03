@@ -55,11 +55,11 @@ const ResetPassword = ({ toggleForm }) => {
                         </div>
                     )}
                     
-                    <div className='light-button'>
+                    <div>
                         {isValidEmail ? (
-                            <button type='button' onClick={() => navigate('/login')}>Log In</button>
+                            <button className='light-button' type='button' onClick={() => navigate('/login')}>Log In</button>
                         ) : (
-                            <button type="submit">Reset Password</button>
+                            <button className='light-button' type="submit">Reset Password</button>
                         )}
                     </div>
                 </form>

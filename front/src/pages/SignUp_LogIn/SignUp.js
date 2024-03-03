@@ -46,8 +46,8 @@ const SignUp = ({ toggleForm }) => {
       <div className="box dark">
         <h2>Hello, Knitter!</h2>
         <p>Already have an account?</p>
-        <div className='dark-button'>
-          <button onClick={() => navigate('/login')}>Log in</button>
+        <div >
+          <button className='dark-button' onClick={() => navigate('/login')}>Log in</button>
         </div>
       </div>
       <div className="box light">
@@ -122,8 +122,8 @@ const SignUp = ({ toggleForm }) => {
             errors={errors.confirmPassword}
           />
 
-          <div className="light-button">
-            <button type="submit">Sign up</button>
+          <div>
+            <button className="light-button" type="submit">Sign up</button>
           </div>
         </form>
       </div>

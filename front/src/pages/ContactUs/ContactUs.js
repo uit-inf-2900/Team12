@@ -71,7 +71,7 @@ const ContactUs = () => {
                             errors={errors.message}
                             type="text"
                             />
-                    <button type="submit" className="submit-button">Send Message</button>
+                    <button type="submit" className="light-button">Send Message</button>
                 </form>
                 
             </div>
