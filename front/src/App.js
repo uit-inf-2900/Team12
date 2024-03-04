@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
+import {Link,  BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 
 
 // Import our pages
@@ -12,6 +12,16 @@ import LogIn from './pages/SignUp_LogIn/LogIn';
 import SignUp from './pages/SignUp_LogIn/SignUp';
 import Recipes from './pages/RecipeManagement/Recipes';
 import ContactUs from './pages/ContactUs/ContactUs';
+
+const NotFound = () => {
+  return (
+    <div className="page-container" style={{ justifyContent: "center", alignItems: "row"}}>
+      <h1>404 - Page Not Found</h1>
+      <p>Sorry, the page you are looking for could not be found.</p>
+      <p> Go back to the <Link to='/'> home page </Link> </p>
+  </div>
+  );
+};
 
 
 export default function App() {
@@ -48,6 +58,8 @@ export default function App() {
               </>
             )}
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="*" element={<NotFound />} />
+
           </Routes>
         </div>
       </div>
