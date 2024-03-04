@@ -7,20 +7,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-
 const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [apiError, setApiError] = useState('');
-    
 
     const onSubmit = (data) => {
-        // console.log('Log In Data', data);
-        //setApiError('');
-        //setIsLoading(true);
-
         const postData = {
             userEmail: data.email,
             userPwd: data.password
@@ -29,23 +21,20 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
         axios.post('http://localhost:5002/login', postData)
         .then(function(response){
             console.log("Response: ", response)
+
+            if (response.data.token){
+                // Get the 
+                sessionStorage.setItem('token', response.data.token)
+                window.location.href = '/';
+                
+            } else {
+                console.log("No token received")
+            }
+            // sessionStorage.setItem('token', response.data.token)
         })
         .catch(function(error){
             console.error("Error: ", error)
         })
-
-        /*
-        //  Simulate API call
-        try{
-            console.log('Log In Data', data);
-        }
-        catch(error){
-            setApiError('Log In failed. Please try again later.');
-        }
-        finally{
-            setIsLoading(false);
-        }
-        */
     };
 
     return (

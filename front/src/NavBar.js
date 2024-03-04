@@ -4,7 +4,6 @@ import "./navbar.css";
 
 
 const NavBar = ({ isLoggedIn, handleLogout }) => {
-  isLoggedIn === true;
   return (
     <header className="header" id="header">
       <nav className="nav container">
@@ -30,7 +29,7 @@ const NavBar = ({ isLoggedIn, handleLogout }) => {
           <>
         <div className="nav-items">
           <NavLink to="/profile" className="nav-action">Profile</NavLink>
-          <NavLink to="/logout" className="nav-action">LogOut</NavLink>
+          <button onClick={handleLogout}>Logg Ut</button>
         </div>
         </>
         )}

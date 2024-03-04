@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 
 
@@ -16,13 +16,13 @@ import ContactUs from './pages/ContactUs/ContactUs';
 
 export default function App() {
 
-  // ENDRE DENNE TIL FALSE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET UT OG TRUE FOR Å SE HVORDAN DET SER UT NÅR MAN ER LOGGET INN
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('isLoggedIn'); // Oppdater localStorage
+    sessionStorage.removeItem('token'); // Fjerner token fra sessionStorage
+    window.location.href = '/login'; // Omdirigerer brukeren til logginn-siden
   };
+
+  // Sjekker direkte om token eksisterer i sessionStorage for å bestemme innloggingsstatus
+  const isLoggedIn = sessionStorage.getItem('token');
 
   return (
     <Router>
@@ -36,7 +36,7 @@ export default function App() {
             <Route path="/kontaktoss" element={<ContactUs />} />
             {!isLoggedIn ? (
               <>
-                <Route path="/login" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
+                <Route path="/login" element={<LogIn />} />
                 <Route path="/signup" element={<SignUp />} />
               </>
             ) : (
