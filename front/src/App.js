@@ -12,6 +12,7 @@ import LogIn from './pages/SignUp_LogIn/LogIn';
 import SignUp from './pages/SignUp_LogIn/SignUp';
 import Recipes from './pages/RecipeManagement/Recipes';
 import ContactUs from './pages/ContactUs/ContactUs';
+import Profilepage from './pages/ProfilePage/Profilepage';
 
 
 export default function App() {
@@ -44,7 +45,7 @@ export default function App() {
                 <Route path="/stash" element={<Stash />} />
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<h1>Prosjekter</h1>} />
-                {/* <Route path="/profile" element={<Profile />} /> Legg til din profilside her */}
+                <Route path="/profile" element={<Profilepage />} />
               </>
             )}
             <Route path="/reset-password" element={<ResetPassword />} />

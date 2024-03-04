@@ -1,6 +1,6 @@
 import React from 'react';
 import '../SignUp_LogIn/Reg.css';
-import './ProfilePage.css'
+import './Profilepage.css'
 // import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Image from "../../images/6.png";
