@@ -24,7 +24,7 @@ describe('NavBar Component', () => {
         expect(screen.getByText('Log In').getAttribute('href')).toBe('/login');
         expect(screen.getByText('Home').getAttribute('href')).toBe('/');
         expect(screen.getByText('About').getAttribute('href')).toBe('/about');
-        expect(screen.getByText('Kontakt oss').getAttribute('href')).toBe('/kontaktoss'); 
+        expect(screen.getByText('Contact us').getAttribute('href')).toBe('/contactus'); 
     });
 
     /* ============================== SIGNED IN NAVBAR TESTS ============================== */
@@ -35,10 +35,10 @@ describe('NavBar Component', () => {
         expect(screen.getByText('Profile').getAttribute('href')).toBe('/profile');
         expect(screen.getByText('Logg Ut')).toBeInTheDocument();
         expect(screen.getByText('Home').getAttribute('href')).toBe('/');
-        expect(screen.getByText('Oppskrifter').getAttribute('href')).toBe('/recipes');
-        expect(screen.getByText('Prosjekter').getAttribute('href')).toBe('/prosjekter');
-        expect(screen.getByText('Garnlager').getAttribute('href')).toBe('/stash');
-        expect(screen.getByText('Kontakt oss').getAttribute('href')).toBe('/kontaktoss');
+        expect(screen.getByText('Recipes').getAttribute('href')).toBe('/recipes');
+        expect(screen.getByText('Projects').getAttribute('href')).toBe('/projects');
+        expect(screen.getByText('Stash').getAttribute('href')).toBe('/stash');
+        expect(screen.getByText('Contact us').getAttribute('href')).toBe('/contactus');
     });
 
 });
