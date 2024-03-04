@@ -33,12 +33,22 @@ const SignUp = ({ toggleForm }) => {
     axios.post('http://localhost:5002/createuser', postData)
     .then(function(response){
       console.log("Response: ", response)
+      if (response.data.token){
+        // Store the token in sessionStorage and redirect the user to the home page
+        sessionStorage.setItem('token', response.data.token)
+        window.location.href = '/';
+        } 
+      else {
+        setErrorMessage("Something went wrong. Please try again.");
+        console.log("No token received")
+      }
     })
     .catch(function(error){
       console.error("Error: ", error)
+      setError("Signing up failed. The username might already be in use. Please try again.")
     })
 
-    console.log('Signup Data', data);
+    // console.log('Signup Data', data);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import './Reg.css';
 import validator from 'validator';
@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 
 const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
     const navigate = useNavigate();
+    const [error, setError] = useState(''); // Legger til en tilstand for feilmelding
     const { register, handleSubmit, formState: { errors } } = useForm();
     
     // Function to handle the form submission
@@ -28,11 +29,13 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                 window.location.href = '/';
                 
             } else {
+                setErrorMessage("Something went wrong. Please try again.");
                 console.log("No token received")
             }
         })
         .catch(function(error){
-            console.error("Error: ", error)
+            console.error("Error: ", error); 
+            setError("Login failed. Check your username and password and try again."); 
         })
     };
 
@@ -61,7 +64,8 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                     <div className='infoText-small'>
                         <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
                     </div>
-
+                    {/* Display an error message it something goes wrong  */}
+                    {error && <div className="errorMsg">{error}</div>}
                     <div>
                         <button className="light-button"type="submit">Log In</button>
                     </div>
