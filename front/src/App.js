@@ -33,7 +33,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/kontaktoss" element={<ContactUs />} />
+            <Route path="/contactus" element={<ContactUs />} />
             {!isLoggedIn ? (
               <>
                 <Route path="/login" element={<LogIn />} />
@@ -43,7 +43,7 @@ export default function App() {
               <>
                 <Route path="/stash" element={<Stash />} />
                 <Route path="/recipes" element={<Recipes />} />
-                <Route path='/prosjekter' element={<h1>Prosjekter</h1>} />
+                <Route path='/projects' element={<h1>Prosjekter</h1>} />
                 {/* <Route path="/profile" element={<Profile />} /> Legg til din profilside her */}
               </>
             )}
