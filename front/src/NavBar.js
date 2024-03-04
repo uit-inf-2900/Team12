@@ -17,12 +17,12 @@ const NavBar = ({ isLoggedIn, handleLogout }) => {
           )}
           {isLoggedIn && (
             <>
-          <li className="nav-item"><NavLink to="/recipes" className="nav-link">Oppskrifter</NavLink></li>
-          <li className="nav-item"><NavLink to="/prosjekter" className="nav-link">Prosjekter</NavLink></li>
-          <li className="nav-item"><NavLink to="/stash" className="nav-link">Garnlager</NavLink></li>
+          <li className="nav-item"><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
+          <li className="nav-item"><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
+          <li className="nav-item"><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
           </>
           )}
-          <li className="nav-item"><NavLink to="/kontaktoss" className="nav-link">Kontakt oss</NavLink></li>
+          <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>
           {/* Add more navigation items */}
         </ul>
         {isLoggedIn && (
