@@ -11,7 +11,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     
-
+    // Function to handle the form submission
     const onSubmit = (data) => {
         const postData = {
             userEmail: data.email,
@@ -23,14 +23,13 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
             console.log("Response: ", response)
 
             if (response.data.token){
-                // Get the 
+                // Store the token in sessionStorage and redirect the user to the home page
                 sessionStorage.setItem('token', response.data.token)
                 window.location.href = '/';
                 
             } else {
                 console.log("No token received")
             }
-            // sessionStorage.setItem('token', response.data.token)
         })
         .catch(function(error){
             console.error("Error: ", error)
