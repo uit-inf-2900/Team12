@@ -1,0 +1,40 @@
+
+@import url('../../Components/navbar.css');
+@import url('../../App.css');
+@import url('../../Components/colorAndText.css');
+@import url('../../Components/Buttons.css');
+
+
+/* UpLoad.css */
+.UpLoad-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);     /* Semi-transparent black */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.UpLoad-content {
+    background: var(--box-color-light);
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.upload-flex-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: start; /* Juster elementene til toppen */
+    width: 100%; /* Bruk hele bredden for å tillate plass på siden */
+}
+
+
+
