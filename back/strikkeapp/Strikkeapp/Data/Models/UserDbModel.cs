@@ -6,7 +6,6 @@ namespace Strikkeapp.Data.Models
 {
     public class UserLogIn
     {
-        // Define UserLogIn schema
         [Key]
         public Guid UserId { get; set; } = Guid.NewGuid();
 
@@ -22,7 +21,7 @@ namespace Strikkeapp.Data.Models
         public string UserStatus { get; set; } = "unverified";
 
         // Validation for user status
-        public static ValidationResult ValidateUserStatus(string userStatus, ValidationContext context)
+        private static ValidationResult ValidateUserStatus(string userStatus)
         {
             var validStatuses = new List<string> { "unverified", "verified", "banned", "inactive" };
             if (validStatuses.Contains(userStatus))
@@ -52,7 +51,7 @@ namespace Strikkeapp.Data.Models
         public string UserType { get; set; } = "user";
 
         // Validation for user type
-        public static ValidationResult ValidateUserType(string userType, ValidationContext context)
+        private static ValidationResult ValidateUserType(string userType)
         {
             var validTypes = new List<string> { "admin", "user" };
             if (validTypes.Contains(userType))
@@ -66,7 +65,6 @@ namespace Strikkeapp.Data.Models
     public class KnittingRecipes
     {
         [Key]
-       
         public Guid KnittingRecipeId { get; set; } = Guid.NewGuid();
 
         [Required]
@@ -74,6 +72,15 @@ namespace Strikkeapp.Data.Models
         public Guid UserId { get; set;}
 
         [Required]
-        public byte[]? RecipePDF { get; set;}
+        public string RecipeName { get; set; } = string.Empty;
+
+        [Required]
+        public int NeedleSize { get; set; }
+
+        [Required]
+        public string KnittingGauge {  get; set; } = string.Empty;
+
+        [Required]
+        public string? RecipePath { get; set;}
     }
 }

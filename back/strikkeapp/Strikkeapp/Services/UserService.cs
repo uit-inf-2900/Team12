@@ -4,7 +4,6 @@ using System.IdentityModel.Tokens.Jwt;
 
 using Strikkeapp.Data.Models;
 
-
 using static strikkeapp.services.UserService;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -37,6 +36,7 @@ public class UserService : IUserService
         _configuration = configuration;
     }
 
+    // Schema for query result
     public class UserServiceResult
     {
         public bool Success { get; set; }
@@ -44,10 +44,7 @@ public class UserService : IUserService
         public string ErrorMessage { get; set; } = string.Empty;
         public string Token { get; set; } = string.Empty;
 
-        public static UserServiceResult ForSuccess(Guid userId) => new UserServiceResult { 
-            Success = true, 
-            UserId = userId };
-        public static UserServiceResult ForSuccessToken(Guid userId, string token) => new UserServiceResult { 
+        public static UserServiceResult ForSuccess(Guid userId, string token) => new UserServiceResult { 
             Success = true,
             UserId = userId,
             Token = token };
@@ -57,44 +54,55 @@ public class UserService : IUserService
 
     }
 
+    // Add new user to database
     public UserServiceResult CreateUser(string userEmail, string userPwd, string userFullName, DateTime userDOB)
     {
         try
         {
+            // Check if email already exsits in database
             if (_context.UserLogIn.Any(x => x.UserEmail == userEmail))
             {
                 return UserServiceResult.ForFailure("Email already exsits");
             }
 
+            // Add to userLogin
             var userLogin = new UserLogIn();
             userLogin.UserEmail = userEmail;
             var hasedPwd = HashPassword(userEmail, userPwd);
             userLogin.UserPwd = hasedPwd;
 
+            // Save new entry
             _context.UserLogIn.Add(userLogin);
             _context.SaveChanges();
 
+            // Add to userDetails
             var userDetails = new UserDetails();
             userDetails.UserId = userLogin.UserId;
             userDetails.UserFullName = userFullName;
             userDetails.DateOfBirth = userDOB;
 
+            // Save new entry
             _context.UserDetails.Add(userDetails);
             _context.SaveChanges();
 
-            return UserServiceResult.ForSuccess(userLogin.UserId);
+            // Generate and return token
+            var token = GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
+            return UserServiceResult.ForSuccess(userLogin.UserId, token);
         }
 
+        // Handle any errors
         catch (DbUpdateException ex)
         {
             return UserServiceResult.ForFailure(ex.Message);
         }
     }
 
+    // Log existing user in
     public UserServiceResult LogInUser(string userEmail, string userPwd)
     {
         try
         {
+            // Get user info from database
             var loginInfo = _context.UserLogIn
                 .Where(x => x.UserEmail == userEmail)
                 .Select(x => new {
@@ -103,44 +111,54 @@ public class UserService : IUserService
                     x.UserStatus})
                 .FirstOrDefault();
 
+            // If user does not exsist
             if (loginInfo == null)
             {
                 return UserServiceResult.ForFailure("Invalid login attempt");
             }
 
+            // If user is banned
             if(loginInfo.UserStatus == "banned")
             {
                 return UserServiceResult.ForFailure("User is banned");
             }
 
-
+            // Unhash password
             var res = _passwordHasher.VerifyHashedPassword(userEmail, loginInfo.UserPwd, userPwd);
 
+            // Check if password matches
             if (res == PasswordVerificationResult.Failed)
             {
                 return UserServiceResult.ForFailure("Invalid login attempt");
             }
 
+            // Generate and return token
             var token = GenerateJwtToken(userEmail, loginInfo.UserId);
-            return UserServiceResult.ForSuccessToken(loginInfo.UserId, token);
+            return UserServiceResult.ForSuccess(loginInfo.UserId, token);
         }
 
+        // Handle errors
         catch (DbUpdateException ex)
         {
             return UserServiceResult.ForFailure(ex.Message);
         }
     }
 
+    // Generate token for satying logged in
     public string GenerateJwtToken(string userEmail, Guid userID)
     {
+        // Recieve token key from app config and verify
         var keyString = _configuration["Jwt:Key"];
         if (string.IsNullOrWhiteSpace(keyString))
         {
             throw new InvalidOperationException("JWT Key is not configured properly.");
         }
 
+        // Generate new handler to generate token
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(keyString); // Ensure _configuration is accessible
+        // Convert key to bytes
+        var key = Encoding.ASCII.GetBytes(keyString);
+        // Add token descriptor with user info
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
@@ -148,12 +166,16 @@ public class UserService : IUserService
             new Claim(ClaimTypes.Email, userEmail),
             new Claim("userId", userID.ToString())
         }),
-            Expires = DateTime.UtcNow.AddDays(7), // Token expiration
+            // Set expiration date
+            Expires = DateTime.UtcNow.AddDays(7),
+            // Set sign in credentials
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            // Add issuer and audience from config
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"]
         };
 
+        // Create and return the token as a string
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }

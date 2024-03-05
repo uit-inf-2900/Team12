@@ -7,12 +7,14 @@ namespace strikkeapp.Controllers;
 [Route("[controller]")]
 public class UsersController : ControllerBase
 {
+    // Set user service
     private readonly IUserService _userService;
     public UsersController(IUserService userService)
     {
         _userService = userService;
     }
 
+    // Create user request schema
     public class CreateUserRequest
     {
         public string UserEmail { get; set; } = string.Empty;
@@ -28,6 +30,7 @@ public class UsersController : ControllerBase
            !string.IsNullOrWhiteSpace(UserFullName));
         }
 
+        // Calculate birth day
         public DateTime Dob2Dt ()
         {
             int year = UserDOB / 10000;
@@ -39,6 +42,7 @@ public class UsersController : ControllerBase
         }
     }
 
+    // Login request schema
     public class LogInUserRequest
     {
         public string UserEmail { get; set; } = string.Empty;
@@ -57,15 +61,19 @@ public class UsersController : ControllerBase
     [Route("/createuser")]
     public IActionResult CreateUser([FromBody] CreateUserRequest request)
     {
+        // Check request
         if (!request.requestOK())
         {
             return BadRequest();
         }
 
+        // Call service
         var result = _userService.CreateUser(request.UserEmail, request.UserPwd, request.UserFullName, request.Dob2Dt());
         
+        // Check if service succeeded
         if(!result.Success)
         {
+            // Send conflict if email already exsits
             if(result.ErrorMessage == "Email already exsits")
             {
                 return Conflict(result.ErrorMessage);
@@ -74,29 +82,39 @@ public class UsersController : ControllerBase
             return BadRequest(result.ErrorMessage);
         }
 
-        return Ok(result.UserId);
+        // Return userid and token on success
+        return Ok(new
+        {
+            UserID = result.UserId,
+            Token = result.Token
+        });
     }
 
     [HttpPost]
     [Route("/login")]
     public IActionResult LogInUser([FromBody] LogInUserRequest request)
     {
-
+        // Call service
         var result = _userService.LogInUser(request.UserEmail, request.UserPwd);
+        // Check for success
         if (!result.Success)
         {
+            // Unauthorized if invalid atempt or user is banned
             if (result.ErrorMessage == "Invalid login attempt" ||
                 result.ErrorMessage == "User is banned")
             {
                 return Unauthorized(result.ErrorMessage);
             }
 
+            // Something else is wrong
             return StatusCode(500, result.ErrorMessage);
         }
 
-
-        return Ok(new {
+        // Return userid and token on success
+        return Ok(new 
+        {
             UserID = result.UserId,
-             Token = result.Token});
+             Token = result.Token
+        });
     }
 }
