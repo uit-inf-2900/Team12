@@ -20,6 +20,7 @@ builder.Services.AddDbContext<StrikkeappDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 var jwtKey = builder.Configuration["Jwt:key"];
 if(string.IsNullOrWhiteSpace(jwtKey))
