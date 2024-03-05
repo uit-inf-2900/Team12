@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import './Reg.css';
+import { useNavigate } from 'react-router-dom';
 import InputField from './InputField';
 import axios from 'axios';
 
+import './Reg.css';
+
 
 const SignUp = ({ toggleForm }) => {
-  const { register, handleSubmit, formState: { errors }, watch, setError } = useForm();
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const [error, setError] = useState(''); 
+  
 
   const onSubmit = (data) => {
     if (data.password !== data.confirmPassword) {
@@ -30,21 +35,34 @@ const SignUp = ({ toggleForm }) => {
     axios.post('http://localhost:5002/createuser', postData)
     .then(function(response){
       console.log("Response: ", response)
+      if (response.data.token){
+        // Store the token in sessionStorage and redirect the user to the home page
+        sessionStorage.setItem('token', response.data.token)
+        window.location.href = '/';
+        } 
+      else {
+        console.log("No token received")
+      }
     })
     .catch(function(error){
-      console.error("Error: ", error)
+      console.error("Error: ", error);
+      if (error.response && error.response.status === 409) {
+        setError("A user with this email already exists");
+      } else {
+        setError("Something went wrong. Please try again later");
+      }
     })
-
-    console.log('Signup Data', data);
+    
   };
+
 
   return (
     <div className='box-container'>
       <div className="box dark">
-        <h2>Hello, Friend!</h2>
+        <h2>Hello, Knitter!</h2>
         <p>Already have an account?</p>
-        <div className='black'>
-          <button onClick={toggleForm} className="signin-button"> Log in</button>
+        <div >
+          <button className='dark-button' onClick={() => navigate('/login')}>Log in</button>
         </div>
       </div>
       <div className="box light">
@@ -62,7 +80,7 @@ const SignUp = ({ toggleForm }) => {
           {/* Use InputField component for Email input */}
           <InputField
             placeholder="Email"
-            type="text"
+            type="email"
             register={register("email", {
               required: "Email is required.",
               pattern: {
@@ -78,7 +96,7 @@ const SignUp = ({ toggleForm }) => {
             placeholder="Birthday"
             type="text"
             register={register("birthday", {
-              required: "Birthday is required.",
+              required: "Birthday is required  (YYYY-MM-DD).",
               validate: (value) => {
                 const regex = /^\d{4}-\d{2}-\d{2}$/;
                 if (!regex.test(value)) {
@@ -119,8 +137,10 @@ const SignUp = ({ toggleForm }) => {
             errors={errors.confirmPassword}
           />
 
-          <div className="purple">
-            <button type="submit">Sign up</button>
+          <div>
+            {/* Generell feilmeldingsviser */}
+            {error && <div className="errorMsg">{error}</div>}
+            <button className="light-button" type="submit">Sign up</button>
           </div>
         </form>
       </div>

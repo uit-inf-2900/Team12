@@ -1,0 +1,41 @@
+
+/* Button specifications */
+button {
+    padding: 10px 15px; /* Padding inside buttons */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin: 0 auto;
+    margin-top: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+/* dark-button */
+.dark-button {
+    background-color: var(--button-bg-colo-dark);   
+    color: var(--button-text-color-light);          /* Text */
+}
+
+.dark-button:hover {
+    background-color: var(--button-hover-dark); /* Darken the button on hover */
+    opacity: 0.8; /* Slight transparency on hover */
+}
+
+/* light-button */
+.light-button {
+    background-color: var(--button-bg-colo-light); 
+    color:  var(--button-text-color-dark); 
+}
+.light-button:hover {
+    background-color: var(--button-hover-light); /* Darken the button on hover */
+    opacity: 0.8; /* Slight transparency on hover */
+}
+
+.close-button {
+    float: center;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+}

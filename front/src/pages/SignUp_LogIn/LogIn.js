@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import './Reg.css';
 import validator from 'validator';
 import InputField from './InputField'; 
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
+    const navigate = useNavigate();
+    const [error, setError] = useState(''); 
     const { register, handleSubmit, formState: { errors } } = useForm();
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [apiError, setApiError] = useState('');
-
+    
+    // Function to handle the form submission
     const onSubmit = (data) => {
-        // console.log('Log In Data', data);
-        //setApiError('');
-        //setIsLoading(true);
-
         const postData = {
             userEmail: data.email,
             userPwd: data.password
@@ -23,23 +22,20 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
         axios.post('http://localhost:5002/login', postData)
         .then(function(response){
             console.log("Response: ", response)
+
+            if (response.data.token){
+                // Store the token in sessionStorage and redirect the user to the home page
+                sessionStorage.setItem('token', response.data.token)
+                window.location.href = '/';
+                
+            } else {
+                console.log("No token received")
+            }
         })
         .catch(function(error){
-            console.error("Error: ", error)
+            console.error("Error: ", error); 
+            setError("Login failed. Check your username and password and try again."); 
         })
-
-        /*
-        //  Simulate API call
-        try{
-            console.log('Log In Data', data);
-        }
-        catch(error){
-            setApiError('Log In failed. Please try again later.');
-        }
-        finally{
-            setIsLoading(false);
-        }
-        */
     };
 
     return (
@@ -64,21 +60,23 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         errors={errors.password}
                         aria-label="Password"
                     />
-                    <div className='small-text'>
-                        <a href="#" onClick={onForgotPasswordClick}>Forgot password?</a>
+                    <div className='infoText-small'>
+                        <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
                     </div>
 
-                    <div className="purple">
-                        <button type="submit">Log In</button>
+                    {/* Display an error message it something goes wrong  */}
+                    <div>
+                        {error && <div className="errorMsg">{error}</div>}
+                        <button className="light-button"type="submit">Log In</button>
                     </div>
                 </form>
             </div>
 
             <div className="box dark">
-                <h2>Hello, Friend!</h2>
+                <h2>Hello, Knitter!</h2>
                 <p>Enter your personal details and start journey with us</p>
-                <div className='black'>
-                    <button onClick={toggleForm}>Don't have an account? Sign Up</button>
+                <div>
+                    <button className='dark-button' onClick={() => navigate('/signup')}>Don't have an account? Sign Up</button>
                 </div>
             </div>
         </div>
