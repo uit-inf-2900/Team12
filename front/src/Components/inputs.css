@@ -2,6 +2,7 @@
 input[type="text"], 
 input[type="password"], 
 input[type="email"], 
+input[type="number"], 
 input[type="date"] {
     width: 90%;                                         /* Responsive width relative to parent */
     padding: 10px 15px;                                 /* Padding inside input fields */
