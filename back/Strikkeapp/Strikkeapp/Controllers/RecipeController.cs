@@ -49,7 +49,7 @@ public class RecipeController : ControllerBase
 
         if (!result.Success == false)
         {
-            return StatusCode(422, result.ErrorMesssage);
+            StatusCode(422, result.ErrorMesssage);
         }
 
         return Created(result.Path, "Recipe uploaded successfully");

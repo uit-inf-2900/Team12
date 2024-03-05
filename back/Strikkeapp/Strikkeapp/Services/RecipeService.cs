@@ -61,9 +61,6 @@ public class RecipeService : IRecipeService
                 KnittingGauge = knittingGauge
             };
 
-            _context.KnittingRecipes.Add(knittingRes);
-            _context.SaveChanges();
-
             var fileName = $"{knittingRes.KnittingRecipeId}.pdf";
             var filePath = Path.Combine(_storagePath, fileName);
             Directory.CreateDirectory(_storagePath);
@@ -74,6 +71,8 @@ public class RecipeService : IRecipeService
             }
 
             knittingRes.RecipePath = filePath;
+
+            _context.KnittingRecipes.Add(knittingRes);
             _context.SaveChanges();
 
             return RecipeServiceResult.ForSuccess(filePath);
