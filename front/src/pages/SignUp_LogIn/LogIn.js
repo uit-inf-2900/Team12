@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
     const navigate = useNavigate();
-    const [error, setError] = useState(''); // Legger til en tilstand for feilmelding
+    const [error, setError] = useState(''); 
     const { register, handleSubmit, formState: { errors } } = useForm();
     
     // Function to handle the form submission
@@ -29,7 +29,6 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                 window.location.href = '/';
                 
             } else {
-                setErrorMessage("Something went wrong. Please try again.");
                 console.log("No token received")
             }
         })
@@ -64,9 +63,10 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                     <div className='infoText-small'>
                         <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
                     </div>
+
                     {/* Display an error message it something goes wrong  */}
-                    {error && <div className="errorMsg">{error}</div>}
                     <div>
+                        {error && <div className="errorMsg">{error}</div>}
                         <button className="light-button"type="submit">Log In</button>
                     </div>
                 </form>

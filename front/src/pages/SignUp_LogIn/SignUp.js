@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import InputField from './InputField';
@@ -9,7 +9,9 @@ import './Reg.css';
 
 const SignUp = ({ toggleForm }) => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors }, watch, setError } = useForm();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const [error, setError] = useState(''); 
+  
 
   const onSubmit = (data) => {
     if (data.password !== data.confirmPassword) {
@@ -39,17 +41,20 @@ const SignUp = ({ toggleForm }) => {
         window.location.href = '/';
         } 
       else {
-        setErrorMessage("Something went wrong. Please try again.");
         console.log("No token received")
       }
     })
     .catch(function(error){
-      console.error("Error: ", error)
-      setError("Signing up failed. The username might already be in use. Please try again.")
+      console.error("Error: ", error);
+      if (error.response && error.response.status === 409) {
+        setError("A user with this email already exists");
+      } else {
+        setError("Something went wrong. Please try again later");
+      }
     })
-
-    // console.log('Signup Data', data);
+    
   };
+
 
   return (
     <div className='box-container'>
@@ -133,6 +138,8 @@ const SignUp = ({ toggleForm }) => {
           />
 
           <div>
+            {/* Generell feilmeldingsviser */}
+            {error && <div className="errorMsg">{error}</div>}
             <button className="light-button" type="submit">Sign up</button>
           </div>
         </form>
