@@ -8,6 +8,7 @@ import './Reg.css';
 
 
 const SignUp = ({ toggleForm }) => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const [error, setError] = useState(''); 
   
