@@ -41,17 +41,18 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
         // TODO: Implement file upload logic
         const formData = new FormData(); 
 
-        formData.append("file", file); 
-        Object.keys(recipeInfo).forEach(key => formData.append(key, recipeInfo[key]));
+        formData.append("RecipeFile", file);
+        formData.append("UserToken", sessionStorage.getItem('token'));
+        formData.append("RecipeName", recipeInfo.recipeName);
+        formData.append("NeedleSize", parseInt(recipeInfo.needleSize));
+        formData.append("KnittingGauge", recipeInfo.knittingGauge);
 
         axios.post('http://localhost:5002/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then(reponse => {
-            // Handle success 
-            fetchRecipes(); 
-            onClose(); 
+            console.log("Upload success:", reponse);
         }).catch(error => {
             // Handle error 
             console.error("Upload error:", error);
