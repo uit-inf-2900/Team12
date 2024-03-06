@@ -2,7 +2,11 @@ import React, { useState, useRef } from 'react';
 import { IoIosCloudUpload } from "react-icons/io";          // Import the icon component from react icons library
 import InputField from '../SignUp_LogIn//InputField';
 import './UpLoad.css';
+import axios from 'axios';
 
+
+// TODO: Implement file upload logic
+// TODO: Implement error handling and feedback to the user
 
 
 const UpLoad = ({ onClose, fetchRecipes }) => {
@@ -35,7 +39,25 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
     // Handle the file upload
     const uploadFile = () => {
         // TODO: Implement file upload logic
+        const formData = new FormData(); 
+
+        formData.append("file", file); 
+        Object.keys(recipeInfo).forEach(key => formData.append(key, recipeInfo[key]));
+
+        axios.post('http://localhost:5002/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(reponse => {
+            // Handle success 
+            fetchRecipes(); 
+            onClose(); 
+        }).catch(error => {
+            // Handle error 
+            console.error("Upload error:", error);
+        })
     };
+
 
     // Function to clear the file 
     const clearFile = () => {
@@ -71,7 +93,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
                     <div className="input">
                         <InputField placeholder="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
                         <InputField placeholder="Author" name="author"  type="text" onChange={handleInputChange} />
-                        <InputField placeholder="Needle Size" name="needleSize"  type="text" onChange={handleInputChange} />
+                        <InputField placeholder="Needle Size" name="needleSize"  type="number" onChange={handleInputChange} />
                         <InputField placeholder="Knitting Gauge" name="knittingGauge"  type="text" onChange={handleInputChange}  />
                         <InputField placeholder="Notes" name="notes"   type="text"onChange={handleInputChange}  />
                     </div>
