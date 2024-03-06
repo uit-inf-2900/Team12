@@ -16,7 +16,7 @@ const RecipesPage = () => {
 
     return (
         <div className='page-container'> 
-            <h1> Welcome to the Recipes Page! </h1>
+            <h1 style={{}}> Welcome to the Recipes Page! </h1>
 
             {/* Upload a recipe */}
             <button className='light-button' onClick={() => setUploading(true)}>Upload Recipe</button>
