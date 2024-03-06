@@ -47,9 +47,9 @@ public class RecipeController : ControllerBase
         var result = _recipeService.StoreRecipe(stream, formData.UserToken, 
             formData.RecipeName, formData.NeedleSize, formData.KnittingGauge);
 
-        if (!result.Success == false)
+        if (!result.Success)
         {
-            StatusCode(422, result.ErrorMesssage);
+            return StatusCode(422, result.ErrorMesssage);
         }
 
         return Created(result.Path, "Recipe uploaded successfully");
