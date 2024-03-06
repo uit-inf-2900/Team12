@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
-
 using Strikkeapp.Data.Models;
 
 using static strikkeapp.services.UserService;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
+
+using Strikkeapp.Services;
 
 namespace strikkeapp.services;
 
@@ -15,14 +12,13 @@ public interface IUserService
 {
     public UserServiceResult CreateUser(string userEmail, string userPwd, string userFullName, DateTime userDOB);
     public UserServiceResult LogInUser(string userEmail, string userPwd);
-    public string GenerateJwtToken(string userEmail, Guid userID);
 }
 
 public class UserService : IUserService
 {
     private readonly StrikkeappDbContext _context;
     private readonly PasswordHasher<object> _passwordHasher = new PasswordHasher<object>();
-    private readonly IConfiguration _configuration;
+    private readonly TokenService _tokenService;
 
     private string HashPassword(string email, string password)
     {
@@ -30,10 +26,10 @@ public class UserService : IUserService
         return _passwordHasher.HashPassword(email, password);
     }
 
-    public UserService(StrikkeappDbContext context, IConfiguration configuration)
+    public UserService(StrikkeappDbContext context, TokenService tokenService)
     {
         _context = context;
-        _configuration = configuration;
+        _tokenService = tokenService;
     }
 
     // Schema for query result
@@ -86,7 +82,7 @@ public class UserService : IUserService
             _context.SaveChanges();
 
             // Generate and return token
-            var token = GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
+            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
             return UserServiceResult.ForSuccess(userLogin.UserId, token);
         }
 
@@ -133,7 +129,7 @@ public class UserService : IUserService
             }
 
             // Generate and return token
-            var token = GenerateJwtToken(userEmail, loginInfo.UserId);
+            var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId);
             return UserServiceResult.ForSuccess(loginInfo.UserId, token);
         }
 
@@ -144,39 +140,5 @@ public class UserService : IUserService
         }
     }
 
-    // Generate token for satying logged in
-    public string GenerateJwtToken(string userEmail, Guid userID)
-    {
-        // Recieve token key from app config and verify
-        var keyString = _configuration["Jwt:Key"];
-        if (string.IsNullOrWhiteSpace(keyString))
-        {
-            throw new InvalidOperationException("JWT Key is not configured properly.");
-        }
 
-        // Generate new handler to generate token
-        var tokenHandler = new JwtSecurityTokenHandler();
-        // Convert key to bytes
-        var key = Encoding.ASCII.GetBytes(keyString);
-        // Add token descriptor with user info
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new[]
-            {
-            new Claim(ClaimTypes.Email, userEmail),
-            new Claim("userId", userID.ToString())
-        }),
-            // Set expiration date
-            Expires = DateTime.UtcNow.AddDays(7),
-            // Set sign in credentials
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            // Add issuer and audience from config
-            Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"]
-        };
-
-        // Create and return the token as a string
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    }
 }

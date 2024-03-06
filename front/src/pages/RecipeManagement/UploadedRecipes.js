@@ -8,6 +8,8 @@ const UploadedRecipes = () => {
     const [sortBy, setSortBy] = useState('');
     const [loading, setLoading] = useState(true);
 
+    // axios.get('/api/uploaded'); 
+
     // Effect to fetch recipes on component mount
     useEffect(() => {
         fetchRecipes();

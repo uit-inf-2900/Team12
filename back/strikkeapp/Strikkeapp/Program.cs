@@ -4,6 +4,7 @@ using Strikkeapp.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Strikkeapp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<TokenService>();
+
 // Add database service
 builder.Services.AddDbContext<StrikkeappDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 
 var jwtKey = builder.Configuration["Jwt:key"];
 if(string.IsNullOrWhiteSpace(jwtKey))
