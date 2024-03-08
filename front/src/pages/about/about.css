@@ -1,9 +1,4 @@
 /* Importing global styles */
-@import url('../../Components/navbar.css');
-@import url('../../App.css');
-@import url('../../Components/colorAndText.css');
-
-
 /* Make the img and info stay beside eachother and have the same height*/
 .section-container .team-member, 
 .section-container .feature-item  {

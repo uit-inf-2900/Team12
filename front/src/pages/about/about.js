@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
 
-import "../SignUp_LogIn/Reg.css";
+import "../../Components/main.css";
 import "./about.css";
 
 import { getImageByName } from '../../images/getImageByName';

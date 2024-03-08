@@ -1,5 +1,5 @@
 import React from "react";
-import "./SignUp_LogIn/Reg.css";
+import "../Components/main.css";
 
 
 export const Stash = () => {

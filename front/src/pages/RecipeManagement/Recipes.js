@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FileUpload from './UpLoad';
 import UploadedRecipes from './UploadedRecipes'; // Assuming you've renamed the component
-import '../../Components/Buttons.css'
+import "../../Components/main.css";
 
 // Main component for recipe-related functionality
 const RecipesPage = () => {

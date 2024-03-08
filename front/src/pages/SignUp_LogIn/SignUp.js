@@ -5,6 +5,7 @@ import InputField from './InputField';
 import axios from 'axios';
 
 import './Reg.css';
+import "../../Components/main.css";
 
 
 const SignUp = ({ toggleForm }) => {
