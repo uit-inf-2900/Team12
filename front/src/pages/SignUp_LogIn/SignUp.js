@@ -5,6 +5,7 @@ import InputField from './InputField';
 import axios from 'axios';
 
 import './Reg.css';
+import "../../Components/main.css";
 
 
 const SignUp = ({ toggleForm }) => {
@@ -120,7 +121,7 @@ const SignUp = ({ toggleForm }) => {
               },
               pattern: {
                 value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-                message: "Password does not meet the requirements.",
+                message: "Password must include uppercase and lowercase letters, digits, and special characters (@$!%*?&).",
               },
             })}
             errors={errors.password}

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import './Reg.css';
+import "../../Components/main.css";
+
 import validator from 'validator';
 import InputField from './InputField'; 
 import axios from 'axios';
