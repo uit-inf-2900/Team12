@@ -121,7 +121,7 @@ const SignUp = ({ toggleForm }) => {
               },
               pattern: {
                 value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-                message: "Password does not meet the requirements.",
+                message: "Password does not meet the requirements. It must contain a upper and lowercase letters, digits, and special characters (@$!%*?&)",
               },
             })}
             errors={errors.password}
