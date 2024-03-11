@@ -35,7 +35,7 @@ public class RecipeController : ControllerBase
 
 
     [HttpPost]
-    [Route("/upload")]
+    [Route("upload")]
     public IActionResult UploadRecipe([FromForm] FormData formData)
     {
         if(!formData.requestOk() || formData.RecipeFile == null)
@@ -54,7 +54,18 @@ public class RecipeController : ControllerBase
 
         return Created(result.Path, "Recipe uploaded successfully");
     }
-        
+
+    [HttpGet]
+    public IActionResult GetRecipes([FromQuery] string userToken)
+    {
+        var result = _recipeService.GetRecipes(userToken);
+        if (!result.Success)
+        {
+            return StatusCode(500, result.ErrorMessage);
+        }
+
+        return Ok(result.Recipes);
+    }
 }
 
 

@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 
 using Strikkeapp.Data.Models;
+using Strikkeapp.Recipes.Models;
 
 namespace Strikkeapp.Services;
 
 public interface IRecipeService
 {
     public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge);
+    public RecipeServiceResultGet GetRecipes(string userToken);
 }
 
 public class RecipeService : IRecipeService
@@ -22,25 +24,6 @@ public class RecipeService : IRecipeService
         _storagePath = configuration.GetConnectionString("RecipesStorage")!;
         _tokenService = tokenService;
         _context = context;
-    }
-
-    public class RecipeServiceResult
-    {
-        public bool Success { get; set; }
-        public string Path { get; set; } = string.Empty;
-        public string ErrorMesssage { get; set; } = string.Empty;
-
-        public static RecipeServiceResult ForSuccess(string RecipePath) => new RecipeServiceResult
-        {
-            Path = RecipePath,
-            Success = true
-        };
-
-        public static RecipeServiceResult ForFailure(string message) => new RecipeServiceResult
-        {
-            Success = false,
-            ErrorMesssage = message
-        };
     }
 
     public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge)
@@ -84,4 +67,31 @@ public class RecipeService : IRecipeService
         }
     }
 
+    public RecipeServiceResultGet GetRecipes(string userToken)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (tokenResult.Success == false)
+        {
+            return RecipeServiceResultGet.ForFailure(tokenResult.ErrorMessage);
+        }
+
+        try
+        {
+            var recipes = _context.KnittingRecipes
+                .Where(r => r.UserId == tokenResult.UserId)
+                .Select(r => new RecipeInfo
+                {
+                    RecipeId = r.KnittingRecipeId,
+                    RecipeName = r.RecipeName,
+                })
+                .ToList();
+
+            return RecipeServiceResultGet.ForSuccess(recipes);
+        }
+
+        catch (Exception ex)
+        {
+            return RecipeServiceResultGet.ForFailure(ex.Message);
+        }
+    }
 }
