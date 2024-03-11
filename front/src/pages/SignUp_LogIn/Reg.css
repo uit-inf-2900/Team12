@@ -1,0 +1,29 @@
+
+
+
+
+/* NB: TROR IKKE VI TRENGER DETTE */
+/* Responsive styles for smaller screens */
+@media screen and (max-width: 900px) {
+    .button {
+        width: 90%; /* Full width for each section */
+        margin-bottom: 20px; /* Add space between the sections */
+    }
+
+    /* Larger input fields on smaller screens */
+    input[type="text"], input[type="password"], input[type="email"] {
+        width: 90%;
+    }
+}
+
+/* Adjust layout for very small screens */
+@media screen and (max-width: 600px) {
+    .button {
+        width: 100%; /* Full width for each section */
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+}
+
+
+
+
