@@ -1,5 +1,5 @@
 import React from 'react';
-import "../../Components/main.css";
+import "../../GlobalStyles/main.css";
 import './Profilepage.css'
 
 // import axios from 'axios';

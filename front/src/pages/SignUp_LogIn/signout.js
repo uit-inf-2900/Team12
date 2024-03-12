@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 <img src={require("../images/sau.svg")} alt="Sau" className="about-logo" />
-import "../Components/main.css";
+import "../../GlobalStyles/main.css";
 
 
 

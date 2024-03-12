@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { IoIosCloudUpload } from "react-icons/io";          // Import the icon component from react icons library
 import InputField from '../SignUp_LogIn//InputField';
 import './UpLoad.css';
-import "../../Components/main.css";
+import "../../GlobalStyles/main.css";
 
 import axios from 'axios';
 

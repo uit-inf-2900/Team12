@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import './Reg.css';
-import "../../Components/main.css";
+import "../../GlobalStyles/main.css";
 
 import validator from 'validator';
 import InputField from './InputField'; 

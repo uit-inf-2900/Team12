@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import InputField from './InputField';
 import axios from 'axios';
 
-import './Reg.css';
-import "../../Components/main.css";
+import "../../GlobalStyles/main.css";
 
 
 const SignUp = ({ toggleForm }) => {

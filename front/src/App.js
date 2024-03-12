@@ -3,7 +3,7 @@ import {Link,  BrowserRouter as Router,  Route, Routes } from "react-router-dom"
 
 
 // Import our pages
-import NavBar from './NavBar'
+import NavBar from './Components/NavBar'
 import {About} from './pages/about/about'
 import {Home} from './pages/home'
 import {Stash} from './pages/stash'

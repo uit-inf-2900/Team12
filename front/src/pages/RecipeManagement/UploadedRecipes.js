@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import "../../Components/main.css";
+import "../../GlobalStyles/main.css";
 
 const UploadedRecipes = () => {
     // State for storing recipes, sorting criteria, and loading status

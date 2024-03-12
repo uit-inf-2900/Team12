@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import validator from 'validator'; // Sørg for at 'validator' er installert
 import Image from "../../images/6.png";
 
-import "../../Components/main.css";
+import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
 
 // 

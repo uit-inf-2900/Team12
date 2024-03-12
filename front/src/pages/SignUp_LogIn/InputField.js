@@ -1,6 +1,5 @@
 import React from 'react';
-import './Reg.css';
-import "../../Components/main.css";
+import "../../GlobalStyles/main.css";
 
 
 const InputField = ({ label, register, errors, ...inputProps }) => (
