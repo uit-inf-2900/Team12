@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import InputField from "../../Components/InputField";
 import { useForm } from 'react-hook-form';
-import validator from 'validator'; // Sørg for at 'validator' er installert
-import Image from "../../images/6.png";
+import validator from 'validator'; 
+import axios from 'axios';
 
+import Image from "../../images/6.png";
+import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
 
@@ -35,8 +36,14 @@ const ContactUs = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
     const onSubmit = data => {
-        console.log(data);
-        reset(); // Clear form after submission
+        axios.post('http://localhost:5002/contact', data)
+            .then(response => {
+                console.log(data);
+                reset(); // Clear form after submission
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     return (
