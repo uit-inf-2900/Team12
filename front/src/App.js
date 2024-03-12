@@ -13,6 +13,7 @@ import SignUp from './pages/SignUp_LogIn/SignUp';
 import Recipes from './pages/RecipeManagement/Recipes';
 import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
+import Projects from './pages/ProjectTracking/ProjectsPage';
 
 const NotFound = () => {
   return (
@@ -54,7 +55,7 @@ export default function App() {
               <>
                 <Route path="/stash" element={<Stash />} />
                 <Route path="/recipes" element={<Recipes />} />
-                <Route path='/projects' element={<h1>Prosjekter</h1>} />
+                <Route path='/projects' element={<Projects/>} />
                 <Route path="/profile" element={<Profilepage />} />
               </>
             )}
