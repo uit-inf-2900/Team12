@@ -12,9 +12,15 @@ button {
     justify-content: center;
 }
 
+
 /* dark-button */
 .dark-button {
     background-color: var(--button-bg-colo-dark);   
+    color: var(--button-text-color-light);          /* Text */
+}
+
+.dark-button.active {
+    background-color: var(--button-hover-dark);   
     color: var(--button-text-color-light);          /* Text */
 }
 
@@ -28,10 +34,16 @@ button {
     background-color: var(--button-bg-colo-light); 
     color:  var(--button-text-color-dark); 
 }
+.light-button.active {
+    background-color: var(--button-hover-light); 
+    color:  var(--button-text-color-dark); 
+}
 .light-button:hover {
     background-color: var(--button-hover-light); /* Darken the button on hover */
     opacity: 0.8; /* Slight transparency on hover */
 }
+
+
 
 .close-button {
     float: center;

@@ -8,7 +8,6 @@ import '../../GlobalStyles/main.css';
 
 
 const Projects = () => {
-    const status = ['Planned', 'In Progress', 'Completed'];
     const [activeStatus, setActiveStatus] = useState();
 
      // Hardcoded projects to see if the filtering works
@@ -27,14 +26,41 @@ const Projects = () => {
 
     const filteredProjects = projects.filter(project => project.status === activeStatus);
 
+    const buttonStyle = {
+        padding: '20px 30px', 
+        margin: '0 20px', 
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        display: 'flex', 
+        alignItems: 'center',
+        with: '100%', 
+    };
+
 
     return(
         <div className="page-container"> 
             <h1> All projects </h1>
-            <div className="section-container">
-                <button onClick={() => setActiveStatus('planned')} className={activeStatus === 'planned' ? 'active' : ''}>Planned</button>
-                <button onClick={() => setActiveStatus('in-progress') } className={activeStatus === 'in-progress' ? 'active' : ''}>In Progress</button>
-                <button onClick={() => setActiveStatus('completed')} className={activeStatus === 'completed' ? 'active' : ''}>Completed</button>
+            <div className="section-container" style={{"padding":"15px 30px;"}}>
+                <button 
+                onClick={() => setActiveStatus('planned')} 
+                className={`light-button ${activeStatus === 'planned' ? 'active' : ''}`}
+                style={buttonStyle}>
+                    Planned
+                </button>
+                <button 
+
+                onClick={() => setActiveStatus('in-progress') } 
+                className={`light-button ${activeStatus === 'in-progress' ? 'active' : ''}`}
+                style={buttonStyle}>
+                    In Progress
+                </button>
+
+                <button 
+                onClick={() => setActiveStatus('completed')} 
+                className={`light-button ${activeStatus === 'completed' ? 'active' : ''}`}
+                style={buttonStyle}>
+                    Completed
+                </button>
             </div>
 
             <div className="box dark">
