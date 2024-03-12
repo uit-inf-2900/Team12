@@ -8,7 +8,7 @@ import '../../GlobalStyles/main.css';
 
 
 const Projects = () => {
-    const [activeStatus, setActiveStatus] = useState();
+    const [activeStatus, setActiveStatus] = useState('in-progress');
 
      // Hardcoded projects to see if the filtering works
     const projects = [
