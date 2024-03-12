@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import "../../GlobalStyles/main.css";
 
 import validator from 'validator';
-import InputField from './InputField'; 
+import InputField from '../../Components/InputField';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';

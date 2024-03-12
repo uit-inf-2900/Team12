@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import InputField from './InputField';
+import InputField from '../../Components/InputField';
 import axios from 'axios';
 
 import "../../GlobalStyles/main.css";

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import InputField from './InputField';
+import InputField from '../../Components/InputField';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 

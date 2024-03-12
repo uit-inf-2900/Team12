@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InputField from "../SignUp_LogIn/InputField";
+import InputField from "../../Components/InputField";
 import { useForm } from 'react-hook-form';
 import validator from 'validator'; // Sørg for at 'validator' er installert
 import Image from "../../images/6.png";
