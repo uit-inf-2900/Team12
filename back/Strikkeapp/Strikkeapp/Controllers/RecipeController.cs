@@ -66,6 +66,27 @@ public class RecipeController : ControllerBase
 
         return Ok(result.Recipes);
     }
+
+    [HttpGet]
+    public IActionResult GetRecipePDF([FromQuery] string userToken, Guid recipeId)
+    {
+        var result = _recipeService.GetRecipePDF(recipeId, userToken);
+        if (!result.Success)
+        {
+            if(result.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+            if(result.ErrorMessage == "Recipe not found")
+            {
+                return NotFound();
+            }
+            
+            return StatusCode(500, result.ErrorMessage);
+        }
+
+        return File(result.PDFData, "application/pdf");
+    }
 }
 
 

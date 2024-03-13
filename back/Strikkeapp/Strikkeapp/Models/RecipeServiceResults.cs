@@ -37,3 +37,22 @@ public class RecipeServiceResultGet
         ErrorMessage = message
     };
 }
+
+public class RecipePDFResult
+{
+    public bool Success { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+    public byte[] PDFData { get; set; } = Array.Empty<byte>();
+
+    public static RecipePDFResult ForFailure(string message) => new RecipePDFResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+
+    public static RecipePDFResult ForSuccess(byte[] pdfData) => new RecipePDFResult
+    {
+        Success = true,
+        PDFData = pdfData
+    };
+}
