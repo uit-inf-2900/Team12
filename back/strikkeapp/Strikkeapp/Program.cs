@@ -21,6 +21,7 @@ builder.Services.AddDbContext<StrikkeappDbContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<IUserInfoService, UserInfoService>();
 
 var jwtKey = builder.Configuration["Jwt:key"];
 if(string.IsNullOrWhiteSpace(jwtKey))
