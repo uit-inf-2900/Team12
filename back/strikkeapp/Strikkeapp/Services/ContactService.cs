@@ -8,6 +8,7 @@ using Strikkeapp.Data.Dto;
 using Microsoft.IdentityModel.Tokens;
 
 
+
 //  https://mailtrap.io/blog/asp-net-core-send-email/
 
 namespace Strikkeapp.Services; 
@@ -15,7 +16,7 @@ namespace Strikkeapp.Services;
 // tenk på H fil i C 
 public interface IContactService
 {
-    public Guid CreateContactRequestAsync (ContactRequestDto request); 
+    public Guid CreateContactRequest (ContactRequestDto request); 
     // hva vil vi gjøre 
     // Liste inkommende greier 
     public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive); 
@@ -40,8 +41,10 @@ public class ContactService : IContactService
     }
 
     // Sende inn Kontaktforespørsel 
-    public Guid CreateContactRequestAsync (ContactRequestDto request)
+    public Guid CreateContactRequest (ContactRequestDto request)
     {
+        Console.WriteLine($"Received request: {(request)}");
+
         // validere inputen 
         ValidateContactRequest(request);    
 

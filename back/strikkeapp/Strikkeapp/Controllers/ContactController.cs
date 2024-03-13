@@ -21,9 +21,10 @@ public class ContactController : ControllerBase
 
     // Post a contact request
     [HttpPost]
+    
     public IActionResult PostContactRequest([FromBody] ContactRequestDto contactRequest)
     {
-        return Ok(_contactService.CreateContactRequestAsync(contactRequest));
+        return Ok(_contactService.CreateContactRequest(contactRequest));
     }
 
     // Get all contact requests

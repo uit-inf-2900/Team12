@@ -34,11 +34,20 @@ const ContactDetails = () => (
 
 const ContactUs = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    
 
     const onSubmit = data => {
-        axios.post('http://localhost:5002/contact', data)
+        const payload = {
+            userEmail: data.email, 
+            userMessage: data.message, 
+            userName: data.Name
+        };
+
+        console.log("Payload: ", payload);
+
+        axios.post('http://localhost:5002/api/Contact', payload)
             .then(response => {
-                console.log(data);
+                console.log("Response: ", response)
                 reset(); // Clear form after submission
             })
             .catch(error => {
