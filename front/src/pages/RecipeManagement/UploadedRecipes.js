@@ -18,8 +18,9 @@ const UploadedRecipes = () => {
     // Fetch recipes from the backend
     const fetchRecipes = async () => {
         setLoading(true);
+        console.log("response");
         try {
-            const response = await axios.get('YOUR_BACKEND_ENDPOINT'); // TODO: Replace with the actual backend endpoint
+            const response = await axios.get('http://localhost:5002/recipe'); // TODO: Replace with the actual backend endpoint
             setRecipes(response.data || []); 
         } catch (error) {
             console.error('Error fetching recipes:', error);

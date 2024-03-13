@@ -4,8 +4,12 @@ import React, {useContext, useState} from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import { useParams } from 'react-router-dom';
 import Card from "../../Components/card";
+import axios from 'axios';
 
 import '../../GlobalStyles/main.css';
+
+
+
 
 
 const Projects = () => {
@@ -37,13 +41,27 @@ const Projects = () => {
         with: '100%', 
     };
 
-    const getProjects={
+    const getProjects=()=>{
 
+        const formData= new FormData();
+        formData.append("UserToken", sessionStorage.getItem('token'));
+
+
+        axios.get('http://localhost:5002/recipe')
+        .then(function (response) {
+        // handle success
+        console.log(response);
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
     };
-
+    
 
     return(
         <div className="page-container"> 
+        
             <h1> All projects </h1>
             <div className="section-container" style={{"padding":"15px 30px;"}}>
                 <button 
