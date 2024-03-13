@@ -1,0 +1,2 @@
+import "../GlobalStyles/card.css"
+
