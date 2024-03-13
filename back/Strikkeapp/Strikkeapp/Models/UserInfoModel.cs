@@ -19,3 +19,21 @@ public class UserInfoServiceResult
         ErrorMessage = message
     };
 }
+
+public class UpdateProfileInfoResult
+{
+    public bool Success { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+    public List<string>? UpdatedFields { get; set; }
+
+    public static UpdateProfileInfoResult ForSuccess(List<string> updatedFields) => new UpdateProfileInfoResult
+    {
+        Success = true,
+        UpdatedFields = updatedFields
+    };
+    public static UpdateProfileInfoResult ForFailure(string message) => new UpdateProfileInfoResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}
