@@ -18,7 +18,7 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly StrikkeappDbContext _context;
-    private readonly PasswordHasher<object> _passwordHasher = new PasswordHasher<object>();
+    private readonly IPasswordHasher<object> _passwordHasher;
     private readonly TokenService _tokenService;
 
     private string HashPassword(string email, string password)
@@ -27,10 +27,13 @@ public class UserService : IUserService
         return _passwordHasher.HashPassword(email, password);
     }
 
-    public UserService(StrikkeappDbContext context, TokenService tokenService)
+    public UserService(StrikkeappDbContext context, 
+        TokenService tokenService, IPasswordHasher<object> passwordHasher)
     {
         _context = context;
+        _passwordHasher = passwordHasher;
         _tokenService = tokenService;
+
     }
 
     // Add new user to database
