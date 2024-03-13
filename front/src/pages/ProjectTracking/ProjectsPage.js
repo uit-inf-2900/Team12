@@ -3,6 +3,7 @@
 import React, {useContext, useState} from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import { useParams } from 'react-router-dom';
+import Card from "../../Components/card";
 
 import '../../GlobalStyles/main.css';
 
@@ -36,6 +37,10 @@ const Projects = () => {
         with: '100%', 
     };
 
+    const getProjects={
+
+    };
+
 
     return(
         <div className="page-container"> 
@@ -63,9 +68,9 @@ const Projects = () => {
                 </button>
             </div>
 
-            <div className="box dark">
+            <div className="card-container">
                 {filteredProjects.map(project => (
-                    <ProjectCard key={project.id} title={project.title} status={project.status} />
+                    <Card key={project.id} title={project.title} status={project.status} />
                 ))}
             </div>
         </div>

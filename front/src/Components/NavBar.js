@@ -13,6 +13,7 @@ const NavBar = ({ isLoggedIn, handleLogout }) => {
           {!isLoggedIn && (
             <>
           <li className="nav-item"><NavLink to="/about" className="nav-link">About</NavLink></li>
+          
           </>
           )}
           {isLoggedIn && (
