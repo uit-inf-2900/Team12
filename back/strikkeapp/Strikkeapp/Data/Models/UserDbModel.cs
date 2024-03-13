@@ -83,4 +83,21 @@ namespace Strikkeapp.Data.Models
         [Required]
         public string? RecipePath { get; set;}
     }
+
+    public class ContactRequest 
+    {
+        [Key]
+        public Guid ContactRequestId { get; set; } = Guid.NewGuid();
+
+        public string? FullName { get; set; }
+        public string? Email { get; set; }
+        public string? Message { get; set; }
+
+        public DateTime TimeCreated { get; set; } = DateTime.Now;
+
+        public bool IsActive { get; set; } = false;
+
+        public bool IsHandled { get; set; } = false;
+    }
+
 }
