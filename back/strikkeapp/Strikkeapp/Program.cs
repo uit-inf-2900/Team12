@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Strikkeapp.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IUserInfoService, UserInfoService>();
+
+builder.Services.AddSingleton<IPasswordHasher<object>, PasswordHasher<object>>();
+
 
 var jwtKey = builder.Configuration["Jwt:key"];
 if(string.IsNullOrWhiteSpace(jwtKey))
