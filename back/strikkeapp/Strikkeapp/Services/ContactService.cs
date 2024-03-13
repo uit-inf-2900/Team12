@@ -9,18 +9,15 @@ using Microsoft.IdentityModel.Tokens;
 
 
 
-//  https://mailtrap.io/blog/asp-net-core-send-email/
-
 namespace Strikkeapp.Services; 
 
-// tenk på H fil i C 
+// REMOVE COMMENT: tenk på det som en H-fil i C
 public interface IContactService
 {
+    // Generate a contact request 
     public Guid CreateContactRequest (ContactRequestDto request); 
-    // hva vil vi gjøre 
-    // Liste inkommende greier 
+    // List inncomming contact requests
     public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive); 
-
 
 
     // svare på mail 
@@ -31,44 +28,44 @@ public interface IContactService
 
 public class ContactService : IContactService
 {   
-    // context derfinerer tables etc  
+    // context defines tables
     private readonly StrikkeappDbContext _context;
 
-    // Dette kalles en constructor (bygger klassen)
+    // Build the service
     public ContactService(StrikkeappDbContext context)
     {
         _context = context;
     }
 
-    // Sende inn Kontaktforespørsel 
+    // Send the contact request to the database
     public Guid CreateContactRequest (ContactRequestDto request)
     {
         Console.WriteLine($"Received request: {(request)}");
 
-        // validere inputen 
+        // validate input
         ValidateContactRequest(request);    
 
 
-        // lag den om til en entity 
+        // Make it an entity
         var contactRequest = CreateContactRequestEntity(request);
 
-        // post den til databasen 
+        // Add it to the database and save changes
         _context.ContactRequests.Add(contactRequest);  
         _context.SaveChanges();  
 
 
-        // returnere iden til den nye kontaktforespørselen
+        // Return the ID of the contact request
         return contactRequest.ContactRequestId; 
     }
 
 
-    // List ut kontaktforespørsler
+    // Create a list of contact requests
     public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive)
     {
-        // hente ut alle kontaktforespørsler 
+        // Get alle the contact requests
         var contactRequests = _context.ContactRequests.ToList();
 
-        // konvertere til dto 
+        // Convert to dto
         var contactRequestDtos = contactRequests.Where(c => c.IsActive == IsActive).Select(c => new ContactRequestDto
         {
             UserEmail = c.Email!,
@@ -80,11 +77,13 @@ public class ContactService : IContactService
     }
 
 
-    // Svar på kontaktforespørsel + endre status til aktiv 
+    // TODO:  Svar på kontaktforespørsel + endre status til aktiv 
 
 
-    // stenge kontaktforespørsel (ferdig håndtert)
+    // TODO: stenge kontaktforespørsel (ferdig håndtert)
 
+
+    // Validate the contact request by checking that the input is not empty or null
     private static bool ValidateContactRequest(ContactRequestDto request)
     {
         if (request.UserEmail.IsNullOrEmpty() )
@@ -104,9 +103,10 @@ public class ContactService : IContactService
     }
 
 
+    // Create a contact request entity from the DTO
     private ContactRequest CreateContactRequestEntity(ContactRequestDto request)
     {
-        // Setter verdiene 
+        // set the values 
         var contactRequest = new ContactRequest
         {
             FullName = request.UserName,
