@@ -14,6 +14,8 @@ import Recipes from './pages/RecipeManagement/Recipes';
 import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
+import EditProfile from './pages/ProfilePage/EditProfile';
+import WishList from './pages/ProfilePage/WishList';
 
 const NotFound = () => {
   return (
@@ -57,6 +59,8 @@ export default function App() {
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<Projects/>} />
                 <Route path="/profile" element={<Profilepage />} />
+                <Route path="/editprofile" element={<EditProfile />} />
+                <Route path="/wishlist" element={<WishList />} />
               </>
             )}
             <Route path="/reset-password" element={<ResetPassword />} />

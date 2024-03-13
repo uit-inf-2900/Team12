@@ -1,5 +1,4 @@
 import React from 'react';
-import './Reg.css';
 import "../../GlobalStyles/main.css";
 
 
