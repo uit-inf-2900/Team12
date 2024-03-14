@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Strikkeapp.Data.Dto;
 using Strikkeapp.Services;
-using System.Threading.Tasks;
 
 
 namespace strikkeapp.Controllers; 
