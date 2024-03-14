@@ -3,14 +3,12 @@ import "../../GlobalStyles/main.css";
 import './Profilepage.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import Image from "../../images/6.png";
-import InputField from '../SignUp_LogIn/InputField'; 
 
 const profilePage = ({userProfile}) => {
     const navigate = useNavigate();
-    const [userProfileState, setUserProfileState] = useState({ UserFullName: '', UserEmail: '' });
+    const [userProfileState, setUserProfileState] = useState({ userFullName: '', userEmail: '' });
     const [profileFetchError, setProfileFetchError] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
@@ -38,18 +36,17 @@ const profilePage = ({userProfile}) => {
     useEffect(() => {
         
         const token = sessionStorage.getItem('token');
-        
+        const address = 'http://localhost:5002/getprofileinfo?userToken=' + token;
+        console.log(address);
+
         if (token) {
-            axios.get('http://localhost:5002/api/userinfo/getprofileinfo', {
+            axios.get(address, {
                 params: {
                     userToken: token
                 }
             })
             .then(response => {
-                setUserProfileState({
-                    UserFullName: response.data.UserFullName,
-                    UserEmail: response.data.UserEmail
-                });
+                setUserProfileState(response.data);
             })
             .catch(error => {
                 console.error("Error fetching profile data: ", error);
@@ -75,8 +72,8 @@ const profilePage = ({userProfile}) => {
                 <div className="profile-image-container">
                     <img src={Image} alt="Profile" />
                 </div>
-                <p className="profile-name">
-                    {profileFetchError || userProfileState.UserFullName || 'Loading...'}
+                <p className="profile-name" style={{fontSize: '24px'}}>
+                    {profileFetchError || userProfileState.userFullName || 'Loading...'}
                 </p>
                 <div style={{flexGrow: 1}}></div>
                 <p className="profile-options" style = {{fontWeight: 'bold'}}>My Profile</p>
@@ -110,23 +107,32 @@ const profilePage = ({userProfile}) => {
                     <p className="error-message">{profileFetchError}</p>
                 ) : (
                     <>
-                        <div className='infoText-small' style={{color: "black"}}> Name </div>
-                        <InputField
-                            type="text"
-                            inputprops={{
-                                defaultValue: userProfileState.UserFullName,
-                                readOnly: true
-                            }}
-                        />
-                        <div className='infoText-small' style={{color: "black"}}> Email </div>
-                        <InputField
-                            type="email"
-                            inputprops={{
-                                defaultValue: userProfileState.UserEmail,
-                                readOnly: true
-                            }}
-                        />
-                        <div style={{flexGrow: 0.4}}></div>
+                        <div className='infoText-small' style={{color: "black", fontWeight: 'bold', fontSize: '20px'}}> Name </div>
+                        <p className="profile-name" style={{
+                            width: 'flex',
+                            marginRight: '10px',
+                            padding: '10px 20px',
+                            border: '1px solid #ccc',
+                            borderRadius: '5px',
+                            backgroundColor: '#f9f9f9',
+                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                        }}>
+                            {profileFetchError || userProfileState.userFullName || 'Loading...'}
+                        </p>
+                        <div style={{flexGrow: 0.1}}></div>
+                        <div className='infoText-small' style={{color: "black", fontWeight: 'bold', fontSize: '20px'}}> Email </div>
+                        <p className="profile-name" style={{
+                            width: 'flex',
+                            marginRight: '10px',
+                            padding: '10px 20px',
+                            border: '1px solid #ccc',
+                            borderRadius: '5px',
+                            backgroundColor: '#f9f9f9',
+                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                        }}>
+                            {profileFetchError || userProfileState.userEmail || 'Loading...'}
+                        </p>
+                        <div style={{flexGrow: 0.2}}></div>
                         <div>
                             <button className='light-button' onClick={() => navigate('/editprofile')}>Edit</button>
                         </div>
