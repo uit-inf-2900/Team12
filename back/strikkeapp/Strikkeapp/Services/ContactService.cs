@@ -3,10 +3,10 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
-using Strikkeapp.Data.Models;
+using Strikkeapp.Data.Entities;
 using Strikkeapp.Data.Dto;
 using Microsoft.IdentityModel.Tokens;
-
+using Strikkeapp.Data.Context;
 
 
 namespace Strikkeapp.Services; 

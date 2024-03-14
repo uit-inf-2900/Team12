@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Strikkeapp.Data.Models;
+using Strikkeapp.Data.Context;
 using Strikkeapp.Models;
 
 namespace Strikkeapp.Services;

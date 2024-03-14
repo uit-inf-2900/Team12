@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Strikkeapp.Data.Models;
-
-using static strikkeapp.services.UserService;
+using Strikkeapp.Data.Context;
+using Strikkeapp.Data.Entities;
 
 using Strikkeapp.Services;
 using Strikkeapp.User.Models;
