@@ -26,7 +26,7 @@ public class UserInfoController : ControllerBase
 
 
     [HttpGet]
-    [Route("getprofileinfo")]
+    [Route("/getprofileinfo")]
     public IActionResult GetProfileInfo([FromQuery] string userToken)
     {
         var result = _userInfoService.GetProfileInfo(userToken);
@@ -50,7 +50,7 @@ public class UserInfoController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("updateprofileinfo")]
+    [Route("/updateprofileinfo")]
     public IActionResult UpdateProfileInfo([FromBody] UpdateRequest request)
     {
         var result = _userInfoService.UpdateProfileInfo(request.Token,
