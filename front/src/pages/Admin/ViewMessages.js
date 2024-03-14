@@ -6,13 +6,33 @@ import axios from 'axios';
 import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
 
+const MessageItem = ({ message, onSelect }) => {
+    return (
+        <div onClick={() => onSelect(message)}
+        style={{ cursor: 'pointer', margin: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', backgroundColor: message.isHandled === 1 ? '#90ee90' : 'transparent' }}>
+            <h3>From: {message.userName}</h3>
+        </div>
+    );
+};
+
+
+const MessageDetails = ({ message }) => {
+    if (!message) return <div>Select a message to view details.</div>;
+
+    return (
+        <div style={{ padding: '10px', border: '1px solid #ccc', borderRadius: '5px', backgroundColor: '#f0f0f0' }}>
+            <h3>From: {message.userName}</h3>
+            <p>Email: {message.userEmail}</p>
+            <p>Message: {message.userMessage}</p>
+        </div>
+    );
+}; 
+
 
 const ViewMessages = () => {
     const [messages, setMessages] = useState([]);
-
-    // Do the user want to see active or inactive messages?
-    const [showActive, setShowActive] = useState(true); 
-
+    const [showActive, setShowActive] = useState(true);
+    const [activeMessage, setActiveMessage] = useState(null);
 
     // Get all the messages from the database
     useEffect(()=> {
@@ -26,26 +46,25 @@ const ViewMessages = () => {
         });
     }, [showActive]);
 
-    return(
-        <div className="page-container">
-            <h2> Inncomming messages </h2>
-            <button className='light-button' onClick={() => setShowActive(!showActive)}>
-                Show {showActive ? 'active': 'inactive'} messages
-            </button>
-            <ul>
-                {messages.map(message => {
-                    return(
-                        // Usees the key to know what message 
-                        <li key={message.id}>
-                            <h3>From: {message.userName}</h3>
-                            <p>Email: {message.userEmail}</p>
-                            <p>Message: {message.userMessage}</p>
-                        </li>
-                    );
-                })}
-            </ul>
+
+    return (
+        <div className="page-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div>
+                <h2>Incoming Messages</h2>
+                <button className='light-button' onClick={() => setShowActive(!showActive)}>
+                    Show {showActive ? 'active' : 'inactive'} messages
+                </button>
+                <div>
+                    {messages.map(message => (
+                        <MessageItem key={message.id} message={message} onSelect={setActiveMessage} />
+                        ))}
+                </div>
+            </div>
+            <div style={{ width: '50%' }}>
+                <MessageDetails message={activeMessage} />
+            </div>
         </div>
-    );
+    ); 
 
 };
 
