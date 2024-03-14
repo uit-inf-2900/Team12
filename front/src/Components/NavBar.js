@@ -2,6 +2,36 @@ import React from 'react';
 import { NavLink } from "react-router-dom";
 import "../GlobalStyles/navbar.css";
 
+const VisitorView = () => {
+  return (
+    <>
+      <li className="nav-item"><NavLink to="/about" className="nav-link">About</NavLink></li>
+      <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>
+    </>
+  );
+}; 
+
+const UserView = () => {
+  return(
+    <>
+      <li className="nav-item"><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
+      <li className="nav-item"><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
+      <li className="nav-item"><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
+    </>
+  ); 
+}; 
+
+const AdminView = ({ isAdmin }) => {
+  return(
+    <>
+      {/* Dont want to show the contact page if you have admin privilages */}
+      {!isAdmin && <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>}
+
+      {/* Show the admin page if you have admin prvileges */}
+      {isAdmin && <li className="nav-item"><NavLink to="/adminpage" className="nav-link">Admin</NavLink></li>}
+    </>
+  ); 
+}; 
 
 const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
   return (
@@ -10,30 +40,15 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
         <NavLink to="/" className="nav-logo">**LOGO**</NavLink>
         <ul className="nav-list">
           <li className="nav-item"><NavLink to="/" className="nav-link">Home</NavLink></li>
-          {!isLoggedIn && (
-          <>
-            <li className="nav-item"><NavLink to="/about" className="nav-link">About</NavLink></li>
-          </>
-          )}
-          {isLoggedIn && (
-          <>
-            <li className="nav-item"><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
-            <li className="nav-item"><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
-            <li className="nav-item"><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
-          </>
-          )}
-          {isLoggedIn && isAdmin ? (
-            <li className="nav-item"><NavLink to="/adminpage" className="nav-link">Admin</NavLink></li>
-          ) : isLoggedIn && (
-          <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>
-          )}
-          {/* Add more navigation items */}
+          {!isLoggedIn && <VisitorView/>}
+          {isLoggedIn && <UserView />}
+          <AdminView isAdmin={isAdmin} />
         </ul>
         {isLoggedIn && (
         <>
           <div className="nav-items">
             <NavLink to="/profile" className="nav-action">Profile</NavLink>
-            <button onClick={handleLogout}>Logg Ut</button>
+            <NavLink onClick={handleLogout}>Logg Ut</NavLink>
           </div>
         </>
         )}

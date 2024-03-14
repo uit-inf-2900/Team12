@@ -42,7 +42,6 @@ const ContactUs = () => {
             userMessage: data.message, 
             userName: data.Name
         };
-
         console.log("Payload: ", payload);
 
         axios.post('http://localhost:5002/api/Contact', payload)

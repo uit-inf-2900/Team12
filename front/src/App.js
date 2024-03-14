@@ -36,7 +36,7 @@ export default function App() {
 
   // Sjekker direkte om token eksisterer i sessionStorage for å bestemme innloggingsstatus
   const isLoggedIn = sessionStorage.getItem('token');
-  const isAdmin =  false; // TODO: get status from backend instead of hardcoding.
+  const isAdmin =  true; // TODO: get status from backend instead of hardcoding.
 
   return (
     <Router>
