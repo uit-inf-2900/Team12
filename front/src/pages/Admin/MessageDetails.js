@@ -4,6 +4,7 @@ import axios from 'axios';
 import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
 import MessageItem from './MessageItem';
+import "./Admin.css"
 
 
 const MessageDetails = ({ message }) => {
@@ -27,7 +28,8 @@ const MessageDetails = ({ message }) => {
         e.preventDefault();
 
         // Check if the reply is empty
-        if (!reply.trim()) return;
+        if (!reply.trim()) 
+            return;
 
         // Send the answer to the server and update the message
         try{
@@ -44,21 +46,36 @@ const MessageDetails = ({ message }) => {
 
     return (
         <div className='message box'>
-            <h3>From: {message.userName}</h3>
-            <p>Email: {message.userEmail}</p>
-            <p>Message: {message.userMessage}</p>
-
-            <form onSubmit={handleSubmit}>
+            <div style={{'textAlign': 'center', "width":"100%"}}>
                 <InputField
-                    type='text'
-                    placeholder='Write your reply here'
+                    type="text"
+                    value={`From: ${message.userName} (${message.userEmail})`}
+                    readOnly
+                    className="input-display"
+                    style={{cursor: 'default'}} // Optional: Changes cursor to indicate it's not editable
+                />
+            </div>
+            <div  style={{'textAlign': 'center', "width":"100%"}}>
+                <InputField 
+                    type="text"
+                    value={`Message: ${message.userMessage}`}
+                    readOnly
+                    className="input-display"
+                    style={{cursor: 'default', 'height': '100px '}} // Optional: Changes cursor to indicate it's not editable
+                    useTextareaStyle={true}
+                />
+            </div>
+
+            <form onSubmit={handleSubmit}  style={{'textAlign': 'center', "width":"100%"}}>
+                <InputField 
+                    style={{'resize': 'vertical', 'height': '100px ' }}
+                    type="text"
+                    placeholder='Write your reply here...'
                     value={reply}
                     onChange={handleReplyChanges}
+                    useTextareaStyle={true}
                 />
-                <div>
-                    <button type='submit' className='dark-button' style={{ padding: '10px 20px' }}>Send reply</button>
-                </div>
-                    
+                <button type='submit' className='dark-button'>Send Reply</button>
             </form>
         </div>
     );

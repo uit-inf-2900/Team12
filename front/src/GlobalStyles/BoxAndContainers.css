@@ -82,7 +82,7 @@
 /* Message box for displaing messages on the admin page*/
 .box.message {
     width: 100%; /* Take up the full width of the container */
-    background-color: var(--box-color-light); /* Light purple background */
+    background-color: var(--box-color-dark); /* Light purple background */
     height: 100%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }
