@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Strikkeapp.Data.Entities;
 
-namespace Strikkeapp.Data.Models;
+namespace Strikkeapp.Data.Context;
 
 public class StrikkeappDbContext : DbContext
 {
@@ -33,7 +34,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-           
+
         modelBuilder.Entity<KnittingRecipes>()
             .HasOne<UserLogIn>()
             .WithMany()

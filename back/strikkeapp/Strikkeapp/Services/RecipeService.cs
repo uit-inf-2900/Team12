@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-using Strikkeapp.Data.Models;
+using Strikkeapp.Data.Entities;
+using Strikkeapp.Data.Context;
 using Strikkeapp.Recipes.Models;
 
 namespace Strikkeapp.Services;
