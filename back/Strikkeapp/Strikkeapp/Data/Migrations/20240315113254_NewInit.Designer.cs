@@ -11,7 +11,7 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    [Migration("20240314141244_NewInit")]
+    [Migration("20240315113254_NewInit")]
     partial class NewInit
     {
         /// <inheritdoc />
@@ -88,11 +88,10 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserFullName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserType")
+                    b.Property<string>("UserFullName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
