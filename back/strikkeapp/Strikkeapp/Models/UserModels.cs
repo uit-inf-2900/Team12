@@ -3,15 +3,15 @@
 public class UserServiceResult
 {
     public bool Success { get; set; }
-    public Guid UserId { get; set; }
     public string ErrorMessage { get; set; } = string.Empty;
     public string Token { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; }
 
-    public static UserServiceResult ForSuccess(Guid userId, string token) => new UserServiceResult
+    public static UserServiceResult ForSuccess(string token, bool isAdmin) => new UserServiceResult
     {
         Success = true,
-        UserId = userId,
-        Token = token
+        Token = token,
+        IsAdmin = isAdmin
     };
     public static UserServiceResult ForFailure(string message) => new UserServiceResult
     {

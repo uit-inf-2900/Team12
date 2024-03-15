@@ -85,8 +85,8 @@ public class UsersController : ControllerBase
         // Return userid and token on success
         return Ok(new
         {
-            UserID = result.UserId,
-            Token = result.Token
+            Token = result.Token,
+            IsAdmin = result.IsAdmin
         });
     }
 
@@ -113,8 +113,8 @@ public class UsersController : ControllerBase
         // Return userid and token on success
         return Ok(new 
         {
-            UserID = result.UserId,
-             Token = result.Token
+             Token = result.Token,
+             IsAdmin = result.IsAdmin
         });
     }
 }
