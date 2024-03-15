@@ -21,14 +21,14 @@ const UserView = () => {
   ); 
 }; 
 
-const AdminView = ({ isAdmin }) => {
+const AdminView = ({ isAdmin, isLoggedIn }) => {
   return(
     <>
       {/* Dont want to show the contact page if you have admin privilages */}
       {!isAdmin && <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>}
 
       {/* Show the admin page if you have admin prvileges */}
-      {isAdmin && <li className="nav-item"><NavLink to="/adminpage" className="nav-link">Admin</NavLink></li>}
+      {isAdmin && isLoggedIn && <li className="nav-item"><NavLink to="/adminpage" className="nav-link">Admin</NavLink></li>}
     </>
   ); 
 }; 
