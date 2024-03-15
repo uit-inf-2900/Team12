@@ -4,7 +4,7 @@ import axios from 'axios';
 import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
 import MessageItem from './MessageItem';
-import "./Admin.css"
+
 
 
 const MessageDetails = ({ message }) => {
