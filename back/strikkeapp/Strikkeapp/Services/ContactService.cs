@@ -72,21 +72,10 @@ public class ContactService : IContactService
     }
 
 
-    // // TODO:  Svar på kontaktforespørsel + endre status til aktiv 
-    // public bool AnswerContactRequest(Guid requestedId, string respondMessage)
-    // {
-    //     // TODO: find the request by id and send an email to the user with the message
-    //     // TODO: update the status to active
-    // }
+    // TODO:  Svar på kontaktforespørsel + endre status til aktiv 
 
 
-    // // TODO: stenge kontaktforespørsel (ferdig håndtert)
-    // public bool CloseContactRequest(Guid requestedId, bool newStatus)
-    // {
-    //     // Find the request in the db
-    //     // Send a mail saying that the conversation is now closed 
-    //     // Update the status to inactive 
-    // }
+    // TODO: stenge kontaktforespørsel (ferdig håndtert)
 
 
     // Validate the contact request by checking that the input is not empty or null
