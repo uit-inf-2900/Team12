@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
 import MessageItem from './MessageItem';
 import MessageDetails from './MessageDetails';
@@ -27,13 +26,26 @@ const ViewMessages = () => {
 
 
     return (
-        <div className="page-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className="page-container" style={{ display: 'flex', justifyContent: 'space-between' , 'max-height': '600px'}}>
             <div style={{ width: '30%' }}>
                 <h2>Incoming Messages</h2>
-                <button className='light-button' onClick={() => setShowActive(!showActive)}>
-                    Show {showActive ? 'active' : 'inactive'} messages
-                </button>
-                <div>
+
+                <div className='switch-container'>
+                    <div 
+                        className={`switch-option ${showActive ? 'active' : ''}`}
+                        onClick={() => setShowActive(true)}
+                    >
+                        Active
+                    </div>
+                    <div 
+                        className={`switch-option ${!showActive ? 'active' : 'inactive'}`}
+                        onClick={() => setShowActive(false)}
+                    >
+                        Inactive
+                </div>
+                </div>
+
+                <div className="messages-list-container"> 
                     {messages.map(message => (
                         <MessageItem key={message.id} message={message} onSelect={setActiveMessage} isSelected={message === activeMessage} />
                         ))}

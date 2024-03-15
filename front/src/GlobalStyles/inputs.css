@@ -21,7 +21,8 @@ textarea {
 textarea {
     height: auto;
     resize: vertical;                                   
-    overflow-y: 'hidden';   
+    overflow-y: 'auto';   
+    max-height: 200px;
 }
 
 
