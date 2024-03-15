@@ -42,7 +42,7 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
           <li className="nav-item"><NavLink to="/" className="nav-link">Home</NavLink></li>
           {!isLoggedIn && <VisitorView/>}
           {isLoggedIn && <UserView />}
-          <AdminView isAdmin={isAdmin} />
+          <AdminView isAdmin={isAdmin} isLoggedIn={isLoggedIn} />
         </ul>
         {isLoggedIn && (
         <>
