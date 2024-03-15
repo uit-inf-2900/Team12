@@ -18,17 +18,5 @@ public class UserDetails
     public DateTime DateOfBirth { get; set; }
 
     [Required]
-    [CustomValidation(typeof(UserDetails), nameof(ValidateUserType))]
-    public string UserType { get; set; } = "user";
-
-    // Validation for user type
-    private static ValidationResult ValidateUserType(string userType)
-    {
-        var validTypes = new List<string> { "admin", "user" };
-        if (validTypes.Contains(userType))
-        {
-            return ValidationResult.Success!;
-        }
-        return new ValidationResult("Invalid type");
-    }
+    public bool IsAdmin { get; set; }
 }

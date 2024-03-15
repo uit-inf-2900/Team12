@@ -68,7 +68,7 @@ public class UserService : IUserService
 
             // Generate and return token
             var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
-            return UserServiceResult.ForSuccess(userLogin.UserId, token);
+            return UserServiceResult.ForSuccess(token, userDetails.IsAdmin);
         }
 
         // Handle any errors
@@ -113,9 +113,14 @@ public class UserService : IUserService
                 return UserServiceResult.ForFailure("Invalid login attempt");
             }
 
+            var isAdmin = _context.UserDetails
+                .Where(u => u.UserId == loginInfo.UserId)
+                .Select(u => u.IsAdmin)
+                .FirstOrDefault();
+
             // Generate and return token
             var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId);
-            return UserServiceResult.ForSuccess(loginInfo.UserId, token);
+            return UserServiceResult.ForSuccess(token, isAdmin);
         }
 
         // Handle errors
