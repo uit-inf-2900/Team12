@@ -71,7 +71,7 @@ namespace Strikkeapp.Data.Migrations
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserFullName = table.Column<string>(type: "TEXT", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UserType = table.Column<string>(type: "TEXT", nullable: false)
+                    IsAdmin = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

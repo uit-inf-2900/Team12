@@ -18,5 +18,5 @@ public class UserDetails
     public DateTime DateOfBirth { get; set; }
 
     [Required]
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; set; } = false;
 }

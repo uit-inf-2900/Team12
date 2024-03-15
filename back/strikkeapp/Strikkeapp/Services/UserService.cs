@@ -46,29 +46,35 @@ public class UserService : IUserService
                 return UserServiceResult.ForFailure("Email already exsits");
             }
 
-            // Add to userLogin
-            var userLogin = new UserLogIn();
-            userLogin.UserEmail = userEmail;
-            var hasedPwd = HashPassword(userEmail, userPwd);
-            userLogin.UserPwd = hasedPwd;
+            using (var transaction = _context.Database.BeginTransaction())
+            {
 
-            // Save new entry
-            _context.UserLogIn.Add(userLogin);
-            _context.SaveChanges();
+                // Add to userLogin
+                var userLogin = new UserLogIn();
+                userLogin.UserEmail = userEmail;
+                var hasedPwd = HashPassword(userEmail, userPwd);
+                userLogin.UserPwd = hasedPwd;
 
-            // Add to userDetails
-            var userDetails = new UserDetails();
-            userDetails.UserId = userLogin.UserId;
-            userDetails.UserFullName = userFullName;
-            userDetails.DateOfBirth = userDOB;
+                // Save new entry
+                _context.UserLogIn.Add(userLogin);
+                _context.SaveChanges();
 
-            // Save new entry
-            _context.UserDetails.Add(userDetails);
-            _context.SaveChanges();
+                // Add to userDetails
+                var userDetails = new UserDetails();
+                userDetails.UserId = userLogin.UserId;
+                userDetails.UserFullName = userFullName;
+                userDetails.DateOfBirth = userDOB;
 
-            // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
-            return UserServiceResult.ForSuccess(token, userDetails.IsAdmin);
+                // Save new entry
+                _context.UserDetails.Add(userDetails);
+                _context.SaveChanges();
+
+                transaction.Commit();
+
+                // Generate and return token
+                var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
+                return UserServiceResult.ForSuccess(token, userDetails.IsAdmin);
+            }
         }
 
         // Handle any errors
