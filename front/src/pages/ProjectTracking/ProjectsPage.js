@@ -24,8 +24,7 @@ const Projects = () => {
         // ... flere prosjekter
     ];
 
-    const filteredProjects = projects.filter(project => project.status === activeStatus);
-
+    
     const buttonStyle = {
         padding: '20px 30px', 
         margin: '0 20px', 
@@ -35,41 +34,38 @@ const Projects = () => {
         alignItems: 'center',
         with: '100%', 
     };
+    
+    const options = [
+        { id: 'planned', label: 'Planned' },
+        { id: 'in-progress', label: 'In Progress' },
+        { id: 'completed', label: 'Completed' }
+    ];
+    
+    const filteredProjects = projects.filter(project => project.status === activeStatus);
 
-
-    return(
-        <div className="page-container"> 
-            <h1> All projects </h1>
-            <div className="section-container" style={{"padding":"15px 30px;"}}>
-                <button 
-                onClick={() => setActiveStatus('planned')} 
-                className={`light-button ${activeStatus === 'planned' ? 'active' : ''}`}
-                style={buttonStyle}>
-                    Planned
-                </button>
-                <button 
-
-                onClick={() => setActiveStatus('in-progress') } 
-                className={`light-button ${activeStatus === 'in-progress' ? 'active' : ''}`}
-                style={buttonStyle}>
-                    In Progress
-                </button>
-
-                <button 
-                onClick={() => setActiveStatus('completed')} 
-                className={`light-button ${activeStatus === 'completed' ? 'active' : ''}`}
-                style={buttonStyle}>
-                    Completed
-                </button>
+    return (
+        <div className="page-container">
+            <div className="switch-container" style={{marginBottom: '20px'}}>
+                {options.map(option => (
+                    <div
+                        key={option.id}
+                        className={`switch-option ${activeStatus === option.id ? 'active' : 'inactive'}`}
+                        onClick={() => setActiveStatus(option.id)}
+                        style={{ fontSize: '1.2em', padding: '15px 20px', borderRadius: '8px' }} // Endret størrelsen
+                    >
+                        {option.label}
+                    </div>
+                ))}
             </div>
-
+            {/* Visning av filtrerte prosjekter */}
             <div className="box dark">
                 {filteredProjects.map(project => (
-                    <ProjectCard key={project.id} title={project.title} status={project.status} />
+                    <ProjectCard key={project.id} title={project.title} status={project.status}/>
                 ))}
             </div>
         </div>
-    )
+    );
 };
+
 
 export default Projects;
