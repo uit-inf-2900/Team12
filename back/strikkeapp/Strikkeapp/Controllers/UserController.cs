@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using strikkeapp.services;
 
+using Strikkeapp.Models;
+
 namespace strikkeapp.Controllers;
 
 [ApiController]
@@ -15,45 +17,7 @@ public class UsersController : ControllerBase
     }
 
     // Create user request schema
-    public class CreateUserRequest
-    {
-        public string UserEmail { get; set; } = string.Empty;
-        public string UserPwd { get; set; } = string.Empty;
-        public string UserFullName { get; set; } = string.Empty;
-        public int UserDOB { get; set; }
-
-        // Check that request is valid
-        public bool requestOK()
-        {
-            return (!string.IsNullOrWhiteSpace(UserEmail) &&
-           !string.IsNullOrWhiteSpace(UserPwd) &&
-           !string.IsNullOrWhiteSpace(UserFullName));
-        }
-
-        // Calculate birth day
-        public DateTime Dob2Dt ()
-        {
-            int year = UserDOB / 10000;
-            int month = (UserDOB / 100) % 100;
-            int day = UserDOB % 100;
-
-            DateTime dob = new DateTime(year, month, day);
-            return dob;
-        }
-    }
-
-    // Login request schema
-    public class LogInUserRequest
-    {
-        public string UserEmail { get; set; } = string.Empty;
-        public string UserPwd { get; set; } = string.Empty;
-
-        public bool requestOk()
-        {
-            return (!string.IsNullOrWhiteSpace(UserEmail) &&
-                !string.IsNullOrWhiteSpace(UserPwd));
-        }
-    }
+    
 
 
 
@@ -82,12 +46,15 @@ public class UsersController : ControllerBase
             return BadRequest(result.ErrorMessage);
         }
 
-        // Return userid and token on success
-        return Ok(new
+        var res = new UserResultDto
         {
             Token = result.Token,
             IsAdmin = result.IsAdmin
-        });
+        };
+
+
+        // Return userid and token on success
+        return Ok(res);
     }
 
     [HttpPost]
@@ -110,11 +77,13 @@ public class UsersController : ControllerBase
             return StatusCode(500, result.ErrorMessage);
         }
 
-        // Return userid and token on success
-        return Ok(new 
+        var res = new UserResultDto
         {
-             Token = result.Token,
-             IsAdmin = result.IsAdmin
-        });
+            Token = result.Token,
+            IsAdmin = result.IsAdmin
+        };
+
+        // Return userid and token on success
+        return Ok(res);
     }
 }
