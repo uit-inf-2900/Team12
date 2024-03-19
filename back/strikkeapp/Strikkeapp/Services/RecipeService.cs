@@ -15,12 +15,12 @@ public interface IRecipeService
 
 public class RecipeService : IRecipeService
 {
-    private readonly TokenService _tokenService;
+    private readonly ITokenService _tokenService;
     private readonly string _storagePath;
     private readonly StrikkeappDbContext _context;
 
     
-    public RecipeService(IConfiguration configuration, TokenService tokenService, StrikkeappDbContext context)
+    public RecipeService(IConfiguration configuration, ITokenService tokenService, StrikkeappDbContext context)
     {
         _storagePath = configuration.GetConnectionString("RecipesStorage")!;
         _tokenService = tokenService;

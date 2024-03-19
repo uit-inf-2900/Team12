@@ -13,11 +13,11 @@ public interface IUserInfoService
 
 public class UserInfoService : IUserInfoService
 {
-    private readonly TokenService _tokenService;
+    private readonly ITokenService _tokenService;
     private readonly IPasswordHasher<object> _passwordHasher;
     private readonly StrikkeappDbContext _context;
 
-    public UserInfoService(TokenService tokenService, IPasswordHasher<object> passwordHasher, StrikkeappDbContext context)
+    public UserInfoService(ITokenService tokenService, IPasswordHasher<object> passwordHasher, StrikkeappDbContext context)
     {
         _tokenService = tokenService;
         _passwordHasher = passwordHasher;

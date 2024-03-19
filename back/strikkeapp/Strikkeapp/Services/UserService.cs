@@ -18,7 +18,7 @@ public class UserService : IUserService
 {
     private readonly StrikkeappDbContext _context;
     private readonly IPasswordHasher<object> _passwordHasher;
-    private readonly TokenService _tokenService;
+    private readonly ITokenService _tokenService;
 
     private string HashPassword(string email, string password)
     {
@@ -27,7 +27,7 @@ public class UserService : IUserService
     }
 
     public UserService(StrikkeappDbContext context, 
-        TokenService tokenService, IPasswordHasher<object> passwordHasher)
+        ITokenService tokenService, IPasswordHasher<object> passwordHasher)
     {
         _context = context;
         _passwordHasher = passwordHasher;
