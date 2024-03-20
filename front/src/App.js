@@ -14,6 +14,7 @@ import Recipes from './pages/RecipeManagement/Recipes';
 import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
+import AdminPage from './pages/Admin/AdminPage';
 
 const NotFound = () => {
   return (
@@ -35,17 +36,23 @@ export default function App() {
 
   // Sjekker direkte om token eksisterer i sessionStorage for å bestemme innloggingsstatus
   const isLoggedIn = sessionStorage.getItem('token');
+  const isAdmin =  true; // TODO: get status from backend instead of hardcoding.
 
   return (
     <Router>
       {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
       <div className="page-container">          
-        <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+        <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
         <div className="content-container">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contactus" element={<ContactUs />} />
+            {isLoggedIn && isAdmin ? (
+            <Route path="/adminpage" element={<AdminPage />} />
+            ) : (
+              <Route path="/contactus" element={<ContactUs />} />
+            )}
             {!isLoggedIn ? (
               <>
                 <Route path="/login" element={<LogIn />} />

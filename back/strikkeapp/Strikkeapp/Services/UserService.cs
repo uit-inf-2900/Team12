@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Strikkeapp.Data.Models;
-
-using static strikkeapp.services.UserService;
+using Strikkeapp.Data.Context;
+using Strikkeapp.Data.Entities;
 
 using Strikkeapp.Services;
 using Strikkeapp.User.Models;
@@ -18,8 +17,8 @@ public interface IUserService
 public class UserService : IUserService
 {
     private readonly StrikkeappDbContext _context;
-    private readonly PasswordHasher<object> _passwordHasher = new PasswordHasher<object>();
-    private readonly TokenService _tokenService;
+    private readonly IPasswordHasher<object> _passwordHasher;
+    private readonly ITokenService _tokenService;
 
     private string HashPassword(string email, string password)
     {
@@ -27,10 +26,13 @@ public class UserService : IUserService
         return _passwordHasher.HashPassword(email, password);
     }
 
-    public UserService(StrikkeappDbContext context, TokenService tokenService)
+    public UserService(StrikkeappDbContext context, 
+        ITokenService tokenService, IPasswordHasher<object> passwordHasher)
     {
         _context = context;
+        _passwordHasher = passwordHasher;
         _tokenService = tokenService;
+
     }
 
     // Add new user to database
@@ -44,29 +46,35 @@ public class UserService : IUserService
                 return UserServiceResult.ForFailure("Email already exsits");
             }
 
-            // Add to userLogin
-            var userLogin = new UserLogIn();
-            userLogin.UserEmail = userEmail;
-            var hasedPwd = HashPassword(userEmail, userPwd);
-            userLogin.UserPwd = hasedPwd;
+            using (var transaction = _context.Database.BeginTransaction())
+            {
 
-            // Save new entry
-            _context.UserLogIn.Add(userLogin);
-            _context.SaveChanges();
+                // Add to userLogin
+                var userLogin = new UserLogIn();
+                userLogin.UserEmail = userEmail;
+                var hasedPwd = HashPassword(userEmail, userPwd);
+                userLogin.UserPwd = hasedPwd;
 
-            // Add to userDetails
-            var userDetails = new UserDetails();
-            userDetails.UserId = userLogin.UserId;
-            userDetails.UserFullName = userFullName;
-            userDetails.DateOfBirth = userDOB;
+                // Save new entry
+                _context.UserLogIn.Add(userLogin);
+                _context.SaveChanges();
 
-            // Save new entry
-            _context.UserDetails.Add(userDetails);
-            _context.SaveChanges();
+                // Add to userDetails
+                var userDetails = new UserDetails();
+                userDetails.UserId = userLogin.UserId;
+                userDetails.UserFullName = userFullName;
+                userDetails.DateOfBirth = userDOB;
 
-            // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
-            return UserServiceResult.ForSuccess(userLogin.UserId, token);
+                // Save new entry
+                _context.UserDetails.Add(userDetails);
+                _context.SaveChanges();
+
+                transaction.Commit();
+
+                // Generate and return token
+                var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
+                return UserServiceResult.ForSuccess(token, userDetails.IsAdmin);
+            }
         }
 
         // Handle any errors
@@ -111,9 +119,14 @@ public class UserService : IUserService
                 return UserServiceResult.ForFailure("Invalid login attempt");
             }
 
+            var isAdmin = _context.UserDetails
+                .Where(u => u.UserId == loginInfo.UserId)
+                .Select(u => u.IsAdmin)
+                .FirstOrDefault();
+
             // Generate and return token
             var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId);
-            return UserServiceResult.ForSuccess(loginInfo.UserId, token);
+            return UserServiceResult.ForSuccess(token, isAdmin);
         }
 
         // Handle errors

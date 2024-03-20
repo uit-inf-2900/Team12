@@ -5,7 +5,7 @@
 namespace Strikkeapp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class CorrectedDatabase : Migration
+    public partial class AddedViritual : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

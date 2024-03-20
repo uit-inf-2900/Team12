@@ -56,4 +56,3 @@ Version.cpp
 *.db
 *.db-shm
 *.db-wal
-/Strikkeapp/Data/Recipes

@@ -3,10 +3,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+using Strikkeapp.Models;
+
 namespace Strikkeapp.Services;
 
 
-public class TokenService
+public interface ITokenService
+{
+    public string GenerateJwtToken(string userEmail, Guid userID);
+    public TokenResult ExtractUserID(string token);
+}
+
+public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
     private readonly string _keyString;
@@ -48,24 +56,6 @@ public class TokenService
         // Create and return the token as a string
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
-    }
-
-    public class TokenResult
-    {
-        public bool Success { get; set; }
-        public Guid UserId { get; set; }
-        public string ErrorMessage { get; set; } = string.Empty;
-
-        public static TokenResult ForSuccess(Guid userId) => new TokenResult
-        {
-            Success = true,
-            UserId = userId
-        };
-        public static TokenResult ForFailure(string message) => new TokenResult
-        {
-            Success = false,
-            ErrorMessage = message
-        };
     }
 
     public TokenResult ExtractUserID(string token)

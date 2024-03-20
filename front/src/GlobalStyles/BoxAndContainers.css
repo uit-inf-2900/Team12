@@ -79,6 +79,13 @@
     
 }
 
+/* Message box for displaing messages on the admin page*/
+.box.message {
+    width: 100%; /* Take up the full width of the container */
+    background-color: var(--box-color-dark); /* Light purple background */
+    height: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
 
 /*============= DROPDOWN ===================*/
   /* Custom styles for the select dropdown */
@@ -100,4 +107,15 @@
 .select-dropdown option {
     padding: 8px 12px; /* Add some padding */
 }
+
+
+/*============= ADMIN PAGE ===================*/
+
+.messages-list-container {
+    max-height: 500px; 
+    overflow-y: auto; 
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
 

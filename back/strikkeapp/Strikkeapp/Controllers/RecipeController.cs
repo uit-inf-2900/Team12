@@ -4,7 +4,7 @@ using Strikkeapp.Services;
 namespace strikkeapp.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/recipe")]
 public class RecipeController : ControllerBase
 {
     private readonly IRecipeService _recipeService;
@@ -56,6 +56,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet]
+    [Route("getallrecipes")]
     public IActionResult GetRecipes([FromQuery] string userToken)
     {
         var result = _recipeService.GetRecipes(userToken);
@@ -67,7 +68,8 @@ public class RecipeController : ControllerBase
         return Ok(result.Recipes);
     }
 
-    [HttpGet("pdf")]
+    [HttpGet]
+    [Route("getrecipe")]
     public IActionResult GetRecipePDF([FromQuery] string userToken, Guid recipeId)
     {
         var result = _recipeService.GetRecipePDF(recipeId, userToken);

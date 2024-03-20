@@ -29,8 +29,7 @@ const Projects = () => {
         // ... flere prosjekter
     ];
 
-    const filteredProjects = projects.filter(project => project.status === activeStatus);
-
+    
     const buttonStyle = {
         padding: '20px 30px', 
         margin: '0 20px', 
@@ -92,7 +91,8 @@ const Projects = () => {
                 ))}
             </div>
         </div>
-    )
+    );
 };
+
 
 export default Projects;

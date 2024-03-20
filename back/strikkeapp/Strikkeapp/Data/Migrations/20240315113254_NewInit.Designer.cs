@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Strikkeapp.Data.Models;
+using Strikkeapp.Data.Context;
 
 #nullable disable
 
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    [Migration("20240304083600_UpdatedRecipe")]
-    partial class UpdatedRecipe
+    [Migration("20240315113254_NewInit")]
+    partial class NewInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,36 @@ namespace Strikkeapp.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
-            modelBuilder.Entity("Strikkeapp.Data.Models.KnittingRecipes", b =>
+            modelBuilder.Entity("Strikkeapp.Data.Entities.ContactRequest", b =>
+                {
+                    b.Property<Guid>("ContactRequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsHandled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TimeCreated")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ContactRequestId");
+
+                    b.ToTable("ContactRequests");
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
                 {
                     b.Property<Guid>("KnittingRecipeId")
                         .ValueGeneratedOnAdd()
@@ -51,7 +80,7 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("KnittingRecipes");
                 });
 
-            modelBuilder.Entity("Strikkeapp.Data.Models.UserDetails", b =>
+            modelBuilder.Entity("Strikkeapp.Data.Entities.UserDetails", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
@@ -59,11 +88,10 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserFullName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("UserType")
+                    b.Property<string>("UserFullName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -72,7 +100,7 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("UserDetails");
                 });
 
-            modelBuilder.Entity("Strikkeapp.Data.Models.UserLogIn", b =>
+            modelBuilder.Entity("Strikkeapp.Data.Entities.UserLogIn", b =>
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
@@ -98,20 +126,20 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("UserLogIn");
                 });
 
-            modelBuilder.Entity("Strikkeapp.Data.Models.KnittingRecipes", b =>
+            modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
                 {
-                    b.HasOne("Strikkeapp.Data.Models.UserLogIn", null)
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Strikkeapp.Data.Models.UserDetails", b =>
+            modelBuilder.Entity("Strikkeapp.Data.Entities.UserDetails", b =>
                 {
-                    b.HasOne("Strikkeapp.Data.Models.UserLogIn", null)
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithOne()
-                        .HasForeignKey("Strikkeapp.Data.Models.UserDetails", "UserId")
+                        .HasForeignKey("Strikkeapp.Data.Entities.UserDetails", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

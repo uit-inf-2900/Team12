@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import InputField from "../../Components/InputField";
 import { useForm } from 'react-hook-form';
-import validator from 'validator'; // Sørg for at 'validator' er installert
-import Image from "../../images/6.png";
+import validator from 'validator'; 
+import axios from 'axios';
 
+import Image from "../../images/6.png";
+import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
 
@@ -33,10 +34,24 @@ const ContactDetails = () => (
 
 const ContactUs = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    
 
     const onSubmit = data => {
-        console.log(data);
-        reset(); // Clear form after submission
+        const payload = {
+            userEmail: data.email, 
+            userMessage: data.message, 
+            userName: data.Name
+        };
+        console.log("Payload: ", payload);
+
+        axios.post('http://localhost:5002/api/Contact', payload)
+            .then(response => {
+                console.log("Response: ", response)
+                reset(); // Clear form after submission
+            })
+            .catch(error => {
+                console.log(error);
+            });
     };
 
     return (
@@ -51,6 +66,7 @@ const ContactUs = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="box dark" style={{"width": "50%", "height":"100%"}}>
                     <h2>Send us a message</h2>
                     <InputField
+                        style={{'width': 'auto', alignItems:'center'}}
                         placeholder="Full Name"
                         register={register("Name", { required: "Full name is required." })}
                         errors={errors.Name}
@@ -58,6 +74,7 @@ const ContactUs = () => {
                         />
                     <InputField
                         placeholder="Email"
+                        style={{'width': 'auto', alignItems:'center'}}
                         register={register("email", {
                             required: "Email is required.",
                             validate: input => validator.isEmail(input) || "Invalid email address"
@@ -67,11 +84,14 @@ const ContactUs = () => {
                         />
                     <InputField
                         placeholder="Message"
+                        style={{'width': 'auto', alignItems:'center'}}
+
                         register={register("message", { 
                             required: "Message is required." })}
                             errors={errors.message}
                             type="text"
-                            />
+                            useTextareaStyle={true}
+                    />
                     <button type="submit" className="light-button">Send Message</button>
                 </form>
                 

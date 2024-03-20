@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Strikkeapp.Data.Entities;
 
-namespace Strikkeapp.Data.Models;
+namespace Strikkeapp.Data.Context;
 
 public class StrikkeappDbContext : DbContext
 {
@@ -10,9 +11,10 @@ public class StrikkeappDbContext : DbContext
     }
 
     // Create tables
-    public DbSet<UserLogIn> UserLogIn { get; set; }
-    public DbSet<UserDetails> UserDetails { get; set; }
-    public DbSet<KnittingRecipes> KnittingRecipes { get; set; }
+    public virtual DbSet<UserLogIn> UserLogIn { get; set; }
+    public virtual DbSet<UserDetails> UserDetails { get; set; }
+    public virtual DbSet<KnittingRecipes> KnittingRecipes { get; set; }
+    public virtual DbSet<ContactRequest> ContactRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,7 +33,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-           
+
         modelBuilder.Entity<KnittingRecipes>()
             .HasOne<UserLogIn>()
             .WithMany()
