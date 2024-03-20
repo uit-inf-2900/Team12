@@ -2,12 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
+
 using strikkeapp.services;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Services;
-using System;
-using Xunit;
 
 namespace Strikkeapp.Tests
 {
@@ -34,14 +33,14 @@ namespace Strikkeapp.Tests
         }
 
         [Fact]
-        public void CreateUser_ShouldReturnSuccess_WithValidData()
+        public void CreateUserTest()
         {
             // Arrange
             var testEmail = "test@example.com";
             var testPassword = "Test123!";
             var testFullName = "Test Testing";
             var testDob = new DateTime(2024, 1, 1);
-            var testId = Guid.NewGuid();
+            //var testId = Guid.NewGuid();
 
             _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
                     .Returns("hashedPassword");
@@ -57,6 +56,39 @@ namespace Strikkeapp.Tests
             _mockTokenService.Verify(x => x.GenerateJwtToken(testEmail, It.IsAny<Guid>()), Times.Once);
 
             // Cleanup
+            _context.Database.EnsureDeleted();
+        }
+
+        [Fact]
+        public void LogInUserTest()
+        {
+            var testEmail = "test@example.com";
+            var testPassword = "Test123!";
+            var hashedPassword = "hashedPassword";
+            var testId = Guid.NewGuid();
+
+            _context.UserLogIn.Add(new UserLogIn
+            {
+                UserEmail = testEmail,
+                UserPwd = hashedPassword,
+                UserId = testId,
+            });
+
+            _context.SaveChanges();
+
+
+            _mockPasswordHasher.Setup(x => x.VerifyHashedPassword(It.IsAny<object>(), hashedPassword, testPassword))
+                .Returns(PasswordVerificationResult.Success);
+
+            _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>()))
+                     .Returns("fakeToken");
+
+            var result = _userService.LogInUser(testEmail, testPassword);
+
+            Assert.True(result.Success);
+            _mockPasswordHasher.Verify(x => x.VerifyHashedPassword(It.IsAny<object>(), hashedPassword, testPassword), Times.Once);
+            _mockTokenService.Verify(x => x.GenerateJwtToken(testEmail, It.IsAny<Guid>()), Times.Once);
+
             _context.Database.EnsureDeleted();
         }
     }
