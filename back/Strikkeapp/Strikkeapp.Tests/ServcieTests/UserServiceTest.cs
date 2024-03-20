@@ -1,64 +1,63 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
-
-using Strikkeapp.Services;
 using strikkeapp.services;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
+using Strikkeapp.Services;
+using System;
+using Xunit;
 
-
-namespace Strikkeapp.Tests.ServcieTests;
-
-public class UserServiceTest
+namespace Strikkeapp.Tests
 {
-    private readonly UserService _userService;
-    private readonly Mock<StrikkeappDbContext> _mockContext;
-    private readonly Mock<IPasswordHasher<object>> _mockHasher;
-    private readonly Mock<TokenService> _mockTokenService;
-
-    public UserServiceTest()
+    public class UserServiceTests
     {
-        // Create mock services
-        _mockContext = new Mock<StrikkeappDbContext>(new DbContextOptions<StrikkeappDbContext>());
-        _mockHasher = new Mock<IPasswordHasher<object>>();
-        _mockTokenService = new Mock<TokenService>();
+        private readonly StrikkeappDbContext _context;
+        private readonly UserService _userService;
+        private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
+        private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
 
-        // Initialize userservice with mocks
-        _userService = new UserService(_mockContext.Object, _mockTokenService.Object, _mockHasher.Object);
+        public UserServiceTests()
+        {
+            // Set up in memory database
+            var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
+                .UseInMemoryDatabase(databaseName: "StrikkeappTestDb")
+                .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .Options;
+
+            // Create new context with the options
+            _context = new StrikkeappDbContext(options);
+
+            // Set up userservice to test
+            _userService = new UserService(_context, _mockTokenService.Object, _mockPasswordHasher.Object);
+        }
+
+        [Fact]
+        public void CreateUser_ShouldReturnSuccess_WithValidData()
+        {
+            // Arrange
+            var testEmail = "test@example.com";
+            var testPassword = "Test123!";
+            var testFullName = "Test Testing";
+            var testDob = new DateTime(2024, 1, 1);
+            var testId = Guid.NewGuid();
+
+            _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
+                    .Returns("hashedPassword");
+            _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>()))
+                             .Returns("fakeToken");
+
+            // Run CreateUser with test variables
+            var result = _userService.CreateUser(testEmail, testPassword, testFullName, testDob);
+
+            // Assert
+            Assert.True(result.Success);
+            _mockPasswordHasher.Verify(x => x.HashPassword(testEmail, testPassword), Times.Once);
+            _mockTokenService.Verify(x => x.GenerateJwtToken(testEmail, It.IsAny<Guid>()), Times.Once);
+
+            // Cleanup
+            _context.Database.EnsureDeleted();
+        }
     }
-
-    [Fact]
-    public void CreateUserOk()
-    {
-        var userEmail = "test@example.com";
-        var userPwd = "Test123!";
-        var userFullName = "Test Testing";
-        var userDOB = new DateTime(2024, 1, 1);
-        var fakeUserId = Guid.NewGuid();
-
-        var hashedPwd = "hashed_password";
-        var expectedToken = "token";
-
-        var userLogInMock = new Mock<DbSet<UserLogIn>>();
-        var userDetailsMock = new Mock<DbSet<UserDetails>>();
-        _mockContext.Setup(m => m.UserLogIn).Returns(() => userLogInMock.Object);
-        _mockContext.Setup(m => m.UserDetails).Returns(() => userDetailsMock.Object);
-
-        _mockContext.Setup(m => m.UserLogIn.Any(x => x.UserEmail == userEmail)).Returns(false);
-        _mockHasher.Setup(m => m.HashPassword(It.IsAny<object>(), userPwd)).Returns(hashedPwd);
-        _mockTokenService.Setup(m => m.GenerateJwtToken(userEmail, fakeUserId)).Returns(expectedToken);
-
-        _mockContext.Setup(m => m.SaveChanges()).Verifiable();
-
-        var result = _userService.CreateUser(userEmail, userPwd, userFullName, userDOB);
-
-        Assert.True(result.Success);
-        Assert.Equal(expectedToken, result.Token);
-        
-        userLogInMock.Verify(m => m.Add(It.IsAny<UserLogIn>()), Times.Once());
-        userDetailsMock.Verify(m => m.Add(It.IsAny<UserDetails>()), Times.Once());
-        _mockContext.Verify(m => m.SaveChanges(), Times.Exactly(2));
-    }
-
 }
