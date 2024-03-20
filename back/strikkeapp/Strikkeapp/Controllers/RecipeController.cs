@@ -67,7 +67,7 @@ public class RecipeController : ControllerBase
         return Ok(result.Recipes);
     }
 
-    [HttpGet]
+    [HttpGet("pdf")]
     public IActionResult GetRecipePDF([FromQuery] string userToken, Guid recipeId)
     {
         var result = _recipeService.GetRecipePDF(recipeId, userToken);
