@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using strikkeapp.services;
 using Strikkeapp.Data.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
