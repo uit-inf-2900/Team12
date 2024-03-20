@@ -3,10 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 
-using Strikkeapp.Services;
 using Strikkeapp.User.Models;
 
-namespace strikkeapp.services;
+namespace Strikkeapp.Services;
 
 public interface IUserService
 {
