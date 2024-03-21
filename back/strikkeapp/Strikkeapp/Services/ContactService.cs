@@ -30,7 +30,6 @@ public class ContactService : IContactService
     public ContactService(StrikkeappDbContext context)
     {
         _context = context;
-
     }
 
     // Send the contact request to the database
@@ -102,20 +101,13 @@ public class ContactService : IContactService
     // Create a contact request entity from the DTO
     private ContactRequest CreateContactRequestEntity(ContactRequestDto request)
     {
-        var userId = _context.UserLogIn
-            .Where(u => u.UserEmail == request.UserEmail)
-            .Select(u => u.UserId)
-            .FirstOrDefault();
-
         // set the values 
         var contactRequest = new ContactRequest
         {
             FullName = request.UserName,
             Email = request.UserEmail,
-            Message = request.UserMessage,
-            UserId = userId
+            Message = request.UserMessage
         };
-
 
         return contactRequest; 
     }
