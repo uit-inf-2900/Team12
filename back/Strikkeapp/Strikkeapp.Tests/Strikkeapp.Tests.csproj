@@ -29,10 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Setup\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Strikkeapp\Strikkeapp.csproj" />
   </ItemGroup>
 
