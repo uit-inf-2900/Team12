@@ -13,7 +13,7 @@ textarea {
     background-color: var(--border-background-color);   
     box-shadow: var(--box-shadow);                      
     box-sizing: border-box;     
-    overflow: 'hidden';   
+    overflow: 'auto';   
     font-family: var(--body-font); 
     font-size: var(--normal-font-size);
 }
