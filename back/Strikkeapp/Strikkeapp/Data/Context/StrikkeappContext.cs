@@ -40,5 +40,13 @@ public class StrikkeappDbContext : DbContext
             .HasForeignKey(kr => kr.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+
+        // Set up a relation between users and conversations (and delete all if user is deleted) 
+        modelBuilder.Entity<ContactRequest>()
+            .HasOne<UserLogIn>()
+            .WithMany()
+            .HasForeignKey(kr => kr.UserId)
+            .OnDelete(DeleteBehavior.Cascade); 
     }
 }

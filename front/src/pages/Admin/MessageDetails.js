@@ -51,7 +51,7 @@ const MessageDetails = ({ message }) => {
                     type="text"
                     value={`From: ${message.userName} (${message.userEmail})`}
                     readOnly
-                    className="input-display"
+                    className="input"
                     style={{cursor: 'default'}} // Optional: Changes cursor to indicate it's not editable
                 />
             </div>
@@ -60,7 +60,7 @@ const MessageDetails = ({ message }) => {
                     type="text"
                     value={`Message: ${message.userMessage}`}
                     readOnly
-                    className="input-display"
+                    className="input"
                     style={{cursor: 'default', 'height': '100px '}} // Optional: Changes cursor to indicate it's not editable
                     useTextareaStyle={true}
                 />
