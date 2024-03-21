@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Strikkeapp.Data.Context;
 
@@ -10,9 +11,11 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    partial class StrikkeappDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240321104245_CRKey")]
+    partial class CRKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -41,7 +44,7 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<DateTime>("TimeCreated")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ContactRequestId");
@@ -133,7 +136,8 @@ namespace Strikkeapp.Data.Migrations
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>

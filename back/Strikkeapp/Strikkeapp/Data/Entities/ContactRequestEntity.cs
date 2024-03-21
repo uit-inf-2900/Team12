@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Strikkeapp.Data.Entities;
 
@@ -8,6 +9,8 @@ public class ContactRequest
     // bruker bare get om du vil gjøre den imuteble (ikke mulig å endre) 
     [Key]
     public Guid ContactRequestId { get; set; } = Guid.NewGuid();
+    [ForeignKey("UserLogIn")]
+    public Guid? UserId { get; set; }
 
     public string? FullName { get; set; }
     public string? Email { get; set; }
