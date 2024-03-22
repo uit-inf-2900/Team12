@@ -33,5 +33,23 @@ public class ContactController : ControllerBase
     {
         return Ok(_contactService.GetContactRequests(isActive));
     }
+
+        // Oppdater IsActive status
+    [HttpPatch("{contactRequestId}/IsActive")]
+    public IActionResult UpdateIsActive(Guid contactRequestId, [FromBody] bool isActive)
+    {
+        var result = _contactService.UpdateIsActiveStatus(contactRequestId, isActive);
+        if (!result) return NotFound();
+        return Ok();
+    }
+
+    // Oppdater IsHandled status
+    [HttpPatch("{contactRequestId}/IsHandled")]
+    public IActionResult UpdateIsHandled(Guid contactRequestId, [FromBody] bool isHandled)
+    {
+        var result = _contactService.UpdateIsHandledStatus(contactRequestId, isHandled);
+        if (!result) return NotFound();
+        return Ok();
+    }
 }
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using strikkeapp.services;
+using Strikkeapp.Services;
 
 using Strikkeapp.Models;
 
