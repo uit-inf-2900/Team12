@@ -19,6 +19,8 @@ public interface IContactService
 
 
     // kunne endre status 
+    bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive);
+    bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled);
 }
 
 public class ContactService : IContactService
@@ -110,5 +112,27 @@ public class ContactService : IContactService
         };
 
         return contactRequest; 
+    }
+
+
+    // Update the status of the contact request 
+    public bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive)
+    {
+        var contactRequest = _context.ContactRequests.Find(contactRequestId);
+        if (contactRequest == null) return false;
+
+        contactRequest.IsActive = isActive;
+        _context.SaveChanges();
+        return true;
+    }
+
+    public bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled)
+    {
+        var contactRequest = _context.ContactRequests.Find(contactRequestId);
+        if (contactRequest == null) return false;
+
+        contactRequest.IsHandled = isHandled;
+        _context.SaveChanges();
+        return true;
     }
 }
