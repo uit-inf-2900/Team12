@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import InputField from '../SignUp_LogIn/InputField';
 import './Profilepage.css';
 
-const EditProfile = ({ userProfile, onUpdateProfile }) => {
-    const [formData, setFormData] = useState({
-        ...userProfile,
-        oldPassword: '', // Add oldPassword to your formData state
-        newPassword: '', // Add newPassword to replace the direct usage of password
-    });
-
+const EditProfile = () => {
     const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        NewPassword: '',
+        OldPassword: '',
+        UserEmail: '',
+        UserFullName: ''
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,12 +23,32 @@ const EditProfile = ({ userProfile, onUpdateProfile }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Ideally, verify the old password with your backend before updating to the new one
-        // For demonstration, this just logs and calls the onUpdateProfile prop (which you'll implement)
-        console.log("Submitting new profile data:", formData);
-        // Here you would actually call onUpdateProfile or similar function
-        // For now, just navigate back to profile for demonstration
-        navigate('/profile');
+        const token = sessionStorage.getItem('token');
+        const address = 'http://localhost:5002/updateprofileinfo';
+        console.log(address);
+    
+        if (token) {
+            const payload = {
+                NewPassword: formData.NewPassword,
+                OldPassword: formData.OldPassword,
+                UserEmail: formData.UserEmail,
+                UserFullName: formData.UserFullName,
+                jwtToken: token
+            };
+            console.log("Payload: ", payload);
+            
+            axios.patch('http://localhost:5002/updateprofileinfo', payload)
+            .then(response => {
+                console.log("Profile Updated:", response.data);
+                navigate('/profile');
+            })
+            .catch(error => {
+                console.error("Error updating profile data: ", error);
+            });
+        } else {
+            console.error("No token found. Please log in.");
+        }
+        console.log("Token:", token);
     };
 
     return (
@@ -37,45 +58,40 @@ const EditProfile = ({ userProfile, onUpdateProfile }) => {
                     <div className='infoText-small' style={{color: "black"}}> Name </div>
                     <InputField
                         type="text"
-                        register={{ name: 'name' }}
-                        inputProps={{
-                            
-                            value: formData.name,
+                        name='UserFullName'
+                        inputprops={{
+                            value: formData.UserFullName,
                             onChange: handleChange
                         }}
                     />
                     <div className='infoText-small' style={{color: "black"}}> Email </div>
                     <InputField
                         type="email"
-                        register={{ name: 'email' }}
-                        inputProps={{
-                            
-                            
-                            value: formData.email,
+                        name='UserEmail'
+                        inputprops={{
+                            value: formData.UserEmail,
                             onChange: handleChange
                         }}
                     />
                     <div className='infoText-small' style={{color: "black"}}> Old Password </div>
                     <InputField
                         type="password"
-                        register={{ name: 'oldPassword' }} // Update to match the new state field
-                        inputProps={{
-                            name: 'oldPassword',
-                            value: formData.oldPassword,
-                            onChange: handleChange,
+                        name='OldPassword'
+                        inputprops={{
+                            value: formData.OldPassword,
+                            onChange: handleChange
                         }}
                     />
                     <div className='infoText-small' style={{color: "black"}}> New Password </div>
                     <InputField
                         type="password"
-                        register={{ name: 'newPassword' }} // Use the new state field for the new password
-                        inputProps={{
-                            name: 'newPassword',
-                            value: formData.newPassword,
-                            onChange: handleChange,
+                        name='NewPassword'
+                        inputprops={{
+                            value: formData.NewPassword,
+                            onChange: handleChange
                         }}
                     />
-                    <button className='light-button' onClick={() => navigate('/profile')}>Save changes</button>
+                    <button type='submit' className='light-button'>Save changes</button>
                 </form>
             </div>
         </div>
