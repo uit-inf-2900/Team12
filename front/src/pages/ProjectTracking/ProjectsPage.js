@@ -56,6 +56,15 @@ const Projects = () => {
             console.log(error);
         })
     };
+
+    const options = [
+        { id: 'planned', label: 'Planned' },
+        { id: 'in-progress', label: 'In Progress' },
+        { id: 'completed', label: 'Completed' }
+    ];
+    
+    const filteredProjects = projects.filter(project => project.status === activeStatus);
+
     
 
     return(
