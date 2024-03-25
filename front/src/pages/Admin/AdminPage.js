@@ -3,9 +3,8 @@ import { useForm } from 'react-hook-form';
 import validator from 'validator'; 
 import axios from 'axios';
 
-import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
-import ViewMessages from './ViewMessages';
+import ViewMessages from './Messages/ViewMessages';
 
 
 const AdminPage = () => {
