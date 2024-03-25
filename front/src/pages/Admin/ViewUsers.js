@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import validator from 'validator'; 
 import axios from 'axios';
 
-import InputField from "../../../Components/InputField";
-import "../../../GlobalStyles/main.css";
+import InputField from "../../Components/InputField";
+import "../../GlobalStyles/main.css";
 
 
 const ViewUsers = () => {
