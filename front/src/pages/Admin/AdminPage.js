@@ -1,34 +1,42 @@
+// AdminPage.js
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import validator from 'validator'; 
-import axios from 'axios';
-
 import "../../GlobalStyles/main.css";
 import ViewMessages from './Messages/ViewMessages';
 import ViewUsers from './ViewUsers';
-
+import Sidebar from './Sidebar'; // Adjust the path according to where you save the Sidebar component
 
 const AdminPage = () => {
     const [showMessages, setShowMessages] = useState(false);
     const [showUsers, setShowUsers] = useState(false);
 
+    const toggleShowUsers = () => {
+        if (!showUsers) {
+            setShowUsers(true);
+        }
+        if (showMessages) {
+            setShowMessages(false);
+        }
+    };
 
-    return(
-        <div className="page-container">
+    const toggleShowMessages = () => {
+        if (!showMessages) {
+            setShowMessages(true);
+        }
+        if (showUsers) {
+            setShowUsers(false);
+        }
+    };
+
+    return (
+        <div className="admin-page-layout">
+            <Sidebar onShowUsers={toggleShowUsers} onShowMessages={toggleShowMessages} />
+            <div className="Admin-page-content">
             <h1>Admin Page</h1>
-            <button className='light-button' onClick={() => setShowUsers(!showUsers)}>
-                {showUsers ? 'Hide users': 'Show users'}
-            </button>
-            {showUsers && <ViewUsers />}
-
-
-            <button className='light-button' onClick={() => setShowMessages(!showMessages)}>
-                {showMessages ? 'Hide messages': 'Show messages'}
-            </button>
-            {showMessages && <ViewMessages />}
+                {showUsers && <ViewUsers />}
+                {showMessages && <ViewMessages />}
+            </div>
         </div>
     );
-
 };
 
 export default AdminPage;
