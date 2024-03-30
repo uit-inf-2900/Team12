@@ -1,7 +1,6 @@
-.admin-page-layout {
-    display: flex;
-    min-height: 100vh;
-}
+@import url('./colorAndText.css');
+
+
 .sidebar {
     width: 50px; /* Bredden når sidebar er kollapset */
     background-color: var(--box-color-dark); /* Hele sidebaren er rosa */
