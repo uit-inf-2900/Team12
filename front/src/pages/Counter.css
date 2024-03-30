@@ -1,35 +1,37 @@
 .page-container {
-    display: flex;
-    align-items: center; /* Aligns vertically center */
-    justify-content: center; /* Aligns horizontally center */
-    height: 100vh; /* Full viewport height */
-    margin: 0 auto;
-    max-width: 600px;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .add-counter-box {
-    cursor: pointer;
-    border: 2px dashed #ccc;
-    background-color: var(--box-color-light);
-    border-radius: 16px;
-    text-align: center;
-    padding: 50px;
-    width: 130px; /* Adjust width as needed */
-    margin: auto; /* Centers the box in the flex container */
-  }
-  
-  .add-counter-box span {
-    display: block;
-    font-size: 1rem; /* Adjust font size if necessary */
-    color: #333;
-  }
-  
-  .plus-sign {
-    font-size: 6rem; /* Adjust plus sign size if necessary */
-    line-height: 1.5rem;
-  }
+  display: flex;
+  flex-direction: row; /* Align children in a row */
+  align-items: flex-start; /* Align children to the top of the container */
+  flex-wrap: wrap; /* Allow children to wrap to the next line */
+  height: 100vh;
+  padding: 20px;
+}
+
+.add-counter-box {
+  cursor: pointer;
+  border: 2px dashed var(--link-color);
+  background-color: var(--box-color-light);
+  border-radius: 16px;
+  text-align: center;
+  padding: 50px;
+  width: 150px;
+  margin: 5px;
+  flex: 0 0 auto; 
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.add-counter-box span,
+.plus-sign {
+  font-size: 1rem;
+  color: #333;
+  display: block;
+}
+
+.plus-sign {
+  font-size: 2rem;
+  margin-top: 10px;
+}
   
   .modal {
     position: fixed;
@@ -83,44 +85,45 @@
   }
   
   .counter-container {
-    border: 2px solid #ccc;
     border-radius: 16px;
     text-align: center;
-    padding: 50px;
-    margin: 10px;
-    width: 130px;
-    max-width: 600px;
-    display: flex; 
+    padding: 20px;
+    width: 150px;
+    background-color: var(--box-color-dark);
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    
+    align-items: center;
+    margin: 5px;
+    overflow: auto;
   }
-
+  
   .counter-name {
     font-size: 1.2rem;
-    color: #333;
-    margin-bottom: 10px;
+    color: var(--box-text-colour);
+    margin-bottom: 5px;
   }
   
   .counter-value {
     font-size: 2rem;
     margin: 10px 0;
-    color: #666;
+    color: var(--box-text-colour);
   }
   
   .counter-controls {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
   }
   
   .counter-controls button {
     padding: 5px 10px;
     border-radius: 5px;
-    border: 1px solid #ccc;
-    background-color: #e7e7e7;
+    background-color: var();
+    margin: 0 5px;
     cursor: pointer;
     font-size: 1rem;
   }
   
   .counter-controls button:hover {
-    background-color: #d7d7d7;
+    background-color: var(--button-hover-light);
   }

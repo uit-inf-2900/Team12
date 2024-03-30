@@ -47,10 +47,10 @@ export const Stash = () => {
     };
 
     return (
-        <div className="page-container">
+        <div className="page-container">        
             <div className="add-counter-box" onClick={() => setIsModalOpen(true)}>
-                <span>Counter</span>
-                <span className="plus-sign">+</span>
+            <span>Counter</span>
+            <span className="plus-sign">+</span>
             </div>
 
             {isModalOpen && (
