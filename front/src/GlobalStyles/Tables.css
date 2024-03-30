@@ -1,0 +1,22 @@
+@import url('./colorAndText.css');
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+/* ?? FLYTTE TIL TEXT AND COLORS? */
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+    font-size: var(--small-font-size);
+    color: var(--text-color);
+    font-family: var(--body-font);
+}
+
+th {
+    background-color: var(--shadow-color);
+}
+  
