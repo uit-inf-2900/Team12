@@ -9,9 +9,18 @@
     padding-top: var(--header-height);
     max-width: 1200px; /* Set a max-width that fits your design */
     margin: auto;
-    padding: 20px;
-    text-align: center; /* Centers text within the container */
+    padding: 20px; 
+    text-align: center; 
+    flex-grow: 1; 
+    overflow: auto; 
+    display: flex;
+    flex-direction: column;
+}
 
+.Admin-page-content {
+    flex-grow: 1; /* Lar innholdet ta opp resten av plassen */
+    overflow: hidden; /* Hindrer innholdet i å gå utenfor sin kontainer */
+    padding: 20px;
 }
 
 /* Applies to all major sections for consistent spacing and alignment */
