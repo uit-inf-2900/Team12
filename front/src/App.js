@@ -17,16 +17,11 @@ import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
 import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
+import NotFound from './pages/NotFound';
+import ViewUsers from './pages/Admin/ViewUsers';
+import ViewMessages from './pages/Admin/Messages/ViewMessages';
 
-const NotFound = () => {
-  return (
-    <div className="page-container" style={{ justifyContent: "center", alignItems: "row"}}>
-      <h1>404 - Page Not Found</h1>
-      <p>Sorry, the page you are looking for could not be found.</p>
-      <p> Go back to the <Link to='/'> home page </Link> </p>
-  </div>
-  );
-};
+
 
 
 export default function App() {
@@ -50,11 +45,19 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contactus" element={<ContactUs />} />
+
+            {/* If you have admin privileges and is admin change the contact us page with the asminpage  */}
             {isLoggedIn && isAdmin ? (
-            <Route path="/adminpage" element={<AdminPage />} />
+              // <>
+                <Route path="/adminpage" element={<AdminPage />} />
+                //  <Route path="/users" element={<ViewUsers />} />
+                // <Route path="/messages" element={<ViewMessages />} />
+              // </> 
             ) : (
               <Route path="/contactus" element={<ContactUs />} />
             )}
+
+            {/* If you are not logged in shou login and signup, if not show all personal options */}
             {!isLoggedIn ? (
               <>
                 <Route path="/login" element={<LogIn />} />

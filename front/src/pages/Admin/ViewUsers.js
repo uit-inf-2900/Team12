@@ -19,7 +19,7 @@ const fetchUserData = async() => {
 
 };
 
-const UsersTable = () => {
+const ViewUsers = () => {
 
     // State to hold users data
     const [users, setUsers] = useState([]);
@@ -56,4 +56,4 @@ const UsersTable = () => {
     );
 };
 
-export default UsersTable;
+export default ViewUsers;
