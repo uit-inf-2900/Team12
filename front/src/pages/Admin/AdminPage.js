@@ -1,39 +1,25 @@
-// AdminPage.js
 import React, { useState } from 'react';
 import "../../GlobalStyles/main.css";
 import ViewMessages from './Messages/ViewMessages';
 import ViewUsers from './ViewUsers';
-import Sidebar from './Sidebar'; // Adjust the path according to where you save the Sidebar component
+import Sidebar from './Sidebar';
+import Dashboard from './Dashboard';
 
 const AdminPage = () => {
-    const [showMessages, setShowMessages] = useState(false);
-    const [showUsers, setShowUsers] = useState(false);
+    const [activeView, setActiveView] = useState('');
 
-    const toggleShowUsers = () => {
-        if (!showUsers) {
-            setShowUsers(true);
-        }
-        if (showMessages) {
-            setShowMessages(false);
-        }
-    };
-
-    const toggleShowMessages = () => {
-        if (!showMessages) {
-            setShowMessages(true);
-        }
-        if (showUsers) {
-            setShowUsers(false);
-        }
+    const toggleView = (view) => {
+        setActiveView(prevView => prevView === view ? '' : view);
     };
 
     return (
         <div className="admin-page-layout">
-            <Sidebar onShowUsers={toggleShowUsers} onShowMessages={toggleShowMessages} />
+            <Sidebar onToggleView={toggleView} activeView={activeView}/>
             <div className="Admin-page-content">
-            <h1>Admin Page</h1>
-                {showUsers && <ViewUsers />}
-                {showMessages && <ViewMessages />}
+                <h1>Admin Page</h1>
+                {activeView === 'users' && <ViewUsers />}
+                {activeView === 'messages' && <ViewMessages />}
+                {activeView === 'dashboard' && <Dashboard />}
             </div>
         </div>
     );
