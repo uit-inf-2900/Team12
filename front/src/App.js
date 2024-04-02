@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Link,  BrowserRouter as Router,  Route, Routes } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode'
 
 
 // Import our pages
@@ -32,8 +33,21 @@ export default function App() {
   };
 
   // Sjekker direkte om token eksisterer i sessionStorage for å bestemme innloggingsstatus
-  const isLoggedIn = sessionStorage.getItem('token');
-  const isAdmin =  true; // TODO: get status from backend instead of hardcoding.
+  const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('token'));
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if(token){
+      try{
+        const decodedToken = jwtDecode(token);
+        setIsAdmin(decodedToken.isAdmin && decodedToken.isAdmin.toLowerCase() === 'true');
+      }catch(error){
+        console.error('Error decoding token', error);
+        setIsAdmin(false);
+      }
+    }
+  }, []);
 
   return (
     <Router>
