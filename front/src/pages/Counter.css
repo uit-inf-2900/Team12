@@ -1,129 +1,92 @@
+/* Container for the page that will use Flexbox to align child elements in a row */
 .page-container {
   display: flex;
-  flex-direction: row; /* Align children in a row */
-  align-items: flex-start; /* Align children to the top of the container */
-  flex-wrap: wrap; /* Allow children to wrap to the next line */
-  height: 100vh;
-  padding: 20px;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow: auto;
+}
+
+.counter-container,
+.add-counter-box {
+  border-radius: 16px;  /* Rounded corners */
+  text-align: center; /* Center text horizontally */
+  padding: 20px;  /* Space inside the boxes */
+  min-height: 150px;  /* Minimum height to maintain a consistent size */
+  width: 150px; /* Fixed width for consistency */
+  display: flex;  /* Use Flexbox for internal alignment */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center;  /* Center children vertically */
+  align-items: center;  /* Center children horizontally */
+  margin: 5px;  /* Space between adjacent counters and/or add-counter box */
+  flex: 0 0 auto; /* Prevent boxes from growing or shrinking */
 }
 
 .add-counter-box {
-  cursor: pointer;
-  border: 2px dashed var(--link-color);
-  background-color: var(--box-color-light);
-  border-radius: 16px;
-  text-align: center;
-  padding: 50px;
-  width: 150px;
-  margin: 5px;
-  flex: 0 0 auto; 
-  margin-left: auto;
-  flex-shrink: 0;
+  cursor: pointer;  /* Change the mouse cursor to indicate it's clickable */
+  border: 2px dashed var(--link-color); /* Dashed border */
+  background-color: var(--box-color-light); /* Light background color */
+  font-size: 1rem;  /* Text size */
+  color: var(--box-text-colour);  /* Text color */
+}
+  
+.modal {
+  position: fixed;  /* Overlay the entire page */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;  /* Use Flexbox for centering the content */
+  align-items: center;  /* Center vertically */
+  justify-content: center;  /* Center horizontally */
 }
 
-.add-counter-box span,
-.plus-sign {
-  font-size: 1rem;
-  color: #333;
-  display: block;
+.modal-content {
+  background-color: var(--box-color-dark);  /* Dark background */
+  padding: 20px;  /* Padding inside the modal content box */
+  border-radius: 16px;  /* Rounded corners */
+  text-align: center; /* Center text and elements horizontally */
 }
 
-.plus-sign {
-  font-size: 2rem;
-  margin-top: 10px;
+.modal-content input[type="text"] {
+  margin-bottom: 10px;  /* Space below the input field */
+  padding: 10px;  /* Inner space of the input field for text padding */
+  border-radius: 8px; /* Slightly rounded corners for the input field */
 }
-  
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 16px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .modal-content form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .modal-content input[type="text"] {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  }
-  
-  .modal-content button {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .modal-content button:hover {
-    background-color: #e7e7e7;
-  }
-  
-  .plus-sign {
-    display: block;
-    font-size: 24px;
-    margin-top: 10px;
-  }
-  
-  .counter-container {
-    border-radius: 16px;
-    text-align: center;
-    padding: 20px;
-    width: 150px;
-    background-color: var(--box-color-dark);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 5px;
-    overflow: auto;
-  }
-  
-  .counter-name {
-    font-size: 1.2rem;
-    color: var(--box-text-colour);
-    margin-bottom: 5px;
-  }
-  
-  .counter-value {
-    font-size: 2rem;
-    margin: 10px 0;
-    color: var(--box-text-colour);
-  }
-  
-  .counter-controls {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .counter-controls button {
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: var();
-    margin: 0 5px;
-    cursor: pointer;
-    font-size: 1rem;
-  }
-  
-  .counter-controls button:hover {
-    background-color: var(--button-hover-light);
-  }
+
+.counter-container {
+  background-color: var(--box-color-dark);  /* Dark background for contrast. */
+  overflow: auto; /* Enable scrolling for overflowing content. */
+}
+
+.counter-info {
+  font-size: 1.7rem;  /* Slightly larger text */
+  color: var(--box-text-colour);  /* Text color */
+}
+
+.counter-controls {
+  display: flex;  /* Use Flexbox for layout */
+  justify-content: center;  /* Center buttons horizontally */
+}
+
+.counter-controls button {
+  padding: 5px 10px;  /* Padding */
+  border-radius: 5px; /* Soft rounded corners for the buttons */
+  margin: 0 5px;  /* Space around buttons for separation */
+  cursor: pointer;  /* Indicate buttons are clickable */
+  font-size: 1rem;  /* Readable font size for button text */
+}
+
+.edit-text {
+  margin-top: 5px;  /* Space above the editable text */
+  margin-bottom: -5px;  /* Adjust spacing below */
+  cursor: pointer;  /* Indicate text is clickable */
+  color: var(--text-color); /* Text color */
+  text-decoration: underline; /* To indicate it is clickable */
+  font-size: var(--small-font-size); /* Smaller font size */
+  text-align: center; /* Center the text horizontally */
+}
+
+.edit-text:hover{
+  color: var(--link-hover-color); /* Change color on hover */
+}
