@@ -122,8 +122,12 @@ public class UserInfoTests
         // Mock services
         _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
             .Returns(TokenResult.ForSuccess(testUserGuid));
+
         _mockPasswordHasher.Setup(h => h.HashPassword(It.IsAny<object>(), newPassword))
             .Returns(hashedNewPassword);
+
+        _mockPasswordHasher.Setup(h => h.VerifyHashedPassword(It.IsAny<object>(), It.IsAny<string>(), oldPassword))
+            .Returns(PasswordVerificationResult.Success);
 
         // Run service and verify results
         var res = _userInfoService.UpdateProfileInfo(testJwtToken, null, null, oldPassword, newPassword);
