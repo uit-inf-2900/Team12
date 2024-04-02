@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Strikkeapp.Data.Context;
 using Strikkeapp.Services;
+using System.Linq;
 
 using Strikkeapp.Models;
 
@@ -11,13 +13,16 @@ public class UsersController : ControllerBase
 {
     // Set user service
     private readonly IUserService _userService;
-    public UsersController(IUserService userService)
+    private readonly StrikkeappDbContext _context; // Legg til referanse til DbContext her
+
+    public UsersController(IUserService userService, StrikkeappDbContext context)
     {
         _userService = userService;
+        _context = context;
     }
 
     // Create user request schema
-    
+
 
 
 
@@ -86,4 +91,28 @@ public class UsersController : ControllerBase
         // Return userid and token on success
         return Ok(res);
     }
+
+
+    [HttpGet]
+    [Route("/getUsers")]
+    public IActionResult GetAllUsers()
+    {
+        var users = _context.UserLogIn.Join(_context.UserDetails,
+                                            login => login.UserId,
+                                            details => details.UserId,
+                                            (login, details) => new {
+                                                FullName = details.UserFullName,
+                                                Email = login.UserEmail,
+                                                Status = login.UserStatus,
+                                                IsAdmin = details.IsAdmin
+                                            }).ToList();
+
+        if (!users.Any())
+        {
+            return NotFound("No users found");
+        }
+
+        return Ok(users);
+    }
+
 }

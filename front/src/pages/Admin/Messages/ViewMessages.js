@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import "../../GlobalStyles/main.css";
+import "../../../GlobalStyles/main.css";
 import MessageItem from './MessageItem';
 import MessageDetails from './MessageDetails';
 
