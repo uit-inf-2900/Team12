@@ -45,7 +45,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h2>Welcome back!</h2>
                     <InputField
-                        placeholder="Email"
+                        label="Email"
                         type="email"
                         register={register("email", {
                         required: "Email is required",
@@ -55,7 +55,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         aria-label="Email"
                     />
                     <InputField
-                        placeholder="Password"
+                        label="Password"
                         type="password"
                         register={register("password", { required: "Password is required" })}
                         errors={errors.password}

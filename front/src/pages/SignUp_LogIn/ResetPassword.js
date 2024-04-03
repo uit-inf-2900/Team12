@@ -29,7 +29,7 @@ const ResetPassword = ({ toggleForm }) => {
                     {/* Use the InputField component for email input */}
                     <InputField
                         type="email"
-                        placeholder="Email"
+                        label="Email"
                         register={register("email", {
                             required: "Email is required.",
                             pattern: {

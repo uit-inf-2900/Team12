@@ -88,7 +88,7 @@ const MessageDetails = ({ message, contactRequestId }) => {
                 <InputField 
                     style={{ resize: 'vertical', height: '100px' }}
                     type="text"
-                    placeholder='Write your reply here...'
+                    label='Write your reply here...'
                     value={reply}
                     onChange={handleReplyChanges}
                     useTextareaStyle={true}

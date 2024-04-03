@@ -72,30 +72,28 @@ const ContactUs = () => {
                     <h2>Send us a message</h2>
                     <InputField
                         style={{'width': 'auto', alignItems:'center'}}
-                        placeholder="Full Name"
+                        label="Full Name"
                         register={register("Name", { required: "Full name is required." })}
                         errors={errors.Name}
                         type="text"
                         />
                     <InputField
-                        placeholder="Email"
+                        label="Email"
                         style={{'width': 'auto', alignItems:'center'}}
                         register={register("email", {
                             required: "Email is required.",
-                            validate: input => validator.isEmail(input) || "Invalid email address"
+                            // validate: input => validator.isEmail(input) || "Invalid email address"
                         })}
                         errors={errors.email}
                         type="email"
                         />
                     <InputField
-                        placeholder="Message"
+                        label="Message"
                         style={{'width': 'auto', alignItems:'center'}}
-
                         register={register("message", { 
                             required: "Message is required." })}
                             errors={errors.message}
                             type="text"
-                            useTextareaStyle={true}
                     />
                     <button type="submit" className="light-button">Send Message</button>
                 </form>
