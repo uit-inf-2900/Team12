@@ -59,7 +59,6 @@ const MessageDetails = ({ message, contactRequestId }) => {
             {/* Display message sender and message content */}
             <div style={{ textAlign: 'center', width: "100%" }}>
                 <InputField
-                
                     label='From'
                     type="text"
                     value={`${message.userName} (${message.userEmail})`}
