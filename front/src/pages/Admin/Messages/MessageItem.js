@@ -5,8 +5,8 @@ const MessageItem = ({ message, onSelect, isSelected }) => {
     // Styles for the message item, highlighting if selected
     const messageItemStyle = {
         cursor: 'pointer',
-        margin: '10px',
-        padding: '10px',
+        margin: '5px',
+        padding: '5px',
         border: '1px solid #ccc',
         borderRadius: '5px',
         backgroundColor: isSelected ? '#F6964B' : 'transparent',
