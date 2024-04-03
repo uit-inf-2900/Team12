@@ -89,6 +89,8 @@ const ContactUs = () => {
                         />
                     <InputField
                         label="Message"
+                        multiline
+                        rows={3}
                         style={{'width': 'auto', alignItems:'center'}}
                         register={register("message", { 
                             required: "Message is required." })}
@@ -97,7 +99,6 @@ const ContactUs = () => {
                     />
                     <button type="submit" className="light-button">Send Message</button>
                 </form>
-
                 
                 {/* SetAlert component for showing alerts */}
                 <SetAlert open={alertInfo.open} setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} severity={alertInfo.severity} message={alertInfo.message} />

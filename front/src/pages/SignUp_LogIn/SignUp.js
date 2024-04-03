@@ -7,6 +7,7 @@ import axios from 'axios';
 import "../../GlobalStyles/main.css";
 
 
+
 const SignUp = ({ toggleForm }) => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch } = useForm();

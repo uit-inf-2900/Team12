@@ -4,6 +4,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import theme from './Theme';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const InputField = ({ label, register, errors, type, ...inputProps }) => {
     // Determine if the input type is password to setup the password visibility toggle
@@ -14,7 +16,9 @@ const InputField = ({ label, register, errors, type, ...inputProps }) => {
 
     return (
         <div>
-            <TextField
+            <ThemeProvider theme={theme}>
+
+            <TextField color='secondary'
                 {...register}
                 {...inputProps}
                 type={isPassword && showPassword ? "text" : type}
@@ -22,28 +26,29 @@ const InputField = ({ label, register, errors, type, ...inputProps }) => {
                 error={!!errors}
                 helperText={errors ? errors.message : ''}
                 variant="outlined"
-                margin="normal"
+                margin="dense"
                 fullWidth
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
                 InputProps={{
                     style: {
                         fontFamily: '"Rigot", sans-serif',
-                        backgroundColor: '#f7f7f7'
-                    },
+                        backgroundColor: '#f7f7f7',
+                        },
                     endAdornment: isPassword ? (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
                                 onClick={togglePasswordVisibility}
                                 edge="end"
-                            >
+                                >
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
                         </InputAdornment>
                     ) : null
                 }}
-            />
+                />
+                </ThemeProvider>
         </div>
     );
 };
