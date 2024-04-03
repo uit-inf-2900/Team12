@@ -30,6 +30,11 @@ public class UserInfoTests
 
         // Set up context and service
         _context = new StrikkeappDbContext(options);
+
+        // Ensure clean database for each test
+        _context.Database.EnsureDeleted();
+        _context.Database.EnsureCreated();
+
         _userInfoService = new UserInfoService(_mockTokenService.Object, _mockPasswordHasher.Object, _context);
 
         // Add test data to database
