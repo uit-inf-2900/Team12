@@ -8,11 +8,12 @@ import theme from './Theme';
 import { ThemeProvider } from '@mui/material/styles';
 
 const InputField = ({ label, register, errors, type, readOnly, ...inputProps }) => {
+    // Chechk the type, state for passwors visabilit and toggle password visibility
     const isPassword = type === "password";
     const [showPassword, setShowPassword] = React.useState(false);
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-    // Apply conditional styles based on readOnly state
+    // Apply conditional styles based on readOnly state (Must be here to hide caret when readonly)
     const inputStyle = readOnly ? {
         fontFamily: '"Rigot", sans-serif',
         backgroundColor: '#f7f7f7',
@@ -24,20 +25,22 @@ const InputField = ({ label, register, errors, type, readOnly, ...inputProps }) 
 
     return (
         <ThemeProvider theme={theme}>
+            {/* Text field component */}
             <TextField
                 color='secondary'
                 {...register}
                 {...inputProps}
-                type={isPassword && showPassword ? "text" : type}
+                type={isPassword && showPassword ? "text" : type}   // Show text instead of password if showPassword is true
                 label={label}
-                error={!!errors}
-                helperText={errors ? errors.message : ''}
+                error={!!errors}                                    // Set error state based on whether errors exist
+                helperText={errors ? errors.message : ''}           // Display error message if errors exist
                 variant="outlined"
                 margin="dense"
                 fullWidth
                 InputProps={{
-                    readOnly: readOnly,
-                    style: inputStyle,
+                    readOnly: readOnly,                             // Set readOnly state
+                    style: inputStyle,                              // Apply conditional styles
+                    // Show eye icon for password input fields
                     endAdornment: isPassword && !readOnly ? (
                         <InputAdornment position="end">
                             <IconButton
@@ -48,7 +51,7 @@ const InputField = ({ label, register, errors, type, readOnly, ...inputProps }) 
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
                         </InputAdornment>
-                    ) : null
+                    ) : null                                        // Don't show eye icon for non-password input fields or readOnly input fields
                 }}
                 // Conditionally remove cursor pointer based on readOnly state
                 onMouseDown={readOnly ? (event) => event.preventDefault() : undefined}
