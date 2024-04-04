@@ -40,8 +40,8 @@ const RecipesPage = () => {
                             backgroundColor: 'white',
                         }, 
                         maxWidth:'fit-content', 
+                        padding: '6px 20px', 
                         margin: 'auto',
-                        
                     }}
                 >
                     Upload Recipes
