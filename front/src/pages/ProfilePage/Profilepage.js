@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Image from "../../images/6.png";
+import InputField from '../../Components/InputField';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
 
 const profilePage = ({userProfile}) => {
     const navigate = useNavigate();
@@ -107,35 +110,30 @@ const profilePage = ({userProfile}) => {
                     <p className="error-message">{profileFetchError}</p>
                 ) : (
                     <>
-                        <div className='infoText-small' style={{color: "black", fontWeight: 'bold', fontSize: '20px'}}> Name </div>
-                        <p className="profile-name" style={{
-                            width: 'flex',
-                            marginRight: '10px',
-                            padding: '10px 20px',
-                            border: '1px solid #ccc',
-                            borderRadius: '5px',
-                            backgroundColor: '#f9f9f9',
-                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                        }}>
-                            {profileFetchError || userProfileState.userFullName || 'Loading...'}
-                        </p>
-                        <div style={{flexGrow: 0.1}}></div>
-                        <div className='infoText-small' style={{color: "black", fontWeight: 'bold', fontSize: '20px'}}> Email </div>
-                        <p className="profile-name" style={{
-                            width: 'flex',
-                            marginRight: '10px',
-                            padding: '10px 20px',
-                            border: '1px solid #ccc',
-                            borderRadius: '5px',
-                            backgroundColor: '#f9f9f9',
-                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                        }}>
-                            {profileFetchError || userProfileState.userEmail || 'Loading...'}
-                        </p>
-                        <div style={{flexGrow: 0.2}}></div>
+                    <h2> Min konto </h2>
+                        <InputField // Bruker InputField for navn
+                            label="Full Name"
+                            readOnly={true} // Sett til true siden dette er for visning
+                            type="text"
+                            value={userProfileState.userFullName || 'Loading...'} // Passer verdien til InputField
+                        />
+                        <div style={{ flexGrow: 0.1 }}></div>
+                        <InputField // Bruker InputField for e-post
+                            label="Email"
+                            readOnly={true} // Sett til true siden dette er for visning
+                            type="email"
+                            value={userProfileState.userEmail || 'Loading...'} // Passer verdien til InputField
+                        />
+                        <div style={{ flexGrow: 0.2 }}></div>
                         <div>
-                            <button className='light-button' onClick={() => navigate('/editprofile')}>Edit</button>
-                        </div>
+                        <Button
+                        variant="contained"
+                        startIcon={<EditIcon />}
+                        onClick={() => navigate('/editprofile')}
+                        style={{ backgroundColor: 'white', color: 'black' }}
+                    >
+                        Edit
+                    </Button>                        </div>
                     </>
                 )}
             </div>

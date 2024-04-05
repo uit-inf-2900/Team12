@@ -54,9 +54,10 @@ const EditProfile = () => {
     return (
         <div className="profile-page-container">
             <div className='box light'>
+                <h2>Edit Profile</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className='infoText-small' style={{color: "black"}}> Name </div>
                     <InputField
+                        label='Name'
                         type="text"
                         name='UserFullName'
                         inputprops={{
@@ -64,8 +65,8 @@ const EditProfile = () => {
                             onChange: handleChange
                         }}
                     />
-                    <div className='infoText-small' style={{color: "black"}}> Email </div>
                     <InputField
+                        label='Email'
                         type="email"
                         name='UserEmail'
                         inputprops={{
@@ -73,8 +74,8 @@ const EditProfile = () => {
                             onChange: handleChange
                         }}
                     />
-                    <div className='infoText-small' style={{color: "black"}}> Old Password </div>
                     <InputField
+                        label='Old password'
                         type="password"
                         name='OldPassword'
                         inputprops={{
@@ -82,8 +83,8 @@ const EditProfile = () => {
                             onChange: handleChange
                         }}
                     />
-                    <div className='infoText-small' style={{color: "black"}}> New Password </div>
                     <InputField
+                        label='New password'
                         type="password"
                         name='NewPassword'
                         inputprops={{
