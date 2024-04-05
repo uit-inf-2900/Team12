@@ -11,6 +11,9 @@ import theme from '../../Components/Theme';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box'; // Import Box from MUI
 
+import ModalContent from "../../Components/ModualContent";
+
+
 
 // Main component for recipe-related functionality
 const RecipesPage = () => {
@@ -52,7 +55,11 @@ const RecipesPage = () => {
             </Box>
 
             {/* FileUpload modal - When this is open, the page content is blurred */}
-            {uploading && <FileUpload onClose={() => setUploading(false)} />}
+            <ModalContent 
+                open={uploading}
+                handleClose={() => setUploading(false)} 
+                infobox={<FileUpload onClose={() => setUploading(false)} />} 
+            />
         </ThemeProvider>
     );
 }

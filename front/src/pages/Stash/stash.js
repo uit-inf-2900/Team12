@@ -7,7 +7,7 @@ import MultiSelect from '../../Components/MultiSelect';
 import { Fab, Modal, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import YarnStash from "./Yarn";
-import ModalContent from "./ModualContent";
+import ModalContent from "../../Components/ModualContent";
 
 import TestModText from "./test"; 
 
@@ -82,16 +82,14 @@ export const Stash = () => {
                 open={openYarnModal} // eller openNeedleModal basert på hva du ønsker
                 handleClose={handleCloseYarnModal} // eller handleCloseNeedleModal
                 infobox={<TestModText/>}
-            >
-            </ModalContent>
+            />
 
             <ModalContent
                 open={openNeedleModal}
                 handleClose={handleCloseNeedleModal}
                 title="Legg til strikkepinner"
                 infobox={<TestModText/>}
-            >
-            </ModalContent>
+            />
 
         </div>
     );
