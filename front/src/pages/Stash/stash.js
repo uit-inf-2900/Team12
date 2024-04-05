@@ -1,91 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import SwitchContainer from "../../Components/SwitchContainer";
-import MultiSelect from "../../Components/MultiSelect";
 import '../../GlobalStyles/main.css';
+import { NeedlesComponent } from "./Needles";
+import MultiSelect from '../../Components/MultiSelect';
 
-
-
-// TODO: legge til en type som heter annen, hvor man selv kan skrive inn typen, feks flettepinne eller heklenål
 
 export const Stash = () => {
-    const [activeStatus, setActiveStatus] = useState('needles');
-    const [needleTypes, setNeedleTypes] = useState(['all']);
+    // State for the selected filters and projects, yarn is the default for the switch container
+    // and all is the default for the needle type filter
+    const [activeStatus, setActiveStatus] = useState('yarn');
+    const [needleTypes, setNeedleTypes] = useState(['All']); 
 
-    // Separerte arrays for needles og yarn
+
+    // TODO: Ta inn data fra backend i stedet for hardkodet data
     const needleStash = [
         { id: 1, size: '10', length: '40 cm', quantity: 5, inUse: true, type: 'Replaceable' },
         { id: 2, size: '5', length: '20 cm', quantity: 8, inUse: false, type: 'Set' },
         { id: 3, size: '3', length: '15 cm', quantity: 12, inUse: true, type: 'Round' },
+        { id: 5, size: '3', length: '1 cm', quantity: 2, inUse: false, type: 'Heklenål' },
+        { id: 6, size: '3', length: '7 cm', quantity: 2, inUse: false, type: 'Flettepinne' },
     ];
 
     const yarnStash = [
         { id: 4, title: 'Rauma Vams' },
-        // Flere garnprosjekter...
     ];
 
-    const options = [
-        { id: 'needles', label: 'Needles' },
-        { id: 'yarn', label: 'Yarn' },
-    ];
-
-    const NeedlesOptions = [
-        { value: 'All', name: 'All needles' },
-        { value: 'Replaceable', name: 'Replaceable needles' },
-        { value: 'Set', name: 'Set needles' },
-        { value: 'Round', name: 'Round needles' },
-    ];
-
-    const handleNeedleTypeChange = (event) => {
-        const { target: { value } } = event;
-        setNeedleTypes(typeof value === 'string' ? value.split(',') : value);
-    };
-
-    // Filtrer basert på activeStatus og needleTypes
-    const filteredNeedleStashs= needleStash.filter(project => {
-        return needleTypes.includes('All') || needleTypes.includes(project.type);
-    });
 
     return (
         <div className="page-container">
-            <h1> Stash </h1>
+            <h1>Stash</h1>
+            {/* Choose if you want to look at needles or yarn  */}
             <SwitchContainer
-                options={options}
+                options={[{ id: 'needles', label: 'Needles' }, { id: 'yarn', label: 'Yarn' }]}
                 activeStatus={activeStatus}
                 setActiveStatus={setActiveStatus}
             />
 
+            {/* If the needle status is chosen, show this section  */}
             {activeStatus === 'needles' && (
-                <>
-                    <MultiSelect
-                        label="Needle Type"
-                        value={needleTypes}
-                        handleChange={handleNeedleTypeChange}
-                        menuItems={NeedlesOptions}
-                    />
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Size</th>
-                                <th>Length</th>
-                                <th>Quantity</th>
-                                <th>In Use</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredNeedleStashs.map(project => (
-                                <tr key={project.id}>
-                                    <td>{project.type}</td>
-                                    <td>{project.size} mm</td>
-                                    <td>{project.length}</td>
-                                    <td>{project.quantity}</td>
-                                    <td>{project.inUse ? 'Yes' : 'No'}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </>
+                <NeedlesComponent 
+                    needleStash={needleStash} 
+                    setNeedleTypes={setNeedleTypes} 
+                    needleTypes={needleTypes} 
+                />
             )}
 
             {activeStatus === 'yarn' && (
