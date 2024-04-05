@@ -65,10 +65,10 @@ export const Stash = () => {
                 </Fab>
             )}
 
-            {/* Modal for yarn */}
+            {/* Modal for yarn and needles */}
             <ModalContent
-                open={openYarnModal} // eller openNeedleModal basert på hva du ønsker
-                handleClose={handleCloseYarnModal} // eller handleCloseNeedleModal
+                open={openYarnModal} 
+                handleClose={handleCloseYarnModal} 
                 infobox={<TestModText/>}
             />
 

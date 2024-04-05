@@ -4,8 +4,33 @@ import React, { useState, useMemo } from 'react';
 import { Fab, Modal, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import MultiSelect from '../../Components/MultiSelect';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { Button } from '@mui/material';
+import "../../GlobalStyles/main.css";
+
 
 export const NeedleStash= ({ setNeedleTypes, needleTypes }) => {
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [needleToDelete, setNeedleToDelete] = useState(null);
+
+    // Funksjon for å åpne modalen for sletting
+    const handleOpenDeleteModal = (needle) => {
+        setNeedleToDelete(needle);
+        setOpenDeleteModal(true);
+    };
+
+    // Funksjon for å lukke modalen for sletting
+    const handleCloseDeleteModal = () => {
+        setOpenDeleteModal(false);
+        setNeedleToDelete(null);
+    };
+
+    // Funksjon for faktisk sletting av nålen
+    const handleDeleteNeedle = () => {
+        // Implementer logikk for å slette nålen her, basert på needleToDelete.id
+        setOpenDeleteModal(false);
+    };
     
     const needleStash = [
         { id: 1, size: '10', length: '40 cm', quantity: 5, inUse: true, type: 'Replaceable' },
@@ -70,6 +95,8 @@ export const NeedleStash= ({ setNeedleTypes, needleTypes }) => {
                                 <th>Length</th>
                                 <th>Quantity</th>
                                 <th>In Use</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
 
@@ -81,11 +108,41 @@ export const NeedleStash= ({ setNeedleTypes, needleTypes }) => {
                                     <td>{needle.size} mm</td>
                                     <td>{needle.length}</td>
                                     <td>{needle.quantity}</td>
-                                    <td>{needle.inUse ? 'Yes' : 'No'}</td>
+                                    <td className={needle.inUse ? 'in-use' : 'not-in-use'}>
+                                        {needle.inUse ? 'In Use' : 'Not In Use'}
+                                    </td>
+                                    <td>
+                                        <Fab size="small" onClick={() => handleEditNeedle(needle)}>
+                                            <EditIcon />
+                                        </Fab>
+                                    </td>
+                                    <td>
+                                        <Fab size="small" onClick={() => handleOpenDeleteModal(needle)}>
+                                            <DeleteIcon />
+                                        </Fab>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+
+                    <Modal className='page-container'
+                        open={openDeleteModal}
+                        onClose={handleCloseDeleteModal}
+                        aria-labelledby="delete-needle-modal-title"
+                        aria-describedby="delete-needle-modal-description"
+                    >
+                        <Box className="box light" >
+                            <h2 id="delete-needle-modal-title">Delete Needle</h2>
+                            <p id="delete-needle-modal-description">
+                                Are you sure you want to delete this needle?
+                            </p>
+                            <Box style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}> 
+                                <button className="light-button" onClick={handleDeleteNeedle}>Yes, Delete</button>
+                                <button className="light-button" onClick={handleCloseDeleteModal}>No, Cancel</button>
+                            </Box>
+                        </Box>
+                    </Modal>
                 </>
             ) : (
                 <p>You have no registered knitting needles. Please add knitting needles to see them in the overview.</p>
