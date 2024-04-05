@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode'
 import NavBar from './Components/NavBar'
 import {About} from './pages/about/about'
 import {Home} from './pages/home'
-import Stash from './pages/stash'
+import Stash from './pages/Stash/stash'
 import ResetPassword from './pages/SignUp_LogIn/ResetPassword';
 import LogIn from './pages/SignUp_LogIn/LogIn';
 import SignUp from './pages/SignUp_LogIn/SignUp';
