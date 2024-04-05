@@ -2,29 +2,44 @@ import React, { useState, useMemo } from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import SwitchContainer from "../../Components/SwitchContainer";
 import '../../GlobalStyles/main.css';
-import { NeedlesComponent } from "./Needles";
+import { NeedleStash } from "./Needles";
 import MultiSelect from '../../Components/MultiSelect';
+import { Fab, Modal, Box } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import YarnStash from "./Yarn";
+import ModalContent from "./ModualContent";
+
+import TestModText from "./test"; 
+
 
 
 export const Stash = () => {
     // State for the selected filters and projects, yarn is the default for the switch container
     // and all is the default for the needle type filter
     const [activeStatus, setActiveStatus] = useState('yarn');
-    const [needleTypes, setNeedleTypes] = useState(['All']); 
+    const [needleTypes, setNeedleTypes] = useState(['All']);
 
 
-    // TODO: Ta inn data fra backend i stedet for hardkodet data
-    const needleStash = [
-        { id: 1, size: '10', length: '40 cm', quantity: 5, inUse: true, type: 'Replaceable' },
-        { id: 2, size: '5', length: '20 cm', quantity: 8, inUse: false, type: 'Set' },
-        { id: 3, size: '3', length: '15 cm', quantity: 12, inUse: true, type: 'Round' },
-        { id: 5, size: '3', length: '1 cm', quantity: 2, inUse: false, type: 'Heklenål' },
-        { id: 6, size: '3', length: '7 cm', quantity: 2, inUse: false, type: 'Flettepinne' },
-    ];
+    const [openNeedleModal, setOpenNeedleModal] = useState(false); 
+    const [openYarnModal, setOpenYarnModal] = useState(false); 
 
-    const yarnStash = [
-        { id: 4, title: 'Rauma Vams' },
-    ];
+    // Hanlde opening and closing of modals
+    const handleOpenNeedleModal = () => setOpenNeedleModal(true);
+    const handleCloseNeedleModal = () => setOpenNeedleModal(false);
+    const handleOpenYarnModal = () => setOpenYarnModal(true);
+    const handleCloseYarnModal = () => setOpenYarnModal(false);
+
+    const modalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        boxShadow: 24,
+        p: 4,
+    };
+
 
 
     return (
@@ -37,22 +52,47 @@ export const Stash = () => {
                 setActiveStatus={setActiveStatus}
             />
 
-            {/* If the needle status is chosen, show this section  */}
+            {/* Show the chosen option (yarn or needles) */}
             {activeStatus === 'needles' && (
-                <NeedlesComponent 
-                    needleStash={needleStash} 
+                <NeedleStash 
                     setNeedleTypes={setNeedleTypes} 
                     needleTypes={needleTypes} 
                 />
             )}
 
             {activeStatus === 'yarn' && (
-                <div className="box dark">
-                    {yarnStash.map(project => (
-                        <ProjectCard key={project.id} title={project.title} />
-                    ))}
-                </div>
+                <YarnStash  />
             )}
+
+            {/* FAB to add yarn and needles */}
+            {activeStatus === 'yarn' && (
+                <Fab color="primary" aria-label="add-yarn" className="fab" onClick={handleOpenYarnModal}>
+                    <AddIcon />
+                </Fab>
+            )}
+
+            {activeStatus === 'needles' && (
+                <Fab color="secondary" aria-label="add-needles" className="fab fab-needles" onClick={handleOpenNeedleModal}>
+                    <AddIcon />
+                </Fab>
+            )}
+
+            {/* Modal for yarn */}
+            <ModalContent
+                open={openYarnModal} // eller openNeedleModal basert på hva du ønsker
+                handleClose={handleCloseYarnModal} // eller handleCloseNeedleModal
+                infobox={<TestModText/>}
+            >
+            </ModalContent>
+
+            <ModalContent
+                open={openNeedleModal}
+                handleClose={handleCloseNeedleModal}
+                title="Legg til strikkepinner"
+                infobox={<TestModText/>}
+            >
+            </ModalContent>
+
         </div>
     );
 };
