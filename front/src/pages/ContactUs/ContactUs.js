@@ -5,12 +5,14 @@ import axios from 'axios';
 
 import Image from "../../images/6.png";
 import InputField from "../../Components/InputField";
+import SetAlert from "../../Components/Alert";
 import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
 
-// 
+
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
+
 
     return (
         <div className="faq-item">
@@ -34,6 +36,7 @@ const ContactDetails = () => (
 
 const ContactUs = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [alertInfo, setAlertInfo] = useState({open: false, severity: 'info', message: ''});
     
 
     const onSubmit = data => {
@@ -47,10 +50,12 @@ const ContactUs = () => {
         axios.post('http://localhost:5002/api/Contact', payload)
             .then(response => {
                 console.log("Response: ", response)
+                setAlertInfo({open: true, severity: 'success', message: 'Message sent successfully!'});
                 reset(); // Clear form after submission
             })
             .catch(error => {
                 console.log(error);
+                setAlertInfo({open: true, severity: 'error', message: 'Failed to send message. Please try again later.'});
             });
     };
 
@@ -67,33 +72,36 @@ const ContactUs = () => {
                     <h2>Send us a message</h2>
                     <InputField
                         style={{'width': 'auto', alignItems:'center'}}
-                        placeholder="Full Name"
+                        label="Full Name"
                         register={register("Name", { required: "Full name is required." })}
                         errors={errors.Name}
                         type="text"
                         />
                     <InputField
-                        placeholder="Email"
+                        label="Email"
                         style={{'width': 'auto', alignItems:'center'}}
                         register={register("email", {
                             required: "Email is required.",
-                            validate: input => validator.isEmail(input) || "Invalid email address"
+                            // validate: input => validator.isEmail(input) || "Invalid email address"
                         })}
                         errors={errors.email}
                         type="email"
                         />
                     <InputField
-                        placeholder="Message"
+                        label="Message"
+                        multiline
+                        rows={3}
                         style={{'width': 'auto', alignItems:'center'}}
-
                         register={register("message", { 
                             required: "Message is required." })}
                             errors={errors.message}
                             type="text"
-                            useTextareaStyle={true}
                     />
                     <button type="submit" className="light-button">Send Message</button>
                 </form>
+                
+                {/* SetAlert component for showing alerts */}
+                <SetAlert open={alertInfo.open} setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} severity={alertInfo.severity} message={alertInfo.message} />
                 
             </div>
             {/* Frequently Asked Questions (FAQ) Section */}

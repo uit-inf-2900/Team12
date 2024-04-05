@@ -131,3 +131,7 @@ a:hover{
     border-bottom: 1px solid;
 }
 
+.blur-background {
+    filter: blur(4px);
+  }
+  

@@ -7,6 +7,7 @@ import axios from 'axios';
 import "../../GlobalStyles/main.css";
 
 
+
 const SignUp = ({ toggleForm }) => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
@@ -71,7 +72,7 @@ const SignUp = ({ toggleForm }) => {
 
           {/* Use InputField component for Full Name input */}
           <InputField
-            placeholder="Full name"
+            label="Full name"
             type="text"
             register={register("Name", { required: "Name is required." })}
             errors={errors.Name}
@@ -79,7 +80,7 @@ const SignUp = ({ toggleForm }) => {
 
           {/* Use InputField component for Email input */}
           <InputField
-            placeholder="Email"
+            label="Email"
             type="email"
             register={register("email", {
               required: "Email is required.",
@@ -93,7 +94,7 @@ const SignUp = ({ toggleForm }) => {
 
           {/* Use InputField component for Birthday input */}
           <InputField
-            placeholder="Birthday"
+            label="Birthday"
             type="text"
             register={register("birthday", {
               required: "Birthday is required  (YYYY-MM-DD).",
@@ -110,7 +111,7 @@ const SignUp = ({ toggleForm }) => {
 
           {/* Use InputField component for Password input */}
           <InputField
-            placeholder="Password"
+            label="Password"
             type="password"
             register={register("password", {
               required: "Password is required.",
@@ -128,7 +129,7 @@ const SignUp = ({ toggleForm }) => {
 
           {/* Use InputField component for Confirm Password input */}
           <InputField
-            placeholder="Confirm Password"
+            label="Confirm Password"
             type="password"
             register={register("confirmPassword", {
               required: "Please confirm your password.",

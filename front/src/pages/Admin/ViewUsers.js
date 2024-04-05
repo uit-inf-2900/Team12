@@ -1,58 +1,117 @@
 import React, { useEffect, useState } from 'react';
-import '../../GlobalStyles/main.css';
+import {
+    Paper,
+    TableContainer,
+    Table,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    TablePagination,
+    CircularProgress,
+  } from '@mui/material';
 
 
-// Get the user data from the server
-const fetchUserData = async() => {
+  // Fetch user data from the backend
+const fetchUserData = async () => {
     try {
-        const response = await fetch('http://localhost:5002/getUsers');
-        if (!response.ok) {
-            throw new Error('Failed to fetch user data');
-        }
-        const data = await response.json();
-        return data;
+    const response = await fetch('http://localhost:5002/getUsers');
+    if (!response.ok) {
+        throw new Error('Failed to fetch user data');
     }
-    catch (error) {
-        console.error('Error fetching user data:', error);
-        return [];
+    const data = await response.json();
+    return data;
+    } catch (error) {
+    console.error('Error fetching user data:', error);
+    return [];
     }
-
 };
 
+
 const ViewUsers = () => {
-
-    // State to hold users data
+    // State variables to store user data, current page, rows per page, and loading state
     const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [loading, setLoading] = useState(true);
 
-    // Fetch users data and set the state
     useEffect(() => {
-        fetchUserData()
-            .then(data => setUsers(data))
-            .catch(error => console.error('Error setting user data:', error));
+        // Fetch the user data when the component mounts
+        const timer = setTimeout(() => {
+            fetchUserData()
+                .then(data => {
+                    setUsers(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error setting user data:', error);
+                    setLoading(false);
+                });
+        }, 1000);
+
+        // Clean up timer
+        return () => clearTimeout(timer);
     }, []);
 
+    // Function to change the current page 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    // Function to change the number of rows per page
+    const handleChangeRowsPerPage = event => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
 
     return (
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                    <th>Admin Privileges</th>
-                </tr>
-            </thead>
-            <tbody>
-                {users.map((user, index) => (
-                    <tr key={index}>
-                        <td>{user.fullName}</td>
-                        <td>{user.email}</td>
-                        <td>{user.status}</td>
-                        <td>{user.isAdmin ? 'Yes' : 'No'}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <Paper>
+            <TableContainer>
+                {/* Display a loading spinner while fetching data */}
+                {loading ?
+                (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+                        <CircularProgress style={{ color: '#F6964B' }} />
+                    </div>
+                ):(
+                <Table>
+                    {/* Create the header of the table */}
+                    <TableHead>
+                        <TableRow>
+                            <TableCell style={{ fontWeight: 'bold' }}>Name</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    {/* Add the user information to the table */}
+                    <TableBody>
+                        {users
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((user, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{user.fullName}</TableCell>
+                                <TableCell>{user.email}</TableCell>
+                                <TableCell>{user.status}</TableCell>
+                                <TableCell>{user.isAdmin ? 'Yes' : 'No'}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                )}
+            </TableContainer>
+
+            {/* Navigate between pages of data displayed within a table */}
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={users.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+        </Paper>
     );
 };
 

@@ -59,19 +59,22 @@ const MessageDetails = ({ message, contactRequestId }) => {
             {/* Display message sender and message content */}
             <div style={{ textAlign: 'center', width: "100%" }}>
                 <InputField
+                    label='From'
                     type="text"
-                    value={`From: ${message.userName} (${message.userEmail})`}
+                    value={`${message.userName} (${message.userEmail})`}
                     readOnly
                     className="input"
                     style={{ cursor: 'default' }}
                 />
                 <InputField 
+                    label='Message'
                     type="text"
-                    value={`Message: ${message.userMessage}`}
+                    multiline
+                    rows={5}
+                    value={`${message.userMessage}`}
                     readOnly
                     className="input"
-                    style={{ cursor: 'default', height: '100px' }}
-                    useTextareaStyle={true}
+                    style={{ cursor: 'default', height: 'auto' }} // 'height' adjusted for multiline                
                 />
             </div>
             
@@ -88,7 +91,7 @@ const MessageDetails = ({ message, contactRequestId }) => {
                 <InputField 
                     style={{ resize: 'vertical', height: '100px' }}
                     type="text"
-                    placeholder='Write your reply here...'
+                    label='Write your reply here...'
                     value={reply}
                     onChange={handleReplyChanges}
                     useTextareaStyle={true}
