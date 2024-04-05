@@ -8,6 +8,7 @@ import Image from "../../images/6.png";
 import InputField from '../../Components/InputField';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
+import ModalContent from '../../Components/ModualContent';
 
 const profilePage = ({userProfile}) => {
     const navigate = useNavigate();
@@ -69,6 +70,19 @@ const profilePage = ({userProfile}) => {
         }
     }, []);
 
+    const deleteAccountContent = (
+        <div className='box light'>
+            <div className="deleteacc-body">{modalMessage}</div>
+            {!modalMessage.startsWith('Goodbye') && (
+                <div className="deleteacc-footer">
+                    <button onClick={handleCloseModal} className="light-button">No</button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button onClick={handleConfirmDelete} className="light-button">Yes</button>
+                </div>
+            )}
+        </div>
+    );
+    
     return (
         <div className="profile-page-container">
             <div className="box dark">
@@ -92,19 +106,12 @@ const profilePage = ({userProfile}) => {
                     Delete account
                 </div>
             </div>
-            {showModal && (
-                <div className="deleteacc">
-                    <div className="deleteacc-content">
-                        <div className="deleteacc-body">{modalMessage}</div>
-                        {!modalMessage.startsWith('Goodbye') && (
-                            <div className="deleteacc-footer">
-                                <button onClick={handleCloseModal} className="light-button">No</button>
-                                <button onClick={handleConfirmDelete} className="light-button">Yes</button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
+            {/* Using ModalContent to show the delete account confirmation */}
+            <ModalContent
+                open={showModal}
+                handleClose={handleCloseModal}
+                infobox={deleteAccountContent}
+            />
             <div className="box light">
                 {profileFetchError ? (
                     <p className="error-message">{profileFetchError}</p>
