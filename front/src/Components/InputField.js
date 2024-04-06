@@ -4,7 +4,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import theme from './Theme';
+import Theme from './Theme';
 import { ThemeProvider } from '@mui/material/styles';
 
 const InputField = ({ label, register, errors, type, readOnly, ...inputProps }) => {
@@ -24,7 +24,7 @@ const InputField = ({ label, register, errors, type, readOnly, ...inputProps }) 
     };
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={Theme}>
             {/* Text field component */}
             <TextField
                 color='secondary'

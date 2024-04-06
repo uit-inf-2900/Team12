@@ -2,7 +2,7 @@ import React from 'react';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import theme from './Theme';
+import Theme from './Theme';
 import { ThemeProvider } from '@mui/material/styles';
 import Select from '@mui/material/Select';
 
@@ -11,7 +11,7 @@ import Select from '@mui/material/Select';
 const MultiSelect = ({ label, value, handleChange, menuItems }) => {
   return (
     // Apply the theme to the component
-    <ThemeProvider theme={theme}> 
+    <ThemeProvider theme={Theme}> 
     
     <FormControl fullWidth variant="outlined">
       {/* Input label for the select */}
@@ -19,7 +19,7 @@ const MultiSelect = ({ label, value, handleChange, menuItems }) => {
         id={`${label}-select-label`} 
         sx={{
           '&.Mui-focused': {
-            color: theme.palette.secondary.main, // Apply secondary color when focused
+            color: Theme.palette.secondary.main, // Apply secondary color when focused
           },
         }}
         >

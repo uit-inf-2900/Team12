@@ -7,7 +7,7 @@ import UploadedRecipes from './UploadedRecipes';
 import "../../GlobalStyles/main.css";
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import theme from '../../Components/Theme';
+import Theme from '../../Components/Theme';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box'; // Import Box from MUI
 
@@ -24,7 +24,7 @@ const RecipesPage = () => {
     const pageContainer = uploading ? "page-container blur-background" : "page-container";
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={Theme}>
             {/* Use Box instead of div to apply the class for blurring */}
             <Box className={pageContainer}> 
                 <h1> Welcome to the Recipes Page! </h1>
