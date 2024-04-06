@@ -13,21 +13,11 @@ const InputField = ({ label, register, errors, type, readOnly, ...inputProps }) 
     const [showPassword, setShowPassword] = React.useState(false);
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-    // Apply conditional styles based on readOnly state (Must be here to hide caret when readonly)
-    const inputStyle = readOnly ? {
-        fontFamily: '"Rigot", sans-serif',
-        backgroundColor: '#f7f7f7',
-        caretColor: 'transparent', // Hide caret
-    } : {
-        fontFamily: '"Rigot", sans-serif',
-        backgroundColor: '#f7f7f7',
-    };
-
     return (
         <ThemeProvider theme={Theme}>
             {/* Text field component */}
             <TextField
-                color='secondary'
+color='secondary'
                 {...register}
                 {...inputProps}
                 type={isPassword && showPassword ? "text" : type}   // Show text instead of password if showPassword is true
@@ -39,14 +29,13 @@ const InputField = ({ label, register, errors, type, readOnly, ...inputProps }) 
                 fullWidth
                 InputProps={{
                     readOnly: readOnly,                             // Set readOnly state
-                    style: inputStyle,                              // Apply conditional styles
                     // Show eye icon for password input fields
                     endAdornment: isPassword && !readOnly ? (
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
                                 onClick={togglePasswordVisibility}
-                                edge="end"
+                                // edge="end"
                             >
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>

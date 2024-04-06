@@ -43,6 +43,7 @@ const Theme = (mode) => {
             },
         },
         components: {
+            // Button style 
             MuiButton: {
                 styleOverrides: {
                     root: {
@@ -60,6 +61,14 @@ const Theme = (mode) => {
                             backgroundColor: '#F6964B',
                             opacity: 0.8,
                         },
+                    },
+                },
+            },
+            MuiInputBase: {
+                styleOverrides: {
+                    input: {
+                        fontFamily: '"Rigot", sans-serif',
+                        backgroundColor: '#f7f7f7',
                     },
                 },
             },
