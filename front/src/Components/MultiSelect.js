@@ -19,7 +19,7 @@ const MultiSelect = ({ label, value, handleChange, menuItems }) => {
         id={`${label}-select-label`} 
         sx={{
           '&.Mui-focused': {
-            color: Theme.palette.secondary.main, // Apply secondary color when focused
+            color: '#000000' , 
           },
         }}
         >

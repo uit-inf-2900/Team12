@@ -32,7 +32,7 @@ const RecipesPage = () => {
                 {/* Upload a recipe using Material-UI Button with custom styles */}
                 <Button
                     variant="outlined"
-                    color='secondary'
+                    color='dark'
                     startIcon={<CloudUploadIcon style={{ color: 'black' }} />}
                     onClick={() => setUploading(true)}
                     
