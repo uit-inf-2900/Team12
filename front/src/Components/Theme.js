@@ -18,15 +18,15 @@ const Theme = (mode) => {
                 main: '#f21e08',
             },
             background: {
-                default: isDarkMode ? '#474747' : '#fff4f1',
-                paper: isDarkMode ? '#474747' : '#ffffff',
+                default: isDarkMode ? 'var(--dark-background-color)' : 'var(--background-color)',
+                paper: isDarkMode ? 'var(--dark-background-color)' : 'var(--background-color)',
             },
             dark: {
                 main: '#000000',
             },
             link: {
-                main: '#F6964B',
-                hover: '#d06514',
+                main: 'var(--link-color)',
+                hover: 'var(--link-hover-color)',
             },
             text: {
                 primary: isDarkMode ? '#ffffff' : '#000000',
@@ -34,12 +34,17 @@ const Theme = (mode) => {
             },
         },
         typography: {
-            fontFamily: '"Syne", sans-serif',
+            fontFamily: 'var(--body-font)',
             fontSize: '1.0rem',
             h1: {
-                fontFamily: '"Rigot", sans-serif',
-                fontSize: '1.8rem',
-                fontWeight: 800,
+                fontFamily: 'var(--main-font)',
+                fontSize: 'var(--h1-font-size)',
+                fontWeight: 'var(--font-semi-bold)',
+            },
+            h2: {
+                fontFamily: 'var(--main-font)',
+                fontSize: 'var(--h2-font-size)',
+                fontWeight: 'var(--font-semi-bold)',
             },
         },
         components: {
@@ -55,24 +60,45 @@ const Theme = (mode) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         textTransform: 'none',
-                        backgroundColor: isDarkMode ? '#474747' : '#ffffff',
-                        color: isDarkMode ? '#ffffff' : '#000000',
+                        backgroundColor: isDarkMode ? 'var(--button-bg-colo-dark:)' : 'var(--button-bg-colo-light)',
+                        color: isDarkMode ? 'var(--button-text-color-light)' : 'var(--button-text-color-dark)',
                         '&:hover': {
-                            backgroundColor: '#F6964B',
+                            backgroundColor: isDarkMode ? 'var(--button-hover-dark)' : 'var(--button-hover-light)',
                             opacity: 0.8,
                         },
                     },
                 },
             },
-            MuiInputBase: {
+            MuiTextField: {
                 styleOverrides: {
-                    input: {
-                        fontFamily: '"Rigot", sans-serif',
-                        backgroundColor: '#f7f7f7',
+                    root: {
+                        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                            transform: 'translate(14px, -6px) scale(0.75)', // Adjust this transformation as needed
+                        },
                     },
                 },
             },
-        },
+            MuiOutlinedInput: {
+                styleOverrides: {
+                    root: {
+                        // Ensuring that the input field's background color goes all the way to the border for multiline
+                        backgroundColor: 'var(--color-inputbox)',
+                        '&.Mui-focused': {
+                        backgroundColor: 'var(--color-inputbox)', // Maintain background color when focused
+                        },
+                        '&:hover:not(.Mui-disabled):not(.Mui-focused):not(.Mui-error) .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'transparent', // Optionally remove the border on hover
+                        },
+                    },
+                    input: {
+                        '&.MuiInputBase-inputMultiline': {
+                        // Ensure multiline input fills the container's height
+                        height: '100%',
+                        },
+                    },
+                    },
+                },
+            },
         custom: {
             headerHeight: '5.5rem',
             boxShadow: '0 2px 16px rgba(0,0,0,0.1)',
