@@ -9,74 +9,54 @@ import AddIcon from "@mui/icons-material/Add";
 import YarnStash from "./Yarn";
 import ModalContent from "../../Components/ModualContent";
 
-import TestModText from "./test"; 
+import TextYarn from "./yarntext"; 
+import TextNeedle from "./needletext"; 
 import AddButton from "../../Components/AddButton";
 
-
-export const Stash = () => {
-    // State for the selected filters and projects, yarn is the default for the switch container
-    // and all is the default for the needle type filter
+const Stash = () => {
     const [activeStatus, setActiveStatus] = useState('yarn');
     const [needleTypes, setNeedleTypes] = useState(['All']);
+    const [openModal, setOpenModal] = useState({ needle: false, yarn: false });
 
-
-    const [openNeedleModal, setOpenNeedleModal] = useState(false); 
-    const [openYarnModal, setOpenYarnModal] = useState(false); 
-
-    // Hanlde opening and closing of modals
-    const handleOpenNeedleModal = () => setOpenNeedleModal(true);
-    const handleCloseNeedleModal = () => setOpenNeedleModal(false);
-    const handleOpenYarnModal = () => setOpenYarnModal(true);
-    const handleCloseYarnModal = () => setOpenYarnModal(false);
-
+    // Adjust the function to correctly reference the needle modal
+    const toggleModal = (type, isOpen) => {
+        // Map 'needles' to 'needle' to match the state key
+        const modalType = type === 'needles' ? 'needle' : type;
+        setOpenModal({ ...openModal, [modalType]: isOpen });
+    };
 
     return (
         <div className="page-container">
             <h1>Stash</h1>
-            {/* Choose if you want to look at needles or yarn  */}
             <SwitchContainer
                 options={[{ id: 'needles', label: 'Needles' }, { id: 'yarn', label: 'Yarn' }]}
                 activeStatus={activeStatus}
                 setActiveStatus={setActiveStatus}
             />
 
-            {/* Show the chosen option (yarn or needles) */}
-            {activeStatus === 'needles' && (
-                <NeedleStash 
-                    setNeedleTypes={setNeedleTypes} 
-                    needleTypes={needleTypes} 
-                />
+            {activeStatus === 'needles' ? (
+                <NeedleStash setNeedleTypes={setNeedleTypes} needleTypes={needleTypes} />
+            ) : (
+                <YarnStash />
             )}
 
-            {activeStatus === 'yarn' && (
-                <YarnStash  />
-            )}
+            <AddButton onClick={() => toggleModal(activeStatus, true)} />
 
-            {/* FAB to add yarn and needles */}
-            {activeStatus === 'yarn' && (
-                <AddButton onClick={handleOpenYarnModal} />
-            )}
-
-            {activeStatus === 'needles' && (
-                <AddButton onClick={handleOpenNeedleModal}/>
-            )}
-
-            {/* Modal for yarn and needles */}
             <ModalContent
-                open={openYarnModal} 
-                handleClose={handleCloseYarnModal} 
-                infobox={<TestModText/>}
+                open={openModal.yarn}
+                handleClose={() => toggleModal('yarn', false)}
+                infobox={<TextYarn />}
             />
 
             <ModalContent
-                open={openNeedleModal}
-                handleClose={handleCloseNeedleModal}
+                open={openModal.needle}
+                handleClose={() => toggleModal('needle', false)}
                 title="Legg til strikkepinner"
-                infobox={<TestModText/>}
+                infobox={<TextNeedle />}
             />
-
         </div>
     );
 };
+
 
 export default Stash;
