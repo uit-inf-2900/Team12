@@ -54,13 +54,13 @@ export const Stash = () => {
 
             {/* FAB to add yarn and needles */}
             {activeStatus === 'yarn' && (
-                <Fab color="primary" aria-label="add-yarn" className="fab" onClick={handleOpenYarnModal}>
+                <Fab style={{ backgroundColor: '#F6964B', color: 'white' }} aria-label="add-yarn" className="fab" onClick={handleOpenYarnModal}>
                     <AddIcon />
                 </Fab>
             )}
 
             {activeStatus === 'needles' && (
-                <Fab color="secondary" aria-label="add-needles" className="fab fab-needles" onClick={handleOpenNeedleModal}>
+                <Fab style={{ backgroundColor: '#F6964B', color: 'white' }}className="fab fab-needles" onClick={handleOpenNeedleModal}>
                     <AddIcon />
                 </Fab>
             )}
