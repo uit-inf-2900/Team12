@@ -8,6 +8,7 @@ import InputField from "../../Components/InputField";
 import SetAlert from "../../Components/Alert";
 import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
+import CustomButton from "../../Components/Button";
 
 
 const FAQItem = ({ question, answer }) => {
@@ -97,7 +98,9 @@ const ContactUs = () => {
                             errors={errors.message}
                             type="text"
                     />
-                    <button type="submit" className="light-button">Send Message</button>
+                    <CustomButton themeMode="light" iconName="send" submit={true}>
+                        Send Message
+                    </CustomButton>
                 </form>
                 
                 {/* SetAlert component for showing alerts */}

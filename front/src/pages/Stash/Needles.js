@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button } from '@mui/material';
 import "../../GlobalStyles/main.css";
+import CustomButton from '../../Components/Button';
 
 
 export const NeedleStash= ({ setNeedleTypes, needleTypes }) => {
@@ -138,8 +139,8 @@ export const NeedleStash= ({ setNeedleTypes, needleTypes }) => {
                                 Are you sure you want to delete this needle?
                             </p>
                             <Box style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}> 
-                                <button className="light-button" onClick={handleDeleteNeedle}>Yes, Delete</button>
-                                <button className="light-button" onClick={handleCloseDeleteModal}>No, Cancel</button>
+                                <CustomButton themeMode="light" onClick={handleDeleteNeedle}>Yes, Delete</CustomButton>
+                                <CustomButton themeMode="light" onClick={handleCloseDeleteModal}>No, Cancel</CustomButton>
                             </Box>
                         </Box>
                     </Modal>

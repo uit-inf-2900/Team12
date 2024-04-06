@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import "../../GlobalStyles/main.css";
 import "./about.css";
+import CustomButton from "../../Components/Button";
 
 import { getImageByName } from '../../images/getImageByName';
 
@@ -87,9 +88,11 @@ export const About = () => {
 
 
       {/* Button for registration */}
-      <div className="section-container" style={{"justify-content":"center"}}>
-          <Link to="/signup">
-            <button className="light-button" >Registrer Deg Nå</button>
+      <div  style={{"justify-content":"center", width:'100%'}}>
+          <Link to="/signup " className="section-container" style={{'text-decoration': 'none'}}>
+            <CustomButton themeMode="light" submit={true} fullWidth={true}>
+              Sign up 
+            </CustomButton>
           </Link>
       </div>
 

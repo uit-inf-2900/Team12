@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import InputField from '../../Components/InputField';
 import './Profilepage.css';
+import CustomButton from '../../Components/Button';
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -92,7 +93,10 @@ const EditProfile = () => {
                             onChange: handleChange
                         }}
                     />
-                    <button type='submit' className='light-button'>Save changes</button>
+                    <CustomButton 
+                        themeMode="light" submit={true} iconName='save'>
+                        Save changes
+                    </CustomButton>
                 </form>
             </div>
         </div>

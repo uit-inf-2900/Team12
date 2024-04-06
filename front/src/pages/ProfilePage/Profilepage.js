@@ -9,6 +9,8 @@ import InputField from '../../Components/InputField';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import ModalContent from '../../Components/ModualContent';
+import CustomButton from '../../Components/Button';
+
 
 const profilePage = ({userProfile}) => {
     const navigate = useNavigate();
@@ -75,10 +77,8 @@ const profilePage = ({userProfile}) => {
             <div className="deleteacc-body">{modalMessage}</div>
             {!modalMessage.startsWith('Goodbye') && (
                 <div className="deleteacc-footer">
-                    <button onClick={handleCloseModal} className="light-button">No</button>
-                    &nbsp;&nbsp;&nbsp;
-                    <button onClick={handleConfirmDelete} className="light-button">Yes</button>
-                </div>
+                    <CustomButton themeMode="light" onClick={handleConfirmDelete}>Yes</CustomButton>                            &nbsp;&nbsp;&nbsp;
+                    <CustomButton themeMode="light" onClick={handleCloseModal}>No</CustomButton>                </div>
             )}
         </div>
     );
@@ -133,14 +133,8 @@ const profilePage = ({userProfile}) => {
                         />
                         <div style={{ flexGrow: 0.2 }}></div>
                         <div>
-                        <Button
-                        variant="contained"
-                        startIcon={<EditIcon />}
-                        onClick={() => navigate('/editprofile')}
-                        style={{ backgroundColor: 'white', color: 'black' }}
-                    >
-                        Edit
-                    </Button>                        </div>
+                        <CustomButton themeMode="light" onClick={() => navigate('/editprofile')} iconName="edit">Edit Profile</CustomButton>                      
+                        </div>
                     </>
                 )}
             </div>

@@ -5,6 +5,7 @@ import InputField from '../../Components/InputField';
 import axios from 'axios';
 
 import "../../GlobalStyles/main.css";
+import CustomButton from '../../Components/Button';
 
 
 
@@ -63,7 +64,7 @@ const SignUp = ({ toggleForm }) => {
         <h2>Hello, Knitter!</h2>
         <p>Already have an account?</p>
         <div >
-          <button className='dark-button' onClick={() => navigate('/login')}>Log in</button>
+          <CustomButton themeMode="dark" onClick={() => navigate('/login')}>Log in</CustomButton>
         </div>
       </div>
       <div className="box light">
@@ -141,7 +142,7 @@ const SignUp = ({ toggleForm }) => {
           <div>
             {/* Generell feilmeldingsviser */}
             {error && <div className="errorMsg">{error}</div>}
-            <button className="light-button" type="submit">Sign up</button>
+            <CustomButton themeMode="light" submit={true}>Sign up</CustomButton>
           </div>
         </form>
       </div>

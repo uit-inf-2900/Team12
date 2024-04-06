@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import InputField from '../../Components/InputField';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import CustomButton from '../../Components/Button';
 
 import "../../GlobalStyles/main.css";
 
@@ -56,9 +57,9 @@ const ResetPassword = ({ toggleForm }) => {
                     
                     <div>
                         {isValidEmail ? (
-                            <button className='light-button' type='button' onClick={() => navigate('/login')}>Log In</button>
+                            <CustomButton themeMode="light" onClick={() => navigate('/login')}>Log In</CustomButton>
                         ) : (
-                            <button className='light-button' type="submit">Reset Password</button>
+                            <CustomButton themeMode="light" submit={true} iconName="reset">Reset Password</CustomButton>
                         )}
                     </div>
                 </form>

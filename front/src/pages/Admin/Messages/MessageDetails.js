@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import InputField from "../../../Components/InputField";
 import "../../../GlobalStyles/main.css";
+import CustomButton from '../../../Components/Button';
 
 // MessageDetails displays details of a selected message and allows for responding
 const MessageDetails = ({ message, contactRequestId }) => {
@@ -97,7 +98,10 @@ const MessageDetails = ({ message, contactRequestId }) => {
                     useTextareaStyle={true}
                 />
                 {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
-                <button type='submit' className='dark-button'>Send Reply</button>
+                <CustomButton 
+                    themeMode="light" submit={true} iconName='send'>
+                        Send Reply
+                </CustomButton>            
             </form>
         </div>
     );
