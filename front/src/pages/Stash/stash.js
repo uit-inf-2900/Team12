@@ -10,7 +10,7 @@ import YarnStash from "./Yarn";
 import ModalContent from "../../Components/ModualContent";
 
 import TestModText from "./test"; 
-
+import AddButton from "../../Components/AddButton";
 
 
 export const Stash = () => {
@@ -54,15 +54,11 @@ export const Stash = () => {
 
             {/* FAB to add yarn and needles */}
             {activeStatus === 'yarn' && (
-                <Fab style={{ backgroundColor: '#F6964B', color: 'white' }} aria-label="add-yarn" className="fab" onClick={handleOpenYarnModal}>
-                    <AddIcon />
-                </Fab>
+                <AddButton onClick={handleOpenYarnModal} />
             )}
 
             {activeStatus === 'needles' && (
-                <Fab style={{ backgroundColor: '#F6964B', color: 'white' }}className="fab fab-needles" onClick={handleOpenNeedleModal}>
-                    <AddIcon />
-                </Fab>
+                <AddButton onClick={handleOpenNeedleModal}/>
             )}
 
             {/* Modal for yarn and needles */}
