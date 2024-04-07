@@ -72,7 +72,6 @@ const ContactUs = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="box dark" style={{"width": "50%", "height":"100%"}}>
                     <h2>Send us a message</h2>
                     <InputField
-                        style={{'width': 'auto', alignItems:'center'}}
                         label="Full Name"
                         register={register("Name", { required: "Full name is required." })}
                         errors={errors.Name}
@@ -80,7 +79,6 @@ const ContactUs = () => {
                         />
                     <InputField
                         label="Email"
-                        style={{'width': 'auto', alignItems:'center'}}
                         register={register("email", {
                             required: "Email is required.",
                             // validate: input => validator.isEmail(input) || "Invalid email address"
@@ -92,7 +90,6 @@ const ContactUs = () => {
                         label="Message"
                         multiline
                         rows={3}
-                        style={{'width': 'auto', alignItems:'center'}}
                         register={register("message", { 
                             required: "Message is required." })}
                             errors={errors.message}
