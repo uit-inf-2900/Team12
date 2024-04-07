@@ -19,7 +19,7 @@ const Theme = (mode) => {
             },
             background: {
                 default: isDarkMode ? 'var(--dark-background-color)' : 'var(--background-color)',
-                paper: isDarkMode ? 'var(--dark-background-color)' : 'var(--background-color)',
+                paper: isDarkMode ? 'var(--dark-background-color)' : 'var(--second-light)',
             },
             dark: {
                 main: '#000000',

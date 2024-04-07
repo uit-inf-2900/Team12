@@ -19,9 +19,7 @@ import AdminPage from './pages/Admin/AdminPage';
 import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
-import ViewUsers from './pages/Admin/ViewUsers';
-import ViewMessages from './pages/Admin/Messages/ViewMessages';
-
+import ThemedFooter from './Components/Footter';
 
 
 
@@ -92,6 +90,7 @@ export default function App() {
 
           </Routes>
         </div>
+        <ThemedFooter />
       </div>
     </Router>
   );
