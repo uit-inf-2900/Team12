@@ -58,9 +58,9 @@ public class InventoryController : ControllerBase
         // Check result, and handle errors
         if(!res.Success) 
         {
-            if(res.ErrorMessage == "Duplicate type")
+            if(res.ErrorMessage == "Unauthorized")
             {
-                return Conflict("Type already exsits");
+                return Unauthorized();
             }
 
             return (StatusCode(500, res.ErrorMessage));
@@ -84,12 +84,12 @@ public class InventoryController : ControllerBase
 
         if(!res.Success)
         {
-            if(res.ErrorMessage == "Duplicate name")
+            if (res.ErrorMessage == "Unauthorized")
             {
-                return Conflict("Item with name already exists");
+                return Unauthorized();
             }
 
-            return(StatusCode(500, res.ErrorMessage));
+            return (StatusCode(500, res.ErrorMessage));
         }
 
         return Ok(res.ItemId);

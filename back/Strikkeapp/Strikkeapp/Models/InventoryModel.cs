@@ -24,11 +24,13 @@ public class InventoryGetResult
 public class YarnInventoryDto
 {
     public Guid ItemId { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
     public string Manufacturer { get; set; } = string.Empty;
-    public int Weight { get; set; }
-    public int Length { get; set; }
-    public string Gauge { get; set; } = string.Empty;
+    public string Color { get; set; } = string.Empty;
+    public string? Batch_Number { get; set; }
+    public int? Weight { get; set; }
+    public int? Length { get; set; }
+    public string? Gauge { get; set; }
     public int NumItems { get; set; }
     public int InUse { get; set; }
     public string? Notes { get; set; }

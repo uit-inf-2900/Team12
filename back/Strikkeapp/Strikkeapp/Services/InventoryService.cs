@@ -41,7 +41,7 @@ public class InventoryService : IInventoryService
                 .Select(yi => new YarnInventoryDto
                 {
                     ItemId = yi.ItemID,
-                    Name = yi.Name,
+                    Type = yi.Type,
                     Manufacturer = yi.Manufacturer,
                     Weight = yi.Weight,
                     Length = yi.Length,
@@ -89,16 +89,7 @@ public class InventoryService : IInventoryService
         using(var transaction = _context.Database.BeginTransaction()) 
         {
             try
-            {
-                // Check that type does not already exist
-                var exsistingItem = _context.NeedleInventory
-                    .Any(ni => ni.UserId == userId && ni.Type == request.Type);
-
-                if (exsistingItem) 
-                {
-                    return InventoryResult.ForFailure("Duplicate type");
-                }
-                   
+            {                   
                 // Create new entry
                 var needleInventory = new NeedleInventory
                 {
@@ -143,21 +134,14 @@ public class InventoryService : IInventoryService
         {
             try
             {
-                // Check if item with name already exists
-                var exsistingItem = _context.YarnInventory
-                    .Any(yi => yi.UserId == userId && yi.Name == request.Name);
-                
-                if(exsistingItem)
-                {
-                    return InventoryResult.ForFailure("Duplicate name");
-                }
-
                 // Create new entry
                 var yarnInventory = new YarnInventory
                 {
                     UserId = userId,
-                    Name = request.Name,
+                    Type = request.Type,
                     Manufacturer = request.Manufacturer,
+                    Color = request.Color,
+                    Batch_Number = request.Batch_Number,
                     Weight = request.Weight,
                     Length = request.Length,
                     Gauge = request.Gauge,
