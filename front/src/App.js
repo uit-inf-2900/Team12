@@ -92,7 +92,7 @@ export default function App() {
 
           </Routes>
         </div>
-        {/* <ThemedFooter /> */}
+        <ThemedFooter />
       </div>
     </Router>
   );
