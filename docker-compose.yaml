@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  front:
+    build:
+      context: front
+      dockerfile: .docker/Dockerfile
+    ports: 
+      - "3000:3001"
+    stdin_open: true
+    tty: true
+
+  back:
+    build:
+      context: back
+      dockerfile: .docker/Dockerfile
+    volumes:
+      - type: bind
+        source: ./back/Strikkeapp/Strikkeapp/Data/Migrations/userInfo.db
+        target: /app/userInfo.db
+    ports:
+      - "5002:5003"
+  

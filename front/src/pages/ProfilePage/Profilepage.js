@@ -5,6 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Image from "../../images/6.png";
+import InputField from '../../Components/InputField';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
+import ModalContent from '../../Components/ModualContent';
+import CustomButton from '../../Components/Button';
+
 
 const profilePage = ({userProfile}) => {
     const navigate = useNavigate();
@@ -66,6 +72,17 @@ const profilePage = ({userProfile}) => {
         }
     }, []);
 
+    const deleteAccountContent = (
+        <div className='box light'>
+            <div className="deleteacc-body">{modalMessage}</div>
+            {!modalMessage.startsWith('Goodbye') && (
+                <div className="deleteacc-footer">
+                    <CustomButton themeMode="light" onClick={handleConfirmDelete}>Yes</CustomButton>                            &nbsp;&nbsp;&nbsp;
+                    <CustomButton themeMode="light" onClick={handleCloseModal}>No</CustomButton>                </div>
+            )}
+        </div>
+    );
+    
     return (
         <div className="profile-page-container">
             <div className="box dark">
@@ -89,52 +106,34 @@ const profilePage = ({userProfile}) => {
                     Delete account
                 </div>
             </div>
-            {showModal && (
-                <div className="deleteacc">
-                    <div className="deleteacc-content">
-                        <div className="deleteacc-body">{modalMessage}</div>
-                        {!modalMessage.startsWith('Goodbye') && (
-                            <div className="deleteacc-footer">
-                                <button onClick={handleCloseModal} className="light-button">No</button>
-                                <button onClick={handleConfirmDelete} className="light-button">Yes</button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
+            {/* Using ModalContent to show the delete account confirmation */}
+            <ModalContent
+                open={showModal}
+                handleClose={handleCloseModal}
+                infobox={deleteAccountContent}
+            />
             <div className="box light">
                 {profileFetchError ? (
                     <p className="error-message">{profileFetchError}</p>
                 ) : (
                     <>
-                        <div className='infoText-small' style={{color: "black", fontWeight: 'bold', fontSize: '20px'}}> Name </div>
-                        <p className="profile-name" style={{
-                            width: 'flex',
-                            marginRight: '10px',
-                            padding: '10px 20px',
-                            border: '1px solid #ccc',
-                            borderRadius: '5px',
-                            backgroundColor: '#f9f9f9',
-                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                        }}>
-                            {profileFetchError || userProfileState.userFullName || 'Loading...'}
-                        </p>
-                        <div style={{flexGrow: 0.1}}></div>
-                        <div className='infoText-small' style={{color: "black", fontWeight: 'bold', fontSize: '20px'}}> Email </div>
-                        <p className="profile-name" style={{
-                            width: 'flex',
-                            marginRight: '10px',
-                            padding: '10px 20px',
-                            border: '1px solid #ccc',
-                            borderRadius: '5px',
-                            backgroundColor: '#f9f9f9',
-                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                        }}>
-                            {profileFetchError || userProfileState.userEmail || 'Loading...'}
-                        </p>
-                        <div style={{flexGrow: 0.2}}></div>
+                    <h2> Min konto </h2>
+                        <InputField // Bruker InputField for navn
+                            label="Full Name"
+                            readOnly={true} // Sett til true siden dette er for visning
+                            type="text"
+                            value={userProfileState.userFullName || 'Loading...'} // Passer verdien til InputField
+                        />
+                        <div style={{ flexGrow: 0.1 }}></div>
+                        <InputField // Bruker InputField for e-post
+                            label="Email"
+                            readOnly={true} // Sett til true siden dette er for visning
+                            type="email"
+                            value={userProfileState.userEmail || 'Loading...'} // Passer verdien til InputField
+                        />
+                        <div style={{ flexGrow: 0.2 }}></div>
                         <div>
-                            <button className='light-button' onClick={() => navigate('/editprofile')}>Edit</button>
+                        <CustomButton themeMode="light" onClick={() => navigate('/editprofile')} iconName="edit">Edit Profile</CustomButton>                      
                         </div>
                     </>
                 )}

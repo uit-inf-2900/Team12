@@ -3,13 +3,21 @@
 import React, {useContext, useState} from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import { useParams } from 'react-router-dom';
+import SwitchContainer from "../../Components/SwitchContainer";
 
 import '../../GlobalStyles/main.css';
+import AddButton from "../../Components/AddButton";
+import ModalContent from "../../Components/ModualContent";
 
 
 const Projects = () => {
     const [activeStatus, setActiveStatus] = useState('in-progress');
+    const [isOpenModal, setIsOpenModal] = useState(false);
 
+    // Simplify the modal toggle to a single state since there's only one modal shown in the snippet
+    const toggleModal = (isOpen) => {
+        setIsOpenModal(isOpen);
+    };
      // Hardcoded projects to see if the filtering works
     const projects = [
         { id: 1, title: 'Honey clutch', status: 'planned' },
@@ -24,52 +32,41 @@ const Projects = () => {
         // ... flere prosjekter
     ];
 
+    
+    const options = [
+        { id: 'planned', label: 'Planned' },
+        { id: 'in-progress', label: 'In Progress' },
+        { id: 'completed', label: 'Completed' }
+    ];
+    
     const filteredProjects = projects.filter(project => project.status === activeStatus);
 
-    const buttonStyle = {
-        padding: '20px 30px', 
-        margin: '0 20px', 
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        display: 'flex', 
-        alignItems: 'center',
-        with: '100%', 
-    };
+    return (
+        <div className="page-container">
+            <SwitchContainer 
+                options={options}
+                activeStatus={activeStatus}
+                setActiveStatus={setActiveStatus}
+            />
 
-
-    return(
-        <div className="page-container"> 
-            <h1> All projects </h1>
-            <div className="section-container" style={{"padding":"15px 30px;"}}>
-                <button 
-                onClick={() => setActiveStatus('planned')} 
-                className={`light-button ${activeStatus === 'planned' ? 'active' : ''}`}
-                style={buttonStyle}>
-                    Planned
-                </button>
-                <button 
-
-                onClick={() => setActiveStatus('in-progress') } 
-                className={`light-button ${activeStatus === 'in-progress' ? 'active' : ''}`}
-                style={buttonStyle}>
-                    In Progress
-                </button>
-
-                <button 
-                onClick={() => setActiveStatus('completed')} 
-                className={`light-button ${activeStatus === 'completed' ? 'active' : ''}`}
-                style={buttonStyle}>
-                    Completed
-                </button>
-            </div>
-
+            {/* Visning av filtrerte prosjekter */}
             <div className="box dark">
                 {filteredProjects.map(project => (
-                    <ProjectCard key={project.id} title={project.title} status={project.status} />
+                    <ProjectCard key={project.id} title={project.title} status={project.status}/>
                 ))}
             </div>
+
+            <AddButton onClick={() => toggleModal(true)} />
+
+            <ModalContent
+                open={isOpenModal}
+                handleClose={() => toggleModal(false)}
+                title="Legg til prosjekt"
+                infobox="Hei, dette skal bli her du fyller inn info om prosjektet"
+            />
         </div>
-    )
+    );
 };
 
+ 
 export default Projects;
