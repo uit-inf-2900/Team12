@@ -8,6 +8,7 @@ public interface IInventoryService
 {
     public InventoryGetResult GetInventory(string jwtToken);
     public InventoryResult AddNeedle(AddNeedleRequest request);
+    public InventoryResult AddYarn(AddYarnRequest request);
 }
 
 public class InventoryService : IInventoryService
@@ -105,7 +106,7 @@ public class InventoryService : IInventoryService
                     Type = request.Type,
                     Size = request.Size,
                     Length = request.Length,
-                    NumItem = 0,
+                    NumItem = 1,
                     NumInUse = 0
                 };
 
@@ -120,6 +121,61 @@ public class InventoryService : IInventoryService
 
             // Catch any errors
             catch(Exception ex) 
+            {
+                transaction.Rollback();
+                return InventoryResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public InventoryResult AddYarn(AddYarnRequest request)
+    {
+        // Check valid token
+        var tokenResult = _tokenService.ExtractUserID(request.userToken);
+        if(!tokenResult.Success)
+        {
+            return InventoryResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                // Check if item with name already exists
+                var exsistingItem = _context.YarnInventory
+                    .Any(yi => yi.UserId == userId && yi.Name == request.Name);
+                
+                if(exsistingItem)
+                {
+                    return InventoryResult.ForFailure("Duplicate name");
+                }
+
+                // Create new entry
+                var yarnInventory = new YarnInventory
+                {
+                    UserId = userId,
+                    Name = request.Name,
+                    Manufacturer = request.Manufacturer,
+                    Weight = request.Weight,
+                    Length = request.Length,
+                    Gauge = request.Gauge,
+                    NumItems = 1,
+                    InUse = 0,
+                    Notes = request.Notes
+                };
+
+                // Add new entry to db
+                _context.YarnInventory.Add(yarnInventory);
+                _context.SaveChanges();
+                transaction.Commit();
+
+                return InventoryResult.ForSuccess(yarnInventory.ItemID);
+            }
+
+            // Handle errors
+            catch(Exception ex)
             {
                 transaction.Rollback();
                 return InventoryResult.ForFailure(ex.Message);
