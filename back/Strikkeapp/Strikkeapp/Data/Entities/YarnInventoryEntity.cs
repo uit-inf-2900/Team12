@@ -13,19 +13,21 @@ public class YarnInventory
     public Guid UserId { get; set; }
 
     [Required]
-    public string Name { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
 
     [Required]
     public string Manufacturer { get; set; } = string.Empty;
 
     [Required]
-    public int Weight { get; set; }
+    public string Color { get; set; } = string.Empty;
 
-    [Required]
-    public int Length { get; set; }
+    public string? Batch_Number { get; set; }
 
-    [Required]
-    public string Gauge { get; set; } = string.Empty;
+    public int? Weight { get; set; }
+
+    public int? Length { get; set; }
+
+    public string? Gauge { get; set; }
 
     [Required]
     public int NumItems { get; set; }
