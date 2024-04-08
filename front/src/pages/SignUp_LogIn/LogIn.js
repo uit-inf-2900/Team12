@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import "../../GlobalStyles/main.css";
 
+import CustomButton from '../../Components/Button';
+
 import validator from 'validator';
 import InputField from '../../Components/InputField';
 import axios from 'axios';
@@ -45,7 +47,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h2>Welcome back!</h2>
                     <InputField
-                        placeholder="Email"
+                        label="Email"
                         type="email"
                         register={register("email", {
                         required: "Email is required",
@@ -55,7 +57,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         aria-label="Email"
                     />
                     <InputField
-                        placeholder="Password"
+                        label="Password"
                         type="password"
                         register={register("password", { required: "Password is required" })}
                         errors={errors.password}
@@ -68,7 +70,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                     {/* Display an error message it something goes wrong  */}
                     <div>
                         {error && <div className="errorMsg">{error}</div>}
-                        <button className="light-button"type="submit">Log In</button>
+                        <CustomButton themeMode="light" iconName="login" submit={true}>Log In</CustomButton>
                     </div>
                 </form>
             </div>
@@ -77,7 +79,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                 <h2>Hello, Knitter!</h2>
                 <p>Enter your personal details and start journey with us</p>
                 <div>
-                    <button className='dark-button' onClick={() => navigate('/signup')}>Don't have an account? Sign Up</button>
+                    <CustomButton themeMode="dark" onClick={() => navigate('/signup')}>Don't have an account? Sign Up</CustomButton>
                 </div>
             </div>
         </div>

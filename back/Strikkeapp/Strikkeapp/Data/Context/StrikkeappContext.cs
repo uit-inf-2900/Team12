@@ -15,6 +15,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<UserDetails> UserDetails { get; set; }
     public virtual DbSet<KnittingRecipes> KnittingRecipes { get; set; }
     public virtual DbSet<ContactRequest> ContactRequests { get; set; }
+    public virtual DbSet<ProjectTracking> ProjectTracking { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,7 +34,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-
+        // User can have multiple recipes
         modelBuilder.Entity<KnittingRecipes>()
             .HasOne<UserLogIn>()
             .WithMany()
@@ -48,5 +49,19 @@ public class StrikkeappDbContext : DbContext
             .WithMany()
             .HasForeignKey(kr => kr.UserId)
             .OnDelete(DeleteBehavior.Cascade); 
+
+        // User can have multiple projects with same recipe
+        modelBuilder.Entity<ProjectTracking>()
+            .HasOne<KnittingRecipes>()
+            .WithMany()
+            .HasForeignKey(pt => pt.KnittingRecipeId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<ProjectTracking>()
+            .HasOne<UserLogIn>()
+            .WithMany()
+            .HasForeignKey(pt => pt.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 <img src={require("../images/sau.svg")} alt="Sau" className="about-logo" />
 import "../../GlobalStyles/main.css";
+import CustomButton from '../../Components/Button';
 
 
 
@@ -24,8 +25,8 @@ const SignOut = () => {
         {showConfirmDialog && (
             <div className='confirm dialog-content'>
                 <h3>Are you sure you want to sign out?</h3>
-                <button onClick={() => setShowConfirmDialog(false)} className="nav-action">Cancel</button>
-                <button onClick={handleSignOut} className="nav-action">Sign Out</button>
+                <CustomButton themeMode="light" onClick={() => setShowConfirmDialog(false)}>Cancel</CustomButton>   
+                <CustomButton themeMode="light" onClick={handleSignOut}>Sign Out</CustomButton>
             </div>
         )}
         </>

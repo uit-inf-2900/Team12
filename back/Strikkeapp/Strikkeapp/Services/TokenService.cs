@@ -10,7 +10,7 @@ namespace Strikkeapp.Services;
 
 public interface ITokenService
 {
-    public string GenerateJwtToken(string userEmail, Guid userID);
+    public string GenerateJwtToken(string userEmail, Guid userID, bool isAdmin);
     public TokenResult ExtractUserID(string token);
 }
 
@@ -30,7 +30,7 @@ public class TokenService : ITokenService
     }
 
     // Generate token for satying logged in
-    public string GenerateJwtToken(string userEmail, Guid userID)
+    public string GenerateJwtToken(string userEmail, Guid userID, bool isAdmin)
     {
         // Generate new handler to generate token
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -42,7 +42,9 @@ public class TokenService : ITokenService
             Subject = new ClaimsIdentity(new[]
             {
             new Claim(ClaimTypes.Email, userEmail),
-            new Claim("userId", userID.ToString())
+            new Claim("userId", userID.ToString()),
+            new Claim("isAdmin", isAdmin.ToString())    
+
         }),
             // Set expiration date
             Expires = DateTime.UtcNow.AddDays(7),

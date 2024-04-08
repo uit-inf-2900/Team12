@@ -3,7 +3,7 @@ import { IoIosCloudUpload } from "react-icons/io";          // Import the icon c
 import InputField from '../../Components/InputField';
 import './UpLoad.css';
 import "../../GlobalStyles/main.css";
-
+import CustomButton from '../../Components/Button';
 import axios from 'axios';
 
 
@@ -94,16 +94,16 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
                     
                     {/* Skjema for oppskriftsinformasjon */}
                     <div className="input">
-                        <InputField placeholder="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
-                        <InputField placeholder="Author" name="author"  type="text" onChange={handleInputChange} />
-                        <InputField placeholder="Needle Size" name="needleSize"  type="number" onChange={handleInputChange} />
-                        <InputField placeholder="Knitting Gauge" name="knittingGauge"  type="text" onChange={handleInputChange}  />
-                        <InputField placeholder="Notes" name="notes"   type="text"onChange={handleInputChange}  />
+                        <InputField label="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
+                        <InputField label="Author" name="author"  type="text" onChange={handleInputChange} />
+                        <InputField label="Needle Size" name="needleSize"  type="number" onChange={handleInputChange} />
+                        <InputField label="Knitting Gauge" name="knittingGauge"  type="text" onChange={handleInputChange}  />
+                        <InputField label="Notes" name="notes"   type="text"onChange={handleInputChange}  />
                     </div>
                 </div>
                 {/* Buttons to clear and upload files. Should only be viseble if a file is uploaded */}
-                {file && <button className="dark-button" onClick={clearFile}>Cancel</button>}           
-                {file && <button className="light-button " onClick={uploadFile}>Upload</button>}
+                {file && <CustomButton themeMode="dark" onClick={clearFile}>Cancel</CustomButton>}           
+                {file && <CustomButton themeMode="light" onClick={uploadFile} iconName="upload"> Upload</CustomButton>}
             </div>
         </div>
     );

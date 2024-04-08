@@ -7,6 +7,7 @@
     /* ============= COLOURS ============= */
 
     --background-color: #fff4f1;
+    --dark-background-color: #f7f7f7;
 
     /* ============= NAVBAR COLORS ============= */
     --shadow-color: #D6AE9A;
@@ -27,7 +28,7 @@
 
 
     /* ============= COLOURS FOR INPUT-BOXES ============= */
-    --color-inputbox: #ffffff;
+    --color-inputbox: #f7f7f7;
 
 
     /* ============= COLOURS FOR BUTTONS ============= */

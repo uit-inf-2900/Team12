@@ -16,6 +16,8 @@ public interface IContactService
 
 
     // svare på mail 
+    public bool ResponseMessage(Guid contactRequestId, string responseMessage);
+
 
 
     // kunne endre status 
@@ -135,4 +137,16 @@ public class ContactService : IContactService
         _context.SaveChanges();
         return true;
     }
+
+    // Answer the contact request
+    public bool ResponseMessage(Guid contactRequestId, string responseMessage)
+    {
+        var contactRequest = _context.ContactRequests.Find(contactRequestId);
+        if (contactRequest == null) return false;
+
+        contactRequest.ResponseMessage = responseMessage;
+        _context.SaveChanges();
+        return true;
+    }
+
 }

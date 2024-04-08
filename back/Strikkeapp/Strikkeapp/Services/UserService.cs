@@ -71,7 +71,7 @@ public class UserService : IUserService
             _context.SaveChanges();
 
             // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId);
+            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId, userDetails.IsAdmin);
             return UserServiceResult.ForSuccess(token, userDetails.IsAdmin);
             }
         
@@ -136,7 +136,7 @@ public class UserService : IUserService
                 .FirstOrDefault();
 
             // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId);
+            var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId, isAdmin);
             return UserServiceResult.ForSuccess(token, isAdmin);
         }
 

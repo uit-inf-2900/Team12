@@ -51,5 +51,14 @@ public class ContactController : ControllerBase
         if (!result) return NotFound();
         return Ok();
     }
+
+    [HttpPost("{contactRequestId}/response")]
+    public IActionResult PostResponseMessage(Guid contactRequestId, [FromBody] string responseMessage)
+    {
+        var result = _contactService.ResponseMessage(contactRequestId, responseMessage);
+        if (!result) return NotFound("Contact request not found.");
+        return Ok("Response saved successfully.");
+    }
+
 }
 
