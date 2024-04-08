@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../GlobalStyles/main.css";
 import "./Counter.css";
+import CustomButton from '../Components/Button';
 
 export const Counter = () => {
     // Store an array of counter objects
@@ -79,14 +80,14 @@ export const Counter = () => {
     };
 
     // Counter component to display each counter with its controls
-    const Counter = ({ index, name, value }) => {
+    const Counters = ({ index, name, value }) => {
         return (
             <div className="counter-container">
             <div className="counter-info" style={{fontSize: '1.2rem'}}>{name}</div>
             <div className="counter-info">{value}</div>
             <div className="counter-controls">
-                <button className= "light-button" onClick={() => handleDecrement(index)}>-</button>
-                <button className= "light-button" onClick={() => handleIncrement(index)}>+</button>
+                <CustomButton themeMode="light" onClick={() => handleDecrement(index)}>-</CustomButton>
+                <CustomButton themeMode="light" onClick={() => handleIncrement(index)}>+</CustomButton>
             </div>
             <span className="edit-text" onClick={() => handleEdit(index)}>Edit</span>
             </div>
@@ -94,62 +95,64 @@ export const Counter = () => {
     };
 
     return (
-        <div className="page-container">        
-            <div className="add-counter-box" onClick={() => setIsAddModalOpen(true)}>
-            <span>Counter</span>
-            <span>+</span>
-            </div>
+        <div className="page-container">
+            <div className="boxes-container">
+                <div className="add-counter-box" onClick={() => setIsAddModalOpen(true)}>
+                <span>Counter</span>
+                <span>+</span>
+                </div>
 
-            {/* Modal for adding a new counter */}
-            {isAddModalOpen && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <form onSubmit={handleSubmit}>
+                {/* Modal for adding a new counter */}
+                {isAddModalOpen && (
+                    <div className="pop">
+                        <div className="pop-content">
+                            <form onSubmit={handleSubmit}>
+                                <input
+                                    type="text"
+                                    placeholder="Name"
+                                    value={counterName}
+                                    onChange={(e) => setCounterName(e.target.value)}
+                                    />
+                                <div className="counter-controls">    
+                                    <button className= "light-button" type="submit" >Add</button>
+                                    <button className= "light-button" type="button" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {/* Modal for editing an existing counter */}
+                {isEditModalOpen && editIndex !== null && (
+                    <div className="pop">
+                    <div className="pop-content">
+                        <form onSubmit={handleEditSubmit}>
                             <input
                                 type="text"
-                                placeholder="Name"
-                                value={counterName}
-                                onChange={(e) => setCounterName(e.target.value)}
-                            />
-                            <div className="counter-controls">    
-                                <button className= "light-button" type="submit" >Add</button>
-                                <button className= "light-button" type="button" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
+                                placeholder="Edit Name"
+                                value={editCounterName}
+                                onChange={(e) => setEditCounterName(e.target.value)}
+                                />
+                            <div className="counter-controls"> 
+                                <button className= "light-button" type="submit">Update</button>
+                                <button className= "light-button" type="button" onClick={() => handleCancelEdit(false)}>Cancel</button>
+                                <button className= "light-button" type="button" onClick={handleRemoveCounter}>Delete Counter</button>
                             </div>
                         </form>
                     </div>
                 </div>
-            )}
+                )}
 
-            {/* Modal for editing an existing counter */}
-            {isEditModalOpen && editIndex !== null && (
-            <div className="modal">
-                <div className="modal-content">
-                    <form onSubmit={handleEditSubmit}>
-                        <input
-                            type="text"
-                            placeholder="Edit Name"
-                            value={editCounterName}
-                            onChange={(e) => setEditCounterName(e.target.value)}
-                        />
-                        <div className="counter-controls"> 
-                            <button className= "light-button" type="submit">Update</button>
-                            <button className= "light-button" type="button" onClick={() => handleCancelEdit(false)}>Cancel</button>
-                            <button className= "light-button" type="button" onClick={handleRemoveCounter}>Delete Counter</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            )}
-
-            {/* Mapping through the counters array to display each Counter component */}
-            {counters.map((counter, index) => (
-                <Counter
+                {/* Mapping through the counters array to display each Counter component */}
+                {counters.map((counter, index) => (
+                    <Counters
                     key={index}
                     index={index}
                     name={counter.name}
                     value={counter.value}
-                />
-            ))}
+                    />
+                    ))}
+            </div>   
         </div>
     );
 };
