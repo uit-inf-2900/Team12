@@ -9,7 +9,7 @@ import SetAlert from "../../Components/Alert";
 import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
 import CustomButton from "../../Components/Button";
-
+import ContactInformation from '../../Components/ContactInformation';
 
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,9 +28,7 @@ const FAQItem = ({ question, answer }) => {
 const ContactDetails = () => (
     <div className="infoText" style={{"textAlign":"left"}}>
         {/* The following details should be styled according to your ContactUs.css */}
-        <p>Send us a mail: <a href="mailto:contact@knithub.com">contact@knithub.com </a></p>
-        <p>Call us: <a href="tel:+4712345678"> 12345678</a></p>
-        <p>Location: <a href="https://maps.google.com?q=Hansine+Hansens+veg+56,+9019+Tromsø">Hansine Hansens veg 56, 9019 Tromsø</a> </p>
+        <ContactInformation />
         <img src={Image} alt="Contact us" className="contact-image" />  
     </div>
 );

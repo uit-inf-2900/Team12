@@ -19,7 +19,7 @@ const Theme = (mode) => {
             },
             background: {
                 default: isDarkMode ? 'var(--dark-background-color)' : 'var(--background-color)',
-                paper: isDarkMode ? 'var(--dark-background-color)' : 'var(--background-color)',
+                paper: isDarkMode ? 'var(--dark-background-color)' : 'var(--second-light)',
             },
             dark: {
                 main: '#000000',
@@ -66,6 +66,16 @@ const Theme = (mode) => {
                             backgroundColor: isDarkMode ? 'var(--button-hover-dark)' : 'var(--button-hover-light)',
                             opacity: 0.8,
                         },
+                    outlined: {
+                        color: '#fffff',
+                        justifyContent: 'center', 
+                        borderColor: '#fffff',
+                        backgroundColor: 'transparent', 
+                        '&:hover': {
+                            borderColor: '#fffff', // Endre border farge på hover
+                            backgroundColor: 'transparent', // Oppretthold transparent bakgrunn på hover
+                        },
+                    }, 
                     },
                 },
             },

@@ -29,18 +29,18 @@ const IconSelector = ({ iconName }) => {
 };
 
 
-const CustomButton = ({ children, iconName, themeMode, submit, fullWidth, ...props  }) => {
+const CustomButton = ({ children, choosenvar, iconName, themeMode, submit, fullWidth, ...props  }) => {
     const theme = Theme(themeMode);
 
     const buttonStyle = {
         width: fullWidth ? '100%' : 'auto', 
-      };
+    };
 
     return (
         <ThemeProvider theme={theme}>
             <Button
                 style={buttonStyle} {...props}
-                variant="contained"
+                variant='contained'
                 startIcon={<IconSelector iconName={iconName} />} 
                 type={submit ? 'submit' : 'button'} 
                 sx={{
