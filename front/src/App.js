@@ -15,6 +15,8 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
+import {GarnKalkulator} from './pages/GarnKalkulator';
+import OkeFelleKalkulator from './pages/OkeFelleKalkulator';
 
 const NotFound = () => {
   return (
@@ -63,6 +65,8 @@ export default function App() {
                 <Route path="/stash" element={<Stash />} />
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<Projects/>} />
+                <Route path='/garnkalkulator' element={<GarnKalkulator/>} />
+                <Route path='/okefellekalkulator' element={<OkeFelleKalkulator/>} />
                 <Route path="/profile" element={<Profilepage />} />
               </>
             )}

@@ -1,0 +1,23 @@
+/* Home.css */
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.customs-box {
+    width: 100%; /* Juster etter behov */
+    height: 500px; /* Juster etter behov */
+    background-color: white;
+    ; /* Erstatt med den faktiske fargekoden du ønsker */
+    border-radius: 10px; /* Gjenbruk variabelen eller sett en fast verdi */
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enkel skyggeeffekt */
+}
