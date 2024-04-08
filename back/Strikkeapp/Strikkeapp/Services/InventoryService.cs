@@ -1,11 +1,13 @@
 ﻿using Strikkeapp.Data.Context;
+using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 
 namespace Strikkeapp.Services;
 
 public interface IInventoryService
 {
-    public InventoryResult GetInventory(string jwtToken);
+    public InventoryGetResult GetInventory(string jwtToken);
+    public InventoryResult AddNeedle(AddNeedleRequest request);
 }
 
 public class InventoryService : IInventoryService
@@ -19,13 +21,13 @@ public class InventoryService : IInventoryService
         _tokenService = tokenService;
     }
 
-    public InventoryResult GetInventory(string jwtToken)
+    public InventoryGetResult GetInventory(string jwtToken)
     {
         // Get userId from token, and handle error
         var tokenResult = _tokenService.ExtractUserID(jwtToken);
         if(!tokenResult.Success)
         {
-            return InventoryResult.ForFailure("Unauthorized");
+            return InventoryGetResult.ForFailure("Unauthorized");
         }
 
         Guid userId = tokenResult.UserId;
@@ -63,14 +65,61 @@ public class InventoryService : IInventoryService
                 })
                 .ToList();
 
-            return InventoryResult.ForSuccess(yarnInvs, needleInvs);
+            return InventoryGetResult.ForSuccess(yarnInvs, needleInvs);
         }
 
         catch (Exception ex)
         {
-            return InventoryResult.ForFailure(ex.Message);
+            return InventoryGetResult.ForFailure(ex.Message);
         }
     }
 
+    public InventoryResult AddNeedle(AddNeedleRequest request)
+    {
+        var tokenResult = _tokenService.ExtractUserID(request.userToken);
+        if(!tokenResult.Success) 
+        {
+            return InventoryResult.ForFailure("Unauthorized");
+        }
 
+        var userId = tokenResult.UserId;
+
+        using(var transaction = _context.Database.BeginTransaction()) 
+        {
+            try
+            {
+                var exsistingItem = _context.NeedleInventory
+                    .Any(ni => ni.UserId == userId && ni.Type == request.Type);
+
+                if (exsistingItem) 
+                {
+                    return InventoryResult.ForFailure("Duplicate type");
+                }
+                   
+
+                var needleInventory = new NeedleInventory
+                {
+                    UserId = userId,
+                    Type = request.Type,
+                    Size = request.Size,
+                    Length = request.Length,
+                    NumItem = 0,
+                    NumInUse = 0
+                };
+
+                _context.NeedleInventory.Add(needleInventory);
+
+                _context.SaveChanges();
+                transaction.Commit();
+
+                return InventoryResult.ForSuccess(needleInventory.ItemID);
+            }
+
+            catch(Exception ex) 
+            {
+                transaction.Rollback();
+                return InventoryResult.ForFailure(ex.Message);
+            }
+        }
+    }
 }
