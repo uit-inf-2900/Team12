@@ -46,13 +46,16 @@ public class InventoryController : ControllerBase
     [Route("addneedle")]
     public IActionResult AddNeedle([FromBody] AddNeedleRequest request)
     {
+        // Check request
         if(!request.isOk()) 
         {
             return BadRequest();
         }
 
+        // Run service
         var res = _inventoryService.AddNeedle(request);
 
+        // Check result, and handle errors
         if(!res.Success) 
         {
             if(res.ErrorMessage == "Duplicate type")
@@ -63,6 +66,7 @@ public class InventoryController : ControllerBase
             return (StatusCode(500, res.ErrorMessage));
         }
 
+        // Return ID of new item
         return Ok(res.ItemId);
     }
 }
