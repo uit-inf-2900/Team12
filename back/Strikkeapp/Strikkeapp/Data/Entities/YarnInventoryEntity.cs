@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Strikkeapp.Data.Entities;
 
-public class KnittingInventory
+public class YarnInventory
 {
     [Key]
     public Guid ItemID { get; set; } = Guid.NewGuid();
@@ -13,17 +13,25 @@ public class KnittingInventory
     public Guid UserId { get; set; }
 
     [Required]
-    public string Type { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
     [Required]
-    public int Size { get; set; }
+    public string Manufacturer { get; set; } = string.Empty;
+
+    [Required]
+    public int Weight { get; set; }
 
     [Required]
     public int Length { get; set; }
 
     [Required]
-    public int NumItem { get; set; }
+    public string Gauge { get; set; } = string.Empty;
 
     [Required]
-    public int NumInUse { get; set; }
+    public int NumItems { get; set; }
+
+    [Required]
+    public int InUse { get; set; }
+
+    public string? Notes { get; set; }
 }
