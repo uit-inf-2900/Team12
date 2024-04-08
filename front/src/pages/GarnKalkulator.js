@@ -1,5 +1,6 @@
 import React, { useState} from "react";
 import "./Garnkalkulator.css"; // Pass på at dette er den korrekte stien til din Home.css-fil
+import InputField from "../Components/InputField";
 
 // import { Link } from 'react-router-dom';
 import Image from "../images/knitting.png";
@@ -29,43 +30,32 @@ export const GarnKalkulator = () => {
                 <h4 style={{color:"#F2E4E1"}}> Strikkefastheten må være den samme. </h4>
                 <div className="calculator-container">
                     <div className="inputs-row">
-                        <h4> I oppskriften: </h4>
-                        <div className="input-group">
-                            <label htmlFor="original-length">Løpelengde</label>
-                            <input
-                                type="number"
-                                id="original-length"
-                                value={originalLength}
-                                onChange={e => setOriginalLength(e.target.value)}
-                                placeholder="Løpelengde"
-                            />
-                        </div>
-                        <div className="input-group">
-                            <label htmlFor="original-skeins">Antall nøster</label>
-                            <input
-                                type="number"
-                                id="original-skeins"
-                                value={originalSkeins}
-                                onChange={e => setOriginalSkeins(e.target.value)}
-                                placeholder="Antall nøster"
-                            />
-                        </div>
+                        <h5> I oppskriften: </h5>
+                        <InputField
+                            label="Løpelengde"
+                            name="original-length"
+                            type="number"
+                            onChange={e => setOriginalLength(e.target.value)}
+                            value={originalLength}
+                        />
+                        <InputField
+                            label="Antall nøster"
+                            name="original-skeins"
+                            type="number"
+                            onChange={e => setOriginalSkeins(e.target.value)}
+                            value={originalSkeins}
+                        />
                     </div>
                     <div className="inputs-row">
-                        <h4> Ditt garn: ....... </h4>
-                        <div className="input-group">
-                            <label htmlFor="new-length">Løpelengde</label>
-                            <input
+                        <h5> Ditt garn: ........................ </h5>
+                            <InputField
+                                label="Løpelengde"
+                                name="new-length"
                                 type="number"
-                                id="new-length"
-                                value={newLength}
                                 onChange={e => setNewLength(e.target.value)}
-                                placeholder="Løpelengde"
+                                value={newLength}
                             />
-                        </div>
-                        <div className="input-group">
-                            <button className='dark-button' onClick={calculateSkeins}>Beregn</button>
-                        </div>
+                        <button className='dark-button' onClick={calculateSkeins}>Beregn</button>
                     </div>
                         {requiredSkeins !== null && (
                             <div className="result">

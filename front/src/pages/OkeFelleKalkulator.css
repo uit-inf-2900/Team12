@@ -62,8 +62,9 @@ button {
     margin-top: 10px; /* Litt plass over knappen */
 }
 
+/* Dette er hover for beregn knappene*/
 button:hover {
-    background-color: #0056b3;
+    background-color: #F6964B;
 }
 
 .result {

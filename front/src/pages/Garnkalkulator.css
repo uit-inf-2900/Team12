@@ -52,13 +52,11 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #474747;
 }
 
 .inputs-row {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
     align-items: center;
     margin-bottom: 1rem;
 }
@@ -81,12 +79,13 @@ button:hover {
 .input-group input,
 .dark-button { /* Gjør knappen lik høyde som input */
     padding: 10px;
-    height: 40px; /* Eksempel på høyde, juster etter behov */
+    height: 60px; /* Eksempel på høyde, juster etter behov */
     box-sizing: border-box; /* Sørger for at padding er inkludert i totalhøyden */
+    background-color: #474747;
 }
 
 .dark-button {
-    flex: 0 0 150px; /* Ikke vokse, ikke krympe, og ha en basisbredde på 150px */
+    flex: 0 0 210px; /* Ikke vokse, ikke krympe, og ha en basisbredde på 150px */
 }
 
 .result {
