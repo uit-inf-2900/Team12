@@ -2,15 +2,15 @@ import React, { useState, useMemo } from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import SwitchContainer from "../../Components/SwitchContainer";
 import '../../GlobalStyles/main.css';
-import { NeedleStash } from "./Needles";
+import { NeedleStash } from "./Needle/Needles";
 import MultiSelect from '../../Components/MultiSelect';
 import { Fab, Modal, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import YarnStash from "./Yarn";
+import YarnStash from "./Yarn/Yarn";
 import ModalContent from "../../Components/ModualContent";
 
-import TextYarn from "./yarntext"; 
-import TextNeedle from "./needletext"; 
+import TextYarn from "./Yarn/yarntext"; 
+import TextNeedle from "./Needle/needletext"; 
 import AddButton from "../../Components/AddButton";
 
 const Stash = () => {
