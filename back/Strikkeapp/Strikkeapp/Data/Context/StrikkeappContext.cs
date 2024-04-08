@@ -16,6 +16,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<KnittingRecipes> KnittingRecipes { get; set; }
     public virtual DbSet<ContactRequest> ContactRequests { get; set; }
     public virtual DbSet<ProjectTracking> ProjectTracking { get; set; }
+    public virtual DbSet<KnittingInventory> KnittingInventory { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,5 +64,12 @@ public class StrikkeappDbContext : DbContext
             .HasForeignKey(pt => pt.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<KnittingInventory>()
+            .HasOne<UserLogIn>()
+            .WithMany()
+            .HasForeignKey(ki => ki.UserId)
+            .IsRequired()
+            .OnDelete (DeleteBehavior.Cascade);
     }
 }
