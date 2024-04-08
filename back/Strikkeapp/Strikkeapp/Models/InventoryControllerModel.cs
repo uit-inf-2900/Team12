@@ -15,3 +15,24 @@ public class AddNeedleRequest
             !(Size < 0) && !(Length < 0));
     }
 }
+
+
+public class AddYarnRequest
+{
+    public string userToken { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Manufacturer { get; set; } = string.Empty;
+    public int Weight { get; set; }
+    public int Length { get; set; }
+    public string Gauge { get; set; } = string.Empty;
+    public string? Notes { get; set; }
+
+    public bool isOk()
+    {
+        return (!string.IsNullOrWhiteSpace(userToken) &&
+            !string.IsNullOrWhiteSpace(Name) &&
+            !string.IsNullOrWhiteSpace(Manufacturer) &&
+            !string.IsNullOrWhiteSpace(Gauge) &&
+            !(Weight < 0) && !(Length < 0));
+    }
+}
