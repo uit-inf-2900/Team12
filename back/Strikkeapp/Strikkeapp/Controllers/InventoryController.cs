@@ -65,8 +65,34 @@ public class InventoryController : ControllerBase
 
             return (StatusCode(500, res.ErrorMessage));
         }
-
+        
         // Return ID of new item
         return Ok(res.ItemId);
     }
+
+
+    [HttpPost]
+    [Route("addyarn")]
+    public IActionResult AddYarn([FromBody] AddYarnRequest request)
+    {
+        if (!request.isOk()) 
+        {
+            return BadRequest();
+        }
+
+        var res = _inventoryService.AddYarn(request);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Duplicate name")
+            {
+                return Conflict("Item with name already exists");
+            }
+
+            return(StatusCode(500, res.ErrorMessage));
+        }
+
+        return Ok(res.ItemId);
+    }
+
 }
