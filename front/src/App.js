@@ -20,6 +20,7 @@ import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
 import ThemedFooter from './Components/Footter';
+// import Counter from './pages/counter'
 
 
 
@@ -83,6 +84,7 @@ export default function App() {
                 <Route path="/profile" element={<Profilepage />} />
                 <Route path="/editprofile" element={<EditProfile />} />
                 <Route path="/wishlist" element={<WishList />} />
+                {/* <Route path='/counter' element={<Counter/>}/>  */}
               </>
             )}
             <Route path="/reset-password" element={<ResetPassword />} />
@@ -90,7 +92,7 @@ export default function App() {
 
           </Routes>
         </div>
-        <ThemedFooter />
+        {/* <ThemedFooter /> */}
       </div>
     </Router>
   );
