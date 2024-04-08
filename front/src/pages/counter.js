@@ -86,8 +86,8 @@ export const Counter = () => {
             <div className="counter-info" style={{fontSize: '1.2rem'}}>{name}</div>
             <div className="counter-info">{value}</div>
             <div className="counter-controls">
-                <CustomButton themeMode="light" onClick={() => handleDecrement(index)}>-</CustomButton>
-                <CustomButton themeMode="light" onClick={() => handleIncrement(index)}>+</CustomButton>
+                <button className= "light-button" onClick={() => handleDecrement(index)}>-</button>
+                <button className= "light-button" onClick={() => handleIncrement(index)}>+</button>
             </div>
             <span className="edit-text" onClick={() => handleEdit(index)}>Edit</span>
             </div>

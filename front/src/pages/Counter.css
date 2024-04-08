@@ -50,7 +50,6 @@
 .counter-container {
   background-color: var(--box-color-dark);  /* Dark background for contrast. */
   overflow: auto; /* Enable scrolling for overflowing content. */
-  display: block;
 }
 
 .counter-info {
@@ -69,8 +68,13 @@
   margin: 0 5px;  /* Space around buttons for separation */
   cursor: pointer;  /* Indicate buttons are clickable */
   font-size: 1rem;  /* Readable font size for button text */
-  width: '15px';
-  height: '40px';
+  background-color: var(--button-bg-colo-light); 
+  color:  var(--button-text-color-dark); 
+}
+
+.counter-controls button:hover{
+  background-color: var(--button-hover-light); 
+  opacity: 0.8;
 }
 
 .boxes-container {
@@ -78,6 +82,7 @@
   flex-direction: row; /* Align children horizontally */
   align-items: start; /* Align children to the start of the cross axis */
   gap: 20px; /* Space between the boxes */
+  flex: 0 0 auto; /* Prevent boxes from growing or shrinking */
 }
 
 .edit-text {
