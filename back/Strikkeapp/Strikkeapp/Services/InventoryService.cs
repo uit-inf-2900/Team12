@@ -76,6 +76,7 @@ public class InventoryService : IInventoryService
 
     public InventoryResult AddNeedle(AddNeedleRequest request)
     {
+        // Check for valid token
         var tokenResult = _tokenService.ExtractUserID(request.userToken);
         if(!tokenResult.Success) 
         {
@@ -88,6 +89,7 @@ public class InventoryService : IInventoryService
         {
             try
             {
+                // Check that type does not already exist
                 var exsistingItem = _context.NeedleInventory
                     .Any(ni => ni.UserId == userId && ni.Type == request.Type);
 
@@ -96,7 +98,7 @@ public class InventoryService : IInventoryService
                     return InventoryResult.ForFailure("Duplicate type");
                 }
                    
-
+                // Create new entry
                 var needleInventory = new NeedleInventory
                 {
                     UserId = userId,
@@ -107,14 +109,16 @@ public class InventoryService : IInventoryService
                     NumInUse = 0
                 };
 
+                // Add entry to database
                 _context.NeedleInventory.Add(needleInventory);
-
                 _context.SaveChanges();
                 transaction.Commit();
 
+                // Return itemId
                 return InventoryResult.ForSuccess(needleInventory.ItemID);
             }
 
+            // Catch any errors
             catch(Exception ex) 
             {
                 transaction.Rollback();
