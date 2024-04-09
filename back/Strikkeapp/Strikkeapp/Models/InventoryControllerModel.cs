@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-
-namespace Strikkeapp.Models;
+﻿namespace Strikkeapp.Models;
 
 public class AddNeedleRequest
 {
@@ -11,13 +9,25 @@ public class AddNeedleRequest
 
     public bool isOk()
     {
-        // Make sure length and size is bigger than 0 and type is not empty
-        return(!string.IsNullOrWhiteSpace(Type) &&
+        return!string.IsNullOrWhiteSpace(Type) &&
             !string.IsNullOrWhiteSpace(userToken) &&
-            !(Size < 0) && !(Length < 0));
+            !(Size < 0) && !(Length < 0);
     }
 }
 
+public class UpdateNeedleRequest
+{
+    public string UserToken { get; set; } = string.Empty;
+    public Guid ItemId { get; set; } = Guid.Empty;
+    public int NewNum { get; set; }
+
+    public bool isOk()
+    {
+        return !string.IsNullOrWhiteSpace(UserToken) &&
+            !(ItemId == Guid.Empty) &&
+            !(NewNum < 0);
+    }
+}
 
 public class AddYarnRequest
 {
@@ -33,14 +43,14 @@ public class AddYarnRequest
 
     public bool isOk()
     {
-        return (!string.IsNullOrWhiteSpace(UserToken) &&
+        return !string.IsNullOrWhiteSpace(UserToken) &&
             !string.IsNullOrWhiteSpace(Type) &&
             !string.IsNullOrWhiteSpace(Manufacturer) &&
-            !string.IsNullOrWhiteSpace(Color));
+            !string.IsNullOrWhiteSpace(Color);
     }
 }
 
-public class UpdateNeedleRequest
+public class UpdateYarnRequest
 {
     public string UserToken { get; set; } = string.Empty;
     public Guid ItemId { get; set; } = Guid.Empty;
@@ -48,20 +58,20 @@ public class UpdateNeedleRequest
 
     public bool isOk()
     {
-        return (!string.IsNullOrWhiteSpace(UserToken) &&
-            !(ItemId == Guid.Empty ) &&
-            !(NewNum < 0));
+        return !string.IsNullOrWhiteSpace(UserToken) &&
+            !(ItemId == Guid.Empty) &&
+            !(NewNum < 0);
     }
 }
 
-public class DeleteNeedleRequest
+public class DeleteItemRequest
 {
     public string UserToken { get; set; } = string.Empty;
     public Guid ItemId { get; set; } = Guid.Empty;
 
     public bool isOk()
     {
-        return (!string.IsNullOrWhiteSpace(UserToken) &&
-            !(ItemId == Guid.Empty));
+        return !string.IsNullOrWhiteSpace(UserToken) &&
+            !(ItemId == Guid.Empty);
     }
 }
