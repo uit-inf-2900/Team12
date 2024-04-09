@@ -17,7 +17,7 @@ public class InventoryController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/get_inventory")]
+    [Route("get_inventory")]
     public IActionResult GetInventory([FromQuery] string userToken)
     {
         // Run service and check result
@@ -95,4 +95,36 @@ public class InventoryController : ControllerBase
         return Ok(res.ItemId);
     }
 
+    [HttpPatch]
+    [Route("updateneedle")]
+    public IActionResult UpdateNeedle([FromBody] UpdateNeedleRequest request)
+    {
+        if(!request.isOk())
+        { 
+            return BadRequest(); 
+        }
+
+        var res = _inventoryService.UpdateNeedle(request);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized("Unauthorized");
+            }
+
+            if(res.ErrorMessage == "Item not found")
+            {
+                return NotFound("Item not found for user");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(new
+        {
+            ItemId = res.ItemId,
+            NumItem = res.NewNum
+        });
+    }
 }

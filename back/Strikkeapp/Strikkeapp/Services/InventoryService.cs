@@ -9,6 +9,7 @@ public interface IInventoryService
     public InventoryGetResult GetInventory(string jwtToken);
     public InventoryResult AddNeedle(AddNeedleRequest request);
     public InventoryResult AddYarn(AddYarnRequest request);
+    public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request);
 }
 
 public class InventoryService : IInventoryService
@@ -119,10 +120,49 @@ public class InventoryService : IInventoryService
         }
     }
 
+    public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request) 
+    {
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
+        if(!tokenResult.Success)
+        {
+            return UpdateInventoryResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var needleInventory = _context.NeedleInventory
+                    .Where(ni => ni.UserId == userId)
+                    .FirstOrDefault(nid => nid.ItemID == request.ItemId);
+
+                if (needleInventory == null)
+                {
+                    return UpdateInventoryResult.ForFailure("Item not found");
+                }
+
+                needleInventory.NumItem = request.NewNum;
+
+                _context.SaveChanges();
+                transaction.Commit();
+
+                return UpdateInventoryResult.ForSuccess(needleInventory.ItemID, needleInventory.NumItem);
+            }
+
+            catch(Exception ex) 
+            {
+                transaction.Rollback();
+                return UpdateInventoryResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
     public InventoryResult AddYarn(AddYarnRequest request)
     {
         // Check valid token
-        var tokenResult = _tokenService.ExtractUserID(request.userToken);
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if(!tokenResult.Success)
         {
             return InventoryResult.ForFailure("Unauthorized");
