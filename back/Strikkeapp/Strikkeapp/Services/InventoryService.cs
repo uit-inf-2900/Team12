@@ -9,9 +9,11 @@ public interface IInventoryService
 {
     public InventoryGetResult GetInventory(string jwtToken);
     public InventoryResult AddNeedle(AddNeedleRequest request);
-    public InventoryResult AddYarn(AddYarnRequest request);
     public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request);
-    public DeleteItemResult DeleteNeedle(DeleteNeedleRequest request);
+    public DeleteItemResult DeleteNeedle(DeleteItemRequest request);
+    public InventoryResult AddYarn(AddYarnRequest request);
+    public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request);
+    public DeleteItemResult DeleteYarn(DeleteItemRequest request);
 }
 
 public class InventoryService : IInventoryService
@@ -29,7 +31,7 @@ public class InventoryService : IInventoryService
     {
         // Get userId from token, and handle error
         var tokenResult = _tokenService.ExtractUserID(jwtToken);
-        if(!tokenResult.Success)
+        if (!tokenResult.Success)
         {
             return InventoryGetResult.ForFailure("Unauthorized");
         }
@@ -82,17 +84,17 @@ public class InventoryService : IInventoryService
     {
         // Check for valid token
         var tokenResult = _tokenService.ExtractUserID(request.userToken);
-        if(!tokenResult.Success) 
+        if (!tokenResult.Success)
         {
             return InventoryResult.ForFailure("Unauthorized");
         }
 
         var userId = tokenResult.UserId;
 
-        using(var transaction = _context.Database.BeginTransaction()) 
+        using (var transaction = _context.Database.BeginTransaction())
         {
             try
-            {                   
+            {
                 // Create new entry
                 var needleInventory = new NeedleInventory
                 {
@@ -114,7 +116,7 @@ public class InventoryService : IInventoryService
             }
 
             // Catch any errors
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 transaction.Rollback();
                 return InventoryResult.ForFailure(ex.Message);
@@ -123,17 +125,17 @@ public class InventoryService : IInventoryService
     }
 
 
-    public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request) 
+    public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request)
     {
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
-        if(!tokenResult.Success)
+        if (!tokenResult.Success)
         {
             return UpdateInventoryResult.ForFailure("Unauthorized");
         }
 
         var userId = tokenResult.UserId;
 
-        using(var transaction = _context.Database.BeginTransaction())
+        using (var transaction = _context.Database.BeginTransaction())
         {
             try
             {
@@ -154,7 +156,7 @@ public class InventoryService : IInventoryService
                 return UpdateInventoryResult.ForSuccess(needleInventory.ItemID, needleInventory.NumItem);
             }
 
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 transaction.Rollback();
                 return UpdateInventoryResult.ForFailure(ex.Message);
@@ -163,7 +165,7 @@ public class InventoryService : IInventoryService
     }
 
 
-    public DeleteItemResult DeleteNeedle(DeleteNeedleRequest request)
+    public DeleteItemResult DeleteNeedle(DeleteItemRequest request)
     {
         // Validate token and get userId
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
@@ -207,14 +209,14 @@ public class InventoryService : IInventoryService
     {
         // Check valid token
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
-        if(!tokenResult.Success)
+        if (!tokenResult.Success)
         {
             return InventoryResult.ForFailure("Unauthorized");
         }
 
         var userId = tokenResult.UserId;
 
-        using(var transaction = _context.Database.BeginTransaction())
+        using (var transaction = _context.Database.BeginTransaction())
         {
             try
             {
@@ -243,7 +245,7 @@ public class InventoryService : IInventoryService
             }
 
             // Handle errors
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 transaction.Rollback();
                 return InventoryResult.ForFailure(ex.Message);
@@ -252,5 +254,77 @@ public class InventoryService : IInventoryService
 
     }
 
-    
+    public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request)
+    {
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
+        if (!tokenResult.Success)
+        {
+            return UpdateInventoryResult.ForFailure("Invalid token");
+        }
+
+        var userId = tokenResult.UserId;
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var yarnInventory = _context.YarnInventory
+                    .Where(yi => yi.UserId == userId)
+                    .FirstOrDefault(yid => yid.ItemID == request.ItemId);
+
+                if(yarnInventory == null)
+                {
+                    return UpdateInventoryResult.ForFailure("Item not found");
+                }
+
+                yarnInventory.NumItems = request.NewNum;
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return UpdateInventoryResult.ForSuccess(yarnInventory.ItemID, yarnInventory.NumItems);
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return UpdateInventoryResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public DeleteItemResult DeleteYarn(DeleteItemRequest request)
+    {
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
+        if(!tokenResult.Success)
+        {
+            return DeleteItemResult.ForFailure("Invalid token");
+        }
+
+        var userId = tokenResult.UserId;
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var yarnToDelete = _context.YarnInventory
+                    .Where(yi => yi.UserId == userId)
+                    .FirstOrDefault();
+
+                    if(yarnToDelete == null)
+                    {
+                        return DeleteItemResult.ForFailure("Item not found for user");
+                    }
+
+                    _context.YarnInventory.Remove(yarnToDelete);
+                    _context.SaveChanges();
+
+                    transaction.Commit();
+                    return DeleteItemResult.ForSuccess(request.ItemId);
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return DeleteItemResult.ForFailure(ex.Message);
+            }
+        }
+    }
 }

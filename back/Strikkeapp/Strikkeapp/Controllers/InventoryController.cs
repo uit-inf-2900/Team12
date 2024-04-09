@@ -70,6 +70,68 @@ public class InventoryController : ControllerBase
         return Ok(res.ItemId);
     }
 
+    [HttpPatch]
+    [Route("updateneedle")]
+    public IActionResult UpdateNeedle([FromBody] UpdateNeedleRequest request)
+    {
+        if (!request.isOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _inventoryService.UpdateNeedle(request);
+
+        if (!res.Success)
+        {
+            if (res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized("Unauthorized");
+            }
+
+            if (res.ErrorMessage == "Item not found")
+            {
+                return NotFound(res.ErrorMessage);
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(new
+        {
+            ItemId = res.ItemId,
+            NumItem = res.NewNum
+        });
+    }
+
+    [HttpDelete]
+    [Route("deleteneedle")]
+    public IActionResult DeleteNeedle([FromBody] DeleteItemRequest request)
+    {
+        if (!request.isOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _inventoryService.DeleteNeedle(request);
+
+        if (!res.Success)
+        {
+            if (res.ErrorMessage == "Invalid token")
+            {
+                return Unauthorized(res.ErrorMessage);
+            }
+
+            if (res.ErrorMessage == "Item not found for user")
+            {
+                return NotFound("Item not found");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(res.ItemId);
+    }
+
 
     [HttpPost]
     [Route("addyarn")]
@@ -96,26 +158,25 @@ public class InventoryController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("updateneedle")]
-    public IActionResult UpdateNeedle([FromBody] UpdateNeedleRequest request)
+    [Route("updateyarn")]
+    public IActionResult UpdateYarn([FromBody] UpdateYarnRequest request)
     {
         if(!request.isOk())
-        { 
-            return BadRequest(); 
+        {
+            return BadRequest();
         }
 
-        var res = _inventoryService.UpdateNeedle(request);
-
+        var res = _inventoryService.UpdateYarn(request);
         if(!res.Success)
         {
-            if(res.ErrorMessage == "Unauthorized")
+            if(res.ErrorMessage == "Invalid token")
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized(res.ErrorMessage);
             }
 
             if(res.ErrorMessage == "Item not found")
             {
-                return NotFound("Item not found for user");
+                return NotFound(res.ErrorMessage);
             }
 
             return StatusCode(500, res.ErrorMessage);
@@ -129,16 +190,16 @@ public class InventoryController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("deleteneedle")]
-    public IActionResult DeleteNeedle([FromBody] DeleteNeedleRequest request) 
+    [Route("deleteyarn")]
+    public IActionResult DeleteYarn([FromBody] DeleteItemRequest request)
     {
         if(!request.isOk())
         {
             return BadRequest();
         }
 
-        var res = _inventoryService.DeleteNeedle(request);
-       
+        var res = _inventoryService.DeleteYarn(request);
+
         if(!res.Success)
         {
             if(res.ErrorMessage == "Invalid token")
@@ -148,7 +209,7 @@ public class InventoryController : ControllerBase
 
             if(res.ErrorMessage == "Item not found for user")
             {
-                return NotFound(res.ErrorMessage);
+                return NotFound("Item not found");
             }
 
             return StatusCode(500, res.ErrorMessage);
