@@ -127,4 +127,33 @@ public class InventoryController : ControllerBase
             NumItem = res.NewNum
         });
     }
+
+    [HttpDelete]
+    [Route("deleteneedle")]
+    public IActionResult DeleteNeedle([FromBody] DeleteNeedleRequest request) 
+    {
+        if(!request.isOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _inventoryService.DeleteNeedle(request);
+       
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Invalid token")
+            {
+                return Unauthorized(res.ErrorMessage);
+            }
+
+            if(res.ErrorMessage == "Item not found for user")
+            {
+                return NotFound(res.ErrorMessage);
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(res.ItemId);
+    }
 }

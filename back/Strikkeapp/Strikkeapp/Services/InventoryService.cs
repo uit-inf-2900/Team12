@@ -1,4 +1,5 @@
-﻿using Strikkeapp.Data.Context;
+﻿using Microsoft.Identity.Client;
+using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 
@@ -10,6 +11,7 @@ public interface IInventoryService
     public InventoryResult AddNeedle(AddNeedleRequest request);
     public InventoryResult AddYarn(AddYarnRequest request);
     public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request);
+    public DeleteItemResult DeleteNeedle(DeleteNeedleRequest request);
 }
 
 public class InventoryService : IInventoryService
@@ -120,6 +122,7 @@ public class InventoryService : IInventoryService
         }
     }
 
+
     public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request) 
     {
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
@@ -158,6 +161,47 @@ public class InventoryService : IInventoryService
             }
         }
     }
+
+
+    public DeleteItemResult DeleteNeedle(DeleteNeedleRequest request)
+    {
+        // Validate token and get userId
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
+        if (!tokenResult.Success)
+        {
+            return DeleteItemResult.ForFailure("Invalid token");
+        }
+
+        var userId = tokenResult.UserId;
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var needleToDelte = _context.NeedleInventory
+                    .Where(ni => ni.UserId == userId)
+                    .FirstOrDefault(nid => nid.ItemID == request.ItemId);
+
+                if (needleToDelte == null)
+                {
+                    return DeleteItemResult.ForFailure("Item not found for user");
+                }
+
+                _context.NeedleInventory.Remove(needleToDelte);
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return DeleteItemResult.ForSuccess(request.ItemId);
+            }
+
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return DeleteItemResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
 
     public InventoryResult AddYarn(AddYarnRequest request)
     {
@@ -205,5 +249,8 @@ public class InventoryService : IInventoryService
                 return InventoryResult.ForFailure(ex.Message);
             }
         }
+
     }
+
+    
 }
