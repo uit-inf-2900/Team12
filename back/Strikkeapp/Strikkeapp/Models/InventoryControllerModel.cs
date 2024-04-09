@@ -53,3 +53,15 @@ public class UpdateNeedleRequest
             !(NewNum < 0));
     }
 }
+
+public class DeleteNeedleRequest
+{
+    public string UserToken { get; set; } = string.Empty;
+    public Guid ItemId { get; set; } = Guid.Empty;
+
+    public bool isOk()
+    {
+        return (!string.IsNullOrWhiteSpace(UserToken) &&
+            !(ItemId == Guid.Empty));
+    }
+}

@@ -85,3 +85,22 @@ public class UpdateInventoryResult
         ErrorMessage = message
     };
 }
+
+public class DeleteItemResult
+{
+    public bool Success { get; set; }
+    public Guid ItemId { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+
+    public static DeleteItemResult ForSuccess(Guid itemId) => new DeleteItemResult
+    {
+        Success = true,
+        ItemId = itemId
+    };
+
+    public static DeleteItemResult ForFailure(string message) => new DeleteItemResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}
