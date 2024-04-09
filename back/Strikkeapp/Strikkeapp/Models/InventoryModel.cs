@@ -64,3 +64,24 @@ public class InventoryResult
         ErrorMessage = message
     };
 }
+
+public class UpdateInventoryResult
+{
+    public bool Success { get; set; }
+    public Guid ItemId { get; set; }
+    public int NewNum { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+
+    public static UpdateInventoryResult ForSuccess(Guid itemId, int newNum) => new UpdateInventoryResult
+    {
+        Success = true,
+        ItemId = itemId,
+        NewNum = newNum
+    };
+
+    public static UpdateInventoryResult ForFailure(string message) => new UpdateInventoryResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}
