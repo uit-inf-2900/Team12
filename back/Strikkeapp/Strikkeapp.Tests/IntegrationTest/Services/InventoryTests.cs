@@ -22,8 +22,9 @@ public class InventoryTests : IDisposable
 
     public InventoryTests()
     {
+        var dbName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
-            .UseInMemoryDatabase(databaseName: "StrikkeappTestDb")
+            .UseInMemoryDatabase(databaseName: dbName)
             .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
