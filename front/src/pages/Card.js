@@ -1,7 +1,7 @@
 import React from 'react';
 import exampleImage from '../images/reading.png'; // Import the PNG image
 
-import "../GlobalStyles/card.css";
+import "../GlobalStyles/main.css";
 
 const Card = ({ title, description }) => {
     
