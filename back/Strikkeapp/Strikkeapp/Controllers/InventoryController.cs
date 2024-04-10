@@ -31,7 +31,7 @@ public class InventoryController : ControllerBase
             }
 
             // Internal error
-            return (StatusCode(500, "Could not fetch inventory"));
+            return StatusCode(500, "Could not fetch inventory");
         }
 
         // Return the lists
@@ -60,10 +60,10 @@ public class InventoryController : ControllerBase
         {
             if(res.ErrorMessage == "Unauthorized")
             {
-                return Unauthorized();
+                return Unauthorized(res.ErrorMessage);
             }
 
-            return (StatusCode(500, res.ErrorMessage));
+            return StatusCode(500, res.ErrorMessage);
         }
         
         // Return ID of new item
@@ -103,6 +103,44 @@ public class InventoryController : ControllerBase
         });
     }
 
+    [HttpPatch]
+    [Route("updateneedlesused")]
+    public IActionResult UpdateNeedlesUsed([FromBody] UpdateItemRequest request)
+    {
+        if (!request.isOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _inventoryService.UpdateNeedlesUsed(request);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized(res.ErrorMessage);
+            }
+
+            if(res.ErrorMessage == "Item not found for user")
+            {
+                return NotFound("Item not found");
+            }
+
+            if(res.ErrorMessage == "Exceeded inventory")
+            {
+                return BadRequest("Not enough needles in inventory");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(new
+        {
+            ItemId = res.ItemId,
+            NumUsed = res.NewUsed
+        });
+    }
+
     [HttpDelete]
     [Route("deleteneedle")]
     public IActionResult DeleteNeedle([FromBody] DeleteItemRequest request)
@@ -116,7 +154,7 @@ public class InventoryController : ControllerBase
 
         if (!res.Success)
         {
-            if (res.ErrorMessage == "Invalid token")
+            if (res.ErrorMessage == "Unauthorized")
             {
                 return Unauthorized(res.ErrorMessage);
             }
@@ -151,7 +189,7 @@ public class InventoryController : ControllerBase
                 return Unauthorized();
             }
 
-            return (StatusCode(500, res.ErrorMessage));
+            return StatusCode(500, res.ErrorMessage);
         }
 
         return Ok(res.ItemId);
@@ -169,7 +207,7 @@ public class InventoryController : ControllerBase
         var res = _inventoryService.UpdateYarn(request);
         if(!res.Success)
         {
-            if(res.ErrorMessage == "Invalid token")
+            if(res.ErrorMessage == "Unauthorized")
             {
                 return Unauthorized(res.ErrorMessage);
             }
@@ -189,6 +227,44 @@ public class InventoryController : ControllerBase
         });
     }
 
+    [HttpPatch]
+    [Route("updateyarnused")]
+    public IActionResult UpdateYarnUsed([FromBody] UpdateItemRequest request)
+    {
+        if (!request.isOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _inventoryService.UpdateYarnUsed(request);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized(res.ErrorMessage);
+            }
+
+            if(res.ErrorMessage == "Item not found for user")
+            {
+                return NotFound("Item not found");
+            }
+
+            if(res.ErrorMessage == "Exceeded inventory")
+            {
+                return BadRequest("Not enough yarn in inventory");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(new
+        {
+            ItemId = res.ItemId,
+            NumUsed = res.NewUsed
+        });
+    }
+
     [HttpDelete]
     [Route("deleteyarn")]
     public IActionResult DeleteYarn([FromBody] DeleteItemRequest request)
@@ -202,7 +278,7 @@ public class InventoryController : ControllerBase
 
         if(!res.Success)
         {
-            if(res.ErrorMessage == "Invalid token")
+            if(res.ErrorMessage == "Unauthorized")
             {
                 return Unauthorized(res.ErrorMessage);
             }

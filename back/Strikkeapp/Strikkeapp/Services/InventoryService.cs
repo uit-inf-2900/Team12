@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using Microsoft.OpenApi.Expressions;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
@@ -10,9 +11,11 @@ public interface IInventoryService
     public InventoryGetResult GetInventory(string jwtToken);
     public InventoryResult AddNeedle(AddNeedleRequest request);
     public UpdateInventoryResult UpdateNeedle(UpdateItemRequest request);
+    public UpdateInventoryResult UpdateNeedlesUsed(UpdateItemRequest request);
     public DeleteItemResult DeleteNeedle(DeleteItemRequest request);
     public InventoryResult AddYarn(AddYarnRequest request);
     public UpdateInventoryResult UpdateYarn(UpdateItemRequest request);
+    public UpdateInventoryResult UpdateYarnUsed(UpdateItemRequest request);
     public DeleteItemResult DeleteYarn(DeleteItemRequest request);
 }
 
@@ -153,7 +156,50 @@ public class InventoryService : IInventoryService
                 _context.SaveChanges();
                 transaction.Commit();
 
-                return UpdateInventoryResult.ForSuccess(needleInventory.ItemID, needleInventory.NumItem);
+                return UpdateInventoryResult.ForSuccessNum(needleInventory.ItemID, needleInventory.NumItem);
+            }
+
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return UpdateInventoryResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public UpdateInventoryResult UpdateNeedlesUsed(UpdateItemRequest request)
+    {
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
+        if (!tokenResult.Success)
+        {
+            return UpdateInventoryResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var needleInventory = _context.NeedleInventory
+                    .Where(ni => ni.UserId == userId)
+                    .FirstOrDefault(nid => nid.ItemID == request.ItemId);
+
+                if (needleInventory == null)
+                {
+                    return UpdateInventoryResult.ForFailure("Item not found for user");
+                }
+
+                if(needleInventory.NumItem < request.NewNum)
+                {
+                    return UpdateInventoryResult.ForFailure("Exceeded inventory");
+                }
+
+                needleInventory.NumInUse = request.NewNum;
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return UpdateInventoryResult.ForSuccessUsed(needleInventory.ItemID, needleInventory.NumInUse);
             }
 
             catch (Exception ex)
@@ -171,7 +217,7 @@ public class InventoryService : IInventoryService
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
         {
-            return DeleteItemResult.ForFailure("Invalid token");
+            return DeleteItemResult.ForFailure("Unauthorized");
         }
 
         var userId = tokenResult.UserId;
@@ -259,7 +305,7 @@ public class InventoryService : IInventoryService
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
         {
-            return UpdateInventoryResult.ForFailure("Invalid token");
+            return UpdateInventoryResult.ForFailure("Unauthorized");
         }
 
         var userId = tokenResult.UserId;
@@ -281,8 +327,51 @@ public class InventoryService : IInventoryService
                 _context.SaveChanges();
 
                 transaction.Commit();
-                return UpdateInventoryResult.ForSuccess(yarnInventory.ItemID, yarnInventory.NumItems);
+                return UpdateInventoryResult.ForSuccessNum(yarnInventory.ItemID, yarnInventory.NumItems);
             }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return UpdateInventoryResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public UpdateInventoryResult UpdateYarnUsed(UpdateItemRequest request)
+    {
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
+        if (!tokenResult.Success)
+        {
+            return UpdateInventoryResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var yarnInventory = _context.YarnInventory
+                    .Where(yi => yi.UserId == userId)
+                    .FirstOrDefault(yid => yid.ItemID == request.ItemId);
+
+                if(yarnInventory == null)
+                {
+                    return UpdateInventoryResult.ForFailure("Item not found for user");
+                }
+
+                if(yarnInventory.NumItems < request.NewNum)
+                {
+                    return UpdateInventoryResult.ForFailure("Exceeded inventory");
+                }
+
+                yarnInventory.InUse = request.NewNum;
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return UpdateInventoryResult.ForSuccessUsed(yarnInventory.ItemID, yarnInventory.InUse);
+            }
+            
             catch(Exception ex)
             {
                 transaction.Rollback();
@@ -296,7 +385,7 @@ public class InventoryService : IInventoryService
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if(!tokenResult.Success)
         {
-            return DeleteItemResult.ForFailure("Invalid token");
+            return DeleteItemResult.ForFailure("Unauthorized");
         }
 
         var userId = tokenResult.UserId;
