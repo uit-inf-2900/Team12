@@ -11,6 +11,7 @@ public interface IUserService
 {
     public UserServiceResult CreateUser(string userEmail, string userPwd, string userFullName, DateTime userDOB);
     public UserServiceResult LogInUser(string userEmail, string userPwd);
+    public DeleteUserResult DeleteUser(string userToken);
 }
 
 public class UserService : IUserService
@@ -129,5 +130,40 @@ public class UserService : IUserService
         }
     }
 
+    public DeleteUserResult DeleteUser(string userToken)
+    {
+        var result = _tokenService.ExtractUserID(userToken);
+        if(!result.Success)
+        {
+            return DeleteUserResult.ForFailure("Unauthorized");
+        }
+
+        var userId = result.UserId;
+
+        using(var transaction = _context.Database.BeginTransaction()) 
+        {
+            try
+            {
+                var userToDelete = _context.UserLogIn
+                   .FirstOrDefault(u => u.UserId == userId);
+
+                if(userToDelete == null)
+                {
+                    return DeleteUserResult.ForFailure("Not found");
+                }
+
+                _context.UserLogIn.Remove(userToDelete);
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return DeleteUserResult.ForSuccess();
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return DeleteUserResult.ForFailure(ex.Message);
+            }
+        }
+    }
 
 }

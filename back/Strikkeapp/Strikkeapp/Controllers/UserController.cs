@@ -92,6 +92,30 @@ public class UsersController : ControllerBase
         return Ok(res);
     }
 
+    [HttpDelete]
+    [Route("deleteuser")]
+    public IActionResult DeleteUser(string userToken)
+    {
+        var res = _userService.DeleteUser(userToken);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized("Invalid token");
+            }
+
+            if(res.ErrorMessage == "Not found")
+            {
+                return StatusCode(500, "Unable to find user");
+            }
+
+            return StatusCode(500, "Unable to delete user");
+        }
+
+        return Ok();
+    }
+
 
     [HttpGet]
     [Route("/getUsers")]

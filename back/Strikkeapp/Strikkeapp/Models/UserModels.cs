@@ -19,3 +19,20 @@ public class UserServiceResult
         ErrorMessage = message
     };
 }
+
+public class DeleteUserResult
+{
+    public bool Success { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+
+    public static DeleteUserResult ForSuccess() => new DeleteUserResult
+    {
+        Success = true
+    };
+
+    public static DeleteUserResult ForFailure(string message) => new DeleteUserResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}
