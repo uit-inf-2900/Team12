@@ -19,6 +19,8 @@ public class InventoryTests : IDisposable
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
 
     private Guid testUserGuid = Guid.NewGuid();
+    private Guid testNeedleId = Guid.NewGuid();
+    private Guid testYarnId = Guid.NewGuid();
 
     public InventoryTests()
     {
@@ -39,7 +41,7 @@ public class InventoryTests : IDisposable
     {
         var testNeedleInventory = new NeedleInventory
         {
-            ItemID = Guid.NewGuid(),
+            ItemID = testNeedleId,
             UserId = testUserGuid,
             Type = "Round",
             Size = 10,
@@ -51,7 +53,7 @@ public class InventoryTests : IDisposable
 
         var testYarnInventory = new YarnInventory
         {
-            ItemID = Guid.NewGuid(),
+            ItemID = testYarnId,
             UserId = testUserGuid,
             Type = "Wool",
             Manufacturer = "Test Manufacturer",
@@ -136,6 +138,28 @@ public class InventoryTests : IDisposable
         Assert.True(res.Success);
         Assert.NotEqual(Guid.Empty, res.ItemId);
     }
+
+    [Fact]
+    public void IncreaseNeedleItem()
+    {
+        var testRequest = new UpdateItemRequest
+        {
+            UserToken = "testToken",
+            ItemId = testNeedleId,
+            NewNum = 69
+        };
+
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.UpdateNeedle(testRequest);
+
+        Assert.True(res.Success);
+        Assert.Equal(res.ItemId, testNeedleId);
+        Assert.Equal(res.NewNum, testRequest.NewNum);
+    }
+
 
     [Fact]
     public void AddYarn_Ok() 
