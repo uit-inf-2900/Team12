@@ -3,12 +3,12 @@
 import React, { useState, useMemo } from 'react'; 
 import { Fab, Modal, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import MultiSelect from '../../Components/MultiSelect';
+import MultiSelect from '../../../Components/MultiSelect';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button } from '@mui/material';
-import "../../GlobalStyles/main.css";
-import CustomButton from '../../Components/Button';
+import "../../../GlobalStyles/main.css";
+import CustomButton from '../../../Components/Button';
 
 
 export const NeedleStash= ({ setNeedleTypes, needleTypes }) => {

@@ -2,6 +2,7 @@
 
 import React, {useContext, useState} from "react";
 import ProjectCard from "../../Components/ProjectCard";
+import Card from "../Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
 
@@ -50,9 +51,9 @@ const Projects = () => {
             />
 
             {/* Visning av filtrerte prosjekter */}
-            <div className="box dark">
+            <div>
                 {filteredProjects.map(project => (
-                    <ProjectCard key={project.id} title={project.title} status={project.status}/>
+                    <Card key={project.id} title={project.title} status={project.status}/>
                 ))}
             </div>
 
