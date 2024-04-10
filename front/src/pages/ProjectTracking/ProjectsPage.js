@@ -2,7 +2,7 @@
 
 import React, {useContext, useState} from "react";
 import ProjectCard from "../../Components/ProjectCard";
-import Card from "../Card";
+import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
 
@@ -24,12 +24,9 @@ const Projects = () => {
         { id: 1, title: 'Honey clutch', status: 'planned' },
         { id: 2, title: 'Summer scarf', status: 'in-progress' },
         { id: 3, title: 'Winter hat', status: 'completed' },
-        { id: 4, title: 'Honey clutch', status: 'planned' },
-        { id: 5, title: 'Summer scarf', status: 'in-progress' },
-        { id: 6, title: 'Winter hat', status: 'completed' },
-        { id: 7, title: 'Honey clutch', status: 'planned' },
-        { id: 8, title: 'Summer scarf', status: 'in-progress' },
-        { id: 9, title: 'Winter hat', status: 'completed' },
+        { id: 4, title: 'Skappel luft', status: 'planned' },
+        { id: 5, title: 'Oslo lue', status: 'in-progress' },
+        { id: 6, title: 'Votter', status: 'completed' },
         // ... flere prosjekter
     ];
 
