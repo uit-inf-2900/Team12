@@ -15,20 +15,6 @@ public class AddNeedleRequest
     }
 }
 
-public class UpdateNeedleRequest
-{
-    public string UserToken { get; set; } = string.Empty;
-    public Guid ItemId { get; set; } = Guid.Empty;
-    public int NewNum { get; set; }
-
-    public bool isOk()
-    {
-        return !string.IsNullOrWhiteSpace(UserToken) &&
-            !(ItemId == Guid.Empty) &&
-            !(NewNum < 0);
-    }
-}
-
 public class AddYarnRequest
 {
     public string UserToken { get; set; } = string.Empty;
@@ -50,7 +36,7 @@ public class AddYarnRequest
     }
 }
 
-public class UpdateYarnRequest
+public class UpdateItemRequest
 {
     public string UserToken { get; set; } = string.Empty;
     public Guid ItemId { get; set; } = Guid.Empty;

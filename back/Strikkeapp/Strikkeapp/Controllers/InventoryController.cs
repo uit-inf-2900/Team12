@@ -72,7 +72,7 @@ public class InventoryController : ControllerBase
 
     [HttpPatch]
     [Route("updateneedle")]
-    public IActionResult UpdateNeedle([FromBody] UpdateNeedleRequest request)
+    public IActionResult UpdateNeedle([FromBody] UpdateItemRequest request)
     {
         if (!request.isOk())
         {
@@ -159,7 +159,7 @@ public class InventoryController : ControllerBase
 
     [HttpPatch]
     [Route("updateyarn")]
-    public IActionResult UpdateYarn([FromBody] UpdateYarnRequest request)
+    public IActionResult UpdateYarn([FromBody] UpdateItemRequest request)
     {
         if(!request.isOk())
         {

@@ -9,10 +9,10 @@ public interface IInventoryService
 {
     public InventoryGetResult GetInventory(string jwtToken);
     public InventoryResult AddNeedle(AddNeedleRequest request);
-    public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request);
+    public UpdateInventoryResult UpdateNeedle(UpdateItemRequest request);
     public DeleteItemResult DeleteNeedle(DeleteItemRequest request);
     public InventoryResult AddYarn(AddYarnRequest request);
-    public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request);
+    public UpdateInventoryResult UpdateYarn(UpdateItemRequest request);
     public DeleteItemResult DeleteYarn(DeleteItemRequest request);
 }
 
@@ -125,7 +125,7 @@ public class InventoryService : IInventoryService
     }
 
 
-    public UpdateInventoryResult UpdateNeedle(UpdateNeedleRequest request)
+    public UpdateInventoryResult UpdateNeedle(UpdateItemRequest request)
     {
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
@@ -254,7 +254,7 @@ public class InventoryService : IInventoryService
 
     }
 
-    public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request)
+    public UpdateInventoryResult UpdateYarn(UpdateItemRequest request)
     {
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
