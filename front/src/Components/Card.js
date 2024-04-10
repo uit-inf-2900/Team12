@@ -3,7 +3,26 @@ import exampleImage from '../images/reading.png'; // Import the PNG image
 
 import "../GlobalStyles/main.css";
 
-const Card = ({ title, description }) => {
+const getCustomLabel = (propName) => {
+    const labels = {
+        knittingGauge: "Knitting Gauge",
+        needleSize: "Needle size (mm)",
+        notes: "Notes",
+        yarntype: "Yarn type",
+        skeinsYarn: "Skein of yarn",
+        color: "Color",
+        weight: "Weight",
+        // Add more labels here
+    };
+
+    // Return lable
+    return labels[propName] || propName;
+};
+
+  
+
+
+const Card = ({ title, ...descriptions }) => {
     
     return (
     <div className="card">
@@ -14,9 +33,9 @@ const Card = ({ title, description }) => {
                     <h3 className="card-title">{title}</h3>
                 </div>
             </div>
-            <p className="card-description">Needle size</p>
-            <p className='card-description'>Knitting Gauge</p>
-            <p className='card-description'>Notes</p>
+            {Object.keys(descriptions).map(key => (
+                <p className="card-description" key={key}> {getCustomLabel(key)}: {descriptions[key]}</p>
+            ))}
         </div>
         
     </div>
