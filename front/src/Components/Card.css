@@ -1,0 +1,98 @@
+@import 'colorAndText.css';
+/* Card.css */
+
+
+
+.card-container {
+    display: flex;
+    justify-content: space-between; /* Adjust spacing between cards */
+    align-items: center; /* Align cards vertically */
+    flex-wrap: wrap; /* Allow cards to wrap to the next line if necessary */
+    padding: 20px; /* Add padding for spacing */
+}
+
+
+
+:root {
+    
+    --curve: 40;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  .card {
+    width: 350px;
+    position: relative;
+    height: 100%;  
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 5px 5px 8px var(--shadow-color);
+    color: var(----box-color-dark);
+  }
+  
+  .card-image {      
+    width: 100%;
+    height: auto;
+  }
+  
+  .card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;      
+    border-radius: calc(var(--curve) * 1px);    
+    background-color: var(--color-inputbox);      
+    transform: translateY(100%);
+    transition: .2s ease-in-out;
+  }
+  
+  .card:hover .card-overlay {
+    transform: translateY(0);
+  }
+  
+  .card-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    padding: 2em;
+    border-radius: calc(var(--curve) * 1px) 0 0 0;    
+    background-color: var(--color-inputbox);
+    transform: translateY(-100%);
+    transition: .1s ease-in-out;
+  }
+  
+  .card:hover .card-header {
+    transform: translateY(0);
+  }
+  
+  .card-title {
+    font-size: 1em;
+    margin: 0 0 .3em;
+    color: var(--main-color);
+  }
+  
+  
+  .card-status {
+    font-size: .8em;
+    color: #D7BDCA;
+  }
+  
+  .card-description {
+    padding: 0 2em 2em;
+    margin: 0;
+    color: var(--text-color);
+    font-family: "MockFlowFont";   
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }    
+
+  .card-content {
+    padding: 16px;
+  }
