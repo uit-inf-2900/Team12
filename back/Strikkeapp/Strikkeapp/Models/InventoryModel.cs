@@ -70,13 +70,21 @@ public class UpdateInventoryResult
     public bool Success { get; set; }
     public Guid ItemId { get; set; }
     public int NewNum { get; set; }
+    public int NewUsed { get; set; }
     public string ErrorMessage { get; set; } = string.Empty;
 
-    public static UpdateInventoryResult ForSuccess(Guid itemId, int newNum) => new UpdateInventoryResult
+    public static UpdateInventoryResult ForSuccessNum(Guid itemId, int newNum) => new UpdateInventoryResult
     {
         Success = true,
         ItemId = itemId,
         NewNum = newNum
+    };
+
+    public static UpdateInventoryResult ForSuccessUsed(Guid itemId, int newNum) => new UpdateInventoryResult
+    {
+        Success = true,
+        ItemId = itemId,
+        NewUsed = newNum
     };
 
     public static UpdateInventoryResult ForFailure(string message) => new UpdateInventoryResult
