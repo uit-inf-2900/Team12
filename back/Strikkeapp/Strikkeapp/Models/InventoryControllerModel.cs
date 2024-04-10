@@ -2,7 +2,7 @@
 
 public class AddNeedleRequest
 {
-    public string userToken {  get; set; } = string.Empty;
+    public string UserToken {  get; set; } = string.Empty;
     public string Type { get; set; } = string.Empty;
     public int Size { get; set; }
     public int Length { get; set; }
@@ -10,7 +10,7 @@ public class AddNeedleRequest
     public bool isOk()
     {
         return!string.IsNullOrWhiteSpace(Type) &&
-            !string.IsNullOrWhiteSpace(userToken) &&
+            !string.IsNullOrWhiteSpace(UserToken) &&
             !(Size < 0) && !(Length < 0);
     }
 }

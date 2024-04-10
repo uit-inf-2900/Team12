@@ -1,6 +1,4 @@
-﻿using Microsoft.Identity.Client;
-using Microsoft.OpenApi.Expressions;
-using Strikkeapp.Data.Context;
+﻿using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 
@@ -86,7 +84,7 @@ public class InventoryService : IInventoryService
     public InventoryResult AddNeedle(AddNeedleRequest request)
     {
         // Check for valid token
-        var tokenResult = _tokenService.ExtractUserID(request.userToken);
+        var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
         {
             return InventoryResult.ForFailure("Unauthorized");
