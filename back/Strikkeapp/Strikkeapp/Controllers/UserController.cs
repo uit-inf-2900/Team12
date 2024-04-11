@@ -21,10 +21,6 @@ public class UsersController : ControllerBase
         _context = context;
     }
 
-    // Create user request schema
-
-
-
 
     [HttpPost]
     [Route("/createuser")]
