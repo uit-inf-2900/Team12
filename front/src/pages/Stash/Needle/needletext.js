@@ -67,9 +67,9 @@ const NeedleInfo = () => {
                         value={needleData.type}
                         onChange={handleTypeChange}
                         options={[
-                            { value: 'Replaceable', label: 'Replaceable' },
-                            { value: 'Set', label: 'Set' },
-                            { value: 'Round', label: 'Round' },
+                            { value: 'Interchangeble', label: 'Interchangeble Needles' },
+                            { value: 'DoublePointed', label: 'DoublePointed' },
+                            { value: 'Circular', label: 'Circular' },
                             { value: 'Other', label: 'Other (Specify)' }
                         ]}
                     />

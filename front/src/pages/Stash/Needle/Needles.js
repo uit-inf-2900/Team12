@@ -34,15 +34,15 @@ export const NeedleStash= ({ setNeedleTypes, needleTypes }) => {
     };
     
     const needleStash = [
-        { id: 1, size: '10', length: '40 cm', quantity: 5, inUse: true, type: 'Replaceable' },
-        { id: 2, size: '5', length: '20 cm', quantity: 8, inUse: false, type: 'Set' },
-        { id: 3, size: '3', length: '15 cm', quantity: 12, inUse: true, type: 'Round' },
+        { id: 1, size: '10', length: '40 cm', quantity: 5, inUse: true, type: 'Interchangeble' },
+        { id: 2, size: '5', length: '20 cm', quantity: 8, inUse: false, type: 'DoublePointed' },
+        { id: 3, size: '3', length: '15 cm', quantity: 12, inUse: true, type: 'Circular' },
         { id: 5, size: '3', length: '1 cm', quantity: 2, inUse: false, type: 'Heklenål' },
         { id: 6, size: '3', length: '7 cm', quantity: 2, inUse: false, type: 'Flettepinne' },
     ];
 
     // Predefined types of needles for filtering. Only these types will be directly selectable.   
-    const predefinedTypes = ['Replaceable', 'Set', 'Round'];
+    const predefinedTypes = ['Interchangeble', 'DoublePointed', 'Circular'];
 
     // useMemo hook to memoize the needles options for the MultiSelect component, avoiding recalculation on every render.
     const NeedlesOptions = useMemo(() => {
