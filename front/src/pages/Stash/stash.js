@@ -10,7 +10,7 @@ import YarnStash from "./Yarn/Yarn";
 import ModalContent from "../../Components/ModualContent";
 
 import TextYarn from "./Yarn/yarntext"; 
-import TextNeedle from "./Needle/needletext"; 
+import NeedleInfo from "./Needle/needletext"; 
 import AddButton from "../../Components/AddButton";
 
 const Stash = () => {
@@ -52,7 +52,7 @@ const Stash = () => {
                 open={openModal.needle}
                 handleClose={() => toggleModal('needle', false)}
                 title="Legg til strikkepinner"
-                infobox={<TextNeedle />}
+                infobox={<NeedleInfo />}
             />
         </div>
     );
