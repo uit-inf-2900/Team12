@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import SwitchContainer from "../../Components/SwitchContainer";
 import '../../GlobalStyles/main.css';
-import { NeedleStash } from "./Needle/Needles";
+import NeedleStash from "./Needle/Needles";
 import MultiSelect from '../../Components/MultiSelect';
 import { Fab, Modal, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
