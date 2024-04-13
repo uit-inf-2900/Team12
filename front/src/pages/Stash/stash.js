@@ -51,8 +51,8 @@ const Stash = () => {
             <ModalContent
                 open={openModal.needle}
                 handleClose={() => toggleModal('needle', false)}
-                title="Legg til strikkepinner"
-                infobox={<NeedleInfo />}
+                title="Add knittingneedles"
+                infobox={<NeedleInfo onClose={() => toggleModal('needle', false)} />}              
             />
         </div>
     );

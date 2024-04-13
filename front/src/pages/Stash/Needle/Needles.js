@@ -28,37 +28,54 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
         // TODO: implement delete needle functionality
         setOpenDeleteModal(false);
     };
-
-    useEffect(() => {
-        // Get the token from session storage and use that to fetch the needle data
+    const fetchNeedles = async () => {
         const token = sessionStorage.getItem('token');
-        const fetchNeedles = async () => {
-            const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
-            // try to fetch the needle data
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': '*/*'
-                    }
-                });
-                // if the response is ok, set the needle state
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.needleInventory) {
-                        setNeedles(data.needleInventory);
-                    } else {
-                        console.error("No needle inventory found:", data);
-                    }
-                } else {
-                    console.error("Failed to fetch needle data. Status:", response.status);
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
+        const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                setNeedles(data.needleInventory || []);
+            } else {
+                console.error("Failed to fetch needle data.");
             }
-        };
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+    
+    useEffect(() => {
         fetchNeedles();
+
+        // TODO: implement fetchNeedles functionality
+        // const fetchNeedles = async () => {
+        //     const token = sessionStorage.getItem('token');
+        //     const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
+        //     // try to fetch the needle data
+        //     try {
+        //         const response = await fetch(url, {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'Accept': '*/*'
+        //             }
+        //         });
+        //         // if the response is ok, set the needle state
+        //         if (response.ok) {
+        //             const data = await response.json();
+        //             if (data && data.needleInventory) {
+        //                 setNeedles(data.needleInventory);
+        //             } else {
+        //                 console.error("No needle inventory found:", data);
+        //             }
+        //         } else {
+        //             console.error("Failed to fetch needle data. Status:", response.status);
+        //         }
+        //     } catch (error) {
+        //         console.error("Error fetching data:", error);
+        //     }
+        // };
+        // fetchNeedles();
     }, []);
 
     // Define the predefined needle types 

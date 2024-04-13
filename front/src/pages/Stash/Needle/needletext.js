@@ -3,8 +3,14 @@ import InputField from '../../../Components/InputField';
 import { ThemeProvider } from '@mui/material/styles'; 
 import Theme from '../../../Components/Theme';
 import CustomButton from '../../../Components/Button';
+import SetAlert from '../../../Components/Alert';
 
-const NeedleInfo = () => {
+
+const NeedleInfo = ({onClose}) => {
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertSeverity, setAlertSeverity] = useState('success');
+
     const token = sessionStorage.getItem('token');  // Fetching the token from session storage
     const [needleData, setNeedleData] = useState({
         userToken: token,  // Using the fetched token
@@ -45,13 +51,20 @@ const NeedleInfo = () => {
             if (response.ok) {
                 const result = await response.json();
                 console.log('Success:', result);
-                // Reset form or provide feedback to the user here
+                setAlertMessage('Your needle is uploaded');
+                setAlertSeverity('success');
+                setAlertOpen(true);
+                onClose();          // This function call will close the modal
             } else {
-                throw new Error('Network response was not ok.');
+                const errorResult = await response.json();
+                setAlertMessage(errorResult.message || 'Something went wrong, please try again later');
+                setAlertSeverity('error');
+                setAlertOpen(true);
+
             }
         } catch (error) {
             console.error('Error:', error);
-        }
+            }
     };
 
     return (
@@ -93,8 +106,14 @@ const NeedleInfo = () => {
                         value={needleData.length}
                         onChange={handleChange('length')}
                     />
-                    <CustomButton themeMode="light" submit={true}>Sign up</CustomButton>
+                    <CustomButton themeMode="light" submit={true}>Upload needle</CustomButton>
                 </form>
+                <SetAlert 
+                    open={alertOpen} 
+                    setOpen={setAlertOpen} 
+                    severity="success" 
+                    message={alertMessage}
+                />
             </div>
         </ThemeProvider>
     );
