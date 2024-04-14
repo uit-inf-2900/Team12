@@ -35,7 +35,7 @@ const Theme = (mode) => {
         },
         typography: {
             fontFamily: 'var(--body-font)',
-            fontSize: '1.0rem',
+            fontSize: 1.0,
             h1: {
                 fontFamily: 'var(--main-font)',
                 fontSize: 'var(--h1-font-size)',
