@@ -34,10 +34,36 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
         setNeedleToDelete(null);
     };
 
-    // Function to delete needles
-    const handleDeleteNeedle = () => {
-        // TODO: implement delete needle functionality
-        setOpenDeleteModal(false);
+    const handleDeleteNeedle = async () => {
+        if (needleToDelete) {
+            const url = `http://localhost:5002/api/inventory/deleteneedle`; 
+            const payload = {
+                userToken: sessionStorage.getItem('token'), // Fetching the token from session storage
+                itemId: needleToDelete.itemId
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE', // or 'DELETE', depending on your API
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': '*/*'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    console.log("Needle deleted successfully");
+                    fetchNeedles(); // Refresh the list after deletion
+                } else {
+                    console.error("Failed to delete the needle", await response.text());
+                }
+            } catch (error) {
+                console.error("Error deleting needle:", error);
+            }
+        }
+
+        setOpenDeleteModal(false); // Close the modal after attempting to delete
     };
 
     
