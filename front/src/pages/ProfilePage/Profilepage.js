@@ -90,7 +90,6 @@ const ProfilePage = () => {
                     userEmail: editState.userEmail
                 });
                 setProfileFetchError(""); // Clear any existing errors
-                setShowModal(true);
                 setIsEditing(false);
             } else {
                 throw new Error('Failed to update profile');
