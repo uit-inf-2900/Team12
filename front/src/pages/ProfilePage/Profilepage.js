@@ -68,32 +68,39 @@ const ProfilePage = () => {
 
     // Save the updated profile data
     const handleSave = async () => {
-        if (userProfileState.newPassword !== userProfileState.confirmNewPassword) {
+        if (editState.newPassword !== editState.confirmNewPassword) {
             setProfileFetchError("New passwords do not match.");
             return;
         }
-        
+    
         const token = sessionStorage.getItem('token');
         const payload = {
             token: token,
-            userFullName: userProfileState.userFullName,
-            userEmail: userProfileState.userEmail,
-            oldPassword: userProfileState.oldPassword,
-            newPassword: userProfileState.newPassword
+            userFullName: editState.userFullName,
+            userEmail: editState.userEmail,
+            oldPassword: editState.oldPassword,
+            newPassword: editState.newPassword
         };
-
+    
         try {
-            await axios.patch('http://localhost:5002/updateprofileinfo', payload);
-            setUserProfileState({
-                userFullName: editState.userFullName,
-                userEmail: editState.userEmail
-            });
-            setIsEditing(false);
+            const response = await axios.patch('http://localhost:5002/updateprofileinfo', payload);
+            if (response.status === 200) {
+                setUserProfileState({
+                    userFullName: editState.userFullName,
+                    userEmail: editState.userEmail
+                });
+                setProfileFetchError(""); // Clear any existing errors
+                setShowModal(true);
+                setIsEditing(false);
+            } else {
+                throw new Error('Failed to update profile');
+            }
         } catch (error) {
             console.error("Error updating profile data: ", error);
             setProfileFetchError("Failed to update profile data.");
         }
     };
+    
 
 
     // Handle input field changes and update the state
