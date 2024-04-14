@@ -6,10 +6,8 @@ import CustomButton from '../../../Components/Button';
 import SetAlert from '../../../Components/Alert';
 
 
-const NeedleInfo = ({onClose}) => {
-    const [alertOpen, setAlertOpen] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
-    const [alertSeverity, setAlertSeverity] = useState('success');
+const NeedleInfo = ({onClose, fetchNeedles}) => {
+    const [alertInfo, setAlertInfo] = useState({open: false, severity: 'info', message: 'test message'});
 
     const token = sessionStorage.getItem('token');  // Fetching the token from session storage
     const [needleData, setNeedleData] = useState({
@@ -31,6 +29,18 @@ const NeedleInfo = ({onClose}) => {
     
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        // Check if all fields are filled in
+        if (!needleData.type || !needleData.size || !needleData.length || (needleData.type === 'Other' && !needleData.otherType)) {
+            setAlertInfo({
+                open: true,
+                severity: 'error',
+                message: 'Please fill in all fields.'
+            });
+            return;
+        }
+
+        // Get the payload ready for the POST request
         const payload = {
             userToken: needleData.userToken,
             type: needleData.type === 'Other' ? needleData.otherType : needleData.type,
@@ -38,6 +48,7 @@ const NeedleInfo = ({onClose}) => {
             length: parseInt(needleData.length, 10)
         };
 
+        // POST request to the API
         try {
             const response = await fetch('http://localhost:5002/api/inventory/addneedle', {
                 method: 'POST',
@@ -51,20 +62,29 @@ const NeedleInfo = ({onClose}) => {
             if (response.ok) {
                 const result = await response.json();
                 console.log('Success:', result);
-                setAlertMessage('Your needle is uploaded');
-                setAlertSeverity('success');
-                setAlertOpen(true);
+                setAlertInfo({
+                    open: true,
+                    severity: 'success',
+                    message: 'Needle uploaded successfully'
+                });
                 onClose();          // This function call will close the modal
+                fetchNeedles(); 
             } else {
                 const errorResult = await response.json();
-                setAlertMessage(errorResult.message || 'Something went wrong, please try again later');
-                setAlertSeverity('error');
-                setAlertOpen(true);
-
+                setAlertInfo({
+                    open: true,
+                    severity: 'error',
+                    message: errorResult.message || 'An unexpected error occurred'
+                });
             }
         } catch (error) {
             console.error('Error:', error);
-            }
+            setAlertInfo({
+                open: true,
+                severity: 'error',
+                message: 'An error occurred while uploading the needle.'
+            });
+        }
     };
 
     return (
@@ -108,12 +128,11 @@ const NeedleInfo = ({onClose}) => {
                     />
                     <CustomButton themeMode="light" submit={true}>Upload needle</CustomButton>
                 </form>
-                <SetAlert 
-                    open={alertOpen} 
-                    setOpen={setAlertOpen} 
-                    severity="success" 
-                    message={alertMessage}
-                />
+                <SetAlert
+                    open={alertInfo.open} 
+                    setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} 
+                    severity={alertInfo.severity} 
+                    message={alertInfo.message} />
             </div>
         </ThemeProvider>
     );

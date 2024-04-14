@@ -13,6 +13,7 @@ import ContactInformation from './ContactInformation';
 import InputField from './InputField';
 import CustomButton from './Button'
 import SendIcon from '@mui/icons-material/Send';
+import SetAlert from './Alert';
 
 // TODO: Get error if no email is entered
 // TODO: Get error if email is not valid
@@ -70,12 +71,13 @@ const Footer = () => {
     const handleSubscribe = () => {
         // TODO: implement the subscribe functionality
         if(email) {
-            alert(`Subscribe to the newsletter with: ${email}`);
+            // Alert the email
+            <SetAlert severity="success" message={`Subscribe to the newsletter with: ${email}`} />
             // Reset email state
             setEmail('');
         } else {
             // Handle empty input or add validation
-            alert('Please enter an email address.');
+            <SetAlert severity="error" message="Please enter an email address." />
         }
     };
 
