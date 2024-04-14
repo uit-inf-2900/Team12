@@ -108,7 +108,7 @@ const Footer = () => {
                             value={email}
                             onInput={e => setEmail(e.target.value)}
                             error={errors.email}
-                            helperTect={errors.email?.message}
+                            helperText={errors.email?.message}
                             onSubmit={handleSubscribe}
                         />
                     </Box>
