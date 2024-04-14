@@ -28,6 +28,8 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
         // TODO: implement delete needle functionality
         setOpenDeleteModal(false);
     };
+
+    
     const fetchNeedles = async () => {
         const token = sessionStorage.getItem('token');
         const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
@@ -46,36 +48,6 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     
     useEffect(() => {
         fetchNeedles();
-
-        // TODO: implement fetchNeedles functionality
-        // const fetchNeedles = async () => {
-        //     const token = sessionStorage.getItem('token');
-        //     const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
-        //     // try to fetch the needle data
-        //     try {
-        //         const response = await fetch(url, {
-        //             method: 'GET',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'Accept': '*/*'
-        //             }
-        //         });
-        //         // if the response is ok, set the needle state
-        //         if (response.ok) {
-        //             const data = await response.json();
-        //             if (data && data.needleInventory) {
-        //                 setNeedles(data.needleInventory);
-        //             } else {
-        //                 console.error("No needle inventory found:", data);
-        //             }
-        //         } else {
-        //             console.error("Failed to fetch needle data. Status:", response.status);
-        //         }
-        //     } catch (error) {
-        //         console.error("Error fetching data:", error);
-        //     }
-        // };
-        // fetchNeedles();
     }, []);
 
     // Define the predefined needle types 
