@@ -19,11 +19,14 @@ import AdminPage from './pages/Admin/AdminPage';
 import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
-import ThemedFooter from './Components/Footter';
+import Footer from './Components/Footter';
+import Theme from './Components/Theme';
+import { ThemeProvider } from '@emotion/react';
 
 
 
 export default function App() {
+  const theme = Theme('light'); 
 
   const handleLogout = () => {
     sessionStorage.removeItem('token'); // Fjerner token fra sessionStorage
@@ -48,6 +51,7 @@ export default function App() {
   }, []);
 
   return (
+    <ThemeProvider theme={theme}>
     <Router>
       {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
       <div className="page-container">          
@@ -90,8 +94,9 @@ export default function App() {
 
           </Routes>
         </div>
-        <ThemedFooter />
+        <Footer />
       </div>
     </Router>
+    </ThemeProvider>
   );
 }

@@ -30,7 +30,7 @@ const IconSelector = ({ iconName }) => {
 
 
 const CustomButton = ({ children, choosenvar, iconName, themeMode, submit, fullWidth, ...props  }) => {
-    const theme = Theme(themeMode);
+    const theme = Theme(themeMode || 'light'); 
 
     const buttonStyle = {
         width: fullWidth ? '100%' : 'auto', 
@@ -43,9 +43,6 @@ const CustomButton = ({ children, choosenvar, iconName, themeMode, submit, fullW
                 variant='contained'
                 startIcon={<IconSelector iconName={iconName} />} 
                 type={submit ? 'submit' : 'button'} 
-                sx={{
-                    // ytterligere stiltilpasninger om nødvendig
-                }}
             >
                 {children}
             </Button>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Box, Grid, Typography, IconButton, Paper, Button } from '@mui/material';
 import Theme from './Theme';
-import { ThemeProvider } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 
 
@@ -26,7 +25,7 @@ import SetAlert from './Alert';
 const FooterRouting = () => {
     return (
         <div>
-            <Typography variant="h3" >
+            <Typography variant="h5" >
                 Useful Links
             </Typography>
             <Link color='#000000' href="/"> Home </Link><br />
@@ -86,10 +85,10 @@ const Footer = () => {
     return (
         // Use paper for the color (can be changed in Theme)
         // Set the with to 100% and add some padding 
-        <Paper sx={{ width: '100%', py: 4 }}> 
+        <Paper sx={{ width: '100%', py: 4}}> 
             <Grid container spacing={3} justifyContent="center" alignItems="start">
                 <Grid item xs={12} sm={4}>
-                    <Typography variant="h3">
+                    <Typography variant="h5">
                         Knithub
                     </Typography>
                     <Box component="form"
@@ -118,7 +117,7 @@ const Footer = () => {
                     <FooterRouting />
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                    <Typography variant="h3" gutterBottom>
+                    <Typography variant="h5" gutterBottom>
                         Contact Us
                     </Typography>
                     <ContactInformation />
@@ -133,13 +132,6 @@ const Footer = () => {
     );
 };
 
-const ThemedFooter = () => {
-    const theme = Theme('light');
-    return (
-        <ThemeProvider theme={theme}>
-            <Footer />
-        </ThemeProvider>
-    );
-};
 
-export default ThemedFooter;
+
+export default Footer;

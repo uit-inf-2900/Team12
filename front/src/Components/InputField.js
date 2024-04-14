@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, MenuItem, InputAdornment, IconButton, ThemeProvider } from '@mui/material';
+import { TextField, MenuItem, InputAdornment, IconButton } from '@mui/material';
 
 import Theme from './Theme';
 import SendIcon from '@mui/icons-material/Send';
@@ -20,7 +20,6 @@ const InputField = ({
     };
 
     return (
-        <ThemeProvider theme={Theme}>
             <TextField
                 color='secondary'
                 {...register}
@@ -59,7 +58,6 @@ const InputField = ({
                     </MenuItem>
                 ))}
             </TextField>
-        </ThemeProvider>
     );
 };
 

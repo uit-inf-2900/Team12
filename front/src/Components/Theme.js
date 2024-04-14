@@ -33,20 +33,7 @@ const Theme = (mode) => {
                 secondary: '#D6AE9A',
             },
         },
-        typography: {
-            fontFamily: 'var(--body-font)',
-            fontSize: 1.0,
-            h1: {
-                fontFamily: 'var(--main-font)',
-                fontSize: 'var(--h1-font-size)',
-                fontWeight: 'var(--font-semi-bold)',
-            },
-            h2: {
-                fontFamily: 'var(--main-font)',
-                fontSize: 'var(--h2-font-size)',
-                fontWeight: 'var(--font-semi-bold)',
-            },
-        },
+
         components: {
             // Button style 
             MuiButton: {
@@ -109,10 +96,7 @@ const Theme = (mode) => {
                     },
                 },
             },
-        custom: {
-            headerHeight: '5.5rem',
-            boxShadow: '0 2px 16px rgba(0,0,0,0.1)',
-        },
+
     });
 };
 
