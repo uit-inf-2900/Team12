@@ -6,12 +6,23 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import "../../../GlobalStyles/main.css";
 import CustomButton from '../../../Components/Button';
+import ModalContent from '../../../Components/ModualContent';
+import NeedleInfo from './needletext';
+import AddButton from '../../../Components/AddButton';
 
 export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     // Set the needle state and the delete modal state
     const [needles, setNeedles] = useState([]);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [needleToDelete, setNeedleToDelete] = useState(null);
+    const [openNeedleModal, setOpenNeedleModal] = useState(false);
+
+
+    // Toggle the needle modal
+    const toggleNeedleModal = () => {
+        setOpenNeedleModal(!openNeedleModal);
+    };
+
 
     // Open and closing Modual for deleting needles 
     const handleOpenDeleteModal = (needle) => {
@@ -78,6 +89,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     });
 
     return (
+        <div>
         <>
         {/* Check if there are any needles to display */}
         {needles.length > 0 ? (
@@ -142,6 +154,12 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
             <p>You have no registered knitting needles. Please add knitting needles to see them in the overview.</p>
             )}
         </>
+        <AddButton onClick={toggleNeedleModal} />
+
+        <Modal open={openNeedleModal} onClose={toggleNeedleModal}>
+            <NeedleInfo onClose={toggleNeedleModal} fetchNeedles={fetchNeedles} />
+        </Modal>
+    </div>
     );
 };
 
