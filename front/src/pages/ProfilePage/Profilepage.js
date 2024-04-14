@@ -14,7 +14,14 @@ const ProfilePage = () => {
 
     // State to store user profile data
     const [userProfileState, setUserProfileState] = useState({
-        userFullName: '', 
+        userFullName: '',
+        userEmail: '',
+    });
+
+    // State to store edit form data. 
+    // This is separate from userProfileState to avoid updating the state on every keystroke
+    const [editState, setEditState] = useState({
+        userFullName: '',
         userEmail: '',
         oldPassword: '',
         newPassword: '',
@@ -33,11 +40,17 @@ const ProfilePage = () => {
             const fetchData = async () => {
                 try {
                     const response = await axios.get(`http://localhost:5002/getprofileinfo?userToken=${token}`);
-                    setUserProfileState(prevState => ({
-                        ...prevState,
+                    setUserProfileState({
                         userFullName: response.data.userFullName,
                         userEmail: response.data.userEmail
-                    }));
+                    });
+                    setEditState({
+                        userFullName: response.data.userFullName,
+                        userEmail: response.data.userEmail,
+                        oldPassword: '',
+                        newPassword: '',
+                        confirmNewPassword: ''
+                    });
                 } catch (error) {
                     console.error("Error fetching profile data: ", error);
                     setProfileFetchError("Failed to fetch profile data.");
@@ -46,6 +59,7 @@ const ProfilePage = () => {
             fetchData();
         }
     }, []);
+
 
     // Toggle between edit and view mode
     const handleEditToggle = () => {
@@ -70,6 +84,10 @@ const ProfilePage = () => {
 
         try {
             await axios.patch('http://localhost:5002/updateprofileinfo', payload);
+            setUserProfileState({
+                userFullName: editState.userFullName,
+                userEmail: editState.userEmail
+            });
             setIsEditing(false);
         } catch (error) {
             console.error("Error updating profile data: ", error);
@@ -81,7 +99,7 @@ const ProfilePage = () => {
     // Handle input field changes and update the state
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setUserProfileState(prev => ({
+        setEditState(prev => ({
             ...prev,
             [name]: value
         }));
@@ -154,12 +172,12 @@ const ProfilePage = () => {
                     <p className="error-message">{profileFetchError}</p>
                 ) : isEditing ? (
                     <>
-                        <h2> Edit your information </h2>
-                        <InputField label="Full Name" type="text" name="userFullName" value={userProfileState.userFullName} onChange={handleChange} />
-                        <InputField label="Email" type="email" name="userEmail" value={userProfileState.userEmail} onChange={handleChange} />
-                        <InputField label="Old Password" type="password" name="oldPassword" value={userProfileState.oldPassword} onChange={handleChange} />
-                        <InputField label="New Password" type="password" name="newPassword" value={userProfileState.newPassword} onChange={handleChange} />
-                        <InputField label="Confirm New Password" type="password" name="confirmNewPassword" value={userProfileState.confirmNewPassword} onChange={handleChange} />
+                        <h2>Edit your information</h2>
+                        <InputField label="Full Name" type="text" name="userFullName" value={editState.userFullName} onChange={handleChange} />
+                        <InputField label="Email" type="email" name="userEmail" value={editState.userEmail} onChange={handleChange} />
+                        <InputField label="Old Password" type="password" name="oldPassword" value={editState.oldPassword} onChange={handleChange} />
+                        <InputField label="New Password" type="password" name="newPassword" value={editState.newPassword} onChange={handleChange} />
+                        <InputField label="Confirm New Password" type="password" name="confirmNewPassword" value={editState.confirmNewPassword} onChange={handleChange} />
                         <CustomButton themeMode="light" iconName='save' onClick={handleSave}>Save Changes</CustomButton>
                         <CustomButton themeMode="light" onClick={handleEditToggle}>Cancel</CustomButton>
                     </>
