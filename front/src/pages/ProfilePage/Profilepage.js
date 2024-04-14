@@ -7,6 +7,7 @@ import Image from "../../images/6.png";
 import InputField from '../../Components/InputField';
 import ModalContent from '../../Components/ModualContent';
 import CustomButton from '../../Components/Button';
+import SetAlert from '../../Components/Alert';
 
 const ProfilePage = () => {
     // State to toggle between edit and view mode
@@ -32,6 +33,14 @@ const ProfilePage = () => {
     const [profileFetchError, setProfileFetchError] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+
+    // For the user to see alert messages 
+    const [alertInfo, setAlertInfo] = useState({
+        open: false,
+        severity: 'error',
+        message: ''
+    });
+    
 
     // Fetch user profile data on page load
     useEffect(() => {
@@ -68,8 +77,21 @@ const ProfilePage = () => {
 
     // Save the updated profile data
     const handleSave = async () => {
+        if (!editState.userFullName || !editState.userEmail) {
+            setAlertInfo({
+                open: true,
+                severity: 'error',
+                message: 'Full name and email cannot be empty.'
+            });
+            return;
+        }
+
         if (editState.newPassword !== editState.confirmNewPassword) {
-            setProfileFetchError("New passwords do not match.");
+            setAlertInfo({
+                open: true,
+                severity: 'error',
+                message: 'Passwords do not match.'
+            });
             return;
         }
     
@@ -91,12 +113,27 @@ const ProfilePage = () => {
                 });
                 setProfileFetchError(""); // Clear any existing errors
                 setIsEditing(false);
+                setAlertInfo({
+                    open: true,
+                    severity: 'success',
+                    message: 'Profile updated successfully.'
+                });
             } else {
                 throw new Error('Failed to update profile');
+                setAlertInfo({
+                    open: true,
+                    severity: 'error',
+                    message: 'Failed to update profile.'
+                })
             }
         } catch (error) {
             console.error("Error updating profile data: ", error);
             setProfileFetchError("Failed to update profile data.");
+            setAlertInfo({
+                open: true,
+                severity: 'error',
+                message: 'Failed to update profile data.'
+            });
         }
     };
     
@@ -195,6 +232,12 @@ const ProfilePage = () => {
                         <CustomButton themeMode="light" onClick={handleEditToggle} iconName="edit">Edit Profile</CustomButton>
                     </>
                 )}
+                <SetAlert
+                    open={alertInfo.open}
+                    setOpen={(isOpen) => setAlertInfo({ ...alertInfo, open: isOpen })}
+                    severity={alertInfo.severity}
+                    message={alertInfo.message}
+                />
             </div>
         </div>
     );
