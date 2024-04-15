@@ -16,13 +16,12 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
-import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
 import Footer from './Components/Footter';
 import Theme from './Components/Theme';
 import { ThemeProvider } from '@emotion/react';
-
+import Resources from './pages/KnitHubResources/Resources';
 
 
 export default function App() {
@@ -61,14 +60,11 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/resources" element={<Resources />} />
 
             {/* If you have admin privileges and is admin change the contact us page with the asminpage  */}
             {isLoggedIn && isAdmin ? (
-              // <>
                 <Route path="/adminpage" element={<AdminPage />} />
-                //  <Route path="/users" element={<ViewUsers />} />
-                // <Route path="/messages" element={<ViewMessages />} />
-              // </> 
             ) : (
               <Route path="/contactus" element={<ContactUs />} />
             )}
@@ -85,7 +81,6 @@ export default function App() {
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<Projects/>} />
                 <Route path="/profile" element={<Profilepage />} />
-                <Route path="/editprofile" element={<EditProfile />} />
                 <Route path="/wishlist" element={<WishList />} />
               </>
             )}
