@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Xml.Serialization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
 
@@ -140,7 +141,7 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
-    public void IncreaseNeedleItem()
+    public void IncreaseingNeedle_Ok()
     {
         var testRequest = new UpdateItemRequest
         {
@@ -158,6 +159,50 @@ public class InventoryTests : IDisposable
         Assert.True(res.Success);
         Assert.Equal(res.ItemId, testNeedleId);
         Assert.Equal(res.NewNum, testRequest.NewNum);
+    }
+
+    [Fact]
+    public void IncreaseNeedlesInUse_Ok()
+    {
+        var testRequest = new UpdateItemRequest
+        {
+            ItemId = testNeedleId,
+            UserToken = "testToken"
+        };
+
+                // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.UpdateNeedlesUsed(testRequest);
+
+        // Assert if service fails
+        Assert.True(res.Success);
+        // Assert is mismatch between request and response
+        Assert.Equal(testRequest.ItemId, res.ItemId);
+        Assert.Equal(testRequest.NewNum, res.NewUsed);
+    }
+
+    [Fact]
+    public void DeleteNeedle_Ok()
+    {
+        var testRequest = new DeleteItemRequest
+        {
+            ItemId = testNeedleId,
+            UserToken = "testToken"
+        };
+
+
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.DeleteNeedle(testRequest);
+
+        Assert.True(res.Success);
+        Assert.Equal(res.ItemId, testRequest.ItemId);
+        // Make sure database is empty after deletion
+        Assert.Empty(_context.NeedleInventory);
     }
 
 
@@ -185,6 +230,72 @@ public class InventoryTests : IDisposable
 
         Assert.True(res.Success);
         Assert.NotEqual(Guid.Empty, res.ItemId);
+    }
+
+    [Fact]
+    public void IncreasingYarn_Ok() 
+    {
+        var testRequest = new UpdateItemRequest
+        {
+            UserToken = "testToken",
+            ItemId = testYarnId,
+            NewNum = 69
+        };
+
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.UpdateYarn(testRequest);
+
+        Assert.True(res.Success);
+        // Assert is mismatch between request and response
+        Assert.Equal(res.ItemId, testRequest.ItemId);
+        Assert.Equal(res.NewNum, testRequest.NewNum);
+    }
+
+    [Fact]
+    public void IncreseYarnInUse_Ok()
+    {
+        var testRequest = new UpdateItemRequest
+        {
+            ItemId = testYarnId,
+            UserToken = "testToken",
+            NewNum = 3
+        };
+
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.UpdateYarnUsed(testRequest);
+
+        Assert.True(res.Success);
+        // Assert is mismatch between request and response
+        Assert.Equal(testRequest.ItemId, res.ItemId);
+        Assert.Equal(testRequest.NewNum, res.NewUsed);
+    }
+
+    [Fact]
+    public void DeleteYarn_Ok() 
+    {
+        var testRequest = new DeleteItemRequest
+        {
+            ItemId = testYarnId,
+            UserToken = "testToken"
+        };
+
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.DeleteYarn(testRequest);
+
+        // Assert if service fails
+        Assert.True(res.Success);
+        Assert.Equal(res.ItemId, testRequest.ItemId);
+        // Make sure database is empty after deletion
+        Assert.Empty(_context.YarnInventory);
     }
 
 }
