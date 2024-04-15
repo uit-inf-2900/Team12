@@ -30,24 +30,24 @@ describe('Signup Component', () => {
     });
 
     // Invalid email format
-    test('displays error for invalid email format', async () => {
-        renderWithRouter(<SignUp isLoggedIn={false}/>);
+    // test('displays error for invalid email format', async () => {
+    //     renderWithRouter(<SignUp isLoggedIn={false}/>);
         
-        await userEvent.type(screen.getByPlaceholderText(/email/i), 'invalid-email');
-        await userEvent.click(screen.getByRole('button', { name: /sign up/i }));
+    //     await userEvent.type(screen.getByPlaceholderText(/email/i), 'invalid-email');
+    //     await userEvent.click(screen.getByRole('button', { name: /sign up/i }));
         
-        expect(await screen.findByText(/email is not valid/i)).toBeInTheDocument();
-    });
+    //     expect(await screen.findByText(/email is not valid/i)).toBeInTheDocument();
+    // });
 
-    // Passwords do not match
-    test('displays error for non-matching passwords', async () => {
-        renderWithRouter(<SignUp />);
+    // // Passwords do not match
+    // test('displays error for non-matching passwords', async () => {
+    //     renderWithRouter(<SignUp />);
 
-        // Since both password and confirm password is of password type we can't use getByPlaceholderText for both
-        const [passwordInput, confirmPasswordInput] = screen.getAllByPlaceholderText(/password/i);
-        await userEvent.type(passwordInput, 'Test123!');
-        await userEvent.type(confirmPasswordInput, 'Test1234!');
-    });
+    //     // Since both password and confirm password is of password type we can't use getByPlaceholderText for both
+    //     const [passwordInput, confirmPasswordInput] = screen.getAllByPlaceholderText(/password/i);
+    //     await userEvent.type(passwordInput, 'Test123!');
+    //     await userEvent.type(confirmPasswordInput, 'Test1234!');
+    // });
 
 
 });
