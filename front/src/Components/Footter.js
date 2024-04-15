@@ -31,6 +31,7 @@ const FooterRouting = () => {
             <Link color='#000000' href="/"> Home </Link><br />
             <Link color='#000000' href="/about"> About </Link><br />
             <Link color='#000000' href="/contactus" > Contact us </Link><br />
+            <Link color='#000000' href="/resources" > Resources </Link><br />
         </div>
     ); 
 };
