@@ -16,14 +16,16 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
-import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
-import ThemedFooter from './Components/Footter';
-
+import Footer from './Components/Footter';
+import Theme from './Components/Theme';
+import { ThemeProvider } from '@emotion/react';
+import Resources from './pages/KnitHubResources/Resources';
 
 
 export default function App() {
+  const theme = Theme('light'); 
 
   const handleLogout = () => {
     sessionStorage.removeItem('token'); // Fjerner token fra sessionStorage
@@ -48,6 +50,7 @@ export default function App() {
   }, []);
 
   return (
+    <ThemeProvider theme={theme}>
     <Router>
       {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
       <div className="page-container">          
@@ -57,14 +60,11 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/resources" element={<Resources />} />
 
             {/* If you have admin privileges and is admin change the contact us page with the asminpage  */}
             {isLoggedIn && isAdmin ? (
-              // <>
                 <Route path="/adminpage" element={<AdminPage />} />
-                //  <Route path="/users" element={<ViewUsers />} />
-                // <Route path="/messages" element={<ViewMessages />} />
-              // </> 
             ) : (
               <Route path="/contactus" element={<ContactUs />} />
             )}
@@ -81,7 +81,6 @@ export default function App() {
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<Projects/>} />
                 <Route path="/profile" element={<Profilepage />} />
-                <Route path="/editprofile" element={<EditProfile />} />
                 <Route path="/wishlist" element={<WishList />} />
               </>
             )}
@@ -90,8 +89,9 @@ export default function App() {
 
           </Routes>
         </div>
-        <ThemedFooter />
+        <Footer />
       </div>
     </Router>
+    </ThemeProvider>
   );
 }

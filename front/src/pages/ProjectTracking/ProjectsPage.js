@@ -21,9 +21,9 @@ const Projects = () => {
     };
      // Hardcoded projects to see if the filtering works
     const projects = [
-        { id: 1, title: 'Honey clutch', status: 'planned' },
-        { id: 2, title: 'Summer scarf', status: 'in-progress' },
-        { id: 3, title: 'Winter hat', status: 'completed' },
+        { id: 1, title: 'Honey clutch', status: 'planned', knittingGauge:'10/10' },
+        { id: 2, title: 'Summer scarf', status: 'in-progress', knittingGauge:'10/10'  },
+        { id: 3, title: 'Winter hat', status: 'completed', knittingGauge:'10/10'  },
         { id: 4, title: 'Skappel luft', status: 'planned' },
         { id: 5, title: 'Oslo lue', status: 'in-progress' },
         { id: 6, title: 'Votter', status: 'completed' },
@@ -50,7 +50,13 @@ const Projects = () => {
             {/* Visning av filtrerte prosjekter */}
             <div>
                 {filteredProjects.map(project => (
-                    <Card key={project.id} title={project.title} status={project.status}/>
+                    <Card
+                        key={project.id}
+                        title={project.title}
+                        needleSize={project.needleSize}
+                        knittingGauge={project.knittingGauge}
+                        notes={project.notes}
+                    />
                 ))}
             </div>
 

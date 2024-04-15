@@ -1,21 +1,26 @@
 import React from "react";
-
+import Card from "../../../Components/Card";
 
 const YarnStash = () => {
 
     const yarnStash = [
-        { id: 4, title: 'Rauma Vams' },
+        { id: 4, title: 'Rauma Vams', yarntype:'wool', color: 'blue', weight: 'fingering', skeinsYarn: 2 },
     ];
 
     return (
-        <div className="box dark">
+        <div className="yarn-container">
             {yarnStash.map(yarn => (
-                <div key={yarn.id} className="project-card">
-                    <h3>{yarn.title}</h3>
-                </div>
+                <Card
+                    key={yarn.id}
+                    title={yarn.title}
+                    yarntype={yarn.yarntype}
+                    color={yarn.color}
+                    weight={yarn.weight}
+                    skeinsYarn={yarn.skeinsYarn}
+                />
             ))}
         </div>
-    );
+    ); 
 };
 
 export default YarnStash;

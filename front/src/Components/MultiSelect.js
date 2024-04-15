@@ -3,16 +3,12 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Theme from './Theme';
-import { ThemeProvider } from '@mui/material/styles';
 import Select from '@mui/material/Select';
 
 
 // Function for a multi-select dropdown menu 
 const MultiSelect = ({ label, value, handleChange, menuItems }) => {
   return (
-    // Apply the theme to the component
-    <ThemeProvider theme={Theme}> 
-    
     <FormControl fullWidth variant="outlined">
       {/* Input label for the select */}
       <InputLabel 
@@ -44,7 +40,6 @@ const MultiSelect = ({ label, value, handleChange, menuItems }) => {
           ))}
       </Select>
     </FormControl>
-    </ThemeProvider>
   );
 };
 
