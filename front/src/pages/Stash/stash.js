@@ -2,15 +2,9 @@ import React, { useState, useMemo } from "react";
 import ProjectCard from "../../Components/ProjectCard";
 import SwitchContainer from "../../Components/SwitchContainer";
 import '../../GlobalStyles/main.css';
-import { NeedleStash } from "./Needles";
-import MultiSelect from '../../Components/MultiSelect';
-import { Fab, Modal, Box } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import YarnStash from "./Yarn";
-import ModalContent from "../../Components/ModualContent";
+import NeedleStash from "./Needle/Needles";
+import YarnStash from "./Yarn/Yarn";
 
-import TextYarn from "./yarntext"; 
-import TextNeedle from "./needletext"; 
 import AddButton from "../../Components/AddButton";
 
 const Stash = () => {
@@ -18,14 +12,7 @@ const Stash = () => {
     const [needleTypes, setNeedleTypes] = useState(['All']);
     const [yarnEntries, setYarnEntries] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
-    const [openModal, setOpenModal] = useState({ needle: false, yarn: false });
 
-    // Adjust the function to correctly reference the needle modal
-    const toggleModal = (type, isOpen) => {
-        // Map 'needles' to 'needle' to match the state key
-        const modalType = type === 'needles' ? 'needle' : type;
-        setOpenModal({ ...openModal, [modalType]: isOpen });
-    };
 
     const addYarnEntry = (entry) => {
         setYarnEntries(prevEntries => [...prevEntries, entry]);
@@ -43,7 +30,7 @@ const Stash = () => {
             return newEntries;
         });
     };
-
+    
     return (
         <div className="page-container">
             <h1>Stash</h1>

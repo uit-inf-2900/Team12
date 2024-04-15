@@ -20,11 +20,12 @@ function SetAlert({ open, setOpen, severity, message }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }} 
         sx={{
             position: 'fixed', 
-            top: '50%',
+            top: '10%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
             '& .MuiPaper-root': {
             },
+            zIndex: 1400,
             // Apply backdrop filter to blur the background
             backdropFilter: 'blur(4px)',
             backgroundColor: 'rgba(255, 255, 255, 0.5)'

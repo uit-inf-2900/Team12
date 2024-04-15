@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Strikkeapp.Data.Context;
 
@@ -10,9 +11,11 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    partial class StrikkeappDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240408080528_KnittingInventory")]
+    partial class KnittingInventory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -54,6 +57,38 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("ContactRequests");
                 });
 
+            modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingInventory", b =>
+                {
+                    b.Property<Guid>("ItemID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Length")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NumInUse")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("NumItem")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ItemID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("KnittingInventory");
+                });
+
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
                 {
                     b.Property<Guid>("KnittingRecipeId")
@@ -83,38 +118,6 @@ namespace Strikkeapp.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("KnittingRecipes");
-                });
-
-            modelBuilder.Entity("Strikkeapp.Data.Entities.NeedleInventory", b =>
-                {
-                    b.Property<Guid>("ItemID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Length")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumInUse")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("NumItem")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Size")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ItemID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("NeedleInventory");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectTracking", b =>
@@ -206,55 +209,6 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("UserLogIn");
                 });
 
-            modelBuilder.Entity("Strikkeapp.Data.Entities.YarnInventory", b =>
-                {
-                    b.Property<Guid>("ItemID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Batch_Number")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Gauge")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("InUse")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("Length")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Manufacturer")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("NumItems")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("Weight")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ItemID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("YarnInventory");
-                });
-
             modelBuilder.Entity("Strikkeapp.Data.Entities.ContactRequest", b =>
                 {
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
@@ -263,7 +217,7 @@ namespace Strikkeapp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
+            modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingInventory", b =>
                 {
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithMany()
@@ -272,7 +226,7 @@ namespace Strikkeapp.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Strikkeapp.Data.Entities.NeedleInventory", b =>
+            modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
                 {
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithMany()
@@ -300,15 +254,6 @@ namespace Strikkeapp.Data.Migrations
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithOne()
                         .HasForeignKey("Strikkeapp.Data.Entities.UserDetails", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Strikkeapp.Data.Entities.YarnInventory", b =>
-                {
-                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

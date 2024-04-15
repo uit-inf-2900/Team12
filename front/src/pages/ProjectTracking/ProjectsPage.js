@@ -2,6 +2,7 @@
 
 import React, {useContext, useState} from "react";
 import ProjectCard from "../../Components/ProjectCard";
+import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
 
@@ -20,15 +21,12 @@ const Projects = () => {
     };
      // Hardcoded projects to see if the filtering works
     const projects = [
-        { id: 1, title: 'Honey clutch', status: 'planned' },
-        { id: 2, title: 'Summer scarf', status: 'in-progress' },
-        { id: 3, title: 'Winter hat', status: 'completed' },
-        { id: 4, title: 'Honey clutch', status: 'planned' },
-        { id: 5, title: 'Summer scarf', status: 'in-progress' },
-        { id: 6, title: 'Winter hat', status: 'completed' },
-        { id: 7, title: 'Honey clutch', status: 'planned' },
-        { id: 8, title: 'Summer scarf', status: 'in-progress' },
-        { id: 9, title: 'Winter hat', status: 'completed' },
+        { id: 1, title: 'Honey clutch', status: 'planned', knittingGauge:'10/10' },
+        { id: 2, title: 'Summer scarf', status: 'in-progress', knittingGauge:'10/10'  },
+        { id: 3, title: 'Winter hat', status: 'completed', knittingGauge:'10/10'  },
+        { id: 4, title: 'Skappel luft', status: 'planned' },
+        { id: 5, title: 'Oslo lue', status: 'in-progress' },
+        { id: 6, title: 'Votter', status: 'completed' },
         // ... flere prosjekter
     ];
 
@@ -50,9 +48,15 @@ const Projects = () => {
             />
 
             {/* Visning av filtrerte prosjekter */}
-            <div className="box dark">
+            <div>
                 {filteredProjects.map(project => (
-                    <ProjectCard key={project.id} title={project.title} status={project.status}/>
+                    <Card
+                        key={project.id}
+                        title={project.title}
+                        needleSize={project.needleSize}
+                        knittingGauge={project.knittingGauge}
+                        notes={project.notes}
+                    />
                 ))}
             </div>
 

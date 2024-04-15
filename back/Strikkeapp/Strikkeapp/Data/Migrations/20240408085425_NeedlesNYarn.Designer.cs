@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Strikkeapp.Data.Context;
 
@@ -10,9 +11,11 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    partial class StrikkeappDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240408085425_NeedlesNYarn")]
+    partial class NeedlesNYarn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -212,23 +215,21 @@ namespace Strikkeapp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Batch_Number")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Gauge")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("InUse")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Length")
+                    b.Property<int>("Length")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Manufacturer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -238,14 +239,10 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<int>("NumItems")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Weight")
+                    b.Property<int>("Weight")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ItemID");
