@@ -16,6 +16,8 @@ import AddButton from "../../Components/AddButton";
 const Stash = () => {
     const [activeStatus, setActiveStatus] = useState('yarn');
     const [needleTypes, setNeedleTypes] = useState(['All']);
+    const [yarnEntries, setYarnEntries] = useState([]);
+    const [editingIndex, setEditingIndex] = useState(null);
     const [openModal, setOpenModal] = useState({ needle: false, yarn: false });
 
     // Adjust the function to correctly reference the needle modal
@@ -23,6 +25,23 @@ const Stash = () => {
         // Map 'needles' to 'needle' to match the state key
         const modalType = type === 'needles' ? 'needle' : type;
         setOpenModal({ ...openModal, [modalType]: isOpen });
+    };
+
+    const addYarnEntry = (entry) => {
+        setYarnEntries(prevEntries => [...prevEntries, entry]);
+    };
+
+    const handleEditYarnEntry = (index) => {
+        setEditingIndex(index); // Set the index of the entry to edit
+        // Additionally, you would set up any state or actions needed to show the editing form here.
+    };
+
+    const handleUpdateYarnEntry = (index, updatedEntry) => {
+        setYarnEntries(prevEntries => {
+            const newEntries = [...prevEntries];
+            newEntries[index] = updatedEntry;
+            return newEntries;
+        });
     };
 
     return (
@@ -37,7 +56,7 @@ const Stash = () => {
             {activeStatus === 'needles' ? (
                 <NeedleStash setNeedleTypes={setNeedleTypes} needleTypes={needleTypes} />
             ) : (
-                <YarnStash />
+                <YarnStash yarnEntries={yarnEntries} onEdit={handleEditYarnEntry} onUpdate={handleUpdateYarnEntry} />
             )}
 
             <AddButton onClick={() => toggleModal(activeStatus, true)} />
@@ -45,7 +64,7 @@ const Stash = () => {
             <ModalContent
                 open={openModal.yarn}
                 handleClose={() => toggleModal('yarn', false)}
-                infobox={<TextYarn />}
+                infobox={<TextYarn open={openModal.yarn} handleClose={() => toggleModal('yarn', false)} addYarnEntry={addYarnEntry} />}
             />
 
             <ModalContent

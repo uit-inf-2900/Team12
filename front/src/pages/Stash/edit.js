@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
+import CustomButton from '../../Components/Button';
 import "../../GlobalStyles/main.css";
 import "../Counter.css";
-import CustomButton from '../../Components/Button';
 
-const TextYarn = ({open, handleClose, addYarnEntry}) => {
+const Edit = ({open, handleClose, onUpdate}) => {
+    // const [editIndex, setEditIndex] = useState(-1);
+    // const [editFormData, setEditFormData] = useState({});
+
     const [yarnDetails, setYarnDetails] = useState({
         brand: '',
         type: '',
@@ -26,7 +29,7 @@ const TextYarn = ({open, handleClose, addYarnEntry}) => {
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        addYarnEntry(yarnDetails);
+        onUpdate(yarnDetails);
         setYarnDetails({
             brand: '', type: '', weight: '', length: '', content: '', 
             knittingTension: '', color: '', batchNumber: '', weightUsed: '', notes: ''
@@ -34,13 +37,12 @@ const TextYarn = ({open, handleClose, addYarnEntry}) => {
         handleClose();
     };
 
-    if (!open) return null;
+    // if (!open) return null;
 
     return (
         <div className="pop">
-            <div className="pop-content" style={{height: '80%', width: '50%'}}>
-                <h2> Add Yarn </h2>
-                <form onSubmit={handleSubmit} className="yarn-form" style={{display: 'flex', flexDirection: 'column'}}>
+          <div className="pop-content" style={{height: '80%', width: '50%'}}>
+            <form onSubmit={handleSubmit} className="yarn-form" style={{display: 'flex', flexDirection: 'column'}}>
                     {Object.keys(yarnDetails).map((key) => {
                         if (key === 'weight' || key === 'weightUsed' || key === 'notes') {
                             return null;
@@ -92,14 +94,14 @@ const TextYarn = ({open, handleClose, addYarnEntry}) => {
                             onChange={handleInputChange}
                         />
                     </div>
-                <div className="counter-controls">
-                    <button className="dark" type="submit">Add</button>
-                    <button className="dark" onClick={handleClose}>Cancel</button>
+                {/* <CustomButton themeMode="dark" onClick={handleSaveClick}>Save</CustomButton> */}
+                <div className='counter-controls'>
+                    <button className="dark" type="submit">Save</button>
                 </div>
-                </form>
-            </div>
+            </form>
+          </div>
         </div>
-    )
-}
+      );
+};
 
-export default TextYarn;
+export default Edit;
