@@ -83,6 +83,7 @@ const SignUp = ({ toggleForm }) => {
           <InputField
             label="Email"
             type="email"
+            data-testid = "email-input"
             register={register("email", {
               required: "Email is required.",
               pattern: {
@@ -97,6 +98,7 @@ const SignUp = ({ toggleForm }) => {
           <InputField
             label="Birthday"
             type="text"
+            data-testid = "Birthday-input"
             register={register("birthday", {
               required: "Birthday is required  (YYYY-MM-DD).",
               validate: (value) => {
@@ -114,6 +116,7 @@ const SignUp = ({ toggleForm }) => {
           <InputField
             label="Password"
             type="password"
+            data-testid = "password-input"
             register={register("password", {
               required: "Password is required.",
               minLength: {
@@ -132,6 +135,7 @@ const SignUp = ({ toggleForm }) => {
           <InputField
             label="Confirm Password"
             type="password"
+            data-testid = "confirm-password-input"
             register={register("confirmPassword", {
               required: "Please confirm your password.",
               validate: (value) => value === watch('password') || "Passwords do not match"

@@ -22,13 +22,15 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
             userPwd: data.password
         }
 
+        
         axios.post('http://localhost:5002/login', postData)
         .then(function(response){
             console.log("Response: ", response)
-
+            
             if (response.data.token){
                 // Store the token in sessionStorage and redirect the user to the home page
                 sessionStorage.setItem('token', response.data.token)
+                console.log("Token stored in sessionStorage:", response.data.token);
                 window.location.href = '/';
                 
             } else {
@@ -55,6 +57,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         })}
                         errors={errors.email}
                         aria-label="Email"
+                        data-testid = "email-input"
                     />
                     <InputField
                         label="Password"
@@ -62,6 +65,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         register={register("password", { required: "Password is required" })}
                         errors={errors.password}
                         aria-label="Password"
+                        data-testid = "password-input"
                     />
                     <div className='infoText-small'>
                         <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
