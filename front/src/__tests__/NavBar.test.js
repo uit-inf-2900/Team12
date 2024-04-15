@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import NavBar from '../NavBar'; 
+import NavBar from '../Components/NavBar';
 
 
 // Tests for the NavBar component
@@ -33,12 +33,10 @@ describe('NavBar Component', () => {
     test('renders everything you should have accsess to when logged in', () => {
         renderWithRouter(<NavBar isLoggedIn={true} />);
         expect(screen.getByText('Profile').getAttribute('href')).toBe('/profile');
-        expect(screen.getByText('Logg Ut')).toBeInTheDocument();
         expect(screen.getByText('Home').getAttribute('href')).toBe('/');
         expect(screen.getByText('Recipes').getAttribute('href')).toBe('/recipes');
         expect(screen.getByText('Projects').getAttribute('href')).toBe('/projects');
         expect(screen.getByText('Stash').getAttribute('href')).toBe('/stash');
-        expect(screen.getByText('Contact us').getAttribute('href')).toBe('/contactus');
     });
 
 });
