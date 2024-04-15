@@ -6,6 +6,7 @@ using Moq;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Services;
+using Strikkeapp.Models;
 
 namespace Strikkeapp.Tests;
 
@@ -17,6 +18,8 @@ public class UserServiceTests
     // Create mock services
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
+
+    private Guid testUserId = Guid.NewGuid();
 
     public UserServiceTests()
     {
@@ -31,13 +34,40 @@ public class UserServiceTests
 
         // Set up userservice to test
         _userService = new UserService(_context, _mockTokenService.Object, _mockPasswordHasher.Object);
+
+        SeedTestData();
+    }
+
+    private void SeedTestData()
+    {
+        var testUserLogIn = new UserLogIn
+        {
+            UserId = testUserId,
+            UserEmail = "test@example.com",
+            UserPwd = "hashedPassword",
+            UserStatus = "verified"
+        };
+
+        _context.UserLogIn.Add(testUserLogIn);
+
+        var testUserDetails = new UserDetails
+        {
+            UserId = testUserId,
+            UserFullName = "Test Testing",
+            DateOfBirth = new DateTime(2024, 1, 1),
+            IsAdmin = false
+        };
+
+        _context.UserDetails.Add(testUserDetails);
+
+        _context.SaveChanges();
     }
 
     [Fact]
     public void CreateUserTest()
     {
         // Set test variables
-        var testEmail = "test@example.com";
+        var testEmail = "newtest@example.com";
         var testPassword = "Test123!";
         var testFullName = "Test Testing";
         var testDob = new DateTime(2024, 1, 1);
@@ -67,15 +97,7 @@ public class UserServiceTests
         var testEmail = "test@example.com";
         var testPassword = "Test123!";
         var hashedPassword = "hashedPassword";
-        var testId = Guid.NewGuid();
 
-        // Add test user to in memory database
-        _context.UserLogIn.Add(new UserLogIn
-        {
-            UserEmail = testEmail,
-            UserPwd = hashedPassword,
-            UserId = testId,
-        });
 
         // Save changes to database
         _context.SaveChanges();
@@ -97,5 +119,18 @@ public class UserServiceTests
 
         // Cleanup database
         _context.Database.EnsureDeleted();
+    }
+
+    [Fact]
+    public void DeleteUser_Ok()
+    {
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        var res = _userService.DeleteUser(testToken);
+
+        Assert.True(res.Success);
     }
 }
