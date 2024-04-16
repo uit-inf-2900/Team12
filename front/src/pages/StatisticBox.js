@@ -6,17 +6,15 @@ import './StatisticBox.css';
 {/* Hente antall nøster brukt */}
 {/* Hente antall meter garn brukt */}
 {/* Hente antall fullførte prosjekter */}
-{/* Hente antall  */}
-
-
+{/* Hente antall .... */}
 
 const StatisticBox = ({ icon, label, value }) => {
     return (
     <div className="statistic-box">
-        <div className="icon">{icon}</div>
+        {icon && <img src={icon} alt={label} className="icon" />}
         <div className="label">{label}</div>
         <div className="value">{value}</div>
-    </div>
+    </div>    
     );
 };
 

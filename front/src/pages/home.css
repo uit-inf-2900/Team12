@@ -9,9 +9,7 @@
 
 .customs-box {
     width: 100%; /* Juster etter behov */
-    height: 500px; /* Juster etter behov */
-    background-color: white;
-    ; /* Erstatt med den faktiske fargekoden du ønsker */
+    height: 600px; /* Juster etter behov */
     border-radius: 10px; /* Gjenbruk variabelen eller sett en fast verdi */
     margin: 20px 0;
     display: flex;
@@ -19,5 +17,4 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Enkel skyggeeffekt */
 }

@@ -12,31 +12,32 @@ export const OkeFelleKalkulator = () => {
     const [newStitches, setNewStitches] = useState(null);
     const [error, setError] = useState('');
     const [pattern, setPattern] = useState('');
-    const [activeStatus, setActiveStatus] = useState('in-progress');
+    const [activeStatus, setActiveStatus] = useState('oke');
     const [numberOfDecreases, setNumberOfDecreases] = useState('');
     
-
+    // trenger vel ikke de 4 neste linjene? 
     const [originalLength, setOriginalLength] = useState('');
     const [originalSkeins, setOriginalSkeins] = useState('');
     const [newLength, setNewLength] = useState('');
     const [requiredSkeins, setRequiredSkeins] = useState(null);
 
     const options = [
-        { id: 'øke', label: 'Øke' },
+        { id: 'oke', label: 'Øke' },
         { id: 'felle', label: 'Felle' }
     ];
 
-    const calculateFelle = () => {
+    const calculateIncrease = () => {
+    {/* ØKE KALKULATOR */}
         if (numberOfStitches > 0 && numberOfIncreases > 0) {
             const newStitchCount = parseInt(numberOfStitches) + parseInt(numberOfIncreases);
             setNewStitches(newStitchCount);
 
-            // beregner mønsteret for økning
+            // beregner mønsteret for økningen
             const stitchesBetweenIncreases = Math.floor(numberOfStitches / numberOfIncreases);
             setPattern(`*Strikk ${stitchesBetweenIncreases} masker, øk 1 maske* ${numberOfIncreases} ganger`);            
         } else {
             setError('Vennligst fyll inn alle feltene med positive tall');
-        }
+    }}
 
     const calculateDecrease = () => {
         if (numberOfStitches > 0 && numberOfDecreases > 0) {
@@ -46,7 +47,7 @@ export const OkeFelleKalkulator = () => {
             // 
             const stitchesBetweenDecreases = Math.floor(numberOfStitches / numberOfDecreases);
             const remainder = numberOfStitches % numberOfDecreases;
-            let patternString = `*Strikk ${stitchesBetweenDecreases - 1} masker, strikk 2 sammen*`;
+            let patternString = `*Strikk ${stitchesBetweenDecreases - 2} masker, strikk 2 sammen*`;
 
             //
             if (remainder > 0) {
@@ -60,7 +61,6 @@ export const OkeFelleKalkulator = () => {
         }
     }
 
-    }
         return (
             <div className="page-container">
                 <SwitchContainer 
@@ -69,6 +69,7 @@ export const OkeFelleKalkulator = () => {
                     setActiveStatus={setActiveStatus}
                 />
                 {/* ØKE KALKULATOREN */}
+                {activeStatus === 'oke' && (
                 <div className="custom-box">
                     <h1 style={{color:"#F2E4E1"}}>Øke Kalkulator</h1>
                     <div className="calculator-container">
@@ -90,7 +91,7 @@ export const OkeFelleKalkulator = () => {
                                 value={numberOfIncreases}
                             />
                             <div className="input-group">
-                                <button className='dark-button' onClick={calculateFelle}>Beregn</button>
+                                <button className='dark-button' onClick={calculateIncrease}>Beregn</button>
                             </div>
                         </div>
                         {newStitches !== null && pattern && (
@@ -105,7 +106,10 @@ export const OkeFelleKalkulator = () => {
                         {error && <p className="error-message">{error}</p>}
                     </div>
                 </div>
+                )}
+
                 {/* FELLE KALKULATOREN */}
+                {activeStatus === 'felle' && (
                 <div className="custom-box">
                     <h1 style={{color:"#F2E4E1"}}>Felle Kalkulator</h1>
                     <div className="calculator-container">
@@ -118,16 +122,16 @@ export const OkeFelleKalkulator = () => {
                                 onChange={e => setNumberOfStitches(e.target.value)}
                                 value={numberOfStitches}
                             />
-                            <label htmlFor="increases">Antall økninger</label>
+                            <label htmlFor="increases">Antall fellinger</label>
                             <InputField
-                                label="Antall økninger"
-                                name="increases"
+                                label="Antall fellinger"
+                                name="decreases"
                                 type="number"
-                                onChange={e => setNumberOfIncreases(e.target.value)}
-                                value={numberOfIncreases}
+                                onChange={e => setNumberOfDecreases(e.target.value)}
+                                value={numberOfDecreases}
                             />
                             <div className="input-group">
-                                <button className='dark-button' onClick={calculateFelle}>Beregn</button>
+                                <button className='dark-button' onClick={calculateDecrease}>Beregn</button>
                             </div>
                         </div>
                         {newStitches !== null && pattern && (
@@ -142,6 +146,7 @@ export const OkeFelleKalkulator = () => {
                         {error && <p className="error-message">{error}</p>}
                     </div>
                 </div>
+                )}
             </div>
     ); 
 }

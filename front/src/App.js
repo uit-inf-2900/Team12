@@ -22,7 +22,9 @@ import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
 import ThemedFooter from './Components/Footter';
-
+import { IncreaseCalculator } from './pages/Calculator/IncreaseCalculator';
+import IncreaseDecreaseCalculator from './pages/Calculator/IncreaseDecreaseCalculator';
+import { YarnCalculator } from './pages/Calculator/YarnCalculator';
 
 
 export default function App() {
@@ -82,8 +84,9 @@ export default function App() {
                 <Route path="/stash" element={<Stash />} />
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<Projects/>} />
-                <Route path='/garnkalkulator' element={<GarnKalkulator/>} />
+                <Route path='/yarncalculator' element={<YarnCalculator/>} />
                 <Route path='/okefellekalkulator' element={<OkeFelleKalkulator/>} />
+                <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
                 <Route path="/profile" element={<Profilepage />} />
                 <Route path="/editprofile" element={<EditProfile />} />
                 <Route path="/wishlist" element={<WishList />} />

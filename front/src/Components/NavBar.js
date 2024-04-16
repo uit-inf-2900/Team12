@@ -17,8 +17,9 @@ const UserView = () => {
       <li className="nav-item"><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
       <li className="nav-item"><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
       <li className="nav-item"><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
-      <li className="nav-item"><NavLink to="/garnkalkulator" className="nav-link">Garnkalkulator</NavLink></li>
+      <li className="nav-item"><NavLink to="/yarncalculator" className="nav-link">Garnkalkulator</NavLink></li>
       <li className="nav-item"><NavLink to="/okefellekalkulator" className="nav-link">Oke</NavLink></li>
+      <li className="nav-item"><NavLink to="/increasedecreasecalculator" className="nav-link">Ny</NavLink></li>
     </>
   ); 
 }; 

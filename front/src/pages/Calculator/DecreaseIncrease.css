@@ -1,0 +1,93 @@
+/* IncreaseCalculator.css */
+
+.custom-box {
+    width: 100%; /* Juster etter behov */
+    height: auto; /* Høyden vil avhenge av innholdet */
+    background-color: #D6AE9A; /* Samme stil som Garnkalkulator */
+    border-radius: 10px; /* Gjenbruker stilen */
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Enkel skyggeeffekt */
+}
+
+.calculator-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #F2E4E1; /* Samme bakgrunnsfarge som Garnkalkulator */
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.inputs-row {
+    display: flex;
+    flex-direction: column; /* Stabler inputfelter vertikalt */
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: row; /* Horisontal layout for label og input */
+    align-items: center;
+    gap: 10px; /* Litt avstand mellom label og input */
+}
+
+.input-group label {
+    flex: 0 0 50%; /* Labels tar opp halve bredden */
+    margin-right: 10px; /* Litt plass mellom label og input */
+    text-align: right;
+}
+
+.input-group input {
+    width: 50%; /* Inputs tar opp den resterende halve bredden */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px; /* Litt plass over knappen */
+}
+
+/* Dette er hover for beregn knappene*/
+button:hover {
+    background-color: #F6964B;
+}
+
+.result {
+    margin-top: 20px; /* Mer plass over resultatet */
+    font-size: 1.2rem;
+    text-align: center; /* Sentrerer tekst */
+}
+
+.error-message {
+    color: red; /* Gir feilmeldinger en rød farge */
+    margin-top: 10px; /* Litt plass over feilmelding */
+}
+
+@media (min-width: 768px) { /* Responsivt design for større skjermer */
+    .inputs-row {
+        flex-direction: row; /* Horisontal layout på større skjermer */
+        justify-content: space-between;
+    }
+    .input-group label,
+    .input-group input {
+        width: auto; /* Bredden blir bestemt av flex-basis i stedet */
+    }
+    .input-group {
+        flex: 1; /* Input-grupper fyller tilgjengelig plass */
+    }
+}

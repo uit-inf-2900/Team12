@@ -36,3 +36,9 @@
     justify-content: space-around; /* Fordeler boksene jevnt */
     margin-top: 20px; /* Avstand til elementene over */
 }
+
+.statistic-box .icon {
+    width: 60px; /* eller hvilken som helst størrelse du ønsker */
+    height: auto; /* for å beholde bildets aspektforhold */
+    margin-bottom: 10px; /* eller hva som passer */
+}
