@@ -5,6 +5,7 @@ import "../GlobalStyles/Card.css";
 const ProjectCard = ({ title, status }) => {
 
     const [toggle, setToggle]=useState(false);
+    
 
     
 
