@@ -58,6 +58,12 @@ export const About = () => {
       <h2>Fantastiske funksjoner:</h2>
       <div className="section-container">
         <FeatureItem
+          imagePosition = "left"
+          imageSrc={getImageByName('stash')}
+          title="Resources page"
+          description="En oversikt over alt du kan trenge av ressurser for strikking. Her finner du blant annet et table med alle forkortelsene du trenger å vite."
+        />
+        <FeatureItem
           imageSrc={getImageByName('yarnSheep')}
           title="Garnlageret"
           description="Hold orden på garnsamlingen din."
