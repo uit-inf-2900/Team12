@@ -44,7 +44,7 @@ const SomeFooter = () => {
                         <FacebookIcon />
                 </IconButton>
             </a>
-            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/team12.2900/" target="_blank" rel="noopener noreferrer">
                 <IconButton>
                     <InstagramIcon />
                 </IconButton>
