@@ -152,7 +152,8 @@ public class UsersController : ControllerBase
                                                 FullName = details.UserFullName,
                                                 Email = login.UserEmail,
                                                 Status = login.UserStatus,
-                                                IsAdmin = details.IsAdmin
+                                                IsAdmin = details.IsAdmin, 
+                                                UserId = login.UserId
                                             }).ToList();
 
         if (!users.Any())
