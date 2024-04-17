@@ -31,7 +31,10 @@ public class ContactController : ControllerBase
     [HttpGet]
     public IActionResult GetContactRequests([FromQuery] bool isActive)
     {
-        return Ok(_contactService.GetContactRequests(isActive));
+        var contactRequests = _contactService.GetContactRequests(isActive);
+        if (contactRequests == null || !contactRequests.Any()) return NotFound("No contact requests found.");
+        return Ok(contactRequests);
+        // return Ok(_contactService.GetContactRequests(isActive));
     }
 
         // Oppdater IsActive status
@@ -40,7 +43,11 @@ public class ContactController : ControllerBase
     {
         var result = _contactService.UpdateIsActiveStatus(contactRequestId, isActive);
         if (!result) return NotFound();
-        return Ok();
+        return Ok(new 
+        {
+            isActive = result,
+            requestId = contactRequestId
+        });
     }
 
     // Oppdater IsHandled status
