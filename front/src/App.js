@@ -22,6 +22,7 @@ import Footer from './Components/Footter';
 import Theme from './Components/Theme';
 import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
+import Counter from './pages/counter';
 
 
 export default function App() {
@@ -82,6 +83,7 @@ export default function App() {
                 <Route path='/projects' element={<Projects/>} />
                 <Route path="/profile" element={<Profilepage />} />
                 <Route path="/wishlist" element={<WishList />} />
+                <Route path='/counter' element={<Counter/>}/> 
               </>
             )}
             <Route path="/reset-password" element={<ResetPassword />} />
