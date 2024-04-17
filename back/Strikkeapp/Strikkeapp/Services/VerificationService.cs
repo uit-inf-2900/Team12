@@ -1,6 +1,4 @@
-﻿using MailerSend;
-
-using Strikkeapp.Data.Context;
+﻿using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 
@@ -8,7 +6,7 @@ namespace Strikkeapp.Services;
 
 public interface IVerificationService
 {
-    public VerificationResult CreateVerification(string userToken);
+    public VerificationResultCreate CreateVerification(string userToken);
     public VerificationResult VerifyCode(string userToken, string code);
 }
 
@@ -23,12 +21,12 @@ public class VerificationService : IVerificationService
         _tokenService = tokenService;
     }
 
-    public VerificationResult CreateVerification(string userToken)
+    public VerificationResultCreate CreateVerification(string userToken)
     {
         var tokenRes = _tokenService.ExtractUserID(userToken);
         if(!tokenRes.Success)
         {
-            return VerificationResult.ForFailure("Unauthorized");
+            return VerificationResultCreate.ForFailure("Unauthorized");
         }
 
         var userId = tokenRes.UserId;
@@ -48,11 +46,11 @@ public class VerificationService : IVerificationService
 
 
                 transaction.Commit();
-                return VerificationResult.ForSuccess();
+                return VerificationResultCreate.ForSuccess(newVerification.VerificationCode);
             }
             catch (Exception ex) 
             {
-                return VerificationResult.ForFailure(ex.Message);
+                return VerificationResultCreate.ForFailure(ex.Message);
             }
         }
     }
