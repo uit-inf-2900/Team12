@@ -4,26 +4,35 @@ import InputField from "../../../Components/InputField";
 import "../../../GlobalStyles/main.css";
 import CustomButton from '../../../Components/Button';
 
-// MessageDetails displays details of a selected message and allows for responding
-const MessageDetails = ({ message, contactRequestId }) => {
+const MessageDetails = ({ message }) => {
     const [reply, setReply] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [responseMessage, setResponseMessage] = useState('');
+    const [messages, setMessages] = useState([]);
 
-    // Resets reply and responseMessage states when a new message is selected
+
+    // function to split messages and replies 
+    const splitMessages = (messageText) => {
+        if (!messageText) return [];
+        return messageText.split('\n\n').map((msg) => ({
+            text: msg,
+            isResponse: msg.startsWith('Response:')
+        }));
+    };
+
     useEffect(() => {
+        if (message) {
+            setMessages(splitMessages(message.userMessage));
+        }
         setReply('');
-        setResponseMessage(message?.response || '');
+        // setResponseMessage(message?.responseMessage || '');
         setErrorMessage('');
     }, [message]);
 
-    // Handle changes in the reply input field
     const handleReplyChanges = (e) => {
         setReply(e.target.value);
         setErrorMessage('');
     };
 
-    // Handles reply submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!reply.trim()) {
@@ -31,25 +40,30 @@ const MessageDetails = ({ message, contactRequestId }) => {
             return;
         }
 
-        if (!message || !contactRequestId) {
+        if (!message) {
             console.error('Invalid message object or missing ContactRequestId');
             setErrorMessage('Invalid message or message ID. Please select a valid message.');
             return;
         }
 
+        // Bruker contactRequestId fra message-objektet for API-kallet
         try {
-            // Sends the reply to the server using the contactRequestId
-            const response = await axios.post(`http://localhost:5002/api/Contact/${contactRequestId}/response`, reply, {
+            const response = await axios.post(`http://localhost:5002/api/Contact/${message.contactRequestId}/response`, JSON.stringify(reply), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
+
             console.log('The response was sent successfully', response.data);
-            setReply(''); // Clears the reply field
-            setResponseMessage(reply); // Updates the displayed response message
-        } catch (error) {
-            console.error(`Failed to send reply for message ${contactRequestId}`, error);
-            setErrorMessage('Failed to send reply. Please try again.');
+            setReply(''); // Tømmer svartekstfeltet
+            // setResponseMessage(reply); // Oppdaterer visningen av svaret
+            setErrorMessage(''); // Fjerner eventuelle feilmeldinger
+            setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);
+        } 
+        catch (error) {
+            console.error(`Failed to send reply for message ${message.contactRequestId}`, error);
+            console.log(error.response.data); // Dette vil vise detaljert informasjon om feilen fra serveren
+            setErrorMessage('Failed to send reply. Please check the data you are sending.');
         }
     };
 
@@ -57,7 +71,6 @@ const MessageDetails = ({ message, contactRequestId }) => {
 
     return (
         <div className='message-box'>
-            {/* Display message sender and message content */}
             <div style={{ textAlign: 'center', width: "100%" }}>
                 <InputField
                     label='From'
@@ -67,27 +80,20 @@ const MessageDetails = ({ message, contactRequestId }) => {
                     className="input"
                     style={{ cursor: 'default' }}
                 />
-                <InputField 
-                    label='Message'
-                    type="text"
-                    multiline
-                    rows={5}
-                    value={`${message.userMessage}`}
-                    readOnly
-                    className="input"
-                    style={{ cursor: 'default', height: 'auto' }} // 'height' adjusted for multiline                
-                />
-            </div>
-            
-            {/* Display the response message if available */}
-            {responseMessage && (
-                <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f0f0f0', borderRadius: '5px' }}>
-                    <h3>Reply:</h3>
-                    <p>{responseMessage}</p>
-                </div>
-            )}
 
-            {/* Reply form */}
+                {messages.map((msg, index) => (
+                    <InputField
+                        key={index}
+                        label={msg.isResponse ? 'Response' : 'Message'}
+                        type="text"
+                        multiline
+                        value={msg.text.replace(/^Response:\s*/, '')}
+                        readOnly
+                        className="input"
+                        style={{ cursor: 'default', height: 'auto' }}
+                    /> 
+                ))}
+            </div>
             <form onSubmit={handleSubmit} style={{ textAlign: 'center', width: "100%" }}>
                 <InputField 
                     style={{ resize: 'vertical', height: '100px' }}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Grid from '@mui/material/Grid'; // Ensure you import Grid from MUI
-
+import Grid from '@mui/material/Grid';
 import "../../../GlobalStyles/main.css";
 import MessageItem from './MessageItem';
 import MessageDetails from './MessageDetails';
@@ -26,7 +25,7 @@ const ViewMessages = () => {
         <Grid container spacing={2} style={{maxHeight: '600px'}}>
             <Grid item xs={12} md={4} className="page-container">
                 <div className='switch-container'>
-                <h2>Incoming Messages</h2>
+                    <h2>Incoming Messages</h2>
                     <div 
                         className={`switch-option ${showActive ? 'active' : ''}`}
                         onClick={() => setShowActive(true)}
@@ -39,11 +38,11 @@ const ViewMessages = () => {
                     >
                         Inactive
                     </div>
-                <div className="messages-list-container"> 
-                    {messages.map(message => (
-                        <MessageItem key={message.id} message={message} onSelect={setActiveMessage} isSelected={message === activeMessage} />
-                    ))}
-                </div>
+                    <div className="messages-list-container"> 
+                        {messages.map(message => (
+                            <MessageItem key={message.contactRequestId} message={message} onSelect={setActiveMessage} isSelected={message === activeMessage} />
+                        ))}
+                    </div>
                 </div>
             </Grid>
             <Grid item xs={12} md={8}>
