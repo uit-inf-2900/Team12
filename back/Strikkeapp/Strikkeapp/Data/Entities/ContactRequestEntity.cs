@@ -16,7 +16,7 @@ public class ContactRequest
     public string? Email { get; set; }
     public string? Message { get; set; }
 
-    public string? ResponseMessage { get; set; }
+    // public string? ResponseMessage { get; set; }
 
     public DateTime TimeCreated { get; set; } = DateTime.Now;
 

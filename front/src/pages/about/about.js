@@ -15,7 +15,7 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
     // Check if you want the image to be on the left or right side of the text
     <div className={`feature-item ${imageToLeft ? "image-left" : "image-right"}`}>
       {!imageToLeft && <img src={imageSrc} alt={title} className="feature-image" />}
-      <div className="section-container">
+      <div className="section-container"  style={{display:'block'}}>
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
@@ -28,9 +28,9 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
 const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
   return (
-    <div className={`team-member ${imageToLeft ? "image-left" : "image-right"}`}>
+    <div className={`feature-item  ${imageToLeft ? "image-left" : "image-right"}`}>
       {imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
-      <div style={{"flex": "1", "max-width": "400px"}}>
+      <div className="section-container"  style={{display:'block'}}>
         <h3>{name}</h3>
         <p>Rolle: {role}</p>
         <p>Bakgrunn: {background}</p>
