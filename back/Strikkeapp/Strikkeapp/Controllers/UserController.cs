@@ -112,6 +112,34 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
+    [HttpPatch]
+    [Route("updateadmin")]
+    public IActionResult UpdateAdmin(UpdateAdminRequest request)
+    {
+        if(!request.requestOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _userService.UpdateAdmin(request.UserToken, request.UpdateUser, request.NewAdmin);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+            if(res.ErrorMessage == "User not found")
+            {
+                return NotFound(res.ErrorMessage);
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(res);
+    }
+
 
     [HttpGet]
     [Route("/getUsers")]

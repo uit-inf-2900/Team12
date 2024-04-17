@@ -36,3 +36,24 @@ public class DeleteUserResult
         ErrorMessage = message
     };
 }
+
+public class UpdateAdminResult
+{
+    public bool Success { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; }
+    public Guid UpdatedUser { get; set; }
+
+    public static UpdateAdminResult ForSuccess(Guid updatedUser, bool isAdmin) => new UpdateAdminResult
+    {
+        Success = true,
+        UpdatedUser = updatedUser,
+        IsAdmin = isAdmin
+    };
+
+    public static UpdateAdminResult ForFailure(string message) => new UpdateAdminResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}

@@ -12,6 +12,7 @@ public interface IUserService
     public UserServiceResult CreateUser(string userEmail, string userPwd, string userFullName, DateTime userDOB);
     public UserServiceResult LogInUser(string userEmail, string userPwd);
     public DeleteUserResult DeleteUser(string userToken);
+    public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin);
 }
 
 public class UserService : IUserService
@@ -166,4 +167,48 @@ public class UserService : IUserService
         }
     }
 
+    public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if(!tokenResult.Success)
+        {
+            return UpdateAdminResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == userId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if(!isAdmin)
+        {
+            return UpdateAdminResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var user = _context.UserDetails
+                    .FirstOrDefault(u => u.UserId == updatedUser);
+
+                if(user == null)
+                {
+                    return UpdateAdminResult.ForFailure("User not found");
+                }
+
+                user.IsAdmin = newAdmin;
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return UpdateAdminResult.ForSuccess(updatedUser, newAdmin);
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return UpdateAdminResult.ForFailure(ex.Message);
+            }
+        }
+    }
 }

@@ -41,6 +41,20 @@ public class LogInUserRequest
     }
 }
 
+public class UpdateAdminRequest
+{
+    public string UserToken { get; set; } = string.Empty;
+    public Guid UpdateUser { get; set; }
+    public bool NewAdmin { get; set; }
+
+    public bool requestOk()
+    {
+        return (!string.IsNullOrWhiteSpace(UserToken)
+            && UpdateUser != Guid.Empty);
+    }
+
+}
+
 public class UserResultDto
 {
     public string? Token { get; set; }
