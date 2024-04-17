@@ -30,15 +30,20 @@ const MessageDetails = ({ message }) => {
     const [isActive, setIsActive] = useState(message?.isActive);
     const [isHandled, setIsHandled] = useState(message?.isHandled);
 
+
+    // Function to split the message text into individual messages
     const splitMessages = (messageText) => {
         if (!messageText) return [];
         return messageText.split('\n new message \n').map((msg) => ({
             text: msg,
-            isResponse: msg.startsWith('Response:')
+            isResponse: msg.startsWith(' Response:')
         }));
     };
 
+
+    // Update the component state when the message prop changes or is set
     useEffect(() => {
+        // If the message is set, update the component state with the message details
         if (message) {
             setMessages(splitMessages(message.userMessage));
             setIsActive(message.isActive);
@@ -48,22 +53,30 @@ const MessageDetails = ({ message }) => {
         setErrorMessage('');
     }, [message]);
 
+    // Function to handle changes to the reply input field and clear the error message
     const handleReplyChanges = (e) => {
         setReply(e.target.value);
         setErrorMessage('');
     };
 
+    // Function to handle the form submission and send the reply to the server
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate the reply and message before sending 
         if (!reply.trim()) {
             setErrorMessage('Please write a reply before sending.');
             return;
         }
+
+        // Check that it is a valid message object and has a ContactRequestId property
         if (!message) {
             console.error('Invalid message object or missing ContactRequestId');
             setErrorMessage('Invalid message, please select a valid message.');
             return;
         }
+
+        // Try to send the reply to the server and update the conversation status
         try {
             const response = await axios.post(`http://localhost:5002/api/Contact/${message.contactRequestId}/response`, JSON.stringify(reply), {
                 headers: {
@@ -87,11 +100,15 @@ const MessageDetails = ({ message }) => {
         setIsHandled(true);
     };
 
+
+    // If no message is selected, display a message to select a message 
     if (!message) return <div>Select a message to view details.</div>;
 
     return (
         <div className='message-box'>
             <div style={{ textAlign: 'center', width: "100%" }}>
+
+                {/* Who is the message from */}
                 <InputField
                     label='From'
                     type="text"
@@ -100,13 +117,15 @@ const MessageDetails = ({ message }) => {
                     className="input"
                     style={{ cursor: 'default' }}
                 />
+
+                {/* Display the message (is it user or admin that has sent the message) */}
                 {messages.map((msg, index) => (
                     <InputField
                         key={index}
                         label={msg.isResponse ? 'Response' : 'Message'}
                         type="text"
                         multiline
-                        value={msg.text.replace(/^Response:\s*/, '')}
+                        value={msg.text.replace(/^ Response:\s*/, '')}
                         readOnly
                         className="input"
                         style={{ cursor: 'default', height: 'auto' }}
@@ -114,6 +133,7 @@ const MessageDetails = ({ message }) => {
                 ))}
             </div>
             <form onSubmit={handleSubmit} style={{ textAlign: 'center', width: "100%" }}>
+                {/* Replyform to reply to the message */}
                 <InputField
                     style={{ resize: 'vertical', height: '100px' }}
                     type="text"
@@ -124,9 +144,12 @@ const MessageDetails = ({ message }) => {
                     useTextareaStyle={true}
                 />
                 {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+
+                {/* Send a message */}
                 <CustomButton themeMode="light" submit={true} iconName='send'>
                     Send Reply
                 </CustomButton>
+                {/* Mark the conversation as finished, this can only be done if the conversation is active and not handled yet */}
                 {isActive && !isHandled && (
                     <CustomButton themeMode="light" onClick={handleFinishConversation}>
                         Mark Conversation as Finished
