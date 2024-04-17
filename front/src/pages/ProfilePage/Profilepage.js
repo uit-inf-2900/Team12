@@ -151,8 +151,29 @@ const ProfilePage = () => {
     // Handle delete account click
     const handleDeleteClick = () => {
         setShowModal(true);
-        // TODO: Implement real account deletion here
-        setModalMessage('Are you sure you want to delete your account? Everything will be lost.');
+        const token = sessionStorage.getItem('token');
+        if (token) {
+            try {
+                const response = axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
+                
+                sessionStorage.removeItem('token');  // Assuming you're using session storage for token management
+                setAlertInfo({
+                    open: true,
+                    severity: 'success',
+                    message: 'Your account has been successfully deleted.'
+                });
+                // Redirect or adjust UI post-deletion
+                
+                window.location.href = '/login'; // Redirect to login or home
+                
+                
+                    
+            } catch (error) {
+                console.error("Error fetching profile data: ", error);
+                setProfileFetchError("Failed to fetch profile data.");
+            }
+        }
+        setShowModal(false);
     };
 
     // Handle close modal
