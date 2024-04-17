@@ -13,7 +13,7 @@ const MessageDetails = ({ message }) => {
     // function to split messages and replies 
     const splitMessages = (messageText) => {
         if (!messageText) return [];
-        return messageText.split('\n\n').map((msg) => ({
+        return messageText.split('\n new message \n').map((msg) => ({
             text: msg,
             isResponse: msg.startsWith('Response:')
         }));
@@ -115,6 +115,7 @@ const MessageDetails = ({ message }) => {
                     type="text"
                     label='Write your reply here...'
                     value={reply}
+                    multiline
                     onChange={handleReplyChanges}
                     useTextareaStyle={true}
                 />
