@@ -8,7 +8,8 @@ namespace Strikkeapp.Services;
 
 public interface IVerificationService
 {
-    public VerificationCreationResult CreateVerification(Guid userId);
+    public VerificationResult CreateVerification(string userToken);
+    public VerificationResult VerifyCode(string userToken, string code);
 }
 
 public class VerificationService : IVerificationService
@@ -22,8 +23,17 @@ public class VerificationService : IVerificationService
         _tokenService = tokenService;
     }
 
-    public VerificationCreationResult CreateVerification(Guid userId)
+    public VerificationResult CreateVerification(string userToken)
     {
+        var tokenRes = _tokenService.ExtractUserID(userToken);
+        if(!tokenRes.Success)
+        {
+            return VerificationResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenRes.UserId;
+
+
         using(var transaction =  _context.Database.BeginTransaction()) 
         {
             try 
@@ -38,11 +48,56 @@ public class VerificationService : IVerificationService
 
 
                 transaction.Commit();
-                return VerificationCreationResult.ForSuccess();
+                return VerificationResult.ForSuccess();
             }
             catch (Exception ex) 
             {
-                return VerificationCreationResult.ForFailure(ex.Message);
+                return VerificationResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public VerificationResult VerifyCode(string userToken, string code)
+    {
+        var tokenRes = _tokenService.ExtractUserID(userToken);
+
+        if(!tokenRes.Success) 
+        {
+            return VerificationResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenRes.UserId;
+
+        var userVerification = _context.UserVerification
+            .Where(uv => uv.VerificationCode == code)
+            .FirstOrDefault(uid => uid.UserId == userId);
+
+        if(userVerification == null) 
+        {
+            return VerificationResult.ForFailure("Not found");
+        }
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var user = _context.UserLogIn
+                    .FirstOrDefault(u => u.UserId == userId);
+
+                if(user == null) 
+                {
+                    return VerificationResult.ForFailure("Not found");
+                }
+
+                user.UserStatus = "verified";
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return VerificationResult.ForSuccess();
+            }
+            catch (Exception ex)
+            {
+                return VerificationResult.ForFailure(ex.Message);
             }
         }
     }

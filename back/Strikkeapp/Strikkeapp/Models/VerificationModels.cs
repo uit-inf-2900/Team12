@@ -1,16 +1,16 @@
 ﻿namespace Strikkeapp.Models;
 
-public class VerificationCreationResult
+public class VerificationResult
 {
     public bool Success { get; set; }
     public string ErrorMessage { get; set; } = string.Empty;
 
-    public static VerificationCreationResult ForSuccess() => new VerificationCreationResult
+    public static VerificationResult ForSuccess() => new VerificationResult
     {
         Success = true,
     };
 
-    public static VerificationCreationResult ForFailure(string message) => new VerificationCreationResult
+    public static VerificationResult ForFailure(string message) => new VerificationResult
     {
         Success = false,
         ErrorMessage = message
