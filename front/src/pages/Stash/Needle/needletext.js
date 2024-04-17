@@ -86,50 +86,53 @@ const NeedleInfo = ({onClose, fetchNeedles}) => {
     };
 
     return (
-        <div className="box dark">
-            <h3>Hei,</h3>
-            <p>HER KOMMER PINNE INFO</p>
+        <div className="pop">
+            <div className="pop-content" style={{height: '60%', width: '50%', alignContent:'center'}}>
+                <h3>Hei,</h3>
+                <p>HER KOMMER PINNE INFO</p>
 
-            <form onSubmit={handleSubmit}>
-                <InputField 
-                    label="Type" 
-                    type="select"
-                    value={needleData.type}
-                    onChange={handleTypeChange}
-                    options={[
-                        { value: 'Interchangeble', label: 'Interchangeble Needles' },
-                        { value: 'DoublePointed', label: 'DoublePointed' },
-                        { value: 'Circular', label: 'Circular' },
-                        { value: 'Other', label: 'Other (Specify)' }
-                    ]}
-                />
-                {needleData.type === 'Other' && (
+                <form onSubmit={handleSubmit}>
                     <InputField 
-                        label="Specify Other Type"
-                        type="text"
-                        value={needleData.otherType || ''}
-                        onChange={(e) => setNeedleData({...needleData, otherType: e.target.value})}
+                        label="Type" 
+                        type="select"
+                        value={needleData.type}
+                        onChange={handleTypeChange}
+                        options={[
+                            { value: 'Interchangeble', label: 'Interchangeble Needles' },
+                            { value: 'DoublePointed', label: 'DoublePointed' },
+                            { value: 'Circular', label: 'Circular' },
+                            { value: 'Other', label: 'Other (Specify)' }
+                        ]}
                     />
-                )}
-                <InputField 
-                    label="Needle Size" 
-                    type="number"
-                    value={needleData.size}
-                    onChange={handleChange('size')}
-                />
-                <InputField 
-                    label="Needle Length"
-                    type="number"
-                    value={needleData.length}
-                    onChange={handleChange('length')}
-                />
-                <CustomButton themeMode="light" submit={true}>Upload needle</CustomButton>
-            </form>
-            <SetAlert
-                open={alertInfo.open} 
-                setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} 
-                severity={alertInfo.severity} 
-                message={alertInfo.message} />
+                    {needleData.type === 'Other' && (
+                        <InputField 
+                            label="Specify Other Type"
+                            type="text"
+                            value={needleData.otherType || ''}
+                            onChange={(e) => setNeedleData({...needleData, otherType: e.target.value})}
+                        />
+                    )}
+                    <InputField 
+                        label="Needle Size" 
+                        type="number"
+                        value={needleData.size}
+                        onChange={handleChange('size')}
+                    />
+                    <InputField 
+                        label="Needle Length"
+                        type="number"
+                        value={needleData.length}
+                        onChange={handleChange('length')}
+                    />
+                    <CustomButton themeMode="light" submit={true}>Upload needle</CustomButton>
+                    <CustomButton themeMode="light" onClick={onClose}>Cancel</CustomButton>
+                </form>
+                <SetAlert
+                    open={alertInfo.open} 
+                    setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} 
+                    severity={alertInfo.severity} 
+                    message={alertInfo.message} />
+            </div>
         </div>
     );
 }

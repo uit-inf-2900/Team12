@@ -166,12 +166,14 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
                 </tbody>
             </table>
             <Modal open={openDeleteModal} onClose={handleCloseDeleteModal}>
-                <Box className="box light">
-                    <h2>Delete Needle</h2>
-                    <p>Are you sure you want to delete this needle?</p>
-                    <Box style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
-                        <CustomButton themeMode="light" onClick={handleDeleteNeedle}>Yes, Delete</CustomButton>
-                        <CustomButton themeMode="light" onClick={handleCloseDeleteModal}>No, Cancel</CustomButton>
+                <Box className="pop" >
+                    <Box className="pop-content">
+                        <h2>Delete Needle</h2>
+                        <p>Are you sure you want to delete this needle?</p>
+                        <Box style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+                            <CustomButton themeMode="light" onClick={handleDeleteNeedle}>Yes, Delete</CustomButton>
+                            <CustomButton themeMode="light" onClick={handleCloseDeleteModal}>No, Cancel</CustomButton>
+                        </Box>
                     </Box>
                 </Box>
             </Modal>
