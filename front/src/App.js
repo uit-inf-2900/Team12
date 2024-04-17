@@ -22,6 +22,7 @@ import Footer from './Components/Footter';
 import Theme from './Components/Theme';
 import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
+import Counter from './pages/counter';
 
 
 export default function App() {

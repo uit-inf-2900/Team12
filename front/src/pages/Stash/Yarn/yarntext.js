@@ -1,101 +1,145 @@
 import React, {useState} from 'react';
-import "../../GlobalStyles/main.css";
-import "../Counter.css";
-import CustomButton from '../../Components/Button';
+import "../../../GlobalStyles/main.css";
+import "../../Counter.css";
+import CustomButton from '../../../Components/Button';
+import InputField from '../../../Components/InputField';
+import yarnBasket from '../../../images/yarnSheep.png';
 
-const TextYarn = ({open, handleClose, addYarnEntry}) => {
-    const [yarnDetails, setYarnDetails] = useState({
-        brand: '',
-        type: '',
-        weight: '',
-        length: '',
-        content: '',
-        knittingTension: '',
-        color: '',
-        batchNumber: '',
-        weightUsed: '',
-        notes: ''
+const TextYarn = ({onClose, fetchYarns}) => {
+    const token = sessionStorage.getItem('token');
+    const [yarnData, setYarnData] = useState({
+        UserToken: token,
+        Manufacturer: '',
+        Type: '',
+        Weight: '',
+        Length: '',
+        Gauge: '',
+        Color: '',
+        Batch_Number: '',
+        Notes: ''
     });
 
     // Function to update yarn details state
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setYarnDetails(prev => ({...prev, [name]: value}));
+    const handleChange = (prop) => (event) => {
+        setYarnData({ ...yarnData, [prop]: event.target.value});
     };
-
     
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        addYarnEntry(yarnDetails);
-        setYarnDetails({
-            brand: '', type: '', weight: '', length: '', content: '', 
-            knittingTension: '', color: '', batchNumber: '', weightUsed: '', notes: ''
-        });
-        handleClose();
-    };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        
+        // Get the payload ready for the POST request
+        const payload = {
+            UserToken: yarnData.UserToken,
+            Type: yarnData.Type,
+            Manufacturer: yarnData.Manufacturer,
+            Color: yarnData.Color,
+            Batch_Number: yarnData.Batch_Number,
+            Weight: parseInt(yarnData.Weight, 10),
+            Length: parseInt(yarnData.Length, 10),
+            Gauge: yarnData.Gauge,
+            Notes: yarnData.Notes
+        };
 
-    if (!open) return null;
+        // POST request to the API
+        const response = await fetch('http://localhost:5002/api/inventory/addyarn', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': '*/*'  // Making sure the accept header is included if needed
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Success:', result);
+            fetchYarns();
+        };
+        onClose();          // This function call will close the modal
+        
+    };
 
     return (
         <div className="pop">
-            <div className="pop-content" style={{height: '80%', width: '50%'}}>
+            <div className="pop-content" style={{height: '95%', width: '50%', alignContent:'center'}}>
                 <h2> Add Yarn </h2>
                 <form onSubmit={handleSubmit} className="yarn-form" style={{display: 'flex', flexDirection: 'column'}}>
-                    {Object.keys(yarnDetails).map((key) => {
-                        if (key === 'weight' || key === 'weightUsed' || key === 'notes') {
-                            return null;
-                        }
-                        return (
-                            <div key={key} className="input-wrapper" style={{marginBottom: '5px'}}>
-                                <input
-                                    type="text"
-                                    name={key}
-                                    className="yarn-input"
-                                    style={{width: '80%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc'}}
-                                    placeholder={key.charAt(0).toUpperCase() + key.slice(1).replaceAll(/([A-Z])/g, ' $1').trim()}
-                                    value={yarnDetails[key]}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                        );
-                    })}
-                    <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '80%', margin: '0 auto' }}>
-                        <div className="input-wrapper" style={{ width: 'calc(50% - 5px)', marginRight: '5px' }}>
-                            <input
+                    <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
+                        <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
+                            <InputField
+                                label="Brand"
                                 type="text"
-                                name="weight"
-                                className="yarn-input" style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                placeholder="Weight"
-                                value={yarnDetails.weight}
-                                onChange={handleInputChange}
+                                value={yarnData.Manufacturer}
+                                onChange={handleChange('Manufacturer')}
+                            />
+                            
+                            <InputField
+                                label="Length"
+                                type="text"
+                                value={yarnData.Length}
+                                onChange={handleChange('Length')}
+                            />
+                            <InputField
+                                label="Gauge"
+                                type="text"
+                                value={yarnData.Gauge}
+                                onChange={handleChange('Gauge')}
+                            />
+                            <InputField
+                                label="Color"
+                                type="text"
+                                value={yarnData.Color}
+                                onChange={handleChange('Color')}
                             />
                         </div>
-                        <div className="input-wrapper" style={{ width: 'calc(50% - 5px)' }}>
-                            <input
+                        <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
+                            <InputField
+                                label="Type"
                                 type="text"
-                                name="weightUsed"
-                                className="yarn-input" style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                                placeholder="Weight Used"
-                                value={yarnDetails.weightUsed}
-                                onChange={handleInputChange}
+                                value={yarnData.Type}
+                                onChange={handleChange('Type')}
                             />
                         </div>
                     </div>
-                    <div className="input-wrapper" style={{marginBottom: '5px'}}>
-                        <input
+                    <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', margin: '0 auto' }}>
+                        <div className="input-wrapper" style={{  width: 'calc(50% + 100px)'}}></div>
+                        <div style={{ width: '40%', alignItems: 'center', marginTop: '-190px'}}>
+                            <img src={yarnBasket} alt="Yarn Basket" />
+                        </div>
+                    </div>
+                    <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
+                        <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
+                            <InputField
+                                label="Weight"
+                                type="number"
+                                value={yarnData.Weight}
+                                onChange={handleChange('Weight')}
+                            />
+                        </div>
+                        <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
+                        <InputField
+                                label="Batch number"
+                                type="text"
+                                value={yarnData.Batch_Number}
+                                onChange={handleChange('Batch_Number')}
+                            />
+                        </div>
+                    </div>
+                    <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>
+                        <InputField
+                            label="Notes"
                             type="text"
-                            name="notes"
-                            className="yarn-input"
-                            style={{width: '80%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc'}}
-                            placeholder="Notes"
-                            value={yarnDetails.notes}
-                            onChange={handleInputChange}
+                            multiline
+                            rows={4}
+                            value={yarnData.Notes}
+                            onChange={handleChange('Notes')}
+                            
                         />
                     </div>
-                <div className="counter-controls">
-                    <button className="dark" type="submit">Add</button>
-                    <button className="dark" onClick={handleClose}>Cancel</button>
-                </div>
+                    <div className="counter-controls">
+                        <CustomButton themeMode="light" submit={true}>Add</CustomButton>
+                        <CustomButton themeMode="light" onClick={onClose}>Cancel</CustomButton>
+                    </div>
                 </form>
             </div>
         </div>

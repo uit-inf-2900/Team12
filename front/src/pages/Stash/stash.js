@@ -3,6 +3,7 @@ import ProjectCard from "../../Components/ProjectCard";
 import SwitchContainer from "../../Components/SwitchContainer";
 import '../../GlobalStyles/main.css';
 import NeedleStash from "./Needle/Needles";
+import ModalContent from "../../Components/ModualContent";
 import YarnStash from "./Yarn/Yarn";
 
 import AddButton from "../../Components/AddButton";
@@ -10,6 +11,7 @@ import AddButton from "../../Components/AddButton";
 const Stash = () => {
     const [activeStatus, setActiveStatus] = useState('yarn');
     const [needleTypes, setNeedleTypes] = useState(['All']);
+    const [yarnTypes, setYarnTypes] = useState(['All']);
     const [yarnEntries, setYarnEntries] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
 
@@ -43,23 +45,9 @@ const Stash = () => {
             {activeStatus === 'needles' ? (
                 <NeedleStash setNeedleTypes={setNeedleTypes} needleTypes={needleTypes} />
             ) : (
-                <YarnStash yarnEntries={yarnEntries} onEdit={handleEditYarnEntry} onUpdate={handleUpdateYarnEntry} />
+                <YarnStash setYarnTypes={setYarnTypes} yarnTypes={yarnTypes} />
             )}
 
-            <AddButton onClick={() => toggleModal(activeStatus, true)} />
-
-            <ModalContent
-                open={openModal.yarn}
-                handleClose={() => toggleModal('yarn', false)}
-                infobox={<TextYarn open={openModal.yarn} handleClose={() => toggleModal('yarn', false)} addYarnEntry={addYarnEntry} />}
-            />
-
-            <ModalContent
-                open={openModal.needle}
-                handleClose={() => toggleModal('needle', false)}
-                title="Legg til strikkepinner"
-                infobox={<TextNeedle />}
-            />
         </div>
     );
 };
