@@ -67,9 +67,11 @@ public class ContactService : IContactService
         // Convert to dto
         var contactRequestDtos = contactRequests.Where(c => c.IsActive == IsActive).Select(c => new ContactRequestDto
         {
+            ContactRequestId = c.ContactRequestId,
             UserEmail = c.Email!,
             UserName = c.FullName!,
-            UserMessage = c.Message!
+            UserMessage = c.Message!,
+            IsActive = c.IsActive
         });
 
         return contactRequestDtos; 
@@ -144,7 +146,7 @@ public class ContactService : IContactService
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
         if (contactRequest == null) return false;
 
-        contactRequest.ResponseMessage = responseMessage;
+        contactRequest.Message += $"\n\nResponse: {responseMessage}";
         _context.SaveChanges();
         return true;
     }
