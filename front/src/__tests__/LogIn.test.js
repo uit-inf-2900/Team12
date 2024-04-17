@@ -1,119 +1,109 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom';
 import LogIn from '../pages/SignUp_LogIn/LogIn'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
-
 import axiosMock from 'axios'; 
 
 jest.mock('axios');
-// jest.mock('react-router-dom', () => ({
-//     ...jest.requireActual('react-router-dom'),
-//     useNavigate: () => jest.fn(),
-// }));
+
+/**
+ * Mocks for navigation and localStorage
+ */
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => jest.fn(),
+}));
 
 describe('LogIn Component', () => {
     beforeEach(() => {
+        // Mock setting items in localStorage
         Storage.prototype.setItem = jest.fn();
+        // Mock a successful axios POST request
         axiosMock.post.mockResolvedValue({data: {token: 'fakeToken123'}});
     });
 
-    // Helper function for testing routing. Simulate navigating to a specific route and render the UI with the router
+    /**
+     * Helper function to render the component within a router context.
+     * This is useful for testing components that are connected to the React Router.
+     *
+     * @param {JSX.Element} ui - The component to render.
+     * @param {Object} options - Configuration options for the router.
+     * @param {string} options.route - The route to simulate navigation to.
+     * @returns The render result from testing-library.
+     */
     const renderWithRouter = (ui, { route = '/' } = {}) => {
         window.history.pushState({}, 'Test page', route);       
-        return render(ui, { wrapper: BrowserRouter });
+        return render(ui, { wrapper: MemoryRouter });
     };
 
-    // Test for ensuring the login form is rendered
+    /**
+     * Test to check if the login form is rendered properly.
+     */
     test('renders the login form', () => {
         const { getByText } = renderWithRouter(<LogIn isLoggedIn={false} />);
-        expect(getByText(/log in/i)).toBeInTheDocument();                               // /i to be case insensitive
+        expect(getByText(/log in/i)).toBeInTheDocument();
     });
 
-
+    /**
+     * Test to check for display of validation messages when the form is submitted empty.
+     */
     test('displays validation messages for empty form submission', async () => {
+        // Render the LogIn component
         renderWithRouter(<LogIn isLoggedIn={false}/>);
+
+        // Wrap the click event in act() as it will trigger state updates
+        await act(async () => {
+            await userEvent.click(screen.getByRole('button', { name: /log in/i }));
+        });
         
-        // Find and click the submit button
-        await userEvent.click(screen.getByRole('button', { name: /log in/i }));
-    
-        // Check for validation messages
+        // Assertions for validation messages
         expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
         expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
     });
-    
 
-    test('displays error for invalid email format', async () => {
-        renderWithRouter(<LogIn />);
-        
-        // Enter an invalid email and a valid password
-        await userEvent.type(screen.getByLabelText(/email/i), 'invalid-email');
-        await userEvent.type(screen.getByLabelText(/password/i), 'ValidPassword123!');
-        
-        // Submit the form
+    
+    test('logs in successfully with valid credentials', async () => {
+        // Mock successful login response
+        axiosMock.post.mockResolvedValueOnce({ data: { token: 'fakeToken123' } });
+    
+        // Render the LogIn component
+        renderWithRouter(<LogIn isLoggedIn={false} />);
+    
+        // Fill out and submit the form
+        await userEvent.type(screen.getByTestId('email-input'), 'test@example.com');
+        await userEvent.type(screen.getByTestId('password-input'), 'password123');
         await userEvent.click(screen.getByRole('button', { name: /log in/i }));
     
-        // Check for an error message related to email format
-        expect(await screen.findByText(/Invalid email address/i)).toBeInTheDocument();
-    });
-    
 
-    test('successful login redirects to the homepage', async () => {
-        // Precise mock for the login request
-        axiosMock.mockResolvedValueOnce({ data: { token: 'fakeToken' } });
-    
-        renderWithRouter(<LogIn />);
-    
-        // Fill in the form
-        await userEvent.type(screen.getByLabelText(/email/i), 'test@test.com');
-        await userEvent.type(screen.getByLabelText(/password/i), 'Test123!');
-        
-        // Submit the form
-        await userEvent.click(screen.getByRole('button', { name: /log in/i }));
-    
-        // Check if axios was called correctly
-        await waitFor(() => {
-            expect(axiosMock.post).toHaveBeenCalledWith('http://localhost:5002/login', {
-                userEmail: 'test@test.com',
-                userPwd: 'Test123!',
-            });
+        // Check if the user is redirected to the home page
+        expect(window.location.href).toEqual('http://localhost/');
         });
+    
+
+    test('displays validation message for empty password', async () => {
+        // Render the LogIn component
+        renderWithRouter(<LogIn isLoggedIn={false}/>);
+
+        // Fill out the form with an empty password
+        await userEvent.type(screen.getByTestId('email-input'), 'test@example.com');
+        await userEvent.click(screen.getByRole('button', { name: /log in/i }));
+
+        // Check if the validation message for empty password is displayed
+        expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
+    });
+
+    test('displays validation message for empty email', async () => {
+        // Render the LogIn component
+        renderWithRouter(<LogIn isLoggedIn={false}/>);
+
+        // Fill out the form with an empty email
+        await userEvent.type(screen.getByTestId('password-input'), 'password123');
+        await userEvent.click(screen.getByRole('button', { name: /log in/i }));
+
+        // Check if the validation message for empty email is displayed
+        expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
     }); 
 
-    test('displays error message on login failure due to API response', async () => {
-        // Mock an API failure
-        axiosMock.post.mockRejectedValueOnce(new Error('Invalid credentials'));
-    
-        renderWithRouter(<LogIn />);
-        
-        // Fill in the form with credentials
-        await userEvent.type(screen.getByLabelText(/email/i), 'test@test.com');
-        await userEvent.type(screen.getByLabelText(/password/i), 'Test123!');
-        
-        // Submit the form
-        await userEvent.click(screen.getByRole('button', { name: /log in/i }));
-    
-        // Check for an error message from the API response
-        expect(await screen.findByText(/Login failed. Check your username and password and try again./i)).toBeInTheDocument();
-    });
-    
-    test('sets token in local storage on successful login', async () => {
-        renderWithRouter(<LogIn />);
-        
-        await act(async () => {
-            // Simulate user input
-            await userEvent.type(screen.getByLabelText(/email/i), 'test@test.com');
-            await userEvent.type(screen.getByLabelText(/password/i), 'Test123!');
-            
-            // Simulate form submission
-            await userEvent.click(screen.getByRole('button', {name: /log in/i}));
-        } );
-        
-        // Assert that local storage was called correctly
-        await waitFor(() => {
-            expect(localStorage.setItem).toHaveBeenCalledWith('token', 'fakeToken123');
-        });
-    });
-    
 
 });

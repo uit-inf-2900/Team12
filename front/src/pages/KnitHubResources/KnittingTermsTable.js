@@ -11,12 +11,10 @@ function KnittingTermsTable() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-
     // Filter the knitting terms based on the search text
     useEffect(() => {
         const filtered = knittingTerms.filter(term =>
             term.english.toLowerCase().includes(searchText.toLowerCase()) ||
-            term.norwegian.toLowerCase().includes(searchText.toLowerCase()) ||
             term.abbreviation.toLowerCase().includes(searchText.toLowerCase())
         );
         setFilteredTerms(filtered);
@@ -48,9 +46,8 @@ function KnittingTermsTable() {
             <table className="table">
                 <thead>
                     <tr>
-                        <th>English Abbreviation</th>
-                        <th>English Term</th>
-                        <th>Norwegian Term</th>
+                        <th>Abbreviation</th>
+                        <th>Definition</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,7 +55,6 @@ function KnittingTermsTable() {
                         <tr key={index}>
                             <td>{term.abbreviation}</td>
                             <td>{term.english}</td>
-                            <td>{term.norwegian}</td>
                         </tr>
                     ))}
                 </tbody>
