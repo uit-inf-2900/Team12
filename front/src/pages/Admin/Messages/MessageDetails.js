@@ -4,6 +4,21 @@ import InputField from "../../../Components/InputField";
 import "../../../GlobalStyles/main.css";
 import CustomButton from '../../../Components/Button';
 
+// Function to update the isActive status 
+const updateIsActiveStatus = async (contactRequestId, isActive) => {
+    try {
+        await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/isActive`, JSON.stringify(isActive), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log('The isActive status was updated successfully');
+    } catch (err) {
+        console.error('Error updating isActive status:', err);
+    }
+};
+
+
 const MessageDetails = ({ message }) => {
     const [reply, setReply] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -15,7 +30,7 @@ const MessageDetails = ({ message }) => {
         if (!messageText) return [];
         return messageText.split('\n new message \n').map((msg) => ({
             text: msg,
-            isResponse: msg.startsWith('Response:')
+            isResponse: msg.startsWith(' Response:')
         }));
     };
 
@@ -64,6 +79,8 @@ const MessageDetails = ({ message }) => {
             setReply('');                                                                   // Emty the reply field after sending the response
             setErrorMessage('');                                                            // Remove any error messages
             setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);   // Add the response to the messages list
+
+            updateIsActiveStatus(message.contactRequestId, true);
         } 
 
         // Catch any errors that occur during the API call and log them to the console and set an error message
@@ -79,7 +96,7 @@ const MessageDetails = ({ message }) => {
     if (!message) return <div>Select a message to view details.</div>;
 
     return (
-        <div className='message-box'>
+        <div className='page-container'>
             {/* Display who the message is from */}
             <div style={{ textAlign: 'center', width: "100%" }}>
                 <InputField
@@ -100,7 +117,7 @@ const MessageDetails = ({ message }) => {
                         label={msg.isResponse ? 'Response' : 'Message'}
                         type="text"
                         multiline
-                        value={msg.text.replace(/^Response:\s*/, '')}       // Remove the 'Response:' prefix from the response messages
+                        value={msg.text.replace(/^ Response:\s*/, '')}       // Remove the 'Response:' prefix from the response messages
                         readOnly
                         className="input"
                         style={{ cursor: 'default', height: 'auto' }}

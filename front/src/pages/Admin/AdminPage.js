@@ -13,7 +13,7 @@ const AdminPage = () => {
     };
 
     return (
-        <div style={{ display: 'flex', margin: 'auto', 'padding-top':'20px'}}>
+        <div style={{ display: 'flex', margin: 'auto', 'padding-top':'20px', overflow:'auto'}}>
             <Sidebar onToggleView={toggleView} activeView={activeView}/>
             <div className="Admin-page-content">
                 <h1>Admin Page</h1>
