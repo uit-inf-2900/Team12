@@ -33,16 +33,21 @@ const MessageDetails = ({ message }) => {
         setErrorMessage('');
     };
 
+
+    // Function to handle the form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Avoid sending empty replies to the server, so we check if the reply is empty or not
         if (!reply.trim()) {
             setErrorMessage('Please write a reply before sending.');
             return;
         }
 
+        // See if the message object is valid and contains the contactRequestId property
         if (!message) {
             console.error('Invalid message object or missing ContactRequestId');
-            setErrorMessage('Invalid message or message ID. Please select a valid message.');
+            setErrorMessage('Invalid message, pleace select a valid message.');
             return;
         }
 
@@ -54,23 +59,28 @@ const MessageDetails = ({ message }) => {
                 }
             });
 
+            // Log the response to the console and add the response to the messages list if the response was sent successfully
             console.log('The response was sent successfully', response.data);
-            setReply(''); // Tømmer svartekstfeltet
-            // setResponseMessage(reply); // Oppdaterer visningen av svaret
-            setErrorMessage(''); // Fjerner eventuelle feilmeldinger
-            setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);
+            setReply('');                                                                   // Emty the reply field after sending the response
+            setErrorMessage('');                                                            // Remove any error messages
+            setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);   // Add the response to the messages list
         } 
+
+        // Catch any errors that occur during the API call and log them to the console and set an error message
         catch (error) {
             console.error(`Failed to send reply for message ${message.contactRequestId}`, error);
-            console.log(error.response.data); // Dette vil vise detaljert informasjon om feilen fra serveren
+            console.log(error.response.data); 
             setErrorMessage('Failed to send reply. Please check the data you are sending.');
         }
     };
 
+
+    // If there is no message selected, we return a message to select a message to view details
     if (!message) return <div>Select a message to view details.</div>;
 
     return (
         <div className='message-box'>
+            {/* Display who the message is from */}
             <div style={{ textAlign: 'center', width: "100%" }}>
                 <InputField
                     label='From'
@@ -82,18 +92,23 @@ const MessageDetails = ({ message }) => {
                 />
 
                 {messages.map((msg, index) => (
+                    // Display the message and response in the message box with the correct label
+                    // If the message is from you (the admin) it will be a response, otherwise it will be a message. 
+                    // NOTE: everyone with admin privilegs can see the messages and responses in the message box, and will have response satus on the messages
                     <InputField
                         key={index}
                         label={msg.isResponse ? 'Response' : 'Message'}
                         type="text"
                         multiline
-                        value={msg.text.replace(/^Response:\s*/, '')}
+                        value={msg.text.replace(/^Response:\s*/, '')}       // Remove the 'Response:' prefix from the response messages
                         readOnly
                         className="input"
                         style={{ cursor: 'default', height: 'auto' }}
                     /> 
                 ))}
             </div>
+
+            {/* Write the reply and send it */}
             <form onSubmit={handleSubmit} style={{ textAlign: 'center', width: "100%" }}>
                 <InputField 
                     style={{ resize: 'vertical', height: '100px' }}
