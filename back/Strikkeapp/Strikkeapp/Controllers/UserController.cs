@@ -13,12 +13,14 @@ public class UsersController : ControllerBase
 {
     // Set user service
     private readonly IUserService _userService;
+    private readonly IMailService _mailService;
     private readonly StrikkeappDbContext _context; // Legg til referanse til DbContext her
 
-    public UsersController(IUserService userService, StrikkeappDbContext context)
+    public UsersController(IUserService userService, StrikkeappDbContext context, IMailService mailService)
     {
         _userService = userService;
         _context = context;
+        _mailService = mailService;
     }
 
 
@@ -45,6 +47,23 @@ public class UsersController : ControllerBase
             }
 
             return BadRequest(result.ErrorMessage);
+        }
+
+        var mailRes = _mailService.SendVerification(result.Token);
+
+        if(!mailRes.Succes)
+        {
+            if(mailRes.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+
+            if(mailRes.ErrorMessage == "Not found")
+            {
+                return NotFound("Cannot find user or code");
+            }
+
+            return StatusCode(500, "Cannot process request");
         }
 
         var res = new UserResultDto
