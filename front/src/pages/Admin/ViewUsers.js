@@ -10,6 +10,7 @@ import {
     TablePagination,
     CircularProgress,
   } from '@mui/material';
+import Button from '@mui/material/Button';
 
 
   // Fetch user data from the backend
@@ -64,6 +65,26 @@ const ViewUsers = () => {
         setPage(0);
     };
 
+    // function to toggle admin 
+    const toggleAdminStatus = async (userId, isAdmin) => {
+        try {
+            const response = await axios.patch(`http://localhost:5002/updateUser/${userId}`, {
+                isAdmin: !isAdmin
+            });
+            if (response.status === 200) {
+                setUsers(prevUsers => prevUsers.map(user =>
+                    user.id === userId ? { ...user, isAdmin: !user.isAdmin } : user
+                ));
+                alert('Admin status updated successfully');
+            }
+        } catch (error) {
+            console.error('Error updating admin status:', error);
+            alert('Failed to update admin status');
+        }
+    };
+
+
+
     return (
         <Paper>
             <TableContainer>
@@ -93,7 +114,16 @@ const ViewUsers = () => {
                                 <TableCell>{user.fullName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.status}</TableCell>
-                                <TableCell>{user.isAdmin ? 'Yes' : 'No'}</TableCell>
+                                <TableCell>{user.isAdmin ? 'Yes' : 'No'}
+                                    <Button
+                                        style={{alignItems: 'right'}}
+                                        variant="contained"
+                                        color={user.isAdmin ? "secondary" : "primary"}
+                                        onClick={() => toggleAdminStatus(user.id, user.isAdmin)}
+                                    >
+                                        {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
+                                    </Button>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
