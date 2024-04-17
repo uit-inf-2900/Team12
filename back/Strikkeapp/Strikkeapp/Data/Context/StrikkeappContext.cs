@@ -18,6 +18,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<ProjectTracking> ProjectTracking { get; set; }
     public virtual DbSet<NeedleInventory> NeedleInventory { get; set; }
     public virtual DbSet<YarnInventory> YarnInventory { get; set; }
+    public virtual DbSet<UserVerification> UserVerification { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,7 +45,6 @@ public class StrikkeappDbContext : DbContext
             .HasForeignKey(kr => kr.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
-
 
         // Set up a relation between users and conversations (and delete all if user is deleted) 
         modelBuilder.Entity<ContactRequest>()
@@ -78,6 +78,13 @@ public class StrikkeappDbContext : DbContext
             .HasOne<UserLogIn>()
             .WithMany()
             .HasForeignKey(yi => yi.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserVerification>()
+            .HasOne<UserLogIn>()
+            .WithOne()
+            .HasForeignKey<UserVerification>(uv => uv.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }
