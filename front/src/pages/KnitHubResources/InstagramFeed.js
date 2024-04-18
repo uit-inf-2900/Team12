@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import '../../GlobalStyles/main.css';
 
 const InstagramFeed = ({ accessToken }) => {
@@ -37,7 +39,11 @@ const InstagramFeed = ({ accessToken }) => {
 
   // Display loading message while fetching data
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+        <CircularProgress style={{ color: '#F6964B' }} /> 
+      </div>
+    );
   }
 
   // Display error message if there is an error
