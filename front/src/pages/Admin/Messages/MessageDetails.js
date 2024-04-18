@@ -165,7 +165,6 @@ const MessageDetails = ({ message }) => {
                     onChange={handleReplyChanges}
                     useTextareaStyle={true}
                 />
-                {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
 
                 {/* Send a message */}
                 <CustomButton themeMode="light" submit={true} iconName='send'>

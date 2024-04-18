@@ -8,27 +8,29 @@ import MessageDetails from './MessageDetails';
 const ViewMessages = () => {
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [showActive, setShowActive] = useState(true);
+    const [selectedFilter, setSelectedFilter] = useState('active');
     const [activeMessage, setActiveMessage] = useState(null);
     const [messageError, setMessageError] = useState('');
 
-
-    // Fetch messages from the server when the component mounts or when showActive is toggled
     const fetchMessages = async () => {
         setIsLoading(true);
-        const isActive = showActive ? 'true' : 'false';
+        let queryParams = '';
+        if (selectedFilter === 'active') {
+            queryParams = 'isActive=true&isHandled=false';
+        } else if (selectedFilter === 'handled') {
+            queryParams = 'isActive=false&isHandled=true';
+        } else if (selectedFilter === 'inactive') {
+            queryParams = 'isActive=false&isHandled=false';
+        }
         try {
-            const response = await axios.get(`http://localhost:5002/api/Contact?isActive=${isActive}`);
-            // Since backend now returns an Ok response even for empty lists, check the content of the message
+            const response = await axios.get(`http://localhost:5002/api/Contact?${queryParams}`);
             if (response.data && response.data.length > 0) {
                 setMessages(response.data);
                 setMessageError('');
             } else if (response.data && response.data.Message) {
-                // Handle the scenario where backend returns a custom message indicating no data
                 setMessages([]);
                 setMessageError(response.data.Message);
             } else {
-                // Handle unlikely case where data is undefined or malformed
                 setMessages([]);
                 setMessageError('There are no contact requests available.');
             }
@@ -39,29 +41,33 @@ const ViewMessages = () => {
             setIsLoading(false);
         }
     };
-    
 
     useEffect(() => {
         fetchMessages();
-    }, [showActive]); // Dependency array includes showActive to re-fetch when toggled
+    }, [selectedFilter]);
 
     return (
-        <Grid  container spacing={2} style={{ overflow:'auto'}}>
+        <Grid container spacing={2} style={{ overflow: 'auto' }}>
             <Grid item xs={12} md={4}>
                 <div className='switch-container'>
                     <h2>Incoming Messages</h2>
                     <div 
-                        className={`switch-option ${showActive ? 'active' : 'inactive'}`}
-                        onClick={() => setShowActive(true)}
+                        className={`switch-option ${selectedFilter === 'active' ? 'active' : 'inactive'}`}
+                        onClick={() => setSelectedFilter('active')}
                     >
-                        {/* Show active or inactive messages based on the  */}
-                        Show Active
+                        Active
                     </div>
                     <div 
-                        className={`switch-option ${!showActive ? 'active' : 'inactive'}`}
-                        onClick={() => setShowActive(false)}
+                        className={`switch-option ${selectedFilter === 'inactive' ? 'active' : 'inactive'}`}
+                        onClick={() => setSelectedFilter('inactive')}
                     >
-                        Show Inactive
+                        Inactive
+                    </div>
+                    <div 
+                        className={`switch-option ${selectedFilter === 'handled' ? 'active' : 'inactive'}`}
+                        onClick={() => setSelectedFilter('handled')}
+                    >
+                        Handled
                     </div>
                     <div className="messages-list-container">
                         {isLoading ? (

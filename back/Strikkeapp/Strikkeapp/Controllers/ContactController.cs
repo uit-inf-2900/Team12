@@ -29,16 +29,16 @@ public class ContactController : ControllerBase
     // Get all contact requests
     // If empty, return ok with a message 
     [HttpGet]
-    public IActionResult GetContactRequests([FromQuery] bool isActive)
+    public IActionResult GetContactRequests([FromQuery] bool isActive, bool isHandled)
     {
-        var contactRequests = _contactService.GetContactRequests(isActive);
+        var contactRequests = _contactService.GetContactRequests(isActive, isHandled);
         if (contactRequests == null || !contactRequests.Any())
         {
             // Instead of returning NotFound, return Ok with a specific message indicating the list is empty.
             // This is a better practice because the client can still expect a response from the server, since a emty list in this case not is an error. 
             return Ok(new { Message = "No contact requests found." });
         }
-        return Ok(_contactService.GetContactRequests(isActive));
+        return Ok(_contactService.GetContactRequests(isActive, isHandled));
     }
 
         // Oppdater IsActive status
