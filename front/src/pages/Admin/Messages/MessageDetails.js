@@ -31,9 +31,11 @@ const MessageDetails = ({ message, refreshMessages }) => {
                 }
             });
             console.log('Conversation status updated successfully');
-            setAlertMessage('Conversation status updated successfully');
-            setAlertSeverity('success');
-            setAlertOpen(true);
+            if (isHandled === true) {
+                setAlertMessage('Conversation is now marked as handled');
+                setAlertSeverity('success');
+                setAlertOpen(true);
+            }
         } catch (err) {
             console.error('Error updating conversation status:', err);
             setAlertMessage('Failed to update conversation status');
@@ -129,6 +131,7 @@ const MessageDetails = ({ message, refreshMessages }) => {
 
     return (
         <div className='message-box'>
+            <SetAlert open={alertOpen} setOpen={setAlertOpen} severity={alertSeverity} message={alertMessage} />
             <div style={{ textAlign: 'center', width: "100%" }}>
 
                 {/* Who is the message from */}
