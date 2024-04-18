@@ -97,20 +97,27 @@ const SignUp = ({ toggleForm }) => {
           {/* Use InputField component for Birthday input */}
           <InputField
             label="Birthday"
-            type="text"
-            data-testid = "Birthday-input"
+            type="date"
+            data-testid="Birthday-input"
             register={register("birthday", {
               required: "Birthday is required  (YYYY-MM-DD).",
               validate: (value) => {
                 const regex = /^\d{4}-\d{2}-\d{2}$/;
-                if (!regex.test(value)) {
+                if (!regex.test(value) && value !== '') {
                   return "Invalid date format (YYYY-MM-DD)";
                 }
                 return true;
               },
             })}
             errors={errors.birthday}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              placeholder: '', // make the placeholder emty 
+            }}
           />
+
 
           {/* Use InputField component for Password input */}
           <InputField
