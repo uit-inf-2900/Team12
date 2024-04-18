@@ -137,7 +137,7 @@ public class UsersController : ControllerBase
     {
         if(!request.requestOk())
         {
-            return BadRequest();
+            return BadRequest("Ur request bad");
         }
 
         var res = _userService.UpdateAdmin(request.UserToken, request.UpdateUser, request.NewAdmin);
@@ -171,7 +171,8 @@ public class UsersController : ControllerBase
                                                 FullName = details.UserFullName,
                                                 Email = login.UserEmail,
                                                 Status = login.UserStatus,
-                                                IsAdmin = details.IsAdmin
+                                                IsAdmin = details.IsAdmin, 
+                                                UserId = login.UserId
                                             }).ToList();
 
         if (!users.Any())

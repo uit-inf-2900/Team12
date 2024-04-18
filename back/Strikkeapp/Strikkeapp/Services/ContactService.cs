@@ -146,7 +146,9 @@ public class ContactService : IContactService
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
         if (contactRequest == null) return false;
 
-        contactRequest.Message += $"\n\nResponse: {responseMessage}";
+
+        // have this '\n new message \n' to see when new message is added
+        contactRequest.Message += $"\n new message \n Response: {responseMessage}";
         _context.SaveChanges();
         return true;
     }

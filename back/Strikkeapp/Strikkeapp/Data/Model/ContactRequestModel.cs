@@ -6,7 +6,5 @@ public class ContactRequestDto
     public string UserEmail { get; set; } = string.Empty;
     public string UserMessage { get; set; } = string.Empty;
     public string UserName { get; set; } = string.Empty;
-
-    public string ResponseMessage { get; set; } = string.Empty;
     public bool IsActive { get; set; } 
 }
