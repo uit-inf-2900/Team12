@@ -6,7 +6,7 @@ namespace Strikkeapp.Data.Entities;
 public class Counter
 {
     [Key]
-    public Guid CounterId { get; } = Guid.NewGuid();
+    public Guid CounterId { get; set; } = Guid.NewGuid();
 
     [ForeignKey("UserLogIn")]
     public Guid UserId { get; set; }
