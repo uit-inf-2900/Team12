@@ -3,34 +3,44 @@ import axios from 'axios';
 import InputField from "../../../Components/InputField";
 import "../../../GlobalStyles/main.css";
 import CustomButton from '../../../Components/Button';
+import SetAlert from '../../../Components/Alert';
 
-// Function to update the conversation status
-const updateConversationStatus = async (contactRequestId, isActive, isHandled) => {
-    try {
-        await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsActive`, JSON.stringify(isActive), {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsHandled`, JSON.stringify(isHandled), {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        console.log('Conversation status updated successfully');
-    } catch (err) {
-        console.error('Error updating conversation status:', err);
-    }
-};
+
 
 const MessageDetails = ({ message }) => {
     const [reply, setReply] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    // const [errorMessage, setErrorMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [isActive, setIsActive] = useState(message?.isActive);
     const [isHandled, setIsHandled] = useState(message?.isHandled);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertSeverity, setAlertSeverity] = useState('info');
+    const [alertMessage, setAlertMessage] = useState('');
 
-
+    // Function to update the conversation status
+    const updateConversationStatus = async (contactRequestId, isActive, isHandled) => {
+        try {
+            await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsActive`, JSON.stringify(isActive), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsHandled`, JSON.stringify(isHandled), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log('Conversation status updated successfully');
+            setAlertMessage('Conversation status updated successfully');
+            setAlertSeverity('success');
+            setAlertOpen(true);
+        } catch (err) {
+            console.error('Error updating conversation status:', err);
+            setAlertMessage('Failed to update conversation status');
+            setAlertSeverity('error');
+            setAlertOpen(truea
+        }
+    };
     // Function to split the message text into individual messages
     const splitMessages = (messageText) => {
         if (!messageText) return [];
@@ -50,13 +60,13 @@ const MessageDetails = ({ message }) => {
             setIsHandled(message.isHandled);
         }
         setReply('');
-        setErrorMessage('');
+        // setErrorMessage('');
     }, [message]);
 
     // Function to handle changes to the reply input field and clear the error message
     const handleReplyChanges = (e) => {
         setReply(e.target.value);
-        setErrorMessage('');
+        // setErrorMessage('');
     };
 
     // Function to handle the form submission and send the reply to the server
@@ -65,14 +75,20 @@ const MessageDetails = ({ message }) => {
 
         // Validate the reply and message before sending 
         if (!reply.trim()) {
-            setErrorMessage('Please write a reply before sending.');
+            // setErrorMessage('Please write a reply before sending.');
+            setAlertMessage('Please write a reply before sending.');
+            setAlertSeverity('error');
+            setAlertOpen(true);
             return;
         }
 
         // Check that it is a valid message object and has a ContactRequestId property
         if (!message) {
             console.error('Invalid message object or missing ContactRequestId');
-            setErrorMessage('Invalid message, please select a valid message.');
+            // setErrorMessage('Invalid message, please select a valid message.');
+            setAlertMessage('Invalid message, please select a valid message.');
+            setAlertSeverity('error');
+            setAlertOpen(true);
             return;
         }
 
@@ -85,12 +101,18 @@ const MessageDetails = ({ message }) => {
             });
             console.log('The response was sent successfully', response.data);
             setReply('');
-            setErrorMessage('');
+            // setErrorMessage('');
             setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);
             updateConversationStatus(message.contactRequestId, true, false);
+            setAlertMessage('Reply sent successfully');
+            setAlertSeverity('success');
+            setAlertOpen(true);
         } catch (error) {
             console.error(`Failed to send reply for message ${message.contactRequestId}`, error);
-            setErrorMessage('Failed to send reply. Please check the data you are sending.');
+            // setErrorMessage('Failed to send reply. Please check the data you are sending.');
+            setAlertMessage('Failed to send reply. Please check the data you are sending.');
+            setAlertSeverity('error');
+            setAlertOpen(true);
         }
     };
 
