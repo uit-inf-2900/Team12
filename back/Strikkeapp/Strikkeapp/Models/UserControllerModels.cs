@@ -52,7 +52,18 @@ public class UpdateAdminRequest
         return (!string.IsNullOrWhiteSpace(UserToken)
             && UpdateUser != Guid.Empty);
     }
+}
 
+public class BanUserRequest
+{
+    public string UserToken { get; set; } = string.Empty;
+    public Guid BanUserId { get; set; }
+
+    public bool requestOk()
+    {
+        return (!string.IsNullOrWhiteSpace(UserToken)
+            && BanUserId != Guid.Empty);
+    }
 }
 
 public class UserResultDto

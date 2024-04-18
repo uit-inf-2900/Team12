@@ -28,6 +28,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IVerificationService, VerificationService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IMailService,  MailService>();
+builder.Services.AddScoped<ICounterService, CounterService>();
 
 builder.Services.AddSingleton<IPasswordHasher<object>, PasswordHasher<object>>();
 

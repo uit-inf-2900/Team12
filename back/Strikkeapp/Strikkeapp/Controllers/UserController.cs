@@ -50,7 +50,7 @@ public class UsersController : ControllerBase
         }
 
         var mailRes = _mailService.SendVerification(result.Token);
-
+        /*
         if(!mailRes.Succes)
         {
             if(mailRes.ErrorMessage == "Unauthorized")
@@ -64,7 +64,7 @@ public class UsersController : ControllerBase
             }
 
             return StatusCode(500, "Cannot process request");
-        }
+        }*/
 
         var res = new UserResultDto
         {
@@ -137,7 +137,7 @@ public class UsersController : ControllerBase
     {
         if(!request.requestOk())
         {
-            return BadRequest("Ur request bad");
+            return BadRequest();
         }
 
         var res = _userService.UpdateAdmin(request.UserToken, request.UpdateUser, request.NewAdmin);
@@ -157,6 +157,35 @@ public class UsersController : ControllerBase
         }
 
         return Ok(res);
+    }
+
+    [HttpPatch]
+    [Route("banuser")]
+    public IActionResult BanUser(BanUserRequest request)
+    {
+        if(!request.requestOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _userService.BanUser(request.UserToken, request.BanUserId);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+
+            if(res.ErrorMessage == "User not found")
+            {
+                return NotFound("Could not find user to ban");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(res.BannedUser);
     }
 
 
