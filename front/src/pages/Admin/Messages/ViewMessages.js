@@ -84,8 +84,8 @@ const ViewMessages = () => {
             </Grid>
             <Grid item xs={12} md={8}>
                 {activeMessage ? (
-                    <MessageDetails message={activeMessage} />
-                ) : (
+                    <MessageDetails message={activeMessage} refreshMessages={fetchMessages}/>
+                    ) : (
                     <div>Select a message to view details.</div>
                 )}
             </Grid>

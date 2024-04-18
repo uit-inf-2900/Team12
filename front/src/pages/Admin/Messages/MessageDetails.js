@@ -7,7 +7,7 @@ import SetAlert from '../../../Components/Alert';
 
 
 
-const MessageDetails = ({ message }) => {
+const MessageDetails = ({ message, refreshMessages }) => {
     const [reply, setReply] = useState('');
     // const [errorMessage, setErrorMessage] = useState('');
     const [messages, setMessages] = useState([]);
@@ -104,6 +104,7 @@ const MessageDetails = ({ message }) => {
             // setErrorMessage('');
             setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);
             updateConversationStatus(message.contactRequestId, true, false);
+            refreshMessages(); 
             setAlertMessage('Reply sent successfully');
             setAlertSeverity('success');
             setAlertOpen(true);
