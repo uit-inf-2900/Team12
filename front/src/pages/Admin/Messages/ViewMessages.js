@@ -46,7 +46,6 @@ const ViewMessages = () => {
     }, [showActive]); // Dependency array includes showActive to re-fetch when toggled
 
     return (
-        // <div className='page-container'>
         <Grid  container spacing={2} style={{ overflow:'auto'}}>
             <Grid item xs={12} md={4}>
                 <div className='switch-container'>
@@ -85,7 +84,6 @@ const ViewMessages = () => {
                 )}
             </Grid>
         </Grid>
-        // </div>
     );
 };
 

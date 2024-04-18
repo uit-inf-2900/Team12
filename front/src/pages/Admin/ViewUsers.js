@@ -11,6 +11,7 @@ import {
     CircularProgress,
   } from '@mui/material';
 import Button from '@mui/material/Button';
+import axios from 'axios';
 
 
   // Fetch user data from the backend
@@ -65,24 +66,38 @@ const ViewUsers = () => {
         setPage(0);
     };
 
-    // function to toggle admin 
     const toggleAdminStatus = async (userId, isAdmin) => {
+        const token = sessionStorage.getItem('token');
         try {
-            const response = await axios.patch(`http://localhost:5002/updateUser/${userId}`, {
-                isAdmin: !isAdmin
+            const response = await axios.patch(`http://localhost:5002/Users/updateadmin`,{
+                UserToken: token,
+                UpdateUser: userId,
+                NewAdmin: !isAdmin
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'  // Make sure headers are set for JSON
+                }
             });
+    
             if (response.status === 200) {
+                // Updating the users array to reflect the change
                 setUsers(prevUsers => prevUsers.map(user =>
-                    user.id === userId ? { ...user, isAdmin: !user.isAdmin } : user
+                    user.userId === userId ? { ...user, isAdmin: !user.isAdmin } : user
                 ));
                 alert('Admin status updated successfully');
             }
+            else {
+            const errorData = await response.data;
+            console.error('Failed to update admin status:', errorData);
+            alert(`Failed to update admin status: ${errorData.message}`);
+            }
         } catch (error) {
             console.error('Error updating admin status:', error);
+            console.log("userid:  " + userId + "\n isAdmin:   " + isAdmin);
             alert('Failed to update admin status');
         }
     };
-
+    
 
 
     return (
@@ -119,7 +134,7 @@ const ViewUsers = () => {
                                         style={{alignItems: 'right'}}
                                         variant="contained"
                                         color={user.isAdmin ? "secondary" : "primary"}
-                                        onClick={() => toggleAdminStatus(user.id, user.isAdmin)}
+                                        onClick={() => toggleAdminStatus(user.userId, user.isAdmin)}
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
                                     </Button>
