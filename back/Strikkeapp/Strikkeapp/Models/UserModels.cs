@@ -57,3 +57,22 @@ public class UpdateAdminResult
         ErrorMessage = message
     };
 }
+
+public class BanUserResult
+{
+    public bool Success { get; set; }
+    public Guid BannedUser { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+
+    public static BanUserResult ForSuccess(Guid bannedUser) => new BanUserResult
+    {
+        Success = true,
+        BannedUser = bannedUser
+    };
+
+    public static BanUserResult ForFailure(string message) => new BanUserResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}

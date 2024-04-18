@@ -13,6 +13,7 @@ public interface IUserService
     public UserServiceResult LogInUser(string userEmail, string userPwd);
     public DeleteUserResult DeleteUser(string userToken);
     public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin);
+    public BanUserResult BanUser(string userToken, Guid bannedUser);
 }
 
 public class UserService : IUserService
@@ -208,6 +209,52 @@ public class UserService : IUserService
             {
                 transaction.Rollback();
                 return UpdateAdminResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public BanUserResult BanUser(string userToken, Guid bannedUser)
+    {
+        var tokenRes = _tokenService.ExtractUserID(userToken);
+        if(!tokenRes.Success)
+        {
+            return BanUserResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenRes.UserId;
+
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == userId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if(!isAdmin)
+        {
+            return BanUserResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var user = _context.UserLogIn
+                    .FirstOrDefault(u => u.UserId == bannedUser);
+
+                if(user == null)
+                {
+                    return BanUserResult.ForFailure("User not found");
+                }
+
+                user.UserStatus = "banned";
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return BanUserResult.ForSuccess(bannedUser);
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return BanUserResult.ForFailure(ex.Message);
             }
         }
     }
