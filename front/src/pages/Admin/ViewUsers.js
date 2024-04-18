@@ -40,6 +40,7 @@ const ViewUsers = () => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
+    const token = sessionStorage.getItem('token');
 
     useEffect(() => {
         // Fetch the user data when the component mounts
@@ -75,7 +76,7 @@ const ViewUsers = () => {
     const toggleAdminStatus = async (userId, isAdmin) => {
 
         // Get the user token from the session storage
-        const token = sessionStorage.getItem('token');
+       
         try {
             // Send a PATCH request to the server to update the admin status of the user
             const response = await axios.patch(`http://localhost:5002/Users/updateadmin`, {
@@ -114,6 +115,40 @@ const ViewUsers = () => {
     };
     
 
+    const banUser = async (UserId) => {
+        try {
+            // Send a POST request to the server to ban the user
+            const response = await axios.patch('http://localhost:5002/Users/banUser', {
+                userToken: token,
+                banUserId: UserId
+            });
+            console.log("userToken: ", token);
+            console.log("banUserId: ", UserId);
+            console.log("response: ", response);
+
+            // If the request is successful, update the users array to remove the banned user
+            if (response.status === 200) {
+                setUsers(prevUsers => prevUsers.filter(user => user.userId !== UserId));
+                // Set alert for success
+                setAlertMessage('User banned successfully');
+                setAlertSeverity('success');
+                setAlertOpen(true);
+            } else {
+                const errorData = await response.data;
+                // Set alert for error from the server response
+                setAlertMessage(`Failed to ban user: ${errorData.message}`);
+                setAlertSeverity('error');
+                setAlertOpen(true);
+            }
+        } catch (error) {
+            // Set alert for error in catch block
+            setAlertMessage('Failed to ban user');
+            setAlertSeverity('error');
+            setAlertOpen(true);
+            console.error('Error banning user:', error);
+        }
+    };
+
 
     return (
         <Paper>
@@ -140,6 +175,7 @@ const ViewUsers = () => {
                             <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     {/* Add the user information to the table */}
@@ -160,6 +196,15 @@ const ViewUsers = () => {
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
                                     </CustomButton>
+                                </TableCell>
+                                <TableCell >{user.status}
+                                <CustomButton
+                                    variant="contained"
+                                    color={user.status === "banned" ? "primary" : "secondary"} // Endre farge basert på status
+                                    onClick={() => banUser(user.userId)}
+                                >
+                                    {user.status === "banned" ? "Unban User" : "Ban User"} {/* Endre knappetekst basert på status */}
+                                </CustomButton>
                                 </TableCell>
                             </TableRow>
                         ))}
