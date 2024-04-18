@@ -10,9 +10,9 @@ import {
     TablePagination,
     CircularProgress,
   } from '@mui/material';
-import Button from '@mui/material/Button';
 import axios from 'axios';
 import SetAlert from '../../Components/Alert';
+import CustomButton from '../../Components/Button';
 
 
   // Fetch user data from the backend
@@ -152,14 +152,14 @@ const ViewUsers = () => {
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.status}</TableCell>
                                 <TableCell>{user.isAdmin ? 'Yes' : 'No'}
-                                    <Button
+                                    <CustomButton
                                         style={{alignItems: 'right'}}
                                         variant="contained"
                                         color={user.isAdmin ? "secondary" : "primary"}
                                         onClick={() => toggleAdminStatus(user.userId, user.isAdmin)}
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
-                                    </Button>
+                                    </CustomButton>
                                 </TableCell>
                             </TableRow>
                         ))}
