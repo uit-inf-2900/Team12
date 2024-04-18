@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 import "../../../GlobalStyles/main.css";
 import MessageItem from './MessageItem';
 import MessageDetails from './MessageDetails';
+import {  TablePagination } from '@mui/material';
+
 
 const ViewMessages = () => {
     const [messages, setMessages] = useState([]);
@@ -11,6 +14,7 @@ const ViewMessages = () => {
     const [selectedFilter, setSelectedFilter] = useState('active');
     const [activeMessage, setActiveMessage] = useState(null);
     const [messageError, setMessageError] = useState('');
+    const [searchText, setSearchText] = useState('');
 
     const fetchMessages = async () => {
         setIsLoading(true);
@@ -46,29 +50,47 @@ const ViewMessages = () => {
         fetchMessages();
     }, [selectedFilter]);
 
+    useEffect(() => {
+        const filtered = messages.filter(message =>
+            message.text && message.text.toLowerCase().includes(searchText.toLowerCase())
+        );
+        
+        setMessages(filtered);
+    }, [searchText]);
+
     return (
         <Grid container spacing={2} style={{ overflow: 'auto' }}>
             <Grid item xs={12} md={4}>
                 <div className='switch-container'>
                     <h2>Incoming Messages</h2>
-                    <div 
-                        className={`switch-option ${selectedFilter === 'active' ? 'active' : 'inactive'}`}
-                        onClick={() => setSelectedFilter('active')}
-                    >
-                        Active
+                    {/* <TextField
+                        label="Search Messages"
+                        variant="outlined"
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                        style={{ margin: '20px 0' }}
+                    /> */}
+                    <div>
+                        <div 
+                            className={`switch-option ${selectedFilter === 'active' ? 'active' : 'inactive'}`}
+                            onClick={() => setSelectedFilter('active')}
+                            >
+                            Active
+                        </div>
+                        <div 
+                            className={`switch-option ${selectedFilter === 'inactive' ? 'active' : 'inactive'}`}
+                            onClick={() => setSelectedFilter('inactive')}
+                            >
+                            Inactive
+                        </div>
+                        <div 
+                            className={`switch-option ${selectedFilter === 'handled' ? 'active' : 'inactive'}`}
+                            onClick={() => setSelectedFilter('handled')}
+                            >
+                            Handled
+                        </div>
                     </div>
-                    <div 
-                        className={`switch-option ${selectedFilter === 'inactive' ? 'active' : 'inactive'}`}
-                        onClick={() => setSelectedFilter('inactive')}
-                    >
-                        Inactive
-                    </div>
-                    <div 
-                        className={`switch-option ${selectedFilter === 'handled' ? 'active' : 'inactive'}`}
-                        onClick={() => setSelectedFilter('handled')}
-                    >
-                        Handled
-                    </div>
+                    
                     <div className="messages-list-container">
                         {isLoading ? (
                             <div>Loading messages...</div>
