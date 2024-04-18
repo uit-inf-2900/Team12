@@ -12,6 +12,7 @@ import {
   } from '@mui/material';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import SetAlert from '../../Components/Alert';
 
 
   // Fetch user data from the backend
@@ -36,6 +37,9 @@ const ViewUsers = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [loading, setLoading] = useState(true);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertSeverity, setAlertSeverity] = useState('info');
+    const [alertMessage, setAlertMessage] = useState('');
 
     useEffect(() => {
         // Fetch the user data when the component mounts
@@ -66,35 +70,46 @@ const ViewUsers = () => {
         setPage(0);
     };
 
+
+    // Function to toggle the admin status of a user
     const toggleAdminStatus = async (userId, isAdmin) => {
+
+        // Get the user token from the session storage
         const token = sessionStorage.getItem('token');
         try {
-            const response = await axios.patch(`http://localhost:5002/Users/updateadmin`,{
+            // Send a PATCH request to the server to update the admin status of the user
+            const response = await axios.patch(`http://localhost:5002/Users/updateadmin`, {
                 UserToken: token,
                 UpdateUser: userId,
                 NewAdmin: !isAdmin
             }, {
                 headers: {
-                    'Content-Type': 'application/json'  // Make sure headers are set for JSON
+                    'Content-Type': 'application/json'
                 }
             });
-    
+            
+            // If the request is successful, update the admin status of the user in the users array
             if (response.status === 200) {
-                // Updating the users array to reflect the change
                 setUsers(prevUsers => prevUsers.map(user =>
                     user.userId === userId ? { ...user, isAdmin: !user.isAdmin } : user
                 ));
-                alert('Admin status updated successfully');
-            }
-            else {
-            const errorData = await response.data;
-            console.error('Failed to update admin status:', errorData);
-            alert(`Failed to update admin status: ${errorData.message}`);
+                // Set alert for success
+                setAlertMessage('Admin status updated successfully');
+                setAlertSeverity('success');
+                setAlertOpen(true);
+            } else {
+                const errorData = await response.data;
+                // Set alert for error from the server response
+                setAlertMessage(`Failed to update admin status: ${errorData.message}`);
+                setAlertSeverity('error');
+                setAlertOpen(true);
             }
         } catch (error) {
+            // Set alert for error in catch block
+            setAlertMessage('Failed to update admin status');
+            setAlertSeverity('error');
+            setAlertOpen(true);
             console.error('Error updating admin status:', error);
-            console.log("userid:  " + userId + "\n isAdmin:   " + isAdmin);
-            alert('Failed to update admin status');
         }
     };
     
@@ -102,6 +117,13 @@ const ViewUsers = () => {
 
     return (
         <Paper>
+            {/* Setup the alert status */}
+            <SetAlert 
+                open={alertOpen} 
+                setOpen={setAlertOpen} 
+                severity={alertSeverity} 
+                message={alertMessage} 
+            />
             <TableContainer>
                 {/* Display a loading spinner while fetching data */}
                 {loading ?
