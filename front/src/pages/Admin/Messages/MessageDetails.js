@@ -38,7 +38,7 @@ const MessageDetails = ({ message }) => {
             console.error('Error updating conversation status:', err);
             setAlertMessage('Failed to update conversation status');
             setAlertSeverity('error');
-            setAlertOpen(truea
+            setAlertOpen(true);
         }
     };
     // Function to split the message text into individual messages
