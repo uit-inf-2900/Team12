@@ -11,8 +11,8 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    [Migration("20240417103905_UserVerification")]
-    partial class UserVerification
+    [Migration("20240418084835_Counter")]
+    partial class Counter
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,9 +41,6 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ResponseMessage")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("TimeCreated")
                         .HasColumnType("TEXT");
 
@@ -55,6 +52,29 @@ namespace Strikkeapp.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ContactRequests");
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.Counter", b =>
+                {
+                    b.Property<Guid>("CounterId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CounterId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CounterInventory");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
@@ -279,6 +299,15 @@ namespace Strikkeapp.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.Counter", b =>
+                {
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
