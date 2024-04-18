@@ -19,6 +19,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<NeedleInventory> NeedleInventory { get; set; }
     public virtual DbSet<YarnInventory> YarnInventory { get; set; }
     public virtual DbSet<UserVerification> UserVerification { get; set; }
+    public virtual DbSet<Counter> CounterInventory { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -85,6 +86,13 @@ public class StrikkeappDbContext : DbContext
             .HasOne<UserLogIn>()
             .WithOne()
             .HasForeignKey<UserVerification>(uv => uv.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Counter>()
+            .HasOne<UserLogIn>()
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }
