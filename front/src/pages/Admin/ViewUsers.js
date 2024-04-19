@@ -21,21 +21,22 @@ import CustomButton from '../../Components/Button';
 import Chip from '@mui/material/Chip';
 
 
-  // Fetch user data from the backend
+// Function to fetch user data from the backend
 const fetchUserData = async () => {
     try {
-    const response = await fetch('http://localhost:5002/getUsers');
-    if (!response.ok) {
-        throw new Error('Failed to fetch user data');
-    }
-    const data = await response.json();
-    return data;
+        const response = await fetch('http://localhost:5002/getUsers');
+        if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+        }
+        return await response.json();
     } catch (error) {
-    console.error('Error fetching user data:', error);
-    return [];
+        console.error('Error fetching user data:', error);
+        return [];
     }
 };
 
+
+// Function to get the status label for a user based on their status (verified, unverified, banned)
 const getStatusLabel = (status) => {
     switch (status) {
         case 'verified':
@@ -132,18 +133,6 @@ const ViewUsers = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // Function to change the current page 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    // Function to change the number of rows per page
-    const handleChangeRowsPerPage = event => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
-
-
     
     const toggleAdminStatus = (userId, isAdmin, userName, userEmail) => {
         handleActionOpen(
@@ -152,10 +141,10 @@ const ViewUsers = () => {
         );
     };
 
-    const banUser = (userId,  userName, userEmail) => {
+    const banUser = (userId, IsBanned, userName, userEmail) => {
         handleActionOpen(
-            `Are you sure you want to ban  ${userName} (${userEmail}) ?`,
-            () => executeBanUser(userId)
+            `Are you sure you want to ${IsBanned ? "ban" : 'unbann' }  ${userName} (${userEmail}) ?`,
+            () => executeBanUser(userId, IsBanned)
         );
     };
 
@@ -202,12 +191,13 @@ const ViewUsers = () => {
     };
     
 
-    const executeBanUser = async (UserId) => {
+    const executeBanUser = async (UserId, IsBanned) => {
         try {
             // Send a POST request to the server to ban the user
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
                 userToken: token,
-                banUserId: UserId
+                banUserId: UserId, 
+                ban: IsBanned
             });
 
             // If the request is successful, update the users array to remove the banned user
@@ -304,12 +294,21 @@ const ViewUsers = () => {
                                         <CustomButton
                                             variant="contained"
                                             color="secondary"
-                                            onClick={() => banUser(user.userId, user.fullName, user.email)}
+                                            onClick={() => banUser(user.userId, true,  user.fullName, user.email)}
                                         >
                                             Ban User
                                         </CustomButton>
                                     )}
-                                    {user.status === "banned" }
+                                    {user.status === "banned" 
+                                    && (
+                                        <CustomButton
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => banUser(user.userId, false, user.fullName, user.email)}
+                                        >
+                                            Unban User
+                                        </CustomButton>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}
