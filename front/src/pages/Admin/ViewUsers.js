@@ -209,9 +209,6 @@ const ViewUsers = () => {
                 userToken: token,
                 banUserId: UserId
             });
-            console.log("userToken: ", token);
-            console.log("banUserId: ", UserId);
-            console.log("response: ", response);
 
             // If the request is successful, update the users array to remove the banned user
             if (response.status === 200) {
@@ -258,8 +255,8 @@ const ViewUsers = () => {
             <Dialog open={dialogOpen} onClose={handleActionCancel}>
                 <DialogTitle>{dialogMessage}</DialogTitle>
                 <DialogActions>
-                    <Button onClick={handleActionCancel}>Cancel</Button>
                     <Button onClick={handleActionConfirm} color="primary">Confirm</Button>
+                    <Button onClick={handleActionCancel}>Cancel</Button>
                 </DialogActions>
             </Dialog>
             <TableContainer>
