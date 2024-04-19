@@ -9,29 +9,25 @@ import {
     TableCell,
     TablePagination,
     CircularProgress,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogTitle,
-    TextField
-} from '@mui/material';
+  } from '@mui/material';
 import axios from 'axios';
 import SetAlert from '../../Components/Alert';
 import CustomButton from '../../Components/Button';
 import Chip from '@mui/material/Chip';
 
 
-// Function to fetch user data from the backend
+  // Fetch user data from the backend
 const fetchUserData = async () => {
     try {
-        const response = await fetch('http://localhost:5002/getUsers');
-        if (!response.ok) {
-            throw new Error('Failed to fetch user data');
-        }
-        return await response.json();
+    const response = await fetch('http://localhost:5002/getUsers');
+    if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+    }
+    const data = await response.json();
+    return data;
     } catch (error) {
-        console.error('Error fetching user data:', error);
-        return [];
+    console.error('Error fetching user data:', error);
+    return [];
     }
 };
 
@@ -62,92 +58,42 @@ const ViewUsers = () => {
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
     const token = sessionStorage.getItem('token');
-    const [sortField, setSortField] = useState('fullName');
-    const [sortDirection, setSortDirection] = useState('asc');
-    const [searchText, setSearchText] = useState('');
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [dialogAction, setDialogAction] = useState(() => () => {});
-    const [dialogMessage, setDialogMessage] = useState('');
-    const [refreshData, setRefreshData] = useState(false);  // State to trigger data refresh
-
-
-    // Call this function to open the dialog and set the action that will be taken upon confirmation
-    const handleActionOpen = (message, action) => {
-        setDialogMessage(message);
-        setDialogAction(() => action);
-        setDialogOpen(true);
-    };
-
-    const handleActionConfirm = () => {
-        dialogAction(); // Directly invoke the stored dialogAction
-        setDialogOpen(false);
-        setRefreshData(prev => !prev); // Ensure refreshData is toggled after the action is confirmed
-    };
-    
-
-    const handleActionCancel = () => {
-        setDialogOpen(false);
-    };
-    const handleSearchChange = (event) => {
-        setSearchText(event.target.value.toLowerCase());
-    };
-
-    
-    // Event handler for sorting
-    const handleSort = (field) => {
-        const isAsc = sortField === field && sortDirection === 'asc';
-        setSortDirection(isAsc ? 'desc' : 'asc');
-        setSortField(field);
-    };
-
-    // Filter users based on search text
-    const filteredUsers = users.filter((user) =>
-        user.fullName.toLowerCase().includes(searchText) || 
-        user.email.toLowerCase().includes(searchText)
-    );
-
-    // Sort users based on sort field and direction
-    const sortedUsers = filteredUsers.sort((a, b) => {
-        if (a[sortField] < b[sortField]) {
-            return sortDirection === 'asc' ? -1 : 1;
-        }
-        if (a[sortField] > b[sortField]) {
-            return sortDirection === 'asc' ? 1 : -1;
-        }
-        return 0;
-    });
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const data = await fetchUserData();
-            setUsers(data);
-            setLoading(false);
-        };
-    
-        fetchData();
-    }, [refreshData]); // refreshData toggles to trigger this effect
-    
-    
-    const toggleAdminStatus = (userId, isAdmin, userName, userEmail) => {
-        handleActionOpen(
-            `Are you sure you want to ${isAdmin ? 'remove' : 'add'} admin privileges for ${userName} (${userEmail})?`,
-            () => updateAdminStatus(userId, !isAdmin)
-        );
+        // Fetch the user data when the component mounts
+        const timer = setTimeout(() => {
+            fetchUserData()
+                .then(data => {
+                    setUsers(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error setting user data:', error);
+                    setLoading(false);
+                });
+        }, 1000);
+
+        // Clean up timer
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Function to change the current page 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
     };
 
-    const banUser = (userId, IsBanned, userName, userEmail) => {
-        handleActionOpen(
-            `Are you sure you want to ${IsBanned ? "ban" : 'unbann' }  ${userName} (${userEmail}) ?`,
-            () => executeBanUser(userId, IsBanned)
-        );
+    // Function to change the number of rows per page
+    const handleChangeRowsPerPage = event => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
     };
 
 
     // Function to toggle the admin status of a user
-    const updateAdminStatus = async (userId, isAdmin) => {
+    const toggleAdminStatus = async (userId, isAdmin) => {
 
         // Get the user token from the session storage
+       
         try {
             // Send a PATCH request to the server to update the admin status of the user
             const response = await axios.patch(`http://localhost:5002/Users/updateadmin`, {
@@ -186,33 +132,40 @@ const ViewUsers = () => {
     };
     
 
-    const executeBanUser = async (UserId, IsBanned) => {
+    const banUser = async (UserId, BanStatus) => {
         try {
+            // Send a POST request to the server to ban the user
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
                 userToken: token,
-                banUserId: UserId,
-                ban: IsBanned
+                banUserId: UserId, 
+                ban: BanStatus
             });
-    
+            console.log("userToken: ", token);
+            console.log("banUserId: ", UserId);
+            console.log("response: ", response);
+
+            // If the request is successful, update the users array to remove the banned user
             if (response.status === 200) {
                 setUsers(prevUsers => prevUsers.filter(user => user.userId !== UserId));
+                // Set alert for success
                 setAlertMessage('User banned successfully');
                 setAlertSeverity('success');
                 setAlertOpen(true);
             } else {
                 const errorData = await response.data;
+                // Set alert for error from the server response
                 setAlertMessage(`Failed to ban user: ${errorData.message}`);
                 setAlertSeverity('error');
                 setAlertOpen(true);
             }
         } catch (error) {
+            // Set alert for error in catch block
             setAlertMessage('Failed to ban user');
             setAlertSeverity('error');
             setAlertOpen(true);
+            console.error('Error banning user:', error);
         }
-        setRefreshData(prev => !prev); // Ensuring refreshData is toggled on each call
     };
-    
 
 
     return (
@@ -224,82 +177,52 @@ const ViewUsers = () => {
                 severity={alertSeverity} 
                 message={alertMessage} 
             />
-            {/* Make a search */}
-            <TextField
-                label="Search Users"
-                variant="outlined"
-                value={searchText}
-                onChange={handleSearchChange}
-                style={{ margin: '10px 0' }}
-                fullWidth
-            />
-            <Dialog open={dialogOpen} onClose={handleActionCancel}>
-                <DialogTitle>{dialogMessage}</DialogTitle>
-                <DialogActions>
-                    <Button onClick={handleActionConfirm} color="primary">Confirm</Button>
-                    <Button onClick={handleActionCancel}>Cancel</Button>
-                </DialogActions>
-            </Dialog>
             <TableContainer>
                 {/* Display a loading spinner while fetching data */}
                 {loading ?
                 (
-                    <CircularProgress style={{ display: 'block', margin: 'auto' }} />
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+                        <CircularProgress style={{ color: '#F6964B' }} />
+                    </div>
                 ):(
                 <Table>
                     {/* Create the header of the table */}
                     <TableHead>
-                    <TableRow>
-                    <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('fullName')}>
-                        Name {sortField === 'fullName' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-                    </TableCell>
-                    <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('email')}>
-                        Email {sortField === 'email' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-                    </TableCell>
-                    <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
-                    <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
-                    <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
-                </TableRow>
+                        <TableRow>
+                            <TableCell style={{ fontWeight: 'bold' }}>Name</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
+                            <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
+                        </TableRow>
                     </TableHead>
                     {/* Add the user information to the table */}
                     <TableBody>
-                        {sortedUsers
+                        {users
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((user, index) => (
                             <TableRow key={index}>
                                 <TableCell>{user.fullName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{getStatusLabel(user.status)}</TableCell>
+                                <TableCell>{user.status}</TableCell>
                                 <TableCell>{user.isAdmin ? 'Yes' : 'No'}
                                     <CustomButton
                                         style={{alignItems: 'right'}}
                                         variant="contained"
                                         color={user.isAdmin ? "secondary" : "primary"}
-                                        onClick={() => toggleAdminStatus(user.userId, user.isAdmin, user.fullName, user.email)}
+                                        onClick={() => toggleAdminStatus(user.userId, user.isAdmin)}
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
                                     </CustomButton>
                                 </TableCell>
-                                <TableCell >
-                                    {user.status !== "banned" && (
-                                        <CustomButton
-                                            variant="contained"
-                                            color="secondary"
-                                            onClick={() => banUser(user.userId, true,  user.fullName, user.email)}
-                                        >
-                                            Ban User
-                                        </CustomButton>
-                                    )}
-                                    {user.status === "banned" 
-                                    && (
-                                        <CustomButton
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={() => banUser(user.userId, false, user.fullName, user.email)}
-                                        >
-                                            Unban User
-                                        </CustomButton>
-                                    )}
+                                <TableCell >{user.status}
+                                <CustomButton
+                                    variant="contained"
+                                    color={user.status === "banned" ? "primary" : "secondary"} // Endre farge basert på status
+                                    onClick={() => banUser(user.userId, user.status === "banned" ? false : true)}
+                                >
+                                    {user.status === "banned" ? "Unban User" : "Ban User"} {/* Endre knappetekst basert på status */}
+                                </CustomButton>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -310,13 +233,13 @@ const ViewUsers = () => {
 
             {/* Navigate between pages of data displayed within a table */}
             <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 component="div"
                 count={users.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onPageChange={(_, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(+event.target.value)}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </Paper>
     );
