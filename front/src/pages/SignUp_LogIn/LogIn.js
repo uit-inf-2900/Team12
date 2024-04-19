@@ -39,7 +39,15 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
         })
         .catch(function(error){
             console.error("Error: ", error); 
-            setError("Login failed. Check your username and password and try again."); 
+            if (error.response.status === 401 && error.response.data === "User is banned" ){
+                setError("Your account has been banned. Please contact the administrator for more information.");
+            }
+            else if (error.response.status === 401 ){
+                setError("Login failed. Check your username and password and try again."); 
+            } 
+            else {
+                setError("Login failed. Please try again later."); 
+            }
         })
     };
 
