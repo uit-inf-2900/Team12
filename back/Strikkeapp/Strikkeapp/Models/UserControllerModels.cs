@@ -58,6 +58,7 @@ public class BanUserRequest
 {
     public string UserToken { get; set; } = string.Empty;
     public Guid BanUserId { get; set; }
+    public bool Ban { get; set; }
 
     public bool requestOk()
     {

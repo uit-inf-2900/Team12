@@ -168,7 +168,7 @@ public class UsersController : ControllerBase
             return BadRequest();
         }
 
-        var res = _userService.BanUser(request.UserToken, request.BanUserId);
+        var res = _userService.BanUser(request.UserToken, request.BanUserId, request.Ban);
 
         if(!res.Success)
         {
