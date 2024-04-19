@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Paper,
     TableContainer,
     Table,
     TableHead,
@@ -9,12 +8,10 @@ import {
     TableCell,
     TablePagination,
     CircularProgress,
-    Button,
     Dialog,
     DialogActions,
     DialogTitle,
     TextField,
-    Chip
 } from '@mui/material';
 import axios from 'axios';
 import SetAlert from '../../../Components/Alert';
@@ -184,7 +181,7 @@ const ViewUsers = () => {
 
 
     return (
-        <Paper>
+        <div>
             {/* Setup the alert status */}
             <SetAlert 
                 open={alertOpen} 
@@ -197,8 +194,8 @@ const ViewUsers = () => {
             <Dialog open={dialogOpen} onClose={handleActionCancel}>
                 <DialogTitle>{dialogMessage}</DialogTitle>
                 <DialogActions>
-                    <Button onClick={handleActionConfirm} color="primary">Confirm</Button>
-                    <Button onClick={handleActionCancel}>Cancel</Button>
+                    <CustomButton onClick={handleActionConfirm} color="primary">Confirm</CustomButton>
+                    <CustomButton onClick={handleActionCancel}>Cancel</CustomButton>
                 </DialogActions>
             </Dialog>
 
@@ -277,7 +274,7 @@ const ViewUsers = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </Paper>
+        </div>
     );
 };
 
