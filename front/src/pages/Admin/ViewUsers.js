@@ -13,6 +13,7 @@ import {
 import axios from 'axios';
 import SetAlert from '../../Components/Alert';
 import CustomButton from '../../Components/Button';
+import Chip from '@mui/material/Chip';
 
 
   // Fetch user data from the backend
@@ -71,12 +72,24 @@ const ViewUsers = () => {
         setPage(0);
     };
 
+    const getStatusLabel = (status) => {
+        switch (status) {
+            case 'verified':
+                return <Chip label="Verified" color="success" />;
+            case 'unverified':
+                return <Chip label="Unverified" color="warning" />;
+            case 'banned':
+                return <Chip label="Banned" color="error" />;
+            default:
+                return <Chip label="Unknown" />;
+        }
+    };
 
+    
     // Function to toggle the admin status of a user
     const toggleAdminStatus = async (userId, isAdmin) => {
 
         // Get the user token from the session storage
-       
         try {
             // Send a PATCH request to the server to update the admin status of the user
             const response = await axios.patch(`http://localhost:5002/Users/updateadmin`, {
@@ -186,7 +199,7 @@ const ViewUsers = () => {
                             <TableRow key={index}>
                                 <TableCell>{user.fullName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status}</TableCell>
+                                <TableCell>{getStatusLabel(user.status)}</TableCell>
                                 <TableCell>{user.isAdmin ? 'Yes' : 'No'}
                                     <CustomButton
                                         style={{alignItems: 'right'}}
