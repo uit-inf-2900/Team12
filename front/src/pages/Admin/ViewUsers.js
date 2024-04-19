@@ -145,16 +145,16 @@ const ViewUsers = () => {
 
 
     
-    const toggleAdminStatus = (userId, isAdmin) => {
+    const toggleAdminStatus = (userId, isAdmin, userName, userEmail) => {
         handleActionOpen(
-            `Are you sure you want to ${isAdmin ? 'remove' : 'add'} admin privileges for this user?`,
+            `Are you sure you want to ${isAdmin ? 'remove' : 'add'} admin privileges for ${userName} (${userEmail})?`,
             () => updateAdminStatus(userId, !isAdmin)
         );
     };
 
-    const banUser = (userId) => {
+    const banUser = (userId,  userName, userEmail) => {
         handleActionOpen(
-            'Are you sure you want to ban this user?',
+            `Are you sure you want to ban  ${userName} (${userEmail}) ?`,
             () => executeBanUser(userId)
         );
     };
@@ -297,7 +297,7 @@ const ViewUsers = () => {
                                         style={{alignItems: 'right'}}
                                         variant="contained"
                                         color={user.isAdmin ? "secondary" : "primary"}
-                                        onClick={() => toggleAdminStatus(user.userId, user.isAdmin)}
+                                        onClick={() => toggleAdminStatus(user.userId, user.isAdmin, user.fullName, user.email)}
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
                                     </CustomButton>
@@ -307,7 +307,7 @@ const ViewUsers = () => {
                                         <CustomButton
                                             variant="contained"
                                             color="secondary"
-                                            onClick={() => banUser(user.userId)}
+                                            onClick={() => banUser(user.userId, user.fullName, user.email)}
                                         >
                                             Ban User
                                         </CustomButton>
