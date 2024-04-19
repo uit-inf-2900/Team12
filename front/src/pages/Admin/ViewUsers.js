@@ -68,6 +68,7 @@ const ViewUsers = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogAction, setDialogAction] = useState(() => () => {});
     const [dialogMessage, setDialogMessage] = useState('');
+    const [refreshData, setRefreshData] = useState(false);  // State to trigger data refresh
 
 
     // Call this function to open the dialog and set the action that will be taken upon confirmation
@@ -78,9 +79,11 @@ const ViewUsers = () => {
     };
 
     const handleActionConfirm = () => {
-        dialogAction();
+        dialogAction(); // Directly invoke the stored dialogAction
         setDialogOpen(false);
+        setRefreshData(prev => !prev); // Ensure refreshData is toggled after the action is confirmed
     };
+    
 
     const handleActionCancel = () => {
         setDialogOpen(false);
@@ -114,25 +117,17 @@ const ViewUsers = () => {
         return 0;
     });
 
-
     useEffect(() => {
-        // Fetch the user data when the component mounts
-        const timer = setTimeout(() => {
-            fetchUserData()
-                .then(data => {
-                    setUsers(data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.error('Error setting user data:', error);
-                    setLoading(false);
-                });
-        }, 1000);
-
-        // Clean up timer
-        return () => clearTimeout(timer);
-    }, []);
-
+        const fetchData = async () => {
+            setLoading(true);
+            const data = await fetchUserData();
+            setUsers(data);
+            setLoading(false);
+        };
+    
+        fetchData();
+    }, [refreshData]); // refreshData toggles to trigger this effect
+    
     
     const toggleAdminStatus = (userId, isAdmin, userName, userEmail) => {
         handleActionOpen(
@@ -193,35 +188,31 @@ const ViewUsers = () => {
 
     const executeBanUser = async (UserId, IsBanned) => {
         try {
-            // Send a POST request to the server to ban the user
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
                 userToken: token,
-                banUserId: UserId, 
+                banUserId: UserId,
                 ban: IsBanned
             });
-
-            // If the request is successful, update the users array to remove the banned user
+    
             if (response.status === 200) {
                 setUsers(prevUsers => prevUsers.filter(user => user.userId !== UserId));
-                // Set alert for success
                 setAlertMessage('User banned successfully');
                 setAlertSeverity('success');
                 setAlertOpen(true);
             } else {
                 const errorData = await response.data;
-                // Set alert for error from the server response
                 setAlertMessage(`Failed to ban user: ${errorData.message}`);
                 setAlertSeverity('error');
                 setAlertOpen(true);
             }
         } catch (error) {
-            // Set alert for error in catch block
             setAlertMessage('Failed to ban user');
             setAlertSeverity('error');
             setAlertOpen(true);
-            console.error('Error banning user:', error);
         }
+        setRefreshData(prev => !prev); // Ensuring refreshData is toggled on each call
     };
+    
 
 
     return (
