@@ -240,7 +240,10 @@ const ViewUsers = () => {
                                         style={{alignItems: 'right'}}
                                         variant="contained"
                                         color={user.isAdmin ? "secondary" : "primary"}
-                                        onClick={() => toggleAdminStatus(user.userId, user.isAdmin)}
+                                        onClick={() => handleActionOpen(
+                                            `Are you sure you want to ${user.isAdmin ? 'remove' : 'add'} admin privileges for ${user.fullName} (${user.email})?`,
+                                            () => toggleAdminStatus(user.userId, !user.isAdmin)
+                                        )}
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
                                     </CustomButton>
@@ -249,7 +252,10 @@ const ViewUsers = () => {
                                 <CustomButton
                                     variant="contained"
                                     color={user.status === "banned" ? "primary" : "secondary"} // Endre farge basert på status
-                                    onClick={() => banUser(user.userId, user.status === "banned" ? false : true)}
+                                    onClick={() => handleActionOpen(
+                                        `Are you sure you want to ${user.status === "banned" ? "unban" : "ban"} ${user.fullName} (${user.email})?`,
+                                        () => banUser(user.userId, user.status !== "banned")
+                                    )}
                                 >
                                     {user.status === "banned" ? "Unban User" : "Ban User"} {/* Endre knappetekst basert på status */}
                                 </CustomButton>
