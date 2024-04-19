@@ -133,9 +133,9 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
                         <th>Type</th>
                         <th>Size</th>
                         <th>Length</th>
-                        <th>Quantity</th>
+                        {/* <th>Quantity</th> */}
                         <th>In Use</th>
-                        <th>Edit</th>
+                        {/* <th>Edit</th> */}
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -147,15 +147,15 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
                             <td>{needle.type}</td>
                             <td>{needle.size} mm</td>
                             <td>{needle.length} cm</td>
-                            <td>{needle.numItem}</td>
+                            {/* <td>{needle.numItem}</td> */}
                             <td className={needle.numInUse ? 'in-use' : 'not-in-use'}>
                                 {needle.numInUse ? 'In Use' : 'Not In Use'}
                             </td>
-                            <td>
+                            {/* <td>
                                 <Fab size="small" onClick={() => handleEditNeedle(needle)}>
                                     <EditIcon />
                                 </Fab>
-                            </td>
+                            </td> */}
                             <td>
                                 <Fab size="small" onClick={() => handleOpenDeleteModal(needle)}>
                                     <DeleteIcon />
