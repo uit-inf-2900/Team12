@@ -36,7 +36,7 @@ const fetchUserData = async () => {
 
 
 const ViewUsers = () => {
-    // State variables to store user data, current page, rows per page, and loading state
+    // State declarations
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -44,7 +44,6 @@ const ViewUsers = () => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
-
     const [sortField, setSortField] = useState('fullName');
     const [sortDirection, setSortDirection] = useState('asc');
     const [searchText, setSearchText] = useState('');
@@ -64,9 +63,11 @@ const ViewUsers = () => {
         }).catch(error => {
             console.error('Error setting user data:', error);
             setLoading(false);
-        });
+        });        
     }, [refreshData]);
 
+
+    // User interaction handlers
     const handleChangePage = (event, newPage) => setPage(newPage);
     const handleChangeRowsPerPage = event => {
         setRowsPerPage(+event.target.value);
@@ -92,20 +93,13 @@ const ViewUsers = () => {
     };
     const handleActionCancel = () => setDialogOpen(false);
 
+     // Sorting and filtering logic
     const filteredUsers = users.filter(user => user.fullName.toLowerCase().includes(searchText) || user.email.toLowerCase().includes(searchText));
     const sortedUsers = filteredUsers.sort((a, b) => (a[sortField] < b[sortField]) ? (sortDirection === 'asc' ? -1 : 1) : (a[sortField] > b[sortField]) ? (sortDirection === 'asc' ? 1 : -1) : 0);
 
-
-
-
-
-
-
-    // Function to toggle the admin status of a user
+   // Admin status update
     const toggleAdminStatus = async (userId, isAdmin) => {
-
         // Get the user token from the session storage
-       
         try {
             // Send a PATCH request to the server to update the admin status of the user
             const response = await axios.patch(`http://localhost:5002/Users/updateadmin`, {
@@ -143,24 +137,26 @@ const ViewUsers = () => {
         }
     };
     
-
-    const banUser = async (UserId, BanStatus) => {
+    // User banning logic
+    const banUser = async (userId, banStatus) => {
         try {
             // Send a POST request to the server to ban the user
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
                 userToken: token,
-                banUserId: UserId, 
-                ban: BanStatus
+                banUserId: userId, 
+                ban: banStatus
             });
-            console.log("userToken: ", token);
-            console.log("banUserId: ", UserId);
-            console.log("response: ", response);
+            console.log("Response: ", response);
 
             // If the request is successful, update the users array to remove the banned user
             if (response.status === 200) {
-                setUsers(prevUsers => prevUsers.filter(user => user.userId !== UserId));
-                // Set alert for success
-                setAlertMessage('User banned successfully');
+                setUsers(prevUsers => prevUsers.map(user => {
+                    if (user.userId === userId) {
+                        return { ...user, status: banStatus ? "banned" : "active" }; // Oppdater status basert på banStatus
+                    }
+                    return user;
+                }));
+                setAlertMessage(`User ${banStatus ? "banned" : "unbanned"} successfully`);
                 setAlertSeverity('success');
                 setAlertOpen(true);
             } else {
@@ -189,8 +185,9 @@ const ViewUsers = () => {
                 severity={alertSeverity} 
                 message={alertMessage} 
             />
+            {/* Search field for users */}
             <TextField label="Search Users" variant="outlined" value={searchText} onChange={handleSearchChange} style={{ margin: '10px 0' }} fullWidth />
-
+            {/* Dialog for confirming actions */}
             <Dialog open={dialogOpen} onClose={handleActionCancel}>
                 <DialogTitle>{dialogMessage}</DialogTitle>
                 <DialogActions>
@@ -199,7 +196,7 @@ const ViewUsers = () => {
                 </DialogActions>
             </Dialog>
 
-
+            {/* User table and loading state */}
             <TableContainer>
                 {/* Display a loading spinner while fetching data */}
                 {loading ?
