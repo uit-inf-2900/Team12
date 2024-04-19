@@ -13,7 +13,7 @@ public interface IUserService
     public UserServiceResult LogInUser(string userEmail, string userPwd);
     public DeleteUserResult DeleteUser(string userToken);
     public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin);
-    public BanUserResult BanUser(string userToken, Guid bannedUser);
+    public BanUserResult BanUser(string userToken, Guid bannedUser, bool shouldBan);
 }
 
 public class UserService : IUserService
@@ -213,7 +213,7 @@ public class UserService : IUserService
         }
     }
 
-    public BanUserResult BanUser(string userToken, Guid bannedUser)
+    public BanUserResult BanUser(string userToken, Guid bannedUser, bool shouldBan)
     {
         var tokenRes = _tokenService.ExtractUserID(userToken);
         if(!tokenRes.Success)
@@ -245,8 +245,16 @@ public class UserService : IUserService
                     return BanUserResult.ForFailure("User not found");
                 }
 
-                user.UserStatus = "banned";
-                _context.SaveChanges();
+                if(shouldBan)
+                {
+                    user.UserStatus = "banned";
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    user.UserStatus = "verified";
+                    _context.SaveChanges();
+                }
 
                 transaction.Commit();
                 return BanUserResult.ForSuccess(bannedUser);
