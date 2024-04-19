@@ -14,6 +14,7 @@ import axios from 'axios';
 import SetAlert from '../../Components/Alert';
 import CustomButton from '../../Components/Button';
 import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
 
 
   // Fetch user data from the backend
@@ -31,6 +32,20 @@ const fetchUserData = async () => {
     }
 };
 
+const getStatusLabel = (status) => {
+    switch (status) {
+        case 'verified':
+            return <Chip label="Verified" color="success" variant="outlined" />;
+        case 'unverified':
+            return <Chip label="Unverified" color="warning" variant="outlined" />;
+        case 'banned':
+            return <Chip label="Banned" color="error"variant="outlined"  />;
+        default:
+            return <Chip label="Unknown" variant="outlined" />;
+    }
+};
+
+
 
 const ViewUsers = () => {
     // State variables to store user data, current page, rows per page, and loading state
@@ -42,6 +57,39 @@ const ViewUsers = () => {
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
     const token = sessionStorage.getItem('token');
+    const [sortField, setSortField] = useState('fullName');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const [searchText, setSearchText] = useState('');
+
+    const handleSearchChange = (event) => {
+        setSearchText(event.target.value.toLowerCase());
+    };
+
+    
+    // Event handler for sorting
+    const handleSort = (field) => {
+        const isAsc = sortField === field && sortDirection === 'asc';
+        setSortDirection(isAsc ? 'desc' : 'asc');
+        setSortField(field);
+    };
+
+    // Filter users based on search text
+    const filteredUsers = users.filter((user) =>
+        user.fullName.toLowerCase().includes(searchText) || 
+        user.email.toLowerCase().includes(searchText)
+    );
+
+    // Sort users based on sort field and direction
+    const sortedUsers = filteredUsers.sort((a, b) => {
+        if (a[sortField] < b[sortField]) {
+            return sortDirection === 'asc' ? -1 : 1;
+        }
+        if (a[sortField] > b[sortField]) {
+            return sortDirection === 'asc' ? 1 : -1;
+        }
+        return 0;
+    });
+
 
     useEffect(() => {
         // Fetch the user data when the component mounts
@@ -72,18 +120,6 @@ const ViewUsers = () => {
         setPage(0);
     };
 
-    const getStatusLabel = (status) => {
-        switch (status) {
-            case 'verified':
-                return <Chip label="Verified" color="success" />;
-            case 'unverified':
-                return <Chip label="Unverified" color="warning" />;
-            case 'banned':
-                return <Chip label="Banned" color="error" />;
-            default:
-                return <Chip label="Unknown" />;
-        }
-    };
 
     
     // Function to toggle the admin status of a user
@@ -172,28 +208,39 @@ const ViewUsers = () => {
                 severity={alertSeverity} 
                 message={alertMessage} 
             />
+            {/* Make a search */}
+            <TextField
+                label="Search Users"
+                variant="outlined"
+                value={searchText}
+                onChange={handleSearchChange}
+                style={{ margin: '10px 0' }}
+                fullWidth
+            />
             <TableContainer>
                 {/* Display a loading spinner while fetching data */}
                 {loading ?
                 (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
-                        <CircularProgress style={{ color: '#F6964B' }} />
-                    </div>
+                    <CircularProgress style={{ display: 'block', margin: 'auto' }} />
                 ):(
                 <Table>
                     {/* Create the header of the table */}
                     <TableHead>
-                        <TableRow>
-                            <TableCell style={{ fontWeight: 'bold' }}>Name</TableCell>
-                            <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
-                            <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
-                            <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
-                            <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
-                        </TableRow>
+                    <TableRow>
+                    <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('fullName')}>
+                        Name {sortField === 'fullName' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('email')}>
+                        Email {sortField === 'email' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+                    </TableCell>
+                    <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
+                    <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
+                </TableRow>
                     </TableHead>
                     {/* Add the user information to the table */}
                     <TableBody>
-                        {users
+                        {sortedUsers
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((user, index) => (
                             <TableRow key={index}>
@@ -228,13 +275,13 @@ const ViewUsers = () => {
 
             {/* Navigate between pages of data displayed within a table */}
             <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={users.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                onPageChange={(_, newPage) => setPage(newPage)}
+                onRowsPerPageChange={(event) => setRowsPerPage(+event.target.value)}
             />
         </Paper>
     );
