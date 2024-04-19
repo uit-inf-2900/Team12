@@ -9,11 +9,17 @@ import {
     TableCell,
     TablePagination,
     CircularProgress,
-  } from '@mui/material';
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    TextField,
+    Chip
+} from '@mui/material';
 import axios from 'axios';
-import SetAlert from '../../Components/Alert';
-import CustomButton from '../../Components/Button';
-import Chip from '@mui/material/Chip';
+import SetAlert from '../../../Components/Alert';
+import CustomButton from '../../../Components/Button';
+import {getStatusLabel} from './UserLable';
 
 
   // Fetch user data from the backend
@@ -32,22 +38,6 @@ const fetchUserData = async () => {
 };
 
 
-// Function to get the status label for a user based on their status (verified, unverified, banned)
-const getStatusLabel = (status) => {
-    switch (status) {
-        case 'verified':
-            return <Chip label="Verified" color="success" variant="outlined" />;
-        case 'unverified':
-            return <Chip label="Unverified" color="warning" variant="outlined" />;
-        case 'banned':
-            return <Chip label="Banned" color="error"variant="outlined"  />;
-        default:
-            return <Chip label="Unknown" variant="outlined" />;
-    }
-};
-
-
-
 const ViewUsers = () => {
     // State variables to store user data, current page, rows per page, and loading state
     const [users, setUsers] = useState([]);
@@ -57,36 +47,61 @@ const ViewUsers = () => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
+
+    const [sortField, setSortField] = useState('fullName');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const [searchText, setSearchText] = useState('');
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogMessage, setDialogMessage] = useState('');
+    const [dialogAction, setDialogAction] = useState(() => () => {});
+    const [refreshData, setRefreshData] = useState(false);
+
+
     const token = sessionStorage.getItem('token');
 
     useEffect(() => {
-        // Fetch the user data when the component mounts
-        const timer = setTimeout(() => {
-            fetchUserData()
-                .then(data => {
-                    setUsers(data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.error('Error setting user data:', error);
-                    setLoading(false);
-                });
-        }, 1000);
+        setLoading(true);
+        fetchUserData().then(data => {
+            setUsers(data);
+            setLoading(false);
+        }).catch(error => {
+            console.error('Error setting user data:', error);
+            setLoading(false);
+        });
+    }, [refreshData]);
 
-        // Clean up timer
-        return () => clearTimeout(timer);
-    }, []);
-
-    // Function to change the current page 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    // Function to change the number of rows per page
+    const handleChangePage = (event, newPage) => setPage(newPage);
     const handleChangeRowsPerPage = event => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    const handleSearchChange = event => setSearchText(event.target.value.toLowerCase());
+    const handleSort = field => {
+        const isAsc = sortField === field && sortDirection === 'asc';
+        setSortDirection(isAsc ? 'desc' : 'asc');
+        setSortField(field);
+    };
+
+    const handleActionOpen = (message, action) => {
+        setDialogMessage(message);
+        setDialogAction(() => action);
+        setDialogOpen(true);
+    };
+    const handleActionConfirm = () => {
+        dialogAction();
+        setDialogOpen(false);
+        setRefreshData(prev => !prev);
+    };
+    const handleActionCancel = () => setDialogOpen(false);
+
+    const filteredUsers = users.filter(user => user.fullName.toLowerCase().includes(searchText) || user.email.toLowerCase().includes(searchText));
+    const sortedUsers = filteredUsers.sort((a, b) => (a[sortField] < b[sortField]) ? (sortDirection === 'asc' ? -1 : 1) : (a[sortField] > b[sortField]) ? (sortDirection === 'asc' ? 1 : -1) : 0);
+
+
+
+
+
 
 
     // Function to toggle the admin status of a user
@@ -177,6 +192,17 @@ const ViewUsers = () => {
                 severity={alertSeverity} 
                 message={alertMessage} 
             />
+            <TextField label="Search Users" variant="outlined" value={searchText} onChange={handleSearchChange} style={{ margin: '10px 0' }} fullWidth />
+
+            <Dialog open={dialogOpen} onClose={handleActionCancel}>
+                <DialogTitle>{dialogMessage}</DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleActionConfirm} color="primary">Confirm</Button>
+                    <Button onClick={handleActionCancel}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
+
+
             <TableContainer>
                 {/* Display a loading spinner while fetching data */}
                 {loading ?
@@ -189,8 +215,12 @@ const ViewUsers = () => {
                     {/* Create the header of the table */}
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{ fontWeight: 'bold' }}>Name</TableCell>
-                            <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
+                            <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('fullName')}>
+                                Name {sortField === 'fullName' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+                            </TableCell>
+                            <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('email')}>
+                                Email {sortField === 'email' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+                            </TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
@@ -198,13 +228,13 @@ const ViewUsers = () => {
                     </TableHead>
                     {/* Add the user information to the table */}
                     <TableBody>
-                        {users
+                        {sortedUsers
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((user, index) => (
                             <TableRow key={index}>
                                 <TableCell>{user.fullName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status}</TableCell>
+                                <TableCell>{getStatusLabel(user.status)}</TableCell>
                                 <TableCell>{user.isAdmin ? 'Yes' : 'No'}
                                     <CustomButton
                                         style={{alignItems: 'right'}}

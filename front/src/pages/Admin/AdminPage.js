@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../../GlobalStyles/main.css";
 import ViewMessages from './Messages/ViewMessages';
-import ViewUsers from './ViewUsers';
+import ViewUsers from './Users/ViewUsers';
 import Sidebar from './Sidebar';
 import Dashboard from './Dashboard';
 
