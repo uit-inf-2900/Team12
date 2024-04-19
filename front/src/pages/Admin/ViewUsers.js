@@ -9,12 +9,16 @@ import {
     TableCell,
     TablePagination,
     CircularProgress,
-  } from '@mui/material';
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    TextField
+} from '@mui/material';
 import axios from 'axios';
 import SetAlert from '../../Components/Alert';
 import CustomButton from '../../Components/Button';
 import Chip from '@mui/material/Chip';
-import TextField from '@mui/material/TextField';
 
 
   // Fetch user data from the backend
@@ -60,7 +64,26 @@ const ViewUsers = () => {
     const [sortField, setSortField] = useState('fullName');
     const [sortDirection, setSortDirection] = useState('asc');
     const [searchText, setSearchText] = useState('');
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogAction, setDialogAction] = useState(() => () => {});
+    const [dialogMessage, setDialogMessage] = useState('');
 
+
+    // Call this function to open the dialog and set the action that will be taken upon confirmation
+    const handleActionOpen = (message, action) => {
+        setDialogMessage(message);
+        setDialogAction(() => action);
+        setDialogOpen(true);
+    };
+
+    const handleActionConfirm = () => {
+        dialogAction();
+        setDialogOpen(false);
+    };
+
+    const handleActionCancel = () => {
+        setDialogOpen(false);
+    };
     const handleSearchChange = (event) => {
         setSearchText(event.target.value.toLowerCase());
     };
@@ -122,8 +145,23 @@ const ViewUsers = () => {
 
 
     
+    const toggleAdminStatus = (userId, isAdmin) => {
+        handleActionOpen(
+            `Are you sure you want to ${isAdmin ? 'remove' : 'add'} admin privileges for this user?`,
+            () => updateAdminStatus(userId, !isAdmin)
+        );
+    };
+
+    const banUser = (userId) => {
+        handleActionOpen(
+            'Are you sure you want to ban this user?',
+            () => executeBanUser(userId)
+        );
+    };
+
+
     // Function to toggle the admin status of a user
-    const toggleAdminStatus = async (userId, isAdmin) => {
+    const updateAdminStatus = async (userId, isAdmin) => {
 
         // Get the user token from the session storage
         try {
@@ -164,7 +202,7 @@ const ViewUsers = () => {
     };
     
 
-    const banUser = async (UserId) => {
+    const executeBanUser = async (UserId) => {
         try {
             // Send a POST request to the server to ban the user
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
@@ -217,6 +255,13 @@ const ViewUsers = () => {
                 style={{ margin: '10px 0' }}
                 fullWidth
             />
+            <Dialog open={dialogOpen} onClose={handleActionCancel}>
+                <DialogTitle>{dialogMessage}</DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleActionCancel}>Cancel</Button>
+                    <Button onClick={handleActionConfirm} color="primary">Confirm</Button>
+                </DialogActions>
+            </Dialog>
             <TableContainer>
                 {/* Display a loading spinner while fetching data */}
                 {loading ?
@@ -257,14 +302,17 @@ const ViewUsers = () => {
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
                                     </CustomButton>
                                 </TableCell>
-                                <TableCell >{user.status}
-                                <CustomButton
-                                    variant="contained"
-                                    color={user.status === "banned" ? "primary" : "secondary"} // Endre farge basert på status
-                                    onClick={() => banUser(user.userId)}
-                                >
-                                    {user.status === "banned" ? "Unban User" : "Ban User"} {/* Endre knappetekst basert på status */}
-                                </CustomButton>
+                                <TableCell >
+                                    {user.status !== "banned" && (
+                                        <CustomButton
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={() => banUser(user.userId)}
+                                        >
+                                            Ban User
+                                        </CustomButton>
+                                    )}
+                                    {user.status === "banned" }
                                 </TableCell>
                             </TableRow>
                         ))}
