@@ -5,7 +5,9 @@ import GeneralCard from './Card';
 
 const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken til usersToken for konsistens
     const [usersData, setUsersData] = useState([]);
-    const [messagesData, setMessagesData] = useState([]);
+    const [activeMessages, setActiveMessages] = useState([]);
+    const [inactiveeMessages, setInactiveMessages] = useState([]);
+    const [handledMessages, setHandledMessages] = useState([]);
     const [yarnData, setYarnData] = useState([]);
     const [needleData, setNeedleData] = useState([]);
     const [recipesData, setRecipesData] = useState([]);
@@ -23,8 +25,17 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
         // Get messages 
         fetch('http://localhost:5002/api/Contact?isActive=false&isHandled=false', { headers: { 'Accept': 'application/json' }})
             .then(response => response.json())
-            .then(data => setMessagesData(data))
+            .then(data => setInactiveMessages(data))
             .catch(error => console.error('Error fetching messages:', error));
+        fetch('http://localhost:5002/api/Contact?isActive=false&isHandled=true', { headers: { 'Accept': 'application/json' }})
+            .then(response => response.json())
+            .then(data => setHandledMessages(data))
+            .catch(error => console.error('Error fetching messages:', error));
+        fetch('http://localhost:5002/api/Contact?isActive=true&isHandled=false', { headers: { 'Accept': 'application/json' }})
+            .then(response => response.json())
+            .then(data => setActiveMessages(data))
+            .catch(error => console.error('Error fetching messages:', error));
+        
 
         // Get recipes
         fetch(`http://localhost:5002/api/recipe/getallrecipes?userToken=${usersToken}`, { headers: { 'Accept': 'application/json' }})
@@ -55,11 +66,12 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
         { label: "Admins", value: usersData.filter(user => user.isAdmin).length },
     ];
 
+    const totalMessages = activeMessages.length + inactiveeMessages.length + handledMessages.length;
     const Messages = [
-        { label: "Total Messages", value: messagesData.length },
-        { label: "Unhandled Active", value: messagesData.filter(message => message.isActive && !message.isHandled).length },
-        { label: "Unhandled Inactive", value: messagesData.filter(message => !message.isActive && !message.isHandled).length},
-        { label: "Handled Messages", value: messagesData.filter(message => !message.isActive && message.isHandled).length }
+        { label: "Total Messages", value: totalMessages },
+        { label: "Unhandled Active", value: activeMessages.length }, 
+        { label: "Unhandled Inactive", value: inactiveeMessages.length},
+        { label: "Handled Messages", value: handledMessages.length}, 
     ]; 
 
     const Needles = [
