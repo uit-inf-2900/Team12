@@ -84,7 +84,6 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
 
     return (
         <div>
-            <h1>Dashboard</h1>
             <div style={{ display: "flex",flexWrap: "wrap", justifyContent: "space-between" }}>
                 <GeneralCard 
                     title="User Statistics"

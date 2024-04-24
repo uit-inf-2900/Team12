@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import Dashboard from './Dashboard/Dashboard';
 
 const AdminPage = () => {
-    const [activeView, setActiveView] = useState('');
+    const [activeView, setActiveView] = useState('dashboard');
 
     const toggleView = (view) => {
         setActiveView(prevView => prevView === view ? '' : view);
