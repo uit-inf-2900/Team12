@@ -78,34 +78,45 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
         { label: "Total Recipes", value: recipesData.length },
     ];
 
+    const Newsletter = [
+        { label: "Total Newsletter", value: 0 },
+    ];
+
     return (
         <div>
             <h1>Dashboard</h1>
-            <GeneralCard 
-                title="User Statistics"
-                stats={userStats}
-                onClick={() => toggleView('users')}
-            />
-            <GeneralCard 
-                title="Message Statistics"
-                stats={Messages}
-                onClick={() => toggleView('users')}
-            />
-            <GeneralCard 
-                title="Recipes Statistics"
-                stats={Recipes}
-                onClick={() => toggleView('users')}
-            />
-            <GeneralCard 
-                title="Yarn Statistics"
-                stats={Yarn}
-                onClick={() => toggleView('users')}
-            />
-            <GeneralCard 
-                title="Needle Statistics"
-                stats={Needles}
-                onClick={() => toggleView('users')}
-            />
+            <div style={{ display: "flex",flexWrap: "wrap", justifyContent: "space-between" }}>
+                <GeneralCard 
+                    title="User Statistics"
+                    stats={userStats}
+                    onClick={() => toggleView('users')}
+                />
+                <GeneralCard 
+                    title="Message Statistics"
+                    stats={Messages}
+                    onClick={() => toggleView('users')}
+                />
+                <GeneralCard 
+                    title="Recipes Statistics"
+                    stats={Recipes}
+                    onClick={() => toggleView('')}
+                />
+                <GeneralCard 
+                    title="Yarn Statistics"
+                    stats={Yarn}
+                    onClick={() => toggleView('')}
+                />
+                <GeneralCard 
+                    title="Needle Statistics"
+                    stats={Needles}
+                    onClick={() => toggleView('')}
+                />
+                <GeneralCard 
+                    title="Newsletter subscripers"
+                    stats={Newsletter}
+                    onClick={() => toggleView('')}
+                />
+            </div>
         </div>        
     );
 };
