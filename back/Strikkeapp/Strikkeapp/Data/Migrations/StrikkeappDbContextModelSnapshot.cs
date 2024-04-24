@@ -67,6 +67,9 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<int>("NeedleSize")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("RecipeName")
                         .IsRequired()
                         .HasColumnType("TEXT");

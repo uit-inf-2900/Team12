@@ -1,14 +1,23 @@
 import React from "react";
 import "../GlobalStyles/main.css";
-import Projects from "../Components/testCard";
+
+import ProjectCard from "../Components/ProjectCard";
+import Card from "../Components/Card";
+
+import PDF from "../Components/PDFviewer";
 
 
 export const Home = () => {
+
+  
   return (
     <div className="page-container">
       <h1>Home </h1> 
-      <Projects
-      />
+      <div>
+        <PDF></PDF>
+      
+      </div>
+      
     </div>
   );
 };

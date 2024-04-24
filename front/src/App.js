@@ -61,6 +61,9 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contactus" element={<ContactUs />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/" exact component={Projects} />
+            
+            
 
             {/* If you have admin privileges and is admin change the contact us page with the asminpage  */}
             {isLoggedIn && isAdmin ? (

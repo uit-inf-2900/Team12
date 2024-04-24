@@ -19,6 +19,7 @@ public class RecipeController : ControllerBase
         public string RecipeName { get; set; } = string.Empty;
         public int NeedleSize {  get; set; }
         public string KnittingGauge { get; set; } = string.Empty;
+        public string Notes { get; set; } = string.Empty;
         public IFormFile? RecipeFile { get; set; }
 
         // Check that request is ok
@@ -45,7 +46,7 @@ public class RecipeController : ControllerBase
 
         using var stream = formData.RecipeFile.OpenReadStream();
         var result = _recipeService.StoreRecipe(stream, formData.UserToken, 
-            formData.RecipeName, formData.NeedleSize, formData.KnittingGauge);
+            formData.RecipeName, formData.NeedleSize, formData.KnittingGauge, formData.Notes);
 
         if (!result.Success)
         {
@@ -69,8 +70,8 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet]
-    [Route("getrecipe")]
-    public IActionResult GetRecipePDF([FromQuery] string userToken, Guid recipeId)
+    [Route("recipe")]
+    public IActionResult GetRecipePDF([FromQuery] string userToken, [FromQuery] Guid recipeId)
     {
         var result = _recipeService.GetRecipePDF(recipeId, userToken);
         if (!result.Success)
@@ -89,6 +90,22 @@ public class RecipeController : ControllerBase
 
         return File(result.PDFData, "application/pdf");
     }
+
+    [HttpDelete]
+    [Route("recipe")]
+    public IActionResult DeleteRecipePDF([FromQuery] string userToken, Guid recipeId)
+    {
+        // Call the recipe service to delete the requested file
+        var result = _recipeService.DeleteRecipePDF(recipeId, userToken);
+        // if the file cannot be deleted, return 404 to indicate that the file does not exist, atleast in the scope of the user sending the request
+        if (!result)
+            return NotFound();
+
+        // If delete is successful in the service, return 200 to indicate this
+        return Ok();
+    }
+    
+
 }
 
 

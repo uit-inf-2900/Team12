@@ -1,5 +1,6 @@
 import React from 'react';
 import exampleImage from '../images/reading.png'; // Import the PNG image
+import UploadedRecipes from '../pages/RecipeManagement/UploadedRecipes';
 
 import "../GlobalStyles/main.css";
 
@@ -22,10 +23,10 @@ const getCustomLabel = (propName) => {
   
 
 
-const Card = ({ title, ...descriptions }) => {
+const Card = ({ title, onClick, ...descriptions }) => {
     
     return (
-    <div className="card">
+    <div className="card" onClick={onClick}>
       <img src={exampleImage} alt={title} className="card-image" /> {/* Use imported image */}
         <div className="card-overlay">
             <div className="card-header">
