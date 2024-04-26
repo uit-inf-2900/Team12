@@ -14,7 +14,6 @@ export const Home = () => {
     <div className="page-container">
       <h1>Home </h1> 
       <div>
-        <PDF></PDF>
       
       </div>
       

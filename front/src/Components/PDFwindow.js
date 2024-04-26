@@ -11,7 +11,7 @@ const PDFViewer = ({ id }) => {
     const fetchPDF = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:5002/api/recipe/getrecipe?userToken=${sessionStorage.getItem('token')}&recipeId=${id}`, {
+            const response = await axios.get(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${id}`, {
                 responseType: 'arraybuffer' // Ensure response is treated as binary data
             });
             const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -28,8 +28,7 @@ const PDFViewer = ({ id }) => {
     };
 
     return (
-        <div className="pdf-viewer">
-            {loading && <p>Loading PDF...</p>}
+        <div>
         </div>
     );
 };
