@@ -17,6 +17,7 @@ const UserView = () => {
       <li className="nav-item"><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
       <li className="nav-item"><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
       <li className="nav-item"><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
+      <li className='nav-item'><NavLink to='/counter' className='nav-link'> Counter </NavLink></li>
     </>
   ); 
 }; 
@@ -25,7 +26,6 @@ const AdminView = ({ isAdmin, isLoggedIn }) => {
   return(
     <>
       {/* Dont want to show the contact page if you have admin privilages */}
-      {!isAdmin && <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>}
 
       {/* Show the admin page if you have admin prvileges */}
       {isAdmin && isLoggedIn && <li className="nav-item"><NavLink to="/adminpage" className="nav-link">Admin</NavLink></li>}

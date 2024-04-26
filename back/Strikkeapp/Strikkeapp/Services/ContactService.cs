@@ -12,13 +12,17 @@ public interface IContactService
     // Generate a contact request 
     public Guid CreateContactRequest (ContactRequestDto request); 
     // List inncomming contact requests
-    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive); 
+    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled); 
 
 
     // svare på mail 
+    public bool ResponseMessage(Guid contactRequestId, string responseMessage);
+
 
 
     // kunne endre status 
+    bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive);
+    bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled);
 }
 
 public class ContactService : IContactService
@@ -55,17 +59,22 @@ public class ContactService : IContactService
 
 
     // Create a list of contact requests
-    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive)
+    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled)
     {
         // Get alle the contact requests
         var contactRequests = _context.ContactRequests.ToList();
 
         // Convert to dto
-        var contactRequestDtos = contactRequests.Where(c => c.IsActive == IsActive).Select(c => new ContactRequestDto
+        var contactRequestDtos = contactRequests
+        .Where(c => c.IsActive == IsActive && c.IsHandled == IsHandled)
+        .Select(c => new ContactRequestDto
         {
+            ContactRequestId = c.ContactRequestId,
             UserEmail = c.Email!,
             UserName = c.FullName!,
-            UserMessage = c.Message!
+            UserMessage = c.Message!,
+            IsActive = c.IsActive, 
+            IsHandled = c.IsHandled
         });
 
         return contactRequestDtos; 
@@ -111,4 +120,40 @@ public class ContactService : IContactService
 
         return contactRequest; 
     }
+
+
+    // Update the status of the contact request 
+    public bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive)
+    {
+        var contactRequest = _context.ContactRequests.Find(contactRequestId);
+        if (contactRequest == null) return false;
+
+        contactRequest.IsActive = isActive;
+        _context.SaveChanges();
+        return true;
+    }
+
+    public bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled)
+    {
+        var contactRequest = _context.ContactRequests.Find(contactRequestId);
+        if (contactRequest == null) return false;
+
+        contactRequest.IsHandled = isHandled;
+        _context.SaveChanges();
+        return true;
+    }
+
+    // Answer the contact request
+    public bool ResponseMessage(Guid contactRequestId, string responseMessage)
+    {
+        var contactRequest = _context.ContactRequests.Find(contactRequestId);
+        if (contactRequest == null) return false;
+
+
+        // have this '\n new message \n' to see when new message is added
+        contactRequest.Message += $"\n new message \n Response: {responseMessage}";
+        _context.SaveChanges();
+        return true;
+    }
+
 }

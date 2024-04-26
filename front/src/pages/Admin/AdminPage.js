@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import validator from 'validator'; 
-import axios from 'axios';
-
-import InputField from "../../Components/InputField";
 import "../../GlobalStyles/main.css";
-import ViewMessages from './ViewMessages';
-
+import ViewMessages from './Messages/ViewMessages';
+import ViewUsers from './Users/ViewUsers';
+import Sidebar from './Sidebar';
+import Dashboard from './Dashboard';
 
 const AdminPage = () => {
-    const [showMessages, setShowMessages] = useState(false);
-    const [showUsers, setShowUsers] = useState(false);
+    const [activeView, setActiveView] = useState('');
 
+    const toggleView = (view) => {
+        setActiveView(prevView => prevView === view ? '' : view);
+    };
 
-    return(
-        <div className="page-container">
-            <h1>Admin Page</h1>
-            <button className='light-button' onClick={() => setShowMessages(!showMessages)}>
-                {showMessages ? 'Hide messages': 'Show messages'}
-            </button>
-            {showMessages && <ViewMessages />}
+    return (
+        <div style={{ display: 'flex', margin: 'auto', 'padding-top':'20px', overflow:'auto'}}>
+            <Sidebar onToggleView={toggleView} activeView={activeView}/>
+            <div className="Admin-page-content">
+                <h1>Admin Page</h1>
+                {activeView === 'users' && <ViewUsers />}
+                {activeView === 'messages' && <ViewMessages />}
+                {activeView === 'dashboard' && <Dashboard />}
+            </div>
         </div>
     );
-
 };
 
 export default AdminPage;

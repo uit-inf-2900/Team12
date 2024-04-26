@@ -14,23 +14,23 @@ button {
 }
 
 /* ========= DARK BUTTONS  ========== */
-.dark-button {
+/* .dark-button {
     background-color: var(--button-bg-colo-dark);   
-    color: var(--button-text-color-light);          /* Text */
+    color: var(--button-text-color-light);         
 }
 
 .dark-button.active {
     background-color: var(--button-hover-dark);   
-    color: var(--button-text-color-light);          /* Text */
+    color: var(--button-text-color-light);         
 }
 
 .dark-button:hover {
-    background-color: var(--button-hover-dark); /* Darken the button on hover */
-    opacity: 0.8; /* Slight transparency on hover */
-}
+    background-color: var(--button-hover-dark); 
+    opacity: 0.8;
+} */
 
 /* ========= LIGHT BUTTONS  ========== */
-.light-button {
+/* .light-button {
     background-color: var(--button-bg-colo-light); 
     color:  var(--button-text-color-dark); 
 }
@@ -39,9 +39,9 @@ button {
     color:  var(--button-text-color-dark); 
 }
 .light-button:hover {
-    background-color: var(--button-hover-light); /* Darken the button on hover */
-    opacity: 0.8; /* Slight transparency on hover */
-}
+    background-color: var(--button-hover-light); 
+    opacity: 0.8; 
+} */
 
 
 /* ========= CLOSE BUTTONS (X)  ========== */

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import "../../GlobalStyles/main.css";
 import "./about.css";
+import CustomButton from "../../Components/Button";
 
 import { getImageByName } from '../../images/getImageByName';
 
@@ -14,7 +15,7 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
     // Check if you want the image to be on the left or right side of the text
     <div className={`feature-item ${imageToLeft ? "image-left" : "image-right"}`}>
       {!imageToLeft && <img src={imageSrc} alt={title} className="feature-image" />}
-      <div className="section-container">
+      <div className="section-container"  style={{display:'block'}}>
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
@@ -27,9 +28,9 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
 const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
   return (
-    <div className={`team-member ${imageToLeft ? "image-left" : "image-right"}`}>
+    <div className={`feature-item  ${imageToLeft ? "image-left" : "image-right"}`}>
       {imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
-      <div style={{"flex": "1", "max-width": "400px"}}>
+      <div className="section-container"  style={{display:'block'}}>
         <h3>{name}</h3>
         <p>Rolle: {role}</p>
         <p>Bakgrunn: {background}</p>
@@ -56,6 +57,12 @@ export const About = () => {
       {/* Features section */}
       <h2>Fantastiske funksjoner:</h2>
       <div className="section-container">
+        <FeatureItem
+          imagePosition = "left"
+          imageSrc={getImageByName('stash')}
+          title="Resources page"
+          description="En oversikt over alt du kan trenge av ressurser for strikking. Her finner du blant annet et table med alle forkortelsene du trenger å vite."
+        />
         <FeatureItem
           imageSrc={getImageByName('yarnSheep')}
           title="Garnlageret"
@@ -87,9 +94,11 @@ export const About = () => {
 
 
       {/* Button for registration */}
-      <div className="section-container" style={{"justify-content":"center"}}>
-          <Link to="/signup">
-            <button className="light-button" >Registrer Deg Nå</button>
+      <div  style={{"justify-content":"center", width:'100%'}}>
+          <Link to="/signup " className="section-container" style={{'text-decoration': 'none'}}>
+            <CustomButton themeMode="light" submit={true} fullWidth={true}>
+              Sign up 
+            </CustomButton>
           </Link>
       </div>
 

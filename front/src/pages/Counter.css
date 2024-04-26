@@ -1,0 +1,100 @@
+
+.counter-container,
+.add-counter-box {
+  border-radius: 16px;  /* Rounded corners */
+  text-align: center; /* Center text horizontally */
+  padding: 20px;  /* Space inside the boxes */
+  min-height: 150px;  /* Minimum height to maintain a consistent size */
+  width: 150px; /* Fixed width for consistency */
+  display: flex;  /* Use Flexbox for internal alignment */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center;  /* Center children vertically */
+  align-items: center;  /* Center children horizontally */
+  margin: 5px;  /* Space between adjacent counters and/or add-counter box */
+  flex: 0 0 auto; /* Prevent boxes from growing or shrinking */
+}
+
+.add-counter-box {
+  cursor: pointer;  /* Change the mouse cursor to indicate it's clickable */
+  border: 2px dashed var(--link-color); /* Dashed border */
+  background-color: var(--box-color-light); /* Light background color */
+  font-size: 1rem;  /* Text size */
+  color: var(--box-text-colour);  /* Text color */
+}
+
+.pop {
+  position: fixed;  /* Overlay the entire page */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;  /* Use Flexbox for centering the content */
+  align-items: center;  /* Center vertically */
+  justify-content: center;  /* Center horizontally */
+}
+
+.pop-content {
+  background-color: var(--box-color-dark);  /* Dark background */
+  padding: 20px;  /* Padding inside the modal content box */
+  border-radius: 16px;  /* Rounded corners */
+  text-align: center; /* Center text and elements horizontally */
+}
+
+.pop-content input[type="text"] {
+  margin-bottom: 10px;  /* Space below the input field */
+  padding: 10px;  /* Inner space of the input field for text padding */
+  border-radius: 8px; /* Slightly rounded corners for the input field */
+}
+
+.counter-container {
+  background-color: var(--box-color-dark);  /* Dark background for contrast. */
+  overflow: auto; /* Enable scrolling for overflowing content. */
+}
+
+.counter-info {
+  font-size: 1.7rem;  /* Slightly larger text */
+  color: var(--box-text-colour);  /* Text color */
+}
+
+.counter-controls {
+  display: flex;  /* Use Flexbox for layout */
+  justify-content: center;  /* Center buttons horizontally */
+}
+
+.counter-controls button {
+  padding: 5px 10px;  /* Padding */
+  border-radius: 5px; /* Soft rounded corners for the buttons */
+  margin: 0 5px;  /* Space around buttons for separation */
+  cursor: pointer;  /* Indicate buttons are clickable */
+  font-size: 1rem;  /* Readable font size for button text */
+  background-color: var(--button-bg-colo-light); 
+  color:  var(--button-text-color-dark); 
+}
+
+.counter-controls button:hover{
+  background-color: var(--button-hover-light); 
+  opacity: 0.8;
+}
+
+.boxes-container {
+  display: flex;
+  flex-direction: row; /* Align children horizontally */
+  align-items: start; /* Align children to the start of the cross axis */
+  gap: 20px; /* Space between the boxes */
+  flex: 0 0 auto; /* Prevent boxes from growing or shrinking */
+}
+
+.edit-text {
+  margin-top: 5px;  /* Space above the editable text */
+  margin-bottom: -5px;  /* Adjust spacing below */
+  cursor: pointer;  /* Indicate text is clickable */
+  color: var(--text-color); /* Text color */
+  text-decoration: underline; /* To indicate it is clickable */
+  font-size: var(--small-font-size); /* Smaller font size */
+  text-align: center; /* Center the text horizontally */
+}
+
+.edit-text:hover{
+  color: var(--link-hover-color); /* Change color on hover */
+}

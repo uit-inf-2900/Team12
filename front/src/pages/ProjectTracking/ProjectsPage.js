@@ -2,38 +2,34 @@
 
 import React, {useContext, useState} from "react";
 import ProjectCard from "../../Components/ProjectCard";
+import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
+import SwitchContainer from "../../Components/SwitchContainer";
 
 import '../../GlobalStyles/main.css';
+import AddButton from "../../Components/AddButton";
+import ModalContent from "../../Components/ModualContent";
 
 
 const Projects = () => {
     const [activeStatus, setActiveStatus] = useState('in-progress');
+    const [isOpenModal, setIsOpenModal] = useState(false);
 
+    // Simplify the modal toggle to a single state since there's only one modal shown in the snippet
+    const toggleModal = (isOpen) => {
+        setIsOpenModal(isOpen);
+    };
      // Hardcoded projects to see if the filtering works
     const projects = [
-        { id: 1, title: 'Honey clutch', status: 'planned' },
-        { id: 2, title: 'Summer scarf', status: 'in-progress' },
-        { id: 3, title: 'Winter hat', status: 'completed' },
-        { id: 4, title: 'Honey clutch', status: 'planned' },
-        { id: 5, title: 'Summer scarf', status: 'in-progress' },
-        { id: 6, title: 'Winter hat', status: 'completed' },
-        { id: 7, title: 'Honey clutch', status: 'planned' },
-        { id: 8, title: 'Summer scarf', status: 'in-progress' },
-        { id: 9, title: 'Winter hat', status: 'completed' },
+        { id: 1, title: 'Honey clutch', status: 'planned', knittingGauge:'10/10' },
+        { id: 2, title: 'Summer scarf', status: 'in-progress', knittingGauge:'10/10'  },
+        { id: 3, title: 'Winter hat', status: 'completed', knittingGauge:'10/10'  },
+        { id: 4, title: 'Skappel luft', status: 'planned' },
+        { id: 5, title: 'Oslo lue', status: 'in-progress' },
+        { id: 6, title: 'Votter', status: 'completed' },
         // ... flere prosjekter
     ];
 
-    
-    const buttonStyle = {
-        padding: '20px 30px', 
-        margin: '0 20px', 
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        display: 'flex', 
-        alignItems: 'center',
-        with: '100%', 
-    };
     
     const options = [
         { id: 'planned', label: 'Planned' },
@@ -45,27 +41,36 @@ const Projects = () => {
 
     return (
         <div className="page-container">
-            <div className="switch-container" style={{marginBottom: '20px'}}>
-                {options.map(option => (
-                    <div
-                        key={option.id}
-                        className={`switch-option ${activeStatus === option.id ? 'active' : 'inactive'}`}
-                        onClick={() => setActiveStatus(option.id)}
-                        style={{ fontSize: '1.2em', padding: '15px 20px', borderRadius: '8px' }} // Endret størrelsen
-                    >
-                        {option.label}
-                    </div>
-                ))}
-            </div>
+            <SwitchContainer 
+                options={options}
+                activeStatus={activeStatus}
+                setActiveStatus={setActiveStatus}
+            />
+
             {/* Visning av filtrerte prosjekter */}
-            <div className="box dark">
+            <div>
                 {filteredProjects.map(project => (
-                    <ProjectCard key={project.id} title={project.title} status={project.status}/>
+                    <Card
+                        key={project.id}
+                        title={project.title}
+                        needleSize={project.needleSize}
+                        knittingGauge={project.knittingGauge}
+                        notes={project.notes}
+                    />
                 ))}
             </div>
+
+            <AddButton onClick={() => toggleModal(true)} />
+
+            <ModalContent
+                open={isOpenModal}
+                handleClose={() => toggleModal(false)}
+                title="Legg til prosjekt"
+                infobox="Hei, dette skal bli her du fyller inn info om prosjektet"
+            />
         </div>
     );
 };
 
-
+ 
 export default Projects;
