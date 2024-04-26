@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../../GlobalStyles/main.css";
+import "../../GlobalStyles/Card.css"
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -36,6 +37,18 @@ const UploadedRecipes = () => {
         }
     };
 
+    const deleteRecipe=async () => {
+        try {
+            const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${id}`);
+            setRecipes(response.data || []); 
+        } catch (error) {
+            console.error('Error deleting recipe:', error);
+        } finally {
+            setLoading(false);
+        }
+
+    };
+
     // Handle sort criteria change
     const handleSortChange = (event) => {
         setSortBy(event.target.value);
@@ -49,13 +62,14 @@ const UploadedRecipes = () => {
         setRecipes(sortedRecipes);
     };
 
-    const openPDF = () => { 
-
-    };
 
     const handleProjectClick = (recipe) => {
         setSelectedRecipe(recipe);
         
+    };
+
+    const handleRecipeDelete = () => {
+        deleteRecipe(recipe.recipeId);
     };
 
     // Menu items for the sort select
@@ -89,15 +103,10 @@ const UploadedRecipes = () => {
                             knittingGauge={recipe.knittingGauge}
                             notes={recipe.notes}
                             onClick={() => handleProjectClick(recipe)}
-                            
                         />
                         
-                        
-                    
-                        
                     ))}
-
-
+                    
                     {selectedRecipe && <PDFViewer id={selectedRecipe.recipeId} />}
                 </div>
                 
