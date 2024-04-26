@@ -49,6 +49,35 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
         }
     };
 
+    const editYarn = async () => {
+        console.log(`Editing yarn with ID: ${ItemID}`);
+        const url = 'http://localhost:5002/api/inventory/updateyarn';
+        const payload = {
+            UserToken: sessionStorage.getItem('token'), // Fetching the token from session storage
+            itemId: ItemID
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'PATCH', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': '*/*'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                console.log("Yarn edited successfully");
+                setYarns(currentYarns => currentYarns.filter(yarn => yarn.itemId !== ItemID));
+            } else {
+                console.error("Failed to edit the yarn", await response.text());
+            }
+        } catch (error) {
+            console.error("Error editing yarn:", error);
+        }
+    }
+
     const fetchYarns = async () => {
         const token = sessionStorage.getItem('token');
         const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
@@ -86,6 +115,7 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
                         Weight={yarn.weight !== null ? yarn.weight.toString() : ''} // Convert to string if not null
                         Length={yarn.length !== null ? yarn.length.toString() : ''}
                         onDelete={handleDeleteYarn}
+                        onEdit={editYarn}
                         />
                     );
                 })}
