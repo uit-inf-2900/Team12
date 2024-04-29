@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../../GlobalStyles/main.css";
 import GeneralCard from './Card'; 
+import StatisticsChart from './ChartData';
 
 const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken til usersToken for konsistens
     const [usersData, setUsersData] = useState([]);
@@ -68,17 +69,17 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
     const totalMessages = activeMessages.length + inactiveeMessages.length + handledMessages.length;
     const Messages = [
         { label: "Total Messages", value: totalMessages },
-        { label: "Unhandled Active", value: activeMessages.length }, 
-        { label: "Unhandled Inactive", value: inactiveeMessages.length},
+        { label: "Active", value: activeMessages.length }, 
+        { label: "Inactive", value: inactiveeMessages.length},
         { label: "Handled Messages", value: handledMessages.length}, 
     ]; 
 
     const Needles = [
         { label: "Total Needles", value: needleData.length },
-        { label: "Interchangeble Needles", value: needleData.filter(needle => needle.type === 'Interchangeble').length },
-        { label: "DoublePointed Needles", value: needleData.filter(needle => needle.type === 'DoublePointed').length },
-        { label: "Circular Needles", value: needleData.filter(needle => needle.type === 'Circular').length },
-        { label: "Other Needles", value: needleData.filter(needle => needle.type === 'Other').length }
+        { label: "Interchangeble", value: needleData.filter(needle => needle.type === 'Interchangeble').length },
+        { label: "DoublePointed", value: needleData.filter(needle => needle.type === 'DoublePointed').length },
+        { label: "Circular", value: needleData.filter(needle => needle.type === 'Circular').length },
+        { label: "Other", value: needleData.filter(needle => needle.type !== 'Interchangeble' && needle.type !== 'DoublePointed' && needle.type !== 'Circular').length }
     ];
 
     const Yarn = [
@@ -100,32 +101,41 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
                     title="User Statistics"
                     stats={userStats}
                     onClick={() => toggleView('users')}
+                    chartComponent = {<StatisticsChart lable={"User Statistics"} userStats={userStats} />}
                 />
-                <GeneralCard 
-                    title="Message Statistics"
-                    stats={Messages}
-                    onClick={() => toggleView('users')}
-                />
-                <GeneralCard 
-                    title="Recipes Statistics"
-                    stats={Recipes}
-                    onClick={() => toggleView('')}
-                />
-                <GeneralCard 
-                    title="Yarn Statistics"
-                    stats={Yarn}
-                    onClick={() => toggleView('')}
-                />
-                <GeneralCard 
-                    title="Needle Statistics"
-                    stats={Needles}
-                    onClick={() => toggleView('')}
-                />
+
                 <GeneralCard 
                     title="Newsletter subscripers"
                     stats={Newsletter}
                     onClick={() => toggleView('')}
                 />
+
+                <GeneralCard 
+                    title="Message Statistics"
+                    stats={Messages}
+                    onClick={() => toggleView('users')}
+                    chartComponent = {<StatisticsChart lable={"Message Statistics"} userStats={Messages} />}
+                />
+
+                <GeneralCard 
+                    title="Yarn Statistics"
+                    stats={Yarn}
+                    onClick={() => toggleView('')}
+                />
+
+                <GeneralCard 
+                    title="Needle Statistics"
+                    stats={Needles}
+                    onClick={() => toggleView('')}
+                    chartComponent = {<StatisticsChart lable={"Needle Statistics"} userStats={Needles} />}
+                />
+
+                <GeneralCard 
+                    title="Recipes Statistics"
+                    stats={Recipes}
+                    onClick={() => toggleView('')}
+                />
+                
             </div>
         </div>        
     );

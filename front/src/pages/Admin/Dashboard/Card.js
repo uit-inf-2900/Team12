@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import "../../../GlobalStyles/main.css";
 import exampleImage from '../../../images/reading.png';
-const GeneralCard = ({ title, stats = [], image = exampleImage, onClick }) => {
+import React, { useState } from 'react';
+
+const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent, onClick }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
         <div className="card" onClick={onClick} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-            <img src={image} alt="Users" className="card-image" />
+            {/* Render chart if provided */}
+            {chartComponent || <img src={image} alt="Default" className="card-image" />}
             <div className={`card-overlay ${isHovered ? 'show' : ''}`}>
                 {isHovered && (
                     <div>

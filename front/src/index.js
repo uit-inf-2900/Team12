@@ -2,6 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+} from 'chart.js';
+
+ChartJS.register(
+  ArcElement, // Required for Doughnut
+  Tooltip,    // Enables tooltips
+  Legend,     // Enables legends
+  CategoryScale,  // Required for Bar charts
+  LinearScale,    // Required for Bar charts
+  BarElement      // Required for Bar charts
+);
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
