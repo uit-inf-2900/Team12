@@ -235,7 +235,7 @@ public class InventoryTests : IDisposable
     [Fact]
     public void IncreasingYarn_Ok() 
     {
-        var testRequest = new UpdateItemRequest
+        var testRequest = new UpdateYarnRequest
         {
             UserToken = "testToken",
             ItemId = testYarnId,
