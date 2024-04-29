@@ -115,7 +115,7 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
                         Weight={yarn.weight !== null ? yarn.weight.toString() : ''} // Convert to string if not null
                         Length={yarn.length !== null ? yarn.length.toString() : ''}
                         onDelete={handleDeleteYarn}
-                        onEdit={editYarn}
+                        // onClick = {editYarn}
                         />
                     );
                 })}
