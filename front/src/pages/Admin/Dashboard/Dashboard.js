@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "../../../GlobalStyles/main.css";
 import GeneralCard from './Card'; 
 import StatisticsChart from './ChartData';
+import {getImageByName} from '../../../images/getImageByName';
 
 const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken til usersToken for konsistens
     const [usersData, setUsersData] = useState([]);
@@ -107,7 +108,8 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
                 <GeneralCard 
                     title="Newsletter subscripers"
                     stats={Newsletter}
-                    onClick={() => toggleView('')}
+                    image={getImageByName('pileOfSweaters')}
+                    // onClick={() => toggleView('')}
                 />
 
                 <GeneralCard 
@@ -120,20 +122,22 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
                 <GeneralCard 
                     title="Yarn Statistics"
                     stats={Yarn}
-                    onClick={() => toggleView('')}
+                    image={getImageByName('yarnBasket')}
+                    // onClick={() => toggleView('')}
                 />
 
                 <GeneralCard 
                     title="Needle Statistics"
                     stats={Needles}
-                    onClick={() => toggleView('')}
+                    // onClick={() => toggleView('')}
                     chartComponent = {<StatisticsChart lable={"Needle Statistics"} userStats={Needles} />}
                 />
 
                 <GeneralCard 
                     title="Recipes Statistics"
                     stats={Recipes}
-                    onClick={() => toggleView('')}
+                    image={getImageByName('books')}
+                    // onClick={() => toggleView('')}
                 />
                 
             </div>

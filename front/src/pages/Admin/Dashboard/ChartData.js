@@ -1,6 +1,25 @@
 import React from 'react';
 import { Doughnut, Bar, Pie } from 'react-chartjs-2';
 import 'chartjs-plugin-datalabels';
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    CategoryScale,
+    LinearScale,
+    BarElement
+  } from 'chart.js';
+  
+  ChartJS.register(
+    ArcElement, // Required for Doughnut
+    Tooltip,    // Enables tooltips
+    Legend,     // Enables legends
+    CategoryScale,  // Required for Bar charts
+    LinearScale,    // Required for Bar charts
+    BarElement      // Required for Bar charts
+  );
+  
 
 const StatisticsChart = ({ label, userStats, chartType }) => {
     // Prepare chart data, excluding the first statistic
