@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import CardDashbord from './CardDashbord'; 
 import "../../../GlobalStyles/main.css";
 import GeneralCard from './Card'; 
 
