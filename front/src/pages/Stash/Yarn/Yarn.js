@@ -3,7 +3,7 @@ import { Modal } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
 import AddButton from '../../../Components/AddButton';
-import Card from '../../../Components/Card';
+import GeneralCard from '../../Admin/Dashboard/Card';
 
 const YarnStash = (setYarnTypes, yarnTypes) => {
     // Set the yarn state and the delete modal state
@@ -47,6 +47,7 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
         } catch (error) {
             console.error("Error deleting yarn:", error);
         }
+        fetchYarns();
     };
 
     const editYarn = async () => {
@@ -99,34 +100,43 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
     }, []);
     
 
+    const YarnStats = [
+        { label: "Brand type", value: yarns.map( yarn => yarn.type)},
+        { label: "Brand", value: yarns.map( yarn => yarn.manufacturer)},
+        { label: "Color", value: yarns.map( yarn => yarn.color)},
+        { label: "Weight", value: yarns.map( yarn => yarn.weight)},
+        { label: "Length", value: yarns.map( yarn => yarn.length )},
+        { label: "Gauge", value: yarns.map( yarn => yarn.gauge)},
+        { label: "Notes", value: yarns.map( yarn => yarn.type)}
+    ];
+
     return (
         <div>
-            <div className="yarn-container">
-                <div className="card-container">
-                {yarns.map(yarn => {
-                    console.log("Card data",yarn);
-                    return(
-                    <Card
-                        key={yarn.itemId}
-                        ItemID={yarn.itemId}
-                        Type={yarn.type}
-                        Manufacturer={yarn.manufacturer}
-                        Color={yarn.color}
-                        Weight={yarn.weight !== null ? yarn.weight.toString() : ''} // Convert to string if not null
-                        Length={yarn.length !== null ? yarn.length.toString() : ''}
-                        onDelete={handleDeleteYarn}
-                        // onClick = {editYarn}
-                        />
-                    );
-                })}
-                </div>
+            <div className="card-container">
+            {yarns.map(yarn => (
+                <GeneralCard
+                    key = {yarn.itemId}
+                    ItemID={yarn.itemId}
+                    title={yarn.type}
+                    stats={[
+                        { label: "Brand type", value: yarn.type},
+                        { label: "Brand", value: yarn.manufacturer},
+                        { label: "Color", value: yarn.color},
+                        { label: "Weight", value: yarn.weight},
+                        { label: "Length", value: yarn.length },
+                        { label: "Gauge", value: yarn.gauge},
+                        { label: "Notes", value: yarn.type}
+                    ]}
+                    onDelete = {() => handleDeleteYarn(yarn.itemId)}
+                    
+                />
+            ))}
             </div>
-        <AddButton onClick={toggleYarnModal} />
-
-        <Modal open={openYarnModal} onClose={toggleYarnModal}>
-            <TextYarn onClose={toggleYarnModal} fetchYarns={fetchYarns} />
-        </Modal>
-    </div>
+            <AddButton onClick={toggleYarnModal} />
+            <Modal open={openYarnModal} onClose={toggleYarnModal}>
+                <TextYarn onClose={toggleYarnModal} fetchYarns={fetchYarns} />
+            </Modal>
+        </div>
     );
 };
 
