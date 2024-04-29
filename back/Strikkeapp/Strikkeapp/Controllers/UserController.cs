@@ -14,13 +14,16 @@ public class UsersController : ControllerBase
     // Set user service
     private readonly IUserService _userService;
     private readonly IMailService _mailService;
+    private readonly IVerificationService _verificationService;
     private readonly StrikkeappDbContext _context; // Legg til referanse til DbContext her
 
-    public UsersController(IUserService userService, StrikkeappDbContext context, IMailService mailService)
+    public UsersController(IUserService userService, StrikkeappDbContext context,
+        IMailService mailService, IVerificationService verificationService)
     {
         _userService = userService;
         _context = context;
         _mailService = mailService;
+        _verificationService = verificationService;
     }
 
 
@@ -212,4 +215,31 @@ public class UsersController : ControllerBase
         return Ok(users);
     }
 
+    [HttpPatch]
+    [Route("/verifyuser")]
+    public IActionResult VerifyUser([FromQuery] VerificationRequest request)
+    {
+        if(!request.IsOk())
+        {
+            return BadRequest();
+        }
+
+        var res = _verificationService.VerifyCode(request.UserToken, request.VerificationCode);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized(res.ErrorMessage);
+            }
+            if(res.ErrorMessage == "Not found")
+            {
+                return NotFound("Could not find verification");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok("User has been verified");
+    }
 }
