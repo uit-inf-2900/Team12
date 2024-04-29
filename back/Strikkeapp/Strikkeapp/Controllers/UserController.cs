@@ -138,13 +138,16 @@ public class UsersController : ControllerBase
     [Route("updateadmin")]
     public IActionResult UpdateAdmin(UpdateAdminRequest request)
     {
+        // Check request
         if(!request.requestOk())
         {
             return BadRequest();
         }
 
+        // Run service
         var res = _userService.UpdateAdmin(request.UserToken, request.UpdateUser, request.NewAdmin);
 
+        //Check for failure, adn handle them
         if(!res.Success)
         {
             if(res.ErrorMessage == "Unauthorized")
@@ -166,13 +169,16 @@ public class UsersController : ControllerBase
     [Route("banuser")]
     public IActionResult BanUser(BanUserRequest request)
     {
+        // Check request
         if(!request.requestOk())
         {
             return BadRequest();
         }
 
+        // Run service
         var res = _userService.BanUser(request.UserToken, request.BanUserId, request.Ban);
 
+        // Check for errors and handle them
         if(!res.Success)
         {
             if(res.ErrorMessage == "Unauthorized")
@@ -219,13 +225,16 @@ public class UsersController : ControllerBase
     [Route("/verifyuser")]
     public IActionResult VerifyUser([FromQuery] VerificationRequest request)
     {
+        // Check request
         if(!request.IsOk())
         {
             return BadRequest();
         }
 
+        // Run service
         var res = _verificationService.VerifyCode(request.UserToken, request.VerificationCode);
 
+        // Check for error, and handle them
         if(!res.Success)
         {
             if(res.ErrorMessage == "Unauthorized")
