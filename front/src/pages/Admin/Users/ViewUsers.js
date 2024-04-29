@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Paper,
     TableContainer,
     Table,
     TableHead,
@@ -9,10 +8,15 @@ import {
     TableCell,
     TablePagination,
     CircularProgress,
-  } from '@mui/material';
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    TextField,
+} from '@mui/material';
 import axios from 'axios';
-import SetAlert from '../../Components/Alert';
-import CustomButton from '../../Components/Button';
+import SetAlert from '../../../Components/Alert';
+import CustomButton from '../../../Components/Button';
+import {getStatusLabel} from './UserLable';
 
 
   // Fetch user data from the backend
@@ -32,7 +36,7 @@ const fetchUserData = async () => {
 
 
 const ViewUsers = () => {
-    // State variables to store user data, current page, rows per page, and loading state
+    // State declarations
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -40,43 +44,62 @@ const ViewUsers = () => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
+    const [sortField, setSortField] = useState('fullName');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const [searchText, setSearchText] = useState('');
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogMessage, setDialogMessage] = useState('');
+    const [dialogAction, setDialogAction] = useState(() => () => {});
+    const [refreshData, setRefreshData] = useState(false);
+
+
     const token = sessionStorage.getItem('token');
 
     useEffect(() => {
-        // Fetch the user data when the component mounts
-        const timer = setTimeout(() => {
-            fetchUserData()
-                .then(data => {
-                    setUsers(data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    console.error('Error setting user data:', error);
-                    setLoading(false);
-                });
-        }, 1000);
+        setLoading(true);
+        fetchUserData().then(data => {
+            setUsers(data);
+            setLoading(false);
+        }).catch(error => {
+            console.error('Error setting user data:', error);
+            setLoading(false);
+        });        
+    }, [refreshData]);
 
-        // Clean up timer
-        return () => clearTimeout(timer);
-    }, []);
 
-    // Function to change the current page 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    // Function to change the number of rows per page
+    // User interaction handlers
+    const handleChangePage = (event, newPage) => setPage(newPage);
     const handleChangeRowsPerPage = event => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
 
+    const handleSearchChange = event => setSearchText(event.target.value.toLowerCase());
+    const handleSort = field => {
+        const isAsc = sortField === field && sortDirection === 'asc';
+        setSortDirection(isAsc ? 'desc' : 'asc');
+        setSortField(field);
+    };
 
-    // Function to toggle the admin status of a user
+    const handleActionOpen = (message, action) => {
+        setDialogMessage(message);
+        setDialogAction(() => action);
+        setDialogOpen(true);
+    };
+    const handleActionConfirm = () => {
+        dialogAction();
+        setDialogOpen(false);
+        setRefreshData(prev => !prev);
+    };
+    const handleActionCancel = () => setDialogOpen(false);
+
+     // Sorting and filtering logic
+    const filteredUsers = users.filter(user => user.fullName.toLowerCase().includes(searchText) || user.email.toLowerCase().includes(searchText));
+    const sortedUsers = filteredUsers.sort((a, b) => (a[sortField] < b[sortField]) ? (sortDirection === 'asc' ? -1 : 1) : (a[sortField] > b[sortField]) ? (sortDirection === 'asc' ? 1 : -1) : 0);
+
+   // Admin status update
     const toggleAdminStatus = async (userId, isAdmin) => {
-
         // Get the user token from the session storage
-       
         try {
             // Send a PATCH request to the server to update the admin status of the user
             const response = await axios.patch(`http://localhost:5002/Users/updateadmin`, {
@@ -114,23 +137,26 @@ const ViewUsers = () => {
         }
     };
     
-
-    const banUser = async (UserId) => {
+    // User banning logic
+    const banUser = async (userId, banStatus) => {
         try {
             // Send a POST request to the server to ban the user
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
                 userToken: token,
-                banUserId: UserId
+                banUserId: userId, 
+                ban: banStatus
             });
-            console.log("userToken: ", token);
-            console.log("banUserId: ", UserId);
-            console.log("response: ", response);
+            console.log("Response: ", response);
 
             // If the request is successful, update the users array to remove the banned user
             if (response.status === 200) {
-                setUsers(prevUsers => prevUsers.filter(user => user.userId !== UserId));
-                // Set alert for success
-                setAlertMessage('User banned successfully');
+                setUsers(prevUsers => prevUsers.map(user => {
+                    if (user.userId === userId) {
+                        return { ...user, status: banStatus ? "banned" : "active" }; // Oppdater status basert på banStatus
+                    }
+                    return user;
+                }));
+                setAlertMessage(`User ${banStatus ? "banned" : "unbanned"} successfully`);
                 setAlertSeverity('success');
                 setAlertOpen(true);
             } else {
@@ -151,7 +177,7 @@ const ViewUsers = () => {
 
 
     return (
-        <Paper>
+        <div>
             {/* Setup the alert status */}
             <SetAlert 
                 open={alertOpen} 
@@ -159,6 +185,18 @@ const ViewUsers = () => {
                 severity={alertSeverity} 
                 message={alertMessage} 
             />
+            {/* Search field for users */}
+            <TextField label="Search Users" variant="outlined" value={searchText} onChange={handleSearchChange} style={{ margin: '10px 0' }} fullWidth />
+            {/* Dialog for confirming actions */}
+            <Dialog open={dialogOpen} onClose={handleActionCancel}>
+                <DialogTitle>{dialogMessage}</DialogTitle>
+                <DialogActions>
+                    <CustomButton onClick={handleActionConfirm} color="primary">Confirm</CustomButton>
+                    <CustomButton onClick={handleActionCancel}>Cancel</CustomButton>
+                </DialogActions>
+            </Dialog>
+
+            {/* User table and loading state */}
             <TableContainer>
                 {/* Display a loading spinner while fetching data */}
                 {loading ?
@@ -171,8 +209,12 @@ const ViewUsers = () => {
                     {/* Create the header of the table */}
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{ fontWeight: 'bold' }}>Name</TableCell>
-                            <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
+                            <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('fullName')}>
+                                Name {sortField === 'fullName' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+                            </TableCell>
+                            <TableCell style={{ fontWeight: 'bold', cursor: 'pointer' }} onClick={() => handleSort('email')}>
+                                Email {sortField === 'email' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+                            </TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Status</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Admin Privileges</TableCell>
                             <TableCell style={{ fontWeight: 'bold' }}>Actions</TableCell>
@@ -180,19 +222,22 @@ const ViewUsers = () => {
                     </TableHead>
                     {/* Add the user information to the table */}
                     <TableBody>
-                        {users
+                        {sortedUsers
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((user, index) => (
                             <TableRow key={index}>
                                 <TableCell>{user.fullName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.status}</TableCell>
+                                <TableCell>{getStatusLabel(user.status)}</TableCell>
                                 <TableCell>{user.isAdmin ? 'Yes' : 'No'}
                                     <CustomButton
                                         style={{alignItems: 'right'}}
                                         variant="contained"
                                         color={user.isAdmin ? "secondary" : "primary"}
-                                        onClick={() => toggleAdminStatus(user.userId, user.isAdmin)}
+                                        onClick={() => handleActionOpen(
+                                            `Are you sure you want to ${user.isAdmin ? 'remove' : 'add'} admin privileges for ${user.fullName} (${user.email})?`,
+                                            () => toggleAdminStatus(user.userId, !user.isAdmin)
+                                        )}
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
                                     </CustomButton>
@@ -201,7 +246,10 @@ const ViewUsers = () => {
                                 <CustomButton
                                     variant="contained"
                                     color={user.status === "banned" ? "primary" : "secondary"} // Endre farge basert på status
-                                    onClick={() => banUser(user.userId)}
+                                    onClick={() => handleActionOpen(
+                                        `Are you sure you want to ${user.status === "banned" ? "unban" : "ban"} ${user.fullName} (${user.email})?`,
+                                        () => banUser(user.userId, user.status !== "banned")
+                                    )}
                                 >
                                     {user.status === "banned" ? "Unban User" : "Ban User"} {/* Endre knappetekst basert på status */}
                                 </CustomButton>
@@ -223,7 +271,7 @@ const ViewUsers = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </Paper>
+        </div>
     );
 };
 

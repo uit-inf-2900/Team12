@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import "../../GlobalStyles/main.css";
 import ViewMessages from './Messages/ViewMessages';
-import ViewUsers from './ViewUsers';
+import ViewUsers from './Users/ViewUsers';
 import Sidebar from './Sidebar';
-import Dashboard from './Dashboard';
+import Dashboard from './Dashboard/Dashboard';
 
 const AdminPage = () => {
-    const [activeView, setActiveView] = useState('');
+    const [activeView, setActiveView] = useState('dashboard');
 
     const toggleView = (view) => {
         setActiveView(prevView => prevView === view ? '' : view);
@@ -19,7 +19,7 @@ const AdminPage = () => {
                 <h1>Admin Page</h1>
                 {activeView === 'users' && <ViewUsers />}
                 {activeView === 'messages' && <ViewMessages />}
-                {activeView === 'dashboard' && <Dashboard />}
+                {activeView === 'dashboard' && <Dashboard toggleView={toggleView}/>}
             </div>
         </div>
     );
