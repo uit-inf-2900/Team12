@@ -67,10 +67,9 @@ public class VerificationService : IVerificationService
         var userId = tokenRes.UserId;
 
         var userVerification = _context.UserVerification
-            .Where(uv => uv.VerificationCode == code)
-            .FirstOrDefault(uid => uid.UserId == userId);
+            .FirstOrDefault(uv => uv.VerificationCode == code && uv.UserId == userId);
 
-        if(userVerification == null) 
+        if (userVerification == null) 
         {
             return VerificationResult.ForFailure("Not found");
         }
