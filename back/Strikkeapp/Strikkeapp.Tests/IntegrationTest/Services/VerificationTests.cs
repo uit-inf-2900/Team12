@@ -45,11 +45,17 @@ public class VerificationTests : IDisposable
             UserId = testUserGuid,
             VerificationCode = verificationString
         };
-
         _context.UserVerification.Add(verificationEntry);
-        _context.SaveChanges();
 
-        Assert.True(verificationEntry.VerificationCode == verificationString);
+        var loginEntry = new UserLogIn
+        {
+            UserId = testUserGuid,
+            UserEmail = "test@example.com",
+            UserPwd = "HashedPwd"
+        };
+        _context.UserLogIn.Add(loginEntry);
+
+        _context.SaveChanges();
     }
 
     public void Dispose()
@@ -88,5 +94,11 @@ public class VerificationTests : IDisposable
         var res = _verificationService.VerifyCode(testToken, verificationString);
 
         Assert.True(res.Success, res.ErrorMessage);
+
+        var entry = _context.UserLogIn
+            .FirstOrDefault(u => u.UserId == testUserGuid);
+
+        Assert.NotNull(entry);
+        Assert.Equal("verified", entry.UserStatus!);
     }
 }
