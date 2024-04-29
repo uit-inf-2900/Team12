@@ -39,7 +39,7 @@ const InputField = ({
                 endAdornment: (
                 <InputAdornment position="end">
                     {isPassword ? (
-                    <IconButton onClick={togglePasswordVisibility}>
+                    <IconButton   aria-label="Toggle password visibility" onClick={togglePasswordVisibility}>
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                     ) : type === "send" ? (
