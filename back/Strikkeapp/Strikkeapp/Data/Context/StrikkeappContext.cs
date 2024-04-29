@@ -20,6 +20,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<YarnInventory> YarnInventory { get; set; }
     public virtual DbSet<UserVerification> UserVerification { get; set; }
     public virtual DbSet<Counter> CounterInventory { get; set; }
+    public virtual DbSet<Newsletter> Newsletter { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,6 +62,7 @@ public class StrikkeappDbContext : DbContext
             .HasForeignKey(pt => pt.KnittingRecipeId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<ProjectTracking>()
             .HasOne<UserLogIn>()
             .WithMany()
@@ -68,6 +70,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<NeedleInventory>()
             .HasOne<UserLogIn>()
             .WithMany()
@@ -75,6 +78,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete (DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<YarnInventory>()
             .HasOne<UserLogIn>()
             .WithMany()
@@ -82,6 +86,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<UserVerification>()
             .HasOne<UserLogIn>()
             .WithOne()
@@ -89,6 +94,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<Counter>()
             .HasOne<UserLogIn>()
             .WithMany()
