@@ -20,6 +20,7 @@ public class UserServiceTests
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
 
     private Guid testUserId = Guid.NewGuid();
+    private Guid adminGuid = Guid.NewGuid();
 
     public UserServiceTests()
     {
@@ -57,6 +58,7 @@ public class UserServiceTests
             DateOfBirth = new DateTime(2024, 1, 1),
             IsAdmin = false
         };
+        _context.UserDetails.Add(testUserDetails);
 
         var testEntry = new UserLogIn
         {
@@ -64,8 +66,26 @@ public class UserServiceTests
             UserPwd = "HashedPassword",
             UserStatus = "Banned"
         };
+        _context.UserLogIn.Add(testEntry);
 
-        _context.UserDetails.Add(testUserDetails);
+        var adminEntry = new UserLogIn
+        {
+            UserId = adminGuid,
+            UserEmail = "admin@admin",
+            UserPwd = "HashedPwd",
+            UserStatus = "verified"
+            
+        };
+        _context.UserLogIn.Add(adminEntry);
+
+        var adminDetails = new UserDetails
+        {
+            UserId = adminEntry.UserId,
+            UserFullName = "Admin Admin",
+            DateOfBirth = DateTime.Now,
+            IsAdmin = true
+        };
+        _context.UserDetails.Add(adminDetails);
 
         _context.SaveChanges();
     }
@@ -228,5 +248,23 @@ public class UserServiceTests
 
         Assert.False(result.Success);
 
+    }
+
+    [Fact]
+    public void UpdateAdmin_Ok()
+    {
+        // Set up test data and mock
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(adminGuid));
+
+        // Setting admin should work
+        var result_set = _userService.UpdateAdmin(testToken, testUserId, true);
+        Assert.True(result_set.Success);
+
+        //Removing admin should work
+        var result_remove = _userService.UpdateAdmin(testToken, testUserId, false);
+        Assert.True(result_remove.Success);
     }
 }
