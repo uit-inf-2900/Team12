@@ -1,40 +1,43 @@
 import React, {useState} from "react";
-import "./DecreaseIncrease.css";
-// minus ../ maybe
 import SwitchContainer from "../../Components/SwitchContainer";
-import InputField from "../../Components/InputField"
-import Image from "../../images/openBook.png";
 import {IncreaseCalculator} from "./IncreaseCalculator"
-import { DecreaseCalculator } from "./DecreaseCalculator";
-import ModalContent from "../../Components/ModualContent";
+import {DecreaseCalculator} from "./DecreaseCalculator";
+import {YarnCalculator} from "./YarnCalculator";
 
 const IncreaseDecreaseCalculator = () => {
     const[activeStatus, setActiveStatus] = useState('oke');
 
     // The components in the switch container
     const options = [
-        { id: 'oke', label: 'Øke' },
-        { id: 'felle', label: 'Felle' }
+        { id: 'yarn', label: 'Yarn' },
+        { id: 'increase', label: 'Increase' },
+        { id: 'decrease', label: 'Decrease' }
     ];
 
     return (
         <div className="page-container">
+
+            {/* Creates a switch container for the three calculatores */}
             <SwitchContainer
                 options={options}
                 activeStatus={activeStatus}
                 setActiveStatus={setActiveStatus}
             />
 
-            {/* DET ER DENNE SOM GJØR AT JEG IKKE KAN KLIKKE MEG VIDERE FRA SWITCH CONTAINEREN */}
-            {activeStatus === 'oke' ? (
-                <IncreaseCalculator />
-            ) : (
-                <DecreaseCalculator />
+            {/* Yarn Calculator */}
+            {activeStatus === 'yarn' && (
+                <YarnCalculator />
             )}
-
+            {/* Increase Calculator */}
+            {activeStatus === 'increase' && (
+                <IncreaseCalculator />
+            )}
+            {/* Decrease Calculator */}
+            {activeStatus === 'decrease' && (
+                <DecreaseCalculator />
+            )} 
         </div>
     )
-} 
-
+}
 
 export default IncreaseDecreaseCalculator;

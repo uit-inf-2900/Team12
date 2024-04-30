@@ -16,8 +16,6 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
-import {GarnKalkulator} from './pages/GarnKalkulator';
-import OkeFelleKalkulator from './pages/OkeFelleKalkulator';
 import EditProfile from './pages/ProfilePage/EditProfile';
 import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
@@ -85,7 +83,6 @@ export default function App() {
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<Projects/>} />
                 <Route path='/yarncalculator' element={<YarnCalculator/>} />
-                <Route path='/okefellekalkulator' element={<OkeFelleKalkulator/>} />
                 <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
                 <Route path="/profile" element={<Profilepage />} />
                 <Route path="/editprofile" element={<EditProfile />} />
