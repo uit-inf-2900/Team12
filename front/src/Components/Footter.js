@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Box, Grid, Typography, IconButton, Paper, Button } from '@mui/material';
+import { Link, Box, Grid, Typography, IconButton, Paper, Button, Alert } from '@mui/material';
 import Theme from './Theme';
 import { useForm } from 'react-hook-form';
 
@@ -65,39 +65,40 @@ const SomeFooter = () => {
 
 const Footer = () => {
     const [email, setEmail] = useState('');
+    const [open, setOpen] = useState(false);  
     const [alert, setAlert] = useState({ severity: '', message: '' });
-    const {register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [error, setError] = useState('');
 
 
     const handleSubscribe = async () => {
-        if (email) {
-            try {
-                const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ subEmail: email })
-                });
-                console.log(response);
+        try {
+            const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ subEmail: email })
+            });
+            
+            if (response.ok) {
+                reset(); // Clear the form state
+                setAlert({ severity: 'success', message: 'You have successfully subscribed to our newsletter!' })
+                setOpen(true);
+                setError(''); 
+                setEmail(''); 
 
-                if (response.ok) {
-                    setAlert({ severity: 'success', message: `Subscribed to the newsletter with: ${email}` });
-                    setEmail('');
-                } else {
-                    const errorText = await response.text();
-                    setAlert({ severity: 'error', message: errorText });
-                }
-            } catch (error) {
-                setAlert({ severity: 'error', message: 'Network error, please try again later.' });
-                console.error(error);
+            } else {
+                const errorText = await response.text();
+                setError(errorText);
             }
-        } else {
-            setAlert({ severity: 'error', message: 'Please enter a valid email address.' });
+        } catch (error) {
+            console.error('Network error:', error);
+            setError('Network error, please try again later.');
         }
     };
+
 
     return (
         // Use paper for the color (can be changed in Theme)
@@ -118,8 +119,8 @@ const Footer = () => {
                                     message: "Invalid email address"
                                 }
                             })}
-                            fullWidth
-                            variant="outlined"
+                            // fullWidth
+                            // variant="outlined"
                             errors={errors.email}
                             type="send" 
                             value={email}
@@ -146,6 +147,7 @@ const Footer = () => {
                     </Typography>
                 </Grid>
             </Grid>
+            <SetAlert open={open} setOpen={setOpen} severity={alert.severity} message={alert.message} />
         </Paper>
     );
 };

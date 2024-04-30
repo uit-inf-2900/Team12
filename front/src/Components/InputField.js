@@ -13,7 +13,6 @@ const InputField = ({
 
     const handleSendClick = (event) => {
         if (errors) {
-            event.preventDefault();
             return;
         }
         else if (onSubmit) {
