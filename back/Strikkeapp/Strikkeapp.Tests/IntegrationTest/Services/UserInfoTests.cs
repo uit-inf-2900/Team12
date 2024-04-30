@@ -87,6 +87,20 @@ public class UserInfoTests
     }
 
     [Fact]
+    public void FakeTokenGet_Fails()
+    {
+        // Test data
+        var testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        var res = _userInfoService.GetProfileInfo(testToken);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
     public void UpdateEmailName_ValidDataSuccess()
     {
         // Test data
