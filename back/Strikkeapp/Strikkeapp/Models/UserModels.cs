@@ -6,12 +6,14 @@ public class UserServiceResult
     public string ErrorMessage { get; set; } = string.Empty;
     public string Token { get; set; } = string.Empty;
     public bool IsAdmin { get; set; }
+    public string UserStatus { get; set; } = string.Empty;
 
-    public static UserServiceResult ForSuccess(string token, bool isAdmin) => new UserServiceResult
+    public static UserServiceResult ForSuccess(string token, bool isAdmin, string userStauts) => new UserServiceResult
     {
         Success = true,
         Token = token,
-        IsAdmin = isAdmin
+        IsAdmin = isAdmin,
+        UserStatus = userStauts
     };
     public static UserServiceResult ForFailure(string message) => new UserServiceResult
     {
