@@ -84,21 +84,98 @@ public class VerificationTests : IDisposable
     }
 
     [Fact]
-    public void VerifyCode_Ok()
+    public void FakeTokenCreateVerification_Fail()
     {
         // Set up test
+        string testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+                    .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run serice and assert if it fails
+        var res = _verificationService.CreateVerification(testToken);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void VerifyCode_Ok()
+    {
+        // Set up test and mock
         string testToken = "testToken";
         _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
                     .Returns(TokenResult.ForSuccess(testUserGuid));
 
         var res = _verificationService.VerifyCode(testToken, verificationString);
 
+        // Should pass
         Assert.True(res.Success, res.ErrorMessage);
 
+        // Entry should be updated
         var entry = _context.UserLogIn
             .FirstOrDefault(u => u.UserId == testUserGuid);
 
         Assert.NotNull(entry);
         Assert.Equal("verified", entry.UserStatus!);
+    }
+
+    [Fact]
+    public void FakeTokenVerify_Fails()
+    {
+        // Set up test and mock
+        string testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+                    .Returns(TokenResult.ForFailure("Invalid token"));
+
+        var res = _verificationService.VerifyCode(testToken, verificationString);
+        
+        // Should fail with "Unauthorized"
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void InvalidCodeVerify_Fails()
+    {
+        // Set up test and mock
+        string testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+                    .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _verificationService.VerifyCode(testToken, "invalidCode");
+        
+        // Should fail with correct message
+        Assert.False(res.Success);
+        Assert.Equal("Not found", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonUserCodeVerify_Fails()
+    {
+        // Set up test and mock
+        string testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+                    .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        var res = _verificationService.VerifyCode(testToken, verificationString);
+        
+        // Should fail with correct message
+        Assert.False(res.Success);
+        Assert.Equal("Not found", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void InvalidUserId_Fails()
+    {
+        // Set up test and mock
+        string testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+                    .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        var res = _verificationService.VerifyCode(testToken, verificationString);
+
+        // Should fail with correct message
+        Assert.False(res.Success);
+        Assert.Equal("Not found", res.ErrorMessage);
     }
 }

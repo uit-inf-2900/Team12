@@ -87,6 +87,34 @@ public class UserInfoTests
     }
 
     [Fact]
+    public void FakeTokenGet_Fails()
+    {
+        // Test data
+        var testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        var res = _userInfoService.GetProfileInfo(testToken);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonUserGet_Fails()
+    {
+        // Test data
+        var testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        var result = _userInfoService.GetProfileInfo(testToken);
+
+        Assert.False(result.Success);
+        Assert.Equal("User not found", result.ErrorMessage);
+    }
+
+    [Fact]
     public void UpdateEmailName_ValidDataSuccess()
     {
         // Test data
@@ -144,6 +172,73 @@ public class UserInfoTests
         var updatedUserLogin = _context.UserLogIn.
             FirstOrDefault(ul => ul.UserId == testUserGuid);
         Assert.Equal(hashedNewPassword, updatedUserLogin?.UserPwd);
+    }
+
+    [Fact]
+    public void FakeTokenUpdate_Fails()
+    {
+        // Test data
+        var testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run service and verify results
+        var res = _userInfoService.UpdateProfileInfo(testToken, "New Name", null, null, null);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void EmptyUpdate_Fails()
+    {
+        // Set up test data and mock
+        var testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run service and verify results
+        var res = _userInfoService.UpdateProfileInfo(testToken, null, null, null, null);
+
+        Assert.False(res.Success);
+        Assert.Equal("No fields to update", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonUserUpdate_Fails()
+    {
+        // Set up test data and mock
+        var fakeToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        // Run service and verify results
+        var result = _userInfoService.UpdateProfileInfo(fakeToken, "New Name", null, null, null);
+
+        Assert.False(result.Success);
+        Assert.Equal("User not found", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void InvalidOrMissingPassword_Fails()
+    {
+        // Test data
+        var testToken = "testToken";
+        var newPassword = "NewPassword123!";
+
+        // Mock services
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run service and verify results
+        var newmissing = _userInfoService.UpdateProfileInfo(testToken, null, null, "Test1234!", null);
+
+        Assert.False(newmissing.Success, "New password missing, should fail");
+        Assert.Equal("Password missing", newmissing.ErrorMessage);
+
+        var wrongPwd = _userInfoService.UpdateProfileInfo(testToken, null, null, "WrongPassword", newPassword);
+        Assert.False(wrongPwd.Success, "New password missing, should fail");
+        Assert.Equal("Wrong password", wrongPwd.ErrorMessage);
     }
 
 }

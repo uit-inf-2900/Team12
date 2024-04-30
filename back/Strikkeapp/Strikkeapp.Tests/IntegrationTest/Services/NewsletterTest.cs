@@ -141,6 +141,20 @@ public class NewsletterTest : IDisposable
         Assert.True(res.Success);
         Assert.NotEmpty(res.Subscribers);
     }
+    [Fact]
+    public void FakeToken_Fails()
+    {
+        // Set up test
+        string fakeToken = "fakeToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+                    .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run test and verify error
+        var res = _newsletterService.GetUsers(fakeToken);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
 
     [Fact]
     public void NonAdmin_GetFails()
