@@ -67,6 +67,8 @@ const Footer = () => {
     const [email, setEmail] = useState('');
     const [alert, setAlert] = useState({ severity: '', message: '' });
     const {register, handleSubmit, formState: { errors } } = useForm();
+    const [error, setError] = useState('');
+
 
     const handleSubscribe = async () => {
         if (email) {
@@ -97,7 +99,6 @@ const Footer = () => {
         }
     };
 
-
     return (
         // Use paper for the color (can be changed in Theme)
         // Set the with to 100% and add some padding 
@@ -107,33 +108,27 @@ const Footer = () => {
                     <Typography variant="h5">
                         Knithub
                     </Typography>
-                    <Box component="form"
-                        onSubmit={handleSubmit(handleSubscribe)}
-                        noValidate
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'flex',
-                            mt: 1,
-                        }}>
+                    <form >
                         <InputField
-                            {...register('email', {
+                            label="Subscribe to our newsletter"
+                            register={register('email', {
                                 required: "Email is required",
                                 pattern: {
-                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                     message: "Invalid email address"
                                 }
                             })}
                             fullWidth
-                            label="Subscribe to our newsletter"
                             variant="outlined"
-                            type="send"
+                            errors={errors.email}
+                            type="send" 
                             value={email}
-                            onInput={e => setEmail(e.target.value)}
-                            error={errors.email}
-                            helperText={errors.email?.message}
-                            onSubmit={handleSubscribe}
+                            onChange={(event) => setEmail(event.target.value)}
+                            onSubmit={handleSubmit(handleSubscribe)}
                         />
-                    </Box>
+                        {error && <div>{error}</div>}
+                        {/* <button type="submit">Subscribe</button> */}
+                    </form>
                     <SomeFooter />
                 </Grid>
                 <Grid item xs={12} sm={3}>
