@@ -75,7 +75,7 @@ public class UserServiceTests
         // Mock behaviour
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
                 .Returns("hashedPassword");
-        _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>()))
+        _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string>()))
                          .Returns("fakeToken");
 
         // Run CreateUser with test variables
@@ -84,10 +84,24 @@ public class UserServiceTests
         // Check expected results
         Assert.True(result.Success);
         _mockPasswordHasher.Verify(x => x.HashPassword(testEmail, testPassword), Times.Once);
-        _mockTokenService.Verify(x => x.GenerateJwtToken(testEmail, It.IsAny<Guid>(), It.IsAny<bool>()), Times.Once);
+        _mockTokenService.Verify(x => x.GenerateJwtToken(testEmail, It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Once);
 
         // Cleanup database
         _context.Database.EnsureDeleted();
+    }
+
+    [Fact]
+    public void CreateDuplicate_Fails()
+    {
+        var testEmail = "test@example.com";
+        var testPassword = "Test123!";
+        var testFullName = "Test Testing";
+        var testDob = new DateTime(2024, 1, 1);
+
+        var result = _userService.CreateUser(testEmail, testPassword, testFullName, testDob);
+
+        Assert.False(result.Success);
+
     }
 
     [Fact]
@@ -106,7 +120,7 @@ public class UserServiceTests
         _mockPasswordHasher.Setup(x => x.VerifyHashedPassword(It.IsAny<object>(), hashedPassword, testPassword))
             .Returns(PasswordVerificationResult.Success);
 
-        _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>()))
+        _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string>()))
                  .Returns("fakeToken");
 
         // Run LogInUser with test variables
@@ -115,7 +129,7 @@ public class UserServiceTests
         // Check expected results
         Assert.True(result.Success);
         _mockPasswordHasher.Verify(x => x.VerifyHashedPassword(It.IsAny<object>(), hashedPassword, testPassword), Times.Once);
-        _mockTokenService.Verify(x => x.GenerateJwtToken(testEmail, It.IsAny<Guid>(), It.IsAny<bool>()), Times.Once);
+        _mockTokenService.Verify(x => x.GenerateJwtToken(testEmail, It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string>()), Times.Once);
 
         // Cleanup database
         _context.Database.EnsureDeleted();
