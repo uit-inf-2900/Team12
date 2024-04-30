@@ -186,11 +186,13 @@ public class UserServiceTests
     [Fact]
     public void DeleteUser_Ok()
     {
+        // Set up data and mock
         var testToken = "testToken";
 
         _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
             .Returns(TokenResult.ForSuccess(testUserId));
 
+        // Run serivce, and check for success
         var res = _userService.DeleteUser(testToken);
 
         Assert.True(res.Success);
@@ -211,5 +213,20 @@ public class UserServiceTests
         // Should fail, with correct error message
         Assert.False(result.Success, "Unvalid token should fail");
         Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void UserNullDeletion_Fails()
+    {
+        var testToken = "testToken";
+        var nonExistentUserId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(nonExistentUserId));
+
+        var result = _userService.DeleteUser(testToken);
+
+        Assert.False(result.Success);
+
     }
 }
