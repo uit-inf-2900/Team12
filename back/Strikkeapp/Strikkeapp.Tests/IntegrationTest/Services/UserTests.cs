@@ -165,6 +165,23 @@ public class UserServiceTests
         // Banned user should not log in
         Assert.False(result.Success);
     }
+    [Fact]
+    public void WrongPassword_Fails() 
+    {
+        // Set up test variables
+        var testEmail = "test@example.com";
+        var testPassword = "WrongPwd";
+        var hashedPassword = "WrongHash";
+
+        // Mock behaviour
+        _mockPasswordHasher.Setup(x => x.VerifyHashedPassword(It.IsAny<object>(), hashedPassword, testPassword))
+            .Returns(PasswordVerificationResult.Success);
+
+        var result = _userService.LogInUser(testEmail, testPassword);
+
+        Assert.False(result.Success);
+
+    }
 
     [Fact]
     public void DeleteUser_Ok()
