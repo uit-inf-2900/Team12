@@ -108,8 +108,10 @@ public class VerificationTests : IDisposable
 
         var res = _verificationService.VerifyCode(testToken, verificationString);
 
+        // Should pass
         Assert.True(res.Success, res.ErrorMessage);
 
+        // Entry should be updated
         var entry = _context.UserLogIn
             .FirstOrDefault(u => u.UserId == testUserGuid);
 
@@ -127,6 +129,7 @@ public class VerificationTests : IDisposable
 
         var res = _verificationService.VerifyCode(testToken, verificationString);
         
+        // Should fail with "Unauthorized"
         Assert.False(res.Success);
         Assert.Equal("Unauthorized", res.ErrorMessage);
     }
@@ -141,6 +144,7 @@ public class VerificationTests : IDisposable
 
         var res = _verificationService.VerifyCode(testToken, "invalidCode");
         
+        // Should fail with correct message
         Assert.False(res.Success);
         Assert.Equal("Not found", res.ErrorMessage);
     }
@@ -155,6 +159,22 @@ public class VerificationTests : IDisposable
 
         var res = _verificationService.VerifyCode(testToken, verificationString);
         
+        // Should fail with correct message
+        Assert.False(res.Success);
+        Assert.Equal("Not found", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void InvalidUserId_Fails()
+    {
+        // Set up test and mock
+        string testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+                    .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        var res = _verificationService.VerifyCode(testToken, verificationString);
+
+        // Should fail with correct message
         Assert.False(res.Success);
         Assert.Equal("Not found", res.ErrorMessage);
     }
