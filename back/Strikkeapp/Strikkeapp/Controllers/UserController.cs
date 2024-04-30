@@ -72,7 +72,8 @@ public class UsersController : ControllerBase
         var res = new UserResultDto
         {
             Token = result.Token,
-            IsAdmin = result.IsAdmin
+            IsAdmin = result.IsAdmin,
+            UserStatus = result.UserStatus
         };
 
 
@@ -103,7 +104,8 @@ public class UsersController : ControllerBase
         var res = new UserResultDto
         {
             Token = result.Token,
-            IsAdmin = result.IsAdmin
+            IsAdmin = result.IsAdmin,
+            UserStatus = result.UserStatus
         };
 
         // Return userid and token on success
