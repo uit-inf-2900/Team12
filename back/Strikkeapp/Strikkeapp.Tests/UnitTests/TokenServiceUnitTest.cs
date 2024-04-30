@@ -58,4 +58,16 @@ public class TokenServiceTests
 
         Assert.False(res.Success);
     }
+
+    [Fact]
+    public void InvalidKey_Fails()
+    {
+        var config = new Mock<IConfiguration>();
+        config.SetupGet(x => x["Jwt:Key"]).Returns("");
+        config.SetupGet(x => x["Jwt:Issuer"]).Returns("YourIssuer");
+        config.SetupGet(x => x["Jwt:Audience"]).Returns("YourAudience");
+
+        TokenService tokenService = null;
+        Assert.Throws<InvalidOperationException>(() => tokenService = new TokenService(config.Object));
+    }
 }
