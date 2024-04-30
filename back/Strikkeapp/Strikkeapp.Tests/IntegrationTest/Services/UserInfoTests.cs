@@ -101,6 +101,20 @@ public class UserInfoTests
     }
 
     [Fact]
+    public void NonUserGet_Fails()
+    {
+        // Test data
+        var testToken = "testToken";
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        var result = _userInfoService.GetProfileInfo(testToken);
+
+        Assert.False(result.Success);
+        Assert.Equal("User not found", result.ErrorMessage);
+    }
+
+    [Fact]
     public void UpdateEmailName_ValidDataSuccess()
     {
         // Test data
