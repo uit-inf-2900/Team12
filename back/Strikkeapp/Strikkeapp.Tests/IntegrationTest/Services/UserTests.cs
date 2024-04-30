@@ -64,9 +64,18 @@ public class UserServiceTests
         {
             UserEmail = "banned@user.com",
             UserPwd = "HashedPassword",
-            UserStatus = "Banned"
+            UserStatus = "banned"
         };
         _context.UserLogIn.Add(testEntry);
+
+        var bannedDetails = new UserDetails
+        {
+            UserId = testEntry.UserId,
+            UserFullName = "Banned User",
+            DateOfBirth = DateTime.Now,
+            IsAdmin = false
+        };
+        _context.UserDetails.Add(bannedDetails);
 
         var adminEntry = new UserLogIn
         {
@@ -177,14 +186,20 @@ public class UserServiceTests
     public void BannedLogIn_Fails()
     {
         // Test data
-        var bannedEmail = "banned @user.com";
+        var bannedEmail = "banned@user.com";
         var bannedPwd = "Test123!";
+        var hashedPwd = "HashedPassword";
+
+        _mockPasswordHasher.Setup(x => x.VerifyHashedPassword(It.IsAny<object>(), hashedPwd, bannedPwd))
+            .Returns(PasswordVerificationResult.Success);
 
         var result = _userService.LogInUser(bannedEmail, bannedPwd);
 
         // Banned user should not log in
         Assert.False(result.Success);
+        Assert.Equal("User is banned", result.ErrorMessage);
     }
+
     [Fact]
     public void WrongPassword_Fails() 
     {
@@ -200,7 +215,6 @@ public class UserServiceTests
         var result = _userService.LogInUser(testEmail, testPassword);
 
         Assert.False(result.Success);
-
     }
 
     [Fact]
@@ -266,5 +280,18 @@ public class UserServiceTests
         //Removing admin should work
         var result_remove = _userService.UpdateAdmin(testToken, testUserId, false);
         Assert.True(result_remove.Success);
+    }
+
+    [Fact]
+    public void NonAdminUpdate_Fails()
+    {
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        var result = _userService.UpdateAdmin(testToken, testUserId, true);
+
+        Assert.False(result.Success);
     }
 }
