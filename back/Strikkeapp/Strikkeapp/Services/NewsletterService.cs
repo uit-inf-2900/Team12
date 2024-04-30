@@ -90,7 +90,7 @@ public class NewsletterService : INewsletterService
     {
         // Get user token, and handle error if it cannot be retrieved
         var tokenResult = _tokenService.ExtractUserID(token);
-        if(tokenResult == null) 
+        if(!tokenResult.Success) 
         {
             return NewsletterSubscribersResult.ForFailure("Unauthorized");
         }
