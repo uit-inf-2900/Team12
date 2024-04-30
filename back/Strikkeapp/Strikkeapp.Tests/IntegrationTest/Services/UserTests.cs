@@ -58,6 +58,13 @@ public class UserServiceTests
             IsAdmin = false
         };
 
+        var testEntry = new UserLogIn
+        {
+            UserEmail = "banned@user.com",
+            UserPwd = "HashedPassword",
+            UserStatus = "Banned"
+        };
+
         _context.UserDetails.Add(testUserDetails);
 
         _context.SaveChanges();
@@ -143,6 +150,19 @@ public class UserServiceTests
         var result = _userService.LogInUser(testEmail, testPwd);
 
         // Non use log in should fail
+        Assert.False(result.Success);
+    }
+
+    [Fact]
+    public void BannedLogIn_Fails()
+    {
+        // Test data
+        var bannedEmail = "banned @user.com";
+        var bannedPwd = "Test123!";
+
+        var result = _userService.LogInUser(bannedEmail, bannedPwd);
+
+        // Banned user should not log in
         Assert.False(result.Success);
     }
 
