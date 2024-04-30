@@ -392,4 +392,20 @@ public class UserServiceTests
         Assert.False(result.Success);
         Assert.Equal("User not found", result.ErrorMessage);
     }
+
+    [Fact]
+    public void FakeTokenBan_Fails()
+    {
+        // Set up data and mock
+        var fakeGuid = Guid.NewGuid();
+        var testToken = "unathorizedToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        var result = _userService.BanUser(testToken, fakeGuid, true);
+
+        Assert.False(result.Success);
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
 }
