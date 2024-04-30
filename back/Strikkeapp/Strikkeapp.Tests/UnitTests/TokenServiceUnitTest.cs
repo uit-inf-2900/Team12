@@ -25,8 +25,9 @@ public class TokenServiceTests
         string testEmail = "test@example.com";
         Guid testGuid = Guid.NewGuid();
         bool testAdmin = false;
+        string testStatus = "unverified";
 
-        string token = _tokenService.GenerateJwtToken(testEmail, testGuid, testAdmin);
+        string token = _tokenService.GenerateJwtToken(testEmail, testGuid, testAdmin, testStatus);
 
         Assert.NotNull(token);
         Assert.NotEmpty(token);
@@ -38,8 +39,9 @@ public class TokenServiceTests
         string testEmail = "test@example.com";
         Guid testGuid = Guid.NewGuid();
         bool testAdmin = false;
+        string testStatus = "unverified";
 
-        string token = _tokenService.GenerateJwtToken(testEmail, testGuid, testAdmin);
+        string token = _tokenService.GenerateJwtToken(testEmail, testGuid, testAdmin, testStatus);
 
         var res = _tokenService.ExtractUserID(token);
 
