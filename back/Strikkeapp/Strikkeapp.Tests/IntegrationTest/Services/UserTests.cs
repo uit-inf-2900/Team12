@@ -113,9 +113,6 @@ public class UserServiceTests
         var hashedPassword = "hashedPassword";
 
 
-        // Save changes to database
-        _context.SaveChanges();
-
         // Mock behaviour
         _mockPasswordHasher.Setup(x => x.VerifyHashedPassword(It.IsAny<object>(), hashedPassword, testPassword))
             .Returns(PasswordVerificationResult.Success);
@@ -133,6 +130,20 @@ public class UserServiceTests
 
         // Cleanup database
         _context.Database.EnsureDeleted();
+    }
+
+    [Fact]
+    public void LogInNonUser_Fails()
+    {
+        // Test data
+        var testEmail = "non@user.com";
+        var testPwd = "Test123!";
+
+        // Run test
+        var result = _userService.LogInUser(testEmail, testPwd);
+
+        // Non use log in should fail
+        Assert.False(result.Success);
     }
 
     [Fact]
