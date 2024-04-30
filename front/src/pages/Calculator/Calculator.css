@@ -1,0 +1,28 @@
+/* IncreaseCalculator.css */
+
+.custom-box {
+    width: 100%; /* Juster etter behov */
+    height: auto; /* Høyden vil avhenge av innholdet */
+    background-color: #D6AE9A; /* Samme stil som Garnkalkulator */
+    border-radius: 10px; /* Gjenbruker stilen */
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Enkel skyggeeffekt */
+}
+
+.calculator-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #F2E4E1; /* Samme bakgrunnsfarge som Garnkalkulator */
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.result {
+    margin-top: 1.5rem; /* Mer plass over resultatet */
+}

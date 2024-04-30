@@ -1,0 +1,44 @@
+.statistic-box {
+    background-color: #FFF; /* Hvit bakgrunn */
+    border: 2px solid #E1E1E1; /* Grå kantlinje */
+    border-radius: 8px; /* Avrundede hjørner */
+    padding: 20px; /* Indre avstand */
+    display: flex; /* Flex container */
+    flex-direction: column; /* Barna ordnes vertikalt */
+    align-items: center; /* Sentrerer barna horisontalt */
+    justify-content: space-between; /* Fordeler plass mellom barna */
+    height: 150px; /* Høyde på boksen */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Skyggeeffekt */
+    margin: 10px; /* Margin rundt boksen */
+    text-align: center; /* Teksten i boksen sentreres */
+}
+
+.icon {
+    /* Stil for ikonet, eventuelt legg til spesifikke størrelser eller farger */
+    margin-bottom: 10px; /* Avstand mellom ikon og tekst */
+}
+
+.label {
+    color: #555; /* Mørkegrå farge på etikett/label */
+    font-size: 0.85em; /* Skriftstørrelse på etiketten */
+    margin-bottom: 5px; /* Avstand mellom etikett og verdi */
+}
+
+.value {
+    color: #333; /* Mørk farge på verdien */
+    font-size: 1.25em; /* Skriftstørrelse på verdien */
+    font-weight: bold; /* Fet tekst for verdien */
+}
+
+.statistics-container {
+    display: flex;
+    flex-wrap: wrap; /* Lar boksene pakke om til neste linje */
+    justify-content: space-around; /* Fordeler boksene jevnt */
+    margin-top: 20px; /* Avstand til elementene over */
+}
+
+.statistic-box .icon {
+    width: 60px; /* eller hvilken som helst størrelse du ønsker */
+    height: auto; /* for å beholde bildets aspektforhold */
+    margin-bottom: 10px; /* eller hva som passer */
+}

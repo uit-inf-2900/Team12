@@ -4,6 +4,8 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 
 using Strikkeapp.User.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace Strikkeapp.Services;
 
@@ -54,6 +56,10 @@ public class UserService : IUserService
             var hasedPwd = HashPassword(userEmail, userPwd);
             userLogin.UserPwd = hasedPwd;
 
+            // ems
+            // Send verification email
+            // SendVerificationEmail(userLogin);
+
             // Save new entry
             _context.UserLogIn.Add(userLogin);
 
@@ -79,6 +85,18 @@ public class UserService : IUserService
         {
             return UserServiceResult.ForFailure(ex.Message);
         }
+    }
+
+    private void SendVerificationEmail(UserLogIn userLogin)
+    {
+        var smtpClient = new SmtpClient("smtp.mailersend.net")
+        {
+            Port = 587,
+            Credentials = new NetworkCredential("MS_N11mgG@trial-pr9084z1d8jgw63d.mlsender.net", "qp8NjvpXu7BheAWI"),
+            EnableSsl = true,
+        };
+        // ems
+        smtpClient.Send("no-reply@strikkeapp.com", userLogin.UserEmail, "Verification-Email", "Denne mailen er en test naa bare");
     }
 
     // Log existing user in

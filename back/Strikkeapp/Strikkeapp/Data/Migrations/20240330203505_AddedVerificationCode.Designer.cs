@@ -11,8 +11,8 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    [Migration("20240325123912_AddResponseMessageToContactRequest")]
-    partial class AddResponseMessageToContactRequest
+    [Migration("20240330203505_AddedVerificationCode")]
+    partial class AddedVerificationCode
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,9 +39,6 @@ namespace Strikkeapp.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Message")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ResponseMessage")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("TimeCreated")
