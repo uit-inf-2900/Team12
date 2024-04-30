@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import InputField from '../../Components/InputField';
 import axios from 'axios';
 
 import "../../GlobalStyles/main.css";
 import CustomButton from '../../Components/Button';
+import InputField from '../../Components/InputField';
 
 
-
+/**
+ *  SignUp component renders the sign-up form.
+ */
 const SignUp = ({ toggleForm }) => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const [error, setError] = useState(''); 
   
 
+  /**
+   * Handle form submission
+   */
   const onSubmit = (data) => {
     if (data.password !== data.confirmPassword) {
       setError('confirmPassword', {
@@ -24,8 +29,12 @@ const SignUp = ({ toggleForm }) => {
       return;
     }
 
+    // Format date of birth
     const dob = data.birthday.replace(/-/g, '')
 
+    /**
+     * Data to be sent to the API to create a user
+     */
     const postData = {
       userEmail: data.email,
       userPwd: data.password,
@@ -34,6 +43,8 @@ const SignUp = ({ toggleForm }) => {
     };
     console.log("User DOB: ", dob)
 
+
+    // Make POST request to the API to create a user 
     axios.post('http://localhost:5002/createuser', postData)
     .then(function(response){
       console.log("Response: ", response)
@@ -48,6 +59,7 @@ const SignUp = ({ toggleForm }) => {
     })
     .catch(function(error){
       console.error("Error: ", error);
+      // Handle errors, and customize the error message based on the response status
       if (error.response && error.response.status === 409) {
         setError("A user with this email already exists");
       } else {
@@ -114,7 +126,7 @@ const SignUp = ({ toggleForm }) => {
               shrink: true,
             }}
             inputProps={{
-              placeholder: '', // make the placeholder emty 
+              placeholder: '', // Emty the placeholder 
             }}
           />
 
