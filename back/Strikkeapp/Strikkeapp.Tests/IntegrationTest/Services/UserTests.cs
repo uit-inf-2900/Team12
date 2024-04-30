@@ -195,4 +195,21 @@ public class UserServiceTests
 
         Assert.True(res.Success);
     }
+
+    [Fact]
+    public void UnauthorizedDeletion_Fails()
+    {
+        // Set up data and mock
+        var testToken = "unathorizedToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        // Run service
+        var result = _userService.DeleteUser(testToken);
+
+        // Should fail, with correct error message
+        Assert.False(result.Success, "Unvalid token should fail");
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
 }
