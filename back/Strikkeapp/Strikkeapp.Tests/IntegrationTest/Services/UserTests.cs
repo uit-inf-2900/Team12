@@ -294,4 +294,22 @@ public class UserServiceTests
 
         Assert.False(result.Success);
     }
+
+    [Fact]
+    public void NonUserUpdate_Fails()
+    {
+        // Set up test data and mock
+        var testToken = "testToken";
+        Guid fakeGuid = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(adminGuid));
+
+        // Run service
+        var result = _userService.UpdateAdmin(testToken, fakeGuid, true);
+
+        // Should fail, with correct error message
+        Assert.False(result.Success);
+        Assert.Equal("User not found", result.ErrorMessage);
+    }
 }
