@@ -323,8 +323,12 @@ public class UserServiceTests
             .Returns(TokenResult.ForSuccess(adminGuid));
 
         // Ban user should work
-        var result = _userService.BanUser(testToken, testUserId, true);
-        Assert.True(result.Success);
+        var ban = _userService.BanUser(testToken, testUserId, true);
+        Assert.True(ban.Success);
+
+        // Unban user should work
+        var unban = _userService.BanUser(testToken, testUserId, false);
+        Assert.True(unban.Success);
     }
 
     [Fact]
