@@ -65,21 +65,41 @@ const SomeFooter = () => {
 
 const Footer = () => {
     const [email, setEmail] = useState('');
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [alert, setAlert] = useState({ severity: '', message: '' });
+    const {register, handleSubmit, formState: { errors } } = useForm();
 
+    const onSubmit = (data) => {
+        handleSubscribe(data); 
+    };
 
-    const handleSubscribe = () => {
-        // TODO: implement the subscribe functionality
-        if(email) {
-            // Alert the email
-            <SetAlert severity="success" message={`Subscribe to the newsletter with: ${email}`} />
-            // Reset email state
-            setEmail('');
+    const handleSubscribe = (data) => {
+        if (email) {
+            fetchSubscribe();
         } else {
-            // Handle empty input or add validation
-            <SetAlert severity="error" message="Please enter an email address." />
+            setAlert({ severity: 'error', message: 'Please enter a valid email address.' });
         }
     };
+
+
+    const fetchSubscribe = async () => {
+        try {
+            const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+            });
+
+            if (response.ok) {
+                setAlert({ severity: 'success', message: `Subscribed to the newsletter with: ${email}` });
+                setEmail('');
+            } else {
+                const errorText = await response.text();
+                setAlert({ severity: 'error', message: errorText });
+            }
+        } catch (error) {
+            setAlert({ severity: 'error', message: 'Network error, please try again later.' });
+        }
+    };
+
 
     
 
