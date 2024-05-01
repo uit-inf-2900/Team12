@@ -79,6 +79,10 @@ const ViewSubscribers = () => {
                 params: { userToken: token, subEmail: email }
             });
             if (response.status === 200) {
+                // Oppdaterer tilstanden for å fjerne den slettede abonnenten
+                setSubscribers(currentSubscribers => 
+                    currentSubscribers.filter(subscriber => subscriber.email !== email)
+                );
                 setAlertMessage('Subscriber removed successfully');
                 setAlertSeverity('success');
                 setAlertOpen(true);
@@ -92,7 +96,7 @@ const ViewSubscribers = () => {
             console.error('Error removing subscriber:', error);
         }
     };
-
+    
     return (
         <div>
             <SetAlert 
