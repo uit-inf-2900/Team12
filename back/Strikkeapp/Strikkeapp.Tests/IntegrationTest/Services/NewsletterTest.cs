@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
 
@@ -16,19 +17,23 @@ public class NewsletterTest : IDisposable
 
     // Create mock service
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
+    private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
 
     private Guid testUserGuid = Guid.NewGuid();
     private Guid testUserGuid2 = Guid.NewGuid();
 
     public NewsletterTest()
     {
+        _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
+                .Returns("hashedPassword");
+
         var dbName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
             .UseInMemoryDatabase(databaseName: dbName)
             .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        _context = new StrikkeappDbContext(options);
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
         _newsletterService = new NewsletterService(_context, _mockTokenService.Object);
 
         // Set up test data in db

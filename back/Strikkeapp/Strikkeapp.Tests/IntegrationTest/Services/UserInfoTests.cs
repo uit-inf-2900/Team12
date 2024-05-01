@@ -22,6 +22,9 @@ public class UserInfoTests
 
     public UserInfoTests()
     {
+        _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
+                .Returns("hashedPassword");
+
         // Set up in memory database
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
             .UseInMemoryDatabase(databaseName: "UserServiceDb")
@@ -29,7 +32,7 @@ public class UserInfoTests
             .Options;
 
         // Set up context and service
-        _context = new StrikkeappDbContext(options);
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
 
         // Ensure clean database for each test
         _context.Database.EnsureDeleted();

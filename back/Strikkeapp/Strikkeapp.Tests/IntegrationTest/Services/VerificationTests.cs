@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
 
@@ -17,6 +18,7 @@ public class VerificationTests : IDisposable
 
     // Set up mock services
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
+    private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
 
     private readonly Guid testGuid = Guid.NewGuid();
     private readonly Guid testUserGuid = Guid.NewGuid();
@@ -24,13 +26,16 @@ public class VerificationTests : IDisposable
 
     public VerificationTests()
     {
+        _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
+                .Returns("hashedPassword");
+
         var dbName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
             .UseInMemoryDatabase(databaseName: dbName)
             .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        _context = new StrikkeappDbContext(options);
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
          
         _verificationService = new VerificationService(_context, _mockTokenService.Object);
 

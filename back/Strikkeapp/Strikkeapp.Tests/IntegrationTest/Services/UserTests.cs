@@ -24,6 +24,9 @@ public class UserServiceTests
 
     public UserServiceTests()
     {
+        _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
+                .Returns("hashedPassword");
+
         // Set up in memory database
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
             .UseInMemoryDatabase(databaseName: "StrikkeappTestDb")
@@ -31,7 +34,7 @@ public class UserServiceTests
             .Options;
 
         // Create new context with the options
-        _context = new StrikkeappDbContext(options);
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
 
         // Set up userservice to test
         _userService = new UserService(_context, _mockTokenService.Object, _mockPasswordHasher.Object);

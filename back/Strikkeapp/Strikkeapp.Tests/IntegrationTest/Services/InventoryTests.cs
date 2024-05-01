@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
@@ -18,6 +19,7 @@ public class InventoryTests : IDisposable
 
     // Create mock service
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
+    private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
 
     private Guid testUserGuid = Guid.NewGuid();
     private Guid testNeedleId = Guid.NewGuid();
@@ -31,7 +33,7 @@ public class InventoryTests : IDisposable
             .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        _context = new StrikkeappDbContext(options);
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
 
         _inventoryService = new InventoryService(_context, _mockTokenService.Object);
 
