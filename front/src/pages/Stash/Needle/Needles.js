@@ -44,7 +44,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
 
             try {
                 const response = await fetch(url, {
-                    method: 'DELETE', // or 'DELETE', depending on your API
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': '*/*'
