@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Strikkeapp.Data.Entities;
 
 namespace Strikkeapp.Data.Context;
@@ -101,5 +102,27 @@ public class StrikkeappDbContext : DbContext
             .HasForeignKey(c => c.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+
+        // Set default admin user
+        Guid adminGuid = Guid.NewGuid();
+        modelBuilder.Entity<UserLogIn>().HasData(
+            new UserLogIn
+            {
+                UserId = adminGuid,
+                UserEmail = "admin@knithub.no",
+                UserPwd = "KnithubAdminUser!",
+                UserStatus = "verified",
+                UserVerificationCode = 999999
+            });
+        modelBuilder.Entity<UserDetails>().HasData(
+            new UserDetails
+            {
+                UserId = adminGuid,
+                UserFullName = "Knithub Admin",
+                DateOfBirth = DateTime.Now,
+                IsAdmin = true
+            });
+
     }
 }
