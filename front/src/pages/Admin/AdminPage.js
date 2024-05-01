@@ -4,6 +4,7 @@ import ViewMessages from './Messages/ViewMessages';
 import ViewUsers from './Users/ViewUsers';
 import Sidebar from './Sidebar';
 import Dashboard from './Dashboard/Dashboard';
+import ViewSubscribers from './NewsLetter';
 
 const AdminPage = () => {
     const [activeView, setActiveView] = useState('dashboard');
@@ -19,6 +20,7 @@ const AdminPage = () => {
                 <h1>Admin Page</h1>
                 {activeView === 'users' && <ViewUsers />}
                 {activeView === 'messages' && <ViewMessages />}
+                {activeView === 'newsletter' && <ViewSubscribers />}
                 {activeView === 'dashboard' && <Dashboard toggleView={toggleView}/>}
             </div>
         </div>
