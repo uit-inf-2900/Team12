@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Strikkeapp.Data.Entities;
 
@@ -6,9 +7,12 @@ namespace Strikkeapp.Data.Context;
 
 public class StrikkeappDbContext : DbContext
 {
-    public StrikkeappDbContext(DbContextOptions<StrikkeappDbContext> options)
+    private readonly IPasswordHasher<object> _passwordHasher;
+    public StrikkeappDbContext(DbContextOptions<StrikkeappDbContext> options,
+        IPasswordHasher<object> passwordHasher)
         : base(options)
     {
+        _passwordHasher = passwordHasher;
     }
 
     // Create tables
@@ -111,7 +115,7 @@ public class StrikkeappDbContext : DbContext
             {
                 UserId = adminGuid,
                 UserEmail = "admin@knithub.no",
-                UserPwd = "KnithubAdminUser!",
+                UserPwd = _passwordHasher.HashPassword("admin@knithub.no", "KnithubAdminUser!"),
                 UserStatus = "verified",
                 UserVerificationCode = 999999
             });
