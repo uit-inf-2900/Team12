@@ -1,36 +1,36 @@
-import React, {useState, useEffect} from "react";
-import { Modal } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Modal, Box, TextField, Button } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
 import AddButton from '../../../Components/AddButton';
 import GeneralCard from '../../Admin/Dashboard/Card';
+import InputField from '../../../Components/InputField';
+import CustomButton from '../../../Components/Button';
+import yarnBasket from '../../../images/yarnSheep.png';
 
-const YarnStash = (setYarnTypes, yarnTypes) => {
-    // Set the yarn state and the delete modal state
+
+
+
+const YarnStash = () => {
     const [yarns, setYarns] = useState([]);
     const [openYarnModal, setOpenYarnModal] = useState(false);
+    const [editYarnModalOpen, setEditYarnModalOpen] = useState(false);
+    const [currentYarn, setCurrentYarn] = useState({});
 
-    // Toggle the yarn modal
     const toggleYarnModal = () => {
         setOpenYarnModal(!openYarnModal);
     };
 
-    const yarnStash = [
-        { ItemID: '', Type: '', Manufacturer:'', Color: '', Weight: '', Length: '' },
-    ];
-
     const handleDeleteYarn = async (ItemID) => {
-        console.log(`Deleting yarn with ID: ${ItemID}`);
-        
-        const url = `http://localhost:5002/api/inventory/deleteyarn`; 
+        const url = `http://localhost:5002/api/inventory/deleteyarn`;
         const payload = {
-            UserToken: sessionStorage.getItem('token'), // Fetching the token from session storage
+            UserToken: sessionStorage.getItem('token'),
             itemId: ItemID
         };
 
         try {
             const response = await fetch(url, {
-                method: 'DELETE', // or 'DELETE', depending on your API
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': '*/*'
@@ -39,7 +39,6 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
             });
 
             if (response.ok) {
-                console.log("Yarn deleted successfully");
                 setYarns(currentYarns => currentYarns.filter(yarn => yarn.itemId !== ItemID));
             } else {
                 console.error("Failed to delete the yarn", await response.text());
@@ -47,37 +46,47 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
         } catch (error) {
             console.error("Error deleting yarn:", error);
         }
-        fetchYarns();
     };
 
-    const editYarn = async () => {
-        console.log(`Editing yarn with ID: ${ItemID}`);
-        const url = 'http://localhost:5002/api/inventory/updateyarn';
+    const handleEditYarn = (yarn) => {
+        setCurrentYarn(yarn);
+        setEditYarnModalOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setEditYarnModalOpen(false);
+    };
+
+    const handleInputChange = (prop) => (event) => {
+        setCurrentYarn({ ...currentYarn, [prop]: event.target.value });
+    };
+
+    const handleSaveUpdatedYarn = async () => {
+        const url = `http://localhost:5002/api/inventory/updateyarn`;
         const payload = {
-            UserToken: sessionStorage.getItem('token'), // Fetching the token from session storage
-            itemId: ItemID
+            UserToken: sessionStorage.getItem('token'),
+            ...currentYarn
         };
 
         try {
             const response = await fetch(url, {
-                method: 'PATCH', 
+                method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': '*/*'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
             });
 
             if (response.ok) {
-                console.log("Yarn edited successfully");
-                setYarns(currentYarns => currentYarns.filter(yarn => yarn.itemId !== ItemID));
+                setYarns(currentYarns => currentYarns.map(yarn => yarn.itemId === currentYarn.itemId ? {...yarn, ...currentYarn} : yarn));
+                closeEditModal();
             } else {
-                console.error("Failed to edit the yarn", await response.text());
+                console.error("Failed to update the yarn", await response.text());
             }
         } catch (error) {
-            console.error("Error editing yarn:", error);
+            console.error("Error updating yarn:", error);
         }
-    }
+    };
 
     const fetchYarns = async () => {
         const token = sessionStorage.getItem('token');
@@ -98,24 +107,13 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
     useEffect(() => {
         fetchYarns();
     }, []);
-    
-
-    const YarnStats = [
-        { label: "Brand type", value: yarns.map( yarn => yarn.type)},
-        { label: "Brand", value: yarns.map( yarn => yarn.manufacturer)},
-        { label: "Color", value: yarns.map( yarn => yarn.color)},
-        { label: "Weight", value: yarns.map( yarn => yarn.weight)},
-        { label: "Length", value: yarns.map( yarn => yarn.length )},
-        { label: "Gauge", value: yarns.map( yarn => yarn.gauge)},
-        { label: "Notes", value: yarns.map( yarn => yarn.type)}
-    ];
 
     return (
         <div>
-            <div className="card-container">
+            <div className="card-container" style={{justifyContent: 'flex-start'}}>
             {yarns.map(yarn => (
                 <GeneralCard
-                    key = {yarn.itemId}
+                    key={yarn.itemId}
                     ItemID={yarn.itemId}
                     title={yarn.type}
                     stats={[
@@ -127,14 +125,31 @@ const YarnStash = (setYarnTypes, yarnTypes) => {
                         { label: "Gauge", value: yarn.gauge},
                         { label: "Notes", value: yarn.type}
                     ]}
-                    onDelete = {() => handleDeleteYarn(yarn.itemId)}
-                    
+                    onDelete={() => handleDeleteYarn(yarn.itemId)}
+                    onEdit={() => handleEditYarn(yarn)}
                 />
             ))}
             </div>
             <AddButton onClick={toggleYarnModal} />
             <Modal open={openYarnModal} onClose={toggleYarnModal}>
                 <TextYarn onClose={toggleYarnModal} fetchYarns={fetchYarns} />
+            </Modal>
+            <Modal open={editYarnModalOpen} onClose={closeEditModal}>
+                <div className="pop">
+                    <div className="pop-content" style={{height: '95%', width: '50%', alignContent:'center'}}>
+                        <h2>Edit Yarn</h2>
+                        <div className="yarn-form" style={{display: 'flex', flexDirection: 'column'}}>
+                            <InputField label="Brand" value={currentYarn.manufacturer || ''} onChange={handleInputChange('manufacturer')} />
+                            <InputField label="Type" value={currentYarn.type || ''} onChange={handleInputChange('type')} />
+                            <InputField label="Color" value={currentYarn.color || ''} onChange={handleInputChange('color')} />
+                            <InputField label="Weight" value={currentYarn.weight || ''} onChange={handleInputChange('weight')} />
+                            <InputField label="Length" value={currentYarn.length || ''} onChange={handleInputChange('length')} />
+                            <InputField label="Notes" value={currentYarn.notes || ''} onChange={handleInputChange('notes')} />
+                            <CustomButton onClick={handleSaveUpdatedYarn}>Save Changes</CustomButton>
+                            <CustomButton onClick={closeEditModal}>Cancel</CustomButton>
+                        </div>
+                    </div>
+                </div>
             </Modal>
         </div>
     );

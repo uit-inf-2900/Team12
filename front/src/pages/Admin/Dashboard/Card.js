@@ -21,7 +21,14 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                         ))}
                     </div>
                 )}
-                <button onClick={onDelete}>Delete</button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                    <button onClick={onEdit} variant="outlined" color="primary">
+                        Edit
+                    </button>
+                    <button onClick={onDelete} variant="outlined" color="secondary">
+                        Delete
+                    </button>
+                </div>
             </div>
             <div className="card-footer">
                 {!isHovered && stats.length > 0 && <h4>{stats[0].label}: {stats[0].value}</h4>}
