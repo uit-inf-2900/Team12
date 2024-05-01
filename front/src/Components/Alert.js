@@ -1,9 +1,11 @@
 import React from 'react';
 import { Snackbar, Alert } from '@mui/material';
 
-// Function to display alerts to the user 
+/** 
+ * Function to display alerts to the user 
+ */
 function SetAlert({ open, setOpen, severity, message }) {
-    // Function to close the alert message 
+    /** Function to close the alert message  */ 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -12,12 +14,12 @@ function SetAlert({ open, setOpen, severity, message }) {
     };
 
     return (
-    // Snackbar displays a brief messages to the user
+    // Displays a brief messages to the user
     <Snackbar 
         open={open} 
-        autoHideDuration={6000}         // How long the message is displayed in ms before it disappears 
-        onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} 
+        autoHideDuration={6000}                                     // ms before the message disappears 
+        onClose={handleClose}                                       
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}    // position of the alert message
         sx={{
             position: 'fixed', 
             top: '10%',

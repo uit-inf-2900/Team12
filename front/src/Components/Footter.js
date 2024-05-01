@@ -14,14 +14,11 @@ import CustomButton from './Button'
 import SendIcon from '@mui/icons-material/Send';
 import SetAlert from './Alert';
 
-// TODO: Get error if no email is entered
-// TODO: Get error if email is not valid
-// TODO: Get info allert if email is already subscribed
-// TODO: Get success alert if the subscribtion now is successful
-// TODO: Get error alert if the subscribtion is not successful
 
 
-// Pages the footer should link to
+/**
+ * Returns usefull links that is used in the footer  
+ */
 const FooterRouting = () => {
     return (
         <div>
@@ -36,6 +33,10 @@ const FooterRouting = () => {
     ); 
 };
 
+
+/**
+ * Returns social media icons that is used in the footer
+ */ 
 const SomeFooter = () => {
     return (
         <Box>
@@ -63,6 +64,10 @@ const SomeFooter = () => {
     ); 
 };
 
+
+/**
+ * Renders the footer component containing subscription form, social icons, and contact information.
+ */
 const Footer = () => {
     const [email, setEmail] = useState('');
     const [open, setOpen] = useState(false);  
@@ -71,6 +76,10 @@ const Footer = () => {
     const [error, setError] = useState('');
 
 
+    /**
+     * Handles subscription form submission.
+     * Sends a request to the server to subscribe to the newsletter.
+     */
     const handleSubscribe = async () => {
         try {
             const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
@@ -82,8 +91,9 @@ const Footer = () => {
                 body: JSON.stringify({ subEmail: email })
             });
             
+            // Of the response is ok, reset the form state and display a success message 
             if (response.ok) {
-                reset(); // Clear the form state
+                reset(); 
                 setAlert({ severity: 'success', message: 'You have successfully subscribed to our newsletter!' })
                 setOpen(true);
                 setError(''); 
@@ -109,6 +119,8 @@ const Footer = () => {
                     <Typography variant="h5">
                         Knithub
                     </Typography>
+
+                    {/* The input field for the user to add its email addrss */}
                     <form >
                         <InputField
                             label="Subscribe to our newsletter"
@@ -119,8 +131,6 @@ const Footer = () => {
                                     message: "Invalid email address"
                                 }
                             })}
-                            // fullWidth
-                            // variant="outlined"
                             errors={errors.email}
                             type="send" 
                             value={email}
@@ -128,13 +138,18 @@ const Footer = () => {
                             onSubmit={handleSubmit(handleSubscribe)}
                         />
                         {error && <div>{error}</div>}
-                        {/* <button type="submit">Subscribe</button> */}
                     </form>
+
+                    {/* The SOME links are under the subscription input */}
                     <SomeFooter />
                 </Grid>
+
+                {/* The footer routing is in the middle */}
                 <Grid item xs={12} sm={3}>
                     <FooterRouting />
                 </Grid>
+
+                {/* The contact information is on the right side */}
                 <Grid item xs={12} sm={4}>
                     <Typography variant="h5" gutterBottom>
                         Contact Us
