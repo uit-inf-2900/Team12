@@ -1,4 +1,9 @@
 # Installing dependencies
+## For Backend
+1. Install .NET 8.0 SDK from https://dotnet.microsoft.com/en-us/download
+2. Install Entity Framework Core Tools by running the following command: `dotnet tool install --global dotnet-ef`
+
+## For Frontend
 
 ## For backend tests
 To be able to run the backend tests, you can install the needed dependencies by doing the following:
