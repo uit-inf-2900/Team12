@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Box, TextField, Button } from "@mui/material";
+import { Modal } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
+import "../../Counter.css";
 import AddButton from '../../../Components/AddButton';
 import GeneralCard from '../../Admin/Dashboard/Card';
 import InputField from '../../../Components/InputField';
 import CustomButton from '../../../Components/Button';
 import yarnBasket from '../../../images/yarnSheep.png';
-
-
-
 
 const YarnStash = () => {
     const [yarns, setYarns] = useState([]);
@@ -27,7 +25,6 @@ const YarnStash = () => {
             UserToken: sessionStorage.getItem('token'),
             itemId: ItemID
         };
-
         try {
             const response = await fetch(url, {
                 method: 'DELETE',
@@ -37,7 +34,6 @@ const YarnStash = () => {
                 },
                 body: JSON.stringify(payload)
             });
-
             if (response.ok) {
                 setYarns(currentYarns => currentYarns.filter(yarn => yarn.itemId !== ItemID));
             } else {
@@ -67,7 +63,6 @@ const YarnStash = () => {
             UserToken: sessionStorage.getItem('token'),
             ...currentYarn
         };
-
         try {
             const response = await fetch(url, {
                 method: 'PATCH',
@@ -76,7 +71,6 @@ const YarnStash = () => {
                 },
                 body: JSON.stringify(payload)
             });
-
             if (response.ok) {
                 setYarns(currentYarns => currentYarns.map(yarn => yarn.itemId === currentYarn.itemId ? {...yarn, ...currentYarn} : yarn));
                 closeEditModal();
@@ -135,18 +129,42 @@ const YarnStash = () => {
                 <TextYarn onClose={toggleYarnModal} fetchYarns={fetchYarns} />
             </Modal>
             <Modal open={editYarnModalOpen} onClose={closeEditModal}>
-                <div className="pop">
+                <div className="pop" >
                     <div className="pop-content" style={{height: '95%', width: '50%', alignContent:'center'}}>
                         <h2>Edit Yarn</h2>
-                        <div className="yarn-form" style={{display: 'flex', flexDirection: 'column'}}>
-                            <InputField label="Brand" value={currentYarn.manufacturer || ''} onChange={handleInputChange('manufacturer')} />
-                            <InputField label="Type" value={currentYarn.type || ''} onChange={handleInputChange('type')} />
-                            <InputField label="Color" value={currentYarn.color || ''} onChange={handleInputChange('color')} />
-                            <InputField label="Weight" value={currentYarn.weight || ''} onChange={handleInputChange('weight')} />
-                            <InputField label="Length" value={currentYarn.length || ''} onChange={handleInputChange('length')} />
-                            <InputField label="Notes" value={currentYarn.notes || ''} onChange={handleInputChange('notes')} />
-                            <CustomButton onClick={handleSaveUpdatedYarn}>Save Changes</CustomButton>
-                            <CustomButton onClick={closeEditModal}>Cancel</CustomButton>
+                        <div className="yarn-form" style={{ display: 'flex', flexDirection: 'column'}}>
+                            <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
+                                <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
+                                    <InputField label="Brand" type= 'text' value={currentYarn.manufacturer || ''} onChange={handleInputChange('manufacturer')} />
+                                    <InputField label="Length" type= 'text' value={currentYarn.length || ''} onChange={handleInputChange('length')} />
+                                    <InputField label="Gauge" type= 'text' value={currentYarn.gauge || ''} onChange={handleInputChange('gauge')} />
+                                    <InputField label="Color" type= 'text' value={currentYarn.color || ''} onChange={handleInputChange('color')} />
+                                </div>
+                                <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
+                                    <InputField label="Type" type= 'text' value={currentYarn.type || ''} onChange={handleInputChange('type')} />
+                                </div>
+                            </div>
+                            <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', margin: '0 auto' }}>
+                                <div className="input-wrapper" style={{  width: 'calc(50% + 100px)'}}></div>
+                                <div style={{ width: '40%', alignItems: 'center', marginTop: '-190px'}}>
+                                    <img src={yarnBasket} alt="Yarn Basket" />
+                                </div>
+                            </div>
+                            <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
+                                <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
+                                    <InputField label="Weight" type= 'number' value={currentYarn.weight || ''} onChange={handleInputChange('weight')} />
+                                </div>
+                                <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
+                                        <InputField label="Batch number" type= 'text' value={currentYarn.batchNumber || ''} onChange={handleInputChange('batchNumber')} />
+                                </div>
+                            </div>
+                            <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>
+                                <InputField label="Notes" type= 'text' value={currentYarn.notes || ''} onChange={handleInputChange('notes')} multiline rows={4} />
+                            </div>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginTop: '20px' }}>
+                                <CustomButton onClick={handleSaveUpdatedYarn}>Save Changes</CustomButton>
+                                <CustomButton onClick={closeEditModal}>Cancel</CustomButton>
+                            </div>
                         </div>
                     </div>
                 </div>

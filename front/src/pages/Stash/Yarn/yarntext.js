@@ -45,7 +45,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'accept': '*/*'  // Making sure the accept header is included if needed
+                'accept': '*/*'
             },
             body: JSON.stringify(payload)
         });
@@ -55,7 +55,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
             console.log('Success:', result);
             fetchYarns();
         };
-        onClose();          // This function call will close the modal
+        onClose();
     };
 
     return (
@@ -65,39 +65,13 @@ const TextYarn = ({onClose, fetchYarns}) => {
                 <form onSubmit={handleSubmit} className="yarn-form" style={{display: 'flex', flexDirection: 'column'}}>
                     <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
                         <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
-                            <InputField
-                                label="Brand"
-                                type="text"
-                                value={yarnData.Manufacturer}
-                                onChange={handleChange('Manufacturer')}
-                            />
-                            
-                            <InputField
-                                label="Length"
-                                type="text"
-                                value={yarnData.Length}
-                                onChange={handleChange('Length')}
-                            />
-                            <InputField
-                                label="Gauge"
-                                type="text"
-                                value={yarnData.Gauge}
-                                onChange={handleChange('Gauge')}
-                            />
-                            <InputField
-                                label="Color"
-                                type="text"
-                                value={yarnData.Color}
-                                onChange={handleChange('Color')}
-                            />
+                            <InputField label="Brand" type="text" value={yarnData.Manufacturer} onChange={handleChange('Manufacturer')}/>
+                            <InputField label="Length" type="text" value={yarnData.Length} onChange={handleChange('Length')}/>
+                            <InputField label="Gauge" type="text" value={yarnData.Gauge} onChange={handleChange('Gauge')}/>
+                            <InputField label="Color" type="text" value={yarnData.Color} onChange={handleChange('Color')}/>
                         </div>
                         <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
-                            <InputField
-                                label="Type"
-                                type="text"
-                                value={yarnData.Type}
-                                onChange={handleChange('Type')}
-                            />
+                            <InputField label="Type" type="text" value={yarnData.Type} onChange={handleChange('Type')}/>
                         </div>
                     </div>
                     <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', margin: '0 auto' }}>
@@ -108,32 +82,14 @@ const TextYarn = ({onClose, fetchYarns}) => {
                     </div>
                     <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
                         <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
-                            <InputField
-                                label="Weight"
-                                type="number"
-                                value={yarnData.Weight}
-                                onChange={handleChange('Weight')}
-                            />
+                            <InputField label="Weight" type="number" value={yarnData.Weight} onChange={handleChange('Weight')}/>
                         </div>
                         <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
-                        <InputField
-                                label="Batch number"
-                                type="text"
-                                value={yarnData.Batch_Number}
-                                onChange={handleChange('Batch_Number')}
-                            />
+                        <InputField label="Batch number" type="text" value={yarnData.Batch_Number} onChange={handleChange('Batch_Number')}/>
                         </div>
                     </div>
                     <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>
-                        <InputField
-                            label="Notes"
-                            type="text"
-                            multiline
-                            rows={4}
-                            value={yarnData.Notes}
-                            onChange={handleChange('Notes')}
-                            
-                        />
+                        <InputField label="Notes" type="text" multiline rows={4} value={yarnData.Notes} onChange={handleChange('Notes')}/>
                     </div>
                     <div className="counter-controls">
                         <CustomButton themeMode="light" submit={true}>Add</CustomButton>
