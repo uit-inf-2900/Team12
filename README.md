@@ -1,5 +1,10 @@
 # Installing dependencies
 
+## For backend tests
+To be able to run the backend tests, you can install the needed dependencies by doing the following:
+1. Navigate to "back/Strikkeapp/Strikkeapp.Tests"
+2. Run the following command `dotnet tool restore`
+
 # Running the application
 Before running the application, make sure that the database has been initialized. This can be done by doing the following:
 1. Open a terminal and navigate to the "back/Strikkeapp/Strikkeapp"
