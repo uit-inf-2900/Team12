@@ -118,7 +118,7 @@ const Dashboard = ({ toggleView }) => {
                 <GeneralCard 
                     title="Message Statistics"
                     stats={Messages}
-                    onClick={() => toggleView('users')}
+                    onClick={() => toggleView('messages')}
                     chartComponent = {<StatisticsChart lable={"Message Statistics"} userStats={Messages} />}
                 />
 
