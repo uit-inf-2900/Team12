@@ -90,6 +90,7 @@ const YarnStash = () => {
             if (response.ok) {
                 const data = await response.json();
                 setYarns(data.yarnInventory);
+                console.log(data.yarnInventory)
             } else {
                 console.error("Failed to fetch yarn data.");
             }
@@ -108,7 +109,7 @@ const YarnStash = () => {
             {yarns.map(yarn => (
                 <GeneralCard
                     key={yarn.itemId}
-                    ItemID={yarn.itemId}
+                    ItemId={yarn.ItemID}
                     title={yarn.type}
                     stats={[
                         { label: "Brand type", value: yarn.type},
@@ -155,13 +156,13 @@ const YarnStash = () => {
                                     <InputField label="Weight" type= 'number' value={currentYarn.weight || ''} onChange={handleInputChange('weight')} />
                                 </div>
                                 <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
-                                        <InputField label="Batch number" type= 'text' value={currentYarn.batchNumber || ''} onChange={handleInputChange('batchNumber')} />
+                                        <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number')} />
                                 </div>
                             </div>
                             <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>
                                 <InputField label="Notes" type= 'text' value={currentYarn.notes || ''} onChange={handleInputChange('notes')} multiline rows={4} />
                             </div>
-                            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-evenly', marginTop: '20px' }}>
+                            <div style={{ width: '100%', display: 'flex' }}>
                                 <CustomButton onClick={handleSaveUpdatedYarn}>Save Changes</CustomButton>
                                 <CustomButton onClick={closeEditModal}>Cancel</CustomButton>
                             </div>

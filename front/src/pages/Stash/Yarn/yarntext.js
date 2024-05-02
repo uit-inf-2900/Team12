@@ -4,8 +4,10 @@ import "../../Counter.css";
 import CustomButton from '../../../Components/Button';
 import InputField from '../../../Components/InputField';
 import yarnBasket from '../../../images/yarnSheep.png';
+import SetAlert from '../../../Components/Alert';
 
 const TextYarn = ({onClose, fetchYarns}) => {
+    const [alertInfo, setAlertInfo] = useState({open: false, severity: 'info', message: 'test message'});
     const token = sessionStorage.getItem('token');
     const [yarnData, setYarnData] = useState({
         UserToken: token,
@@ -26,10 +28,21 @@ const TextYarn = ({onClose, fetchYarns}) => {
     
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        // Check if all fields are filled in
+        if (!yarnData.Type || !yarnData.Manufacturer || !yarnData.Color) {
+            setAlertInfo({
+                open: true,
+                severity: 'error',
+                message: 'Please fill in all fields.'
+            });
+            return;
+        }
         
         // Get the payload ready for the POST request
         const payload = {
             UserToken: yarnData.UserToken,
+            ItemId: yarnData.ItemId,
             Type: yarnData.Type,
             Manufacturer: yarnData.Manufacturer,
             Color: yarnData.Color,
@@ -53,9 +66,21 @@ const TextYarn = ({onClose, fetchYarns}) => {
         if (response.ok) {
             const result = await response.json();
             console.log('Success:', result);
+            setAlertInfo({
+                open: true,
+                severity: 'success',
+                message: 'Needle uploaded successfully'
+            });
+            onClose();
             fetchYarns();
-        };
-        onClose();
+        } else {
+            const errorResult = await response.json();
+            setAlertInfo({
+                open: true,
+                severity: 'error',
+                message: errorResult.message || 'An unexpected error occurred'
+            });
+        }
     };
 
     return (
@@ -96,6 +121,11 @@ const TextYarn = ({onClose, fetchYarns}) => {
                         <CustomButton themeMode="light" onClick={onClose}>Cancel</CustomButton>
                     </div>
                 </form>
+                <SetAlert
+                    open={alertInfo.open} 
+                    setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} 
+                    severity={alertInfo.severity} 
+                    message={alertInfo.message} />
             </div>
         </div>
     )
