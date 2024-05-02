@@ -41,6 +41,25 @@ public class CounterController : ControllerBase
         return Ok(res.CounterId);
     }
 
+    [HttpGet]
+    [Route("getcounters")]
+    public IActionResult GetCounter([FromQuery] string userToken)
+    {
+        var res = _counterService.GetCounters(userToken);
+
+        if (!res.Success)
+        {
+            if (res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok(res.UserCounters);
+    }
+
     [HttpPatch]
     [Route("updatecounter")]
     public IActionResult UpdateCounter([FromBody] UpdateCounterRequest request)
@@ -50,7 +69,7 @@ public class CounterController : ControllerBase
             return BadRequest();
         }
 
-        var res = _counterService.UpdateCounter(request.userToken, request.counterId, request.newNum);
+        var res = _counterService.UpdateCounter(request.userToken, request.counterId, request.newNum, request.newName);
 
         if (!res.Success)
         {

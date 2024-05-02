@@ -7,8 +7,9 @@ namespace Strikkeapp.Services;
 public interface ICounterService 
 {
     public CreateCounterResult CreateCounter(string userToken, string name);
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum);
+    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName);
     public CounterResult DeleteCounter(string userToken, Guid counterId);
+    public GetCountersResult GetCounters(string userToken);
 }
 
 public class CounterService : ICounterService
@@ -57,7 +58,24 @@ public class CounterService : ICounterService
         }
     }
 
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum)
+    public GetCountersResult GetCounters(string userToken)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return GetCountersResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+
+        var counters = _context.CounterInventory
+            .Where(uid => uid.UserId == userId)
+            .ToList();
+
+        return GetCountersResult.ForSuccess(counters);
+    }
+
+    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName)
     {
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
@@ -82,6 +100,12 @@ public class CounterService : ICounterService
 
                 getCounter.RoundNumber = newNum;
                 _context.SaveChanges();
+
+                if(!string.IsNullOrWhiteSpace(newName))
+                {
+                    getCounter.Name = newName;
+                    _context.SaveChanges();
+                }
 
                 transaction.Commit();
                 return CounterResult.ForSuccess();
