@@ -36,6 +36,7 @@ const YarnStash = () => {
             });
             if (response.ok) {
                 setYarns(currentYarns => currentYarns.filter(yarn => yarn.itemId !== ItemID));
+                closeEditModal();
             } else {
                 console.error("Failed to delete the yarn", await response.text());
             }
@@ -108,21 +109,22 @@ const YarnStash = () => {
             <div className="card-container" style={{justifyContent: 'flex-start'}}>
             {yarns.map(yarn => (
                 <GeneralCard
-                    key={yarn.itemId}
-                    ItemId={yarn.ItemID}
-                    title={yarn.type}
-                    stats={[
-                        { label: "Brand type", value: yarn.type},
-                        { label: "Brand", value: yarn.manufacturer},
-                        { label: "Color", value: yarn.color},
-                        { label: "Weight", value: yarn.weight},
-                        { label: "Length", value: yarn.length },
-                        { label: "Gauge", value: yarn.gauge},
-                        { label: "Notes", value: yarn.type}
-                    ]}
-                    onDelete={() => handleDeleteYarn(yarn.itemId)}
-                    onEdit={() => handleEditYarn(yarn)}
-                />
+                        key={yarn.itemId}
+                        ItemId={yarn.ItemID}
+                        title={yarn.type}
+                        stats={[
+                            { label: "Brand type", value: yarn.type},
+                            { label: "Brand", value: yarn.manufacturer},
+                            { label: "Color", value: yarn.color},
+                            { label: "Weight", value: yarn.weight},
+                            { label: "Length", value: yarn.length },
+                            { label: "Gauge", value: yarn.gauge},
+                            { label: "Notes", value: yarn.notes}
+                        ]}
+                        // onDelete={() => handleDeleteYarn(yarn.itemId)}
+                        onClick={() => handleEditYarn(yarn)}
+                    />
+               
             ))}
             </div>
             <AddButton onClick={toggleYarnModal} />
@@ -165,6 +167,8 @@ const YarnStash = () => {
                             <div style={{ width: '100%', display: 'flex' }}>
                                 <CustomButton onClick={handleSaveUpdatedYarn}>Save Changes</CustomButton>
                                 <CustomButton onClick={closeEditModal}>Cancel</CustomButton>
+                                <CustomButton onClick={() => handleDeleteYarn(currentYarn.itemId)}>Delete</CustomButton>
+
                             </div>
                         </div>
                     </div>
