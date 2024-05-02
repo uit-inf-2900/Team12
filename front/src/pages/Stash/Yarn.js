@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "../../GlobalStyles/main.css";
 import "../Counter.css";
-import CustomButton from '../../Components/Button';
+import { CustomButton } from '../../Components/Button';
 import Edit from './edit';
 
 const YarnStash = ({ yarnEntries = [], onUpdate }) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import exampleImage from '../images/reading.png'; // Import the PNG image
-import CustomButton from './Button';
+import { CustomButton } from './Button';
 
 import "../GlobalStyles/main.css";
 

@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
 
 import '../../GlobalStyles/main.css';
-import AddButton from "../../Components/AddButton";
+import { AddButton } from "../../Components/Button";
 import ModalContent from "../../Components/ModualContent";
 
 
@@ -60,7 +60,7 @@ const Projects = () => {
                 ))}
             </div>
 
-            <AddButton onClick={() => toggleModal(true)} />
+            <AddButton iconName='add' onClick={() => toggleModal(true)} />
 
             <ModalContent
                 open={isOpenModal}

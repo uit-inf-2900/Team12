@@ -3,7 +3,7 @@ import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Circu
 
 import { fetchUserData } from '../apiServices';
 import SetAlert from '../../../Components/Alert';
-import CustomButton from '../../../Components/Button';
+import { CustomButton } from '../../../Components/Button';
 import useDialog from '../../../Components/useDialog';
 import { getStatusLabel } from '../../../Components/UserLable';
 

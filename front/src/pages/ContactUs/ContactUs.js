@@ -8,7 +8,7 @@ import InputField from "../../Components/InputField";
 import SetAlert from "../../Components/Alert";
 import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
-import CustomButton from "../../Components/Button";
+import { CustomButton } from "../../Components/Button";
 import ContactInformation from '../../Components/ContactInformation';
 
 const FAQItem = ({ question, answer }) => {

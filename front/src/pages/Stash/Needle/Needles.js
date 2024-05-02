@@ -5,10 +5,10 @@ import MultiSelect from '../../../Components/MultiSelect';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import "../../../GlobalStyles/main.css";
-import CustomButton from '../../../Components/Button';
+import { CustomButton } from '../../../Components/Button';
 import ModalContent from '../../../Components/ModualContent';
 import NeedleInfo from './needletext';
-import AddButton from '../../../Components/AddButton';
+import { AddButton } from '../../../Components/Button';
 
 
 /**

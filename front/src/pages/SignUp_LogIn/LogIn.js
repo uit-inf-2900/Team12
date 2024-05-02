@@ -5,7 +5,7 @@ import validator from 'validator';
 import axios from 'axios';
 
 import "../../GlobalStyles/main.css";
-import CustomButton from '../../Components/Button';
+import { CustomButton } from '../../Components/Button';
 import InputField from '../../Components/InputField';
 
 

@@ -6,7 +6,7 @@ import axios from 'axios';
 import Image from "../../images/6.png";
 import InputField from '../../Components/InputField';
 import ModalContent from '../../Components/ModualContent';
-import CustomButton from '../../Components/Button';
+import { CustomButton } from '../../Components/Button';
 import SetAlert from '../../Components/Alert';
 
 const ProfilePage = () => {

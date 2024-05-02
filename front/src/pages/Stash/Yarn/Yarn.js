@@ -3,10 +3,10 @@ import { Modal } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
 import "../../Counter.css";
-import AddButton from '../../../Components/AddButton';
+import { AddButton } from '../../../Components/Button';
 import GeneralCard from '../../Admin/Dashboard/Card';
 import InputField from '../../../Components/InputField';
-import CustomButton from '../../../Components/Button';
+import { CustomButton } from '../../../Components/Button';
 import yarnBasket from '../../../images/yarnSheep.png';
 
 const YarnStash = () => {

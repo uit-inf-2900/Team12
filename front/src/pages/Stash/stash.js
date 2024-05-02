@@ -6,8 +6,6 @@ import NeedleStash from "./Needle/Needles";
 import ModalContent from "../../Components/ModualContent";
 import YarnStash from "./Yarn/Yarn";
 
-import AddButton from "../../Components/AddButton";
-
 const Stash = () => {
     const [activeStatus, setActiveStatus] = useState('yarn');
     const [needleTypes, setNeedleTypes] = useState(['All']);

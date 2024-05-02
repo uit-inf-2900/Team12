@@ -3,7 +3,7 @@ import InputField from "../../Components/InputField";
 import "./Calculator.css"
 // import { Link } from 'react-router-dom';
 import Image from "../../images/knitting.png";
-import CustomButton from "../../Components/Button";
+import { CustomButton } from "../../Components/Button";
 
 export const YarnCalculator = () => {
     const [originalLength, setOriginalLength] = useState('');
