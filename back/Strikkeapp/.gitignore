@@ -1,3 +1,6 @@
+TestResults
+CoverageReports
+
 *.swp
 *.*~
 project.lock.json

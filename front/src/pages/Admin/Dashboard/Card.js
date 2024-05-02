@@ -22,12 +22,14 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                     </div>
                 )}
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                    <button onClick={onEdit} variant="outlined" color="primary">
+                    
+                    {onEdit && (<button onClick={onEdit} variant="outlined" color="primary">
                         Edit
-                    </button>
-                    <button onClick={onDelete} variant="outlined" color="secondary">
+                    </button>)}
+
+                    {onDelete && (<button onClick={onDelete} variant="outlined" color="secondary">
                         Delete
-                    </button>
+                    </button>)}
                 </div>
             </div>
             <div className="card-footer">

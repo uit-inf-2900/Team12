@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import "../../GlobalStyles/main.css";
-
-import CustomButton from '../../Components/Button';
-
+import { useNavigate, Link } from 'react-router-dom';
 import validator from 'validator';
-import InputField from '../../Components/InputField';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
-const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
+import "../../GlobalStyles/main.css";
+import CustomButton from '../../Components/Button';
+import InputField from '../../Components/InputField';
+
+
+/**
+ * LogIn component renders the login form.
+ */
+const LogIn = () => {
     const navigate = useNavigate();
     const [error, setError] = useState(''); 
     const { register, handleSubmit, formState: { errors } } = useForm();
     
-    // Function to handle the form submission
+    /** Function to handle the form submission */ 
     const onSubmit = (data) => {
         const postData = {
             userEmail: data.email,
@@ -39,6 +41,7 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
         })
         .catch(function(error){
             console.error("Error: ", error); 
+            // Handle login errors and display appropriate error message
             if (error.response.status === 401 && error.response.data === "User is banned" ){
                 setError("Your account has been banned. Please contact the administrator for more information.");
             }
@@ -56,6 +59,8 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
             <div className="box light">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h2>Welcome back!</h2>
+
+                    {/* InputField for Email */}
                     <InputField
                         label="Email"
                         type="email"
@@ -67,6 +72,8 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         aria-label="Email"
                         data-testid = "email-input"
                     />
+
+                    {/* InputField for Password */}
                     <InputField
                         label="Password"
                         type="password"
@@ -75,6 +82,8 @@ const LogIn = ({ toggleForm, onForgotPasswordClick}) => {
                         aria-label="Password"
                         data-testid = "password-input"
                     />
+
+                    {/* Link to forgot password page */}
                     <div className='infoText-small'>
                         <Link to="/reset-password" className="forgot-password-link">Forgot password?</Link>
                     </div>

@@ -1,13 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Strikkeapp.Data.Entities;
 
 namespace Strikkeapp.Data.Context;
 
 public class StrikkeappDbContext : DbContext
 {
-    public StrikkeappDbContext(DbContextOptions<StrikkeappDbContext> options)
+    private readonly IPasswordHasher<object> _passwordHasher;
+    public StrikkeappDbContext(DbContextOptions<StrikkeappDbContext> options,
+        IPasswordHasher<object> passwordHasher)
         : base(options)
     {
+        _passwordHasher = passwordHasher;
     }
 
     // Create tables
@@ -20,6 +25,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<YarnInventory> YarnInventory { get; set; }
     public virtual DbSet<UserVerification> UserVerification { get; set; }
     public virtual DbSet<Counter> CounterInventory { get; set; }
+    public virtual DbSet<Newsletter> Newsletter { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,6 +67,7 @@ public class StrikkeappDbContext : DbContext
             .HasForeignKey(pt => pt.KnittingRecipeId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<ProjectTracking>()
             .HasOne<UserLogIn>()
             .WithMany()
@@ -68,6 +75,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<NeedleInventory>()
             .HasOne<UserLogIn>()
             .WithMany()
@@ -75,6 +83,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete (DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<YarnInventory>()
             .HasOne<UserLogIn>()
             .WithMany()
@@ -82,6 +91,7 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<UserVerification>()
             .HasOne<UserLogIn>()
             .WithOne()
@@ -89,11 +99,34 @@ public class StrikkeappDbContext : DbContext
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Add forignkey and delete behaviour
         modelBuilder.Entity<Counter>()
             .HasOne<UserLogIn>()
             .WithMany()
             .HasForeignKey(c => c.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+
+        // Set default admin user
+        Guid adminGuid = Guid.NewGuid();
+        modelBuilder.Entity<UserLogIn>().HasData(
+            new UserLogIn
+            {
+                UserId = adminGuid,
+                UserEmail = "admin@knithub.no",
+                UserPwd = _passwordHasher.HashPassword("admin@knithub.no", "KnithubAdminUser!"),
+                UserStatus = "verified",
+                UserVerificationCode = 999999
+            });
+        modelBuilder.Entity<UserDetails>().HasData(
+            new UserDetails
+            {
+                UserId = adminGuid,
+                UserFullName = "Knithub Admin",
+                DateOfBirth = DateTime.Now,
+                IsAdmin = true
+            });
+
     }
 }

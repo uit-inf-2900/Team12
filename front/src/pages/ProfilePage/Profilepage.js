@@ -77,16 +77,30 @@ const ProfilePage = () => {
 
     // Save the updated profile data
     const handleSave = async () => {
-        if (!editState.userFullName || !editState.userEmail) {
+        // Check if full name, email, or old password is empty
+        if (!editState.userFullName || !editState.userEmail || !editState.oldPassword) {
             setAlertInfo({
                 open: true,
                 severity: 'error',
-                message: 'Full name and email cannot be empty.'
+                message: 'Full name, email, and current password must all be provided.'
             });
             return;
         }
-
-        if (editState.newPassword !== editState.confirmNewPassword) {
+    
+        // Handle password update logic
+        let newPasswordToSend = editState.newPassword;
+        if (editState.newPassword === '') {
+            if (editState.confirmNewPassword === '') {
+                newPasswordToSend = editState.oldPassword;
+            } else {
+                setAlertInfo({
+                    open: true,
+                    severity: 'error',
+                    message: 'New password is empty but confirm password is not.'
+                });
+                return;
+            }
+        } else if (editState.newPassword !== editState.confirmNewPassword) {
             setAlertInfo({
                 open: true,
                 severity: 'error',
@@ -101,7 +115,7 @@ const ProfilePage = () => {
             userFullName: editState.userFullName,
             userEmail: editState.userEmail,
             oldPassword: editState.oldPassword,
-            newPassword: editState.newPassword
+            newPassword: newPasswordToSend
         };
     
         try {
@@ -120,11 +134,6 @@ const ProfilePage = () => {
                 });
             } else {
                 throw new Error('Failed to update profile');
-                setAlertInfo({
-                    open: true,
-                    severity: 'error',
-                    message: 'Failed to update profile.'
-                })
             }
         } catch (error) {
             console.error("Error updating profile data: ", error);
@@ -136,6 +145,7 @@ const ProfilePage = () => {
             });
         }
     };
+    
     
 
 

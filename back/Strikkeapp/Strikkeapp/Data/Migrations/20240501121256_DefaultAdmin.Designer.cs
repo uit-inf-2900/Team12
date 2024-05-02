@@ -11,8 +11,8 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    [Migration("20240408135011_UpdatedYarn")]
-    partial class UpdatedYarn
+    [Migration("20240501121256_DefaultAdmin")]
+    partial class DefaultAdmin
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,9 +41,6 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ResponseMessage")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("TimeCreated")
                         .HasColumnType("TEXT");
 
@@ -55,6 +52,29 @@ namespace Strikkeapp.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ContactRequests");
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.Counter", b =>
+                {
+                    b.Property<Guid>("CounterId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CounterId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CounterInventory");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
@@ -120,6 +140,16 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("NeedleInventory");
                 });
 
+            modelBuilder.Entity("Strikkeapp.Data.Entities.Newsletter", b =>
+                {
+                    b.Property<string>("email")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("email");
+
+                    b.ToTable("Newsletter");
+                });
+
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectTracking", b =>
                 {
                     b.Property<Guid>("ProjectId")
@@ -181,6 +211,15 @@ namespace Strikkeapp.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("UserDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("ca5cb373-cb81-4f13-bd75-6a271f0af169"),
+                            DateOfBirth = new DateTime(2024, 5, 1, 14, 12, 55, 957, DateTimeKind.Local).AddTicks(7022),
+                            IsAdmin = true,
+                            UserFullName = "Knithub Admin"
+                        });
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.UserLogIn", b =>
@@ -201,12 +240,40 @@ namespace Strikkeapp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserVerificationCode")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("UserId");
 
                     b.HasIndex("UserEmail")
                         .IsUnique();
 
                     b.ToTable("UserLogIn");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("ca5cb373-cb81-4f13-bd75-6a271f0af169"),
+                            UserEmail = "admin@knithub.no",
+                            UserPwd = "AQAAAAIAAYagAAAAEATZBdcB4rhIWkdMmC5V3idN5UXxsE+gto8rzx2C7D8Y+4inDaW1XiyCfSUm6oUhMQ==",
+                            UserStatus = "verified",
+                            UserVerificationCode = 999999
+                        });
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.UserVerification", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VerificationCode")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserVerification");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.YarnInventory", b =>
@@ -266,6 +333,15 @@ namespace Strikkeapp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Strikkeapp.Data.Entities.Counter", b =>
+                {
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
                 {
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
@@ -303,6 +379,15 @@ namespace Strikkeapp.Data.Migrations
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithOne()
                         .HasForeignKey("Strikkeapp.Data.Entities.UserDetails", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.UserVerification", b =>
+                {
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
+                        .WithOne()
+                        .HasForeignKey("Strikkeapp.Data.Entities.UserVerification", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

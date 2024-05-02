@@ -137,6 +137,16 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("NeedleInventory");
                 });
 
+            modelBuilder.Entity("Strikkeapp.Data.Entities.Newsletter", b =>
+                {
+                    b.Property<string>("email")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("email");
+
+                    b.ToTable("Newsletter");
+                });
+
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectTracking", b =>
                 {
                     b.Property<Guid>("ProjectId")
@@ -198,6 +208,15 @@ namespace Strikkeapp.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("UserDetails");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("ca5cb373-cb81-4f13-bd75-6a271f0af169"),
+                            DateOfBirth = new DateTime(2024, 5, 1, 14, 12, 55, 957, DateTimeKind.Local).AddTicks(7022),
+                            IsAdmin = true,
+                            UserFullName = "Knithub Admin"
+                        });
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.UserLogIn", b =>
@@ -218,12 +237,25 @@ namespace Strikkeapp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserVerificationCode")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("UserId");
 
                     b.HasIndex("UserEmail")
                         .IsUnique();
 
                     b.ToTable("UserLogIn");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("ca5cb373-cb81-4f13-bd75-6a271f0af169"),
+                            UserEmail = "admin@knithub.no",
+                            UserPwd = "AQAAAAIAAYagAAAAEATZBdcB4rhIWkdMmC5V3idN5UXxsE+gto8rzx2C7D8Y+4inDaW1XiyCfSUm6oUhMQ==",
+                            UserStatus = "verified",
+                            UserVerificationCode = 999999
+                        });
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.UserVerification", b =>

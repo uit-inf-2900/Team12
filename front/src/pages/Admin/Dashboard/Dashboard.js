@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import "../../../GlobalStyles/main.css";
 import GeneralCard from './Card'; 
+import StatisticsChart from '../../../data/ChartData';
+import {getImageByName} from '../../../images/getImageByName';
+import { fetchSubscribers } from '../apiServices';
 
-const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken til usersToken for konsistens
+const Dashboard = ({ toggleView }) => {  
     const [usersData, setUsersData] = useState([]);
     const [activeMessages, setActiveMessages] = useState([]);
     const [inactiveeMessages, setInactiveMessages] = useState([]);
@@ -10,6 +13,7 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
     const [yarnData, setYarnData] = useState([]);
     const [needleData, setNeedleData] = useState([]);
     const [recipesData, setRecipesData] = useState([]);
+    const [subscribers, setSubscribers] = useState([]);
 
     const usersToken = sessionStorage.getItem('token');
 
@@ -44,17 +48,18 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
 
         // Get inventory
         fetch(`http://localhost:5002/api/inventory/get_inventory?userToken=${usersToken}`, { headers: { 'Accept': 'application/json' }})
-        .then(response => response.json())
-        .then(data => {
-            setYarnData(data.yarnInventory);
-            setNeedleData(data.needleInventory);
-        })
-        .catch(error => console.error('Error fetching inventory:', error));
+            .then(response => response.json())
+            .then(data => {
+                setYarnData(data.yarnInventory);
+                setNeedleData(data.needleInventory);
+            })
+            .catch(error => console.error('Error fetching inventory:', error));
 
 
-        // TODO: Add number of subscribers to the newsletter 
-
-        
+        // Get newsletter subscribers 
+        fetchSubscribers().then(data => {
+            setSubscribers(data);
+        }).catch(error => console.error('Error fetching newsletter subscribers:', error));    
     }, [usersToken]);  
 
     const userStats = [
@@ -68,17 +73,17 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
     const totalMessages = activeMessages.length + inactiveeMessages.length + handledMessages.length;
     const Messages = [
         { label: "Total Messages", value: totalMessages },
-        { label: "Unhandled Active", value: activeMessages.length }, 
-        { label: "Unhandled Inactive", value: inactiveeMessages.length},
+        { label: "Active", value: activeMessages.length }, 
+        { label: "Inactive", value: inactiveeMessages.length},
         { label: "Handled Messages", value: handledMessages.length}, 
     ]; 
 
     const Needles = [
         { label: "Total Needles", value: needleData.length },
-        { label: "Interchangeble Needles", value: needleData.filter(needle => needle.type === 'Interchangeble').length },
-        { label: "DoublePointed Needles", value: needleData.filter(needle => needle.type === 'DoublePointed').length },
-        { label: "Circular Needles", value: needleData.filter(needle => needle.type === 'Circular').length },
-        { label: "Other Needles", value: needleData.filter(needle => needle.type === 'Other').length }
+        { label: "Interchangeble", value: needleData.filter(needle => needle.type === 'Interchangeble').length },
+        { label: "DoublePointed", value: needleData.filter(needle => needle.type === 'DoublePointed').length },
+        { label: "Circular", value: needleData.filter(needle => needle.type === 'Circular').length },
+        { label: "Other", value: needleData.filter(needle => needle.type !== 'Interchangeble' && needle.type !== 'DoublePointed' && needle.type !== 'Circular').length }
     ];
 
     const Yarn = [
@@ -90,7 +95,7 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
     ];
 
     const Newsletter = [
-        { label: "Total Newsletter", value: 0 },
+        { label: "Newsletter Subscribers", value: subscribers.length },
     ];
 
     return (
@@ -100,32 +105,44 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
                     title="User Statistics"
                     stats={userStats}
                     onClick={() => toggleView('users')}
+                    chartComponent = {<StatisticsChart lable={"User Statistics"} userStats={userStats} />}
                 />
-                <GeneralCard 
-                    title="Message Statistics"
-                    stats={Messages}
-                    onClick={() => toggleView('users')}
-                />
-                <GeneralCard 
-                    title="Recipes Statistics"
-                    stats={Recipes}
-                    onClick={() => toggleView('')}
-                />
-                <GeneralCard 
-                    title="Yarn Statistics"
-                    stats={Yarn}
-                    onClick={() => toggleView('')}
-                />
-                <GeneralCard 
-                    title="Needle Statistics"
-                    stats={Needles}
-                    onClick={() => toggleView('')}
-                />
+
                 <GeneralCard 
                     title="Newsletter subscripers"
                     stats={Newsletter}
-                    onClick={() => toggleView('')}
+                    image={getImageByName('pileOfSweaters')}
+                    onClick={() => toggleView('newsletter')} 
+                /> 
+
+                <GeneralCard 
+                    title="Message Statistics"
+                    stats={Messages}
+                    onClick={() => toggleView('messages')}
+                    chartComponent = {<StatisticsChart lable={"Message Statistics"} userStats={Messages} />}
                 />
+
+                <GeneralCard 
+                    title="Yarn Statistics"
+                    stats={Yarn}
+                    image={getImageByName('yarnBasket')}
+                    // onClick={() => toggleView('')}
+                />
+
+                <GeneralCard 
+                    title="Needle Statistics"
+                    stats={Needles}
+                    // onClick={() => toggleView('')}
+                    chartComponent = {<StatisticsChart lable={"Needle Statistics"} userStats={Needles} />}
+                />
+
+                <GeneralCard 
+                    title="Recipes Statistics"
+                    stats={Recipes}
+                    image={getImageByName('books')}
+                    // onClick={() => toggleView('')}
+                />
+                
             </div>
         </div>        
     );

@@ -36,3 +36,15 @@ public class VerificationResult
     };
 
 }
+
+public class VerificationRequest
+{
+    public string UserToken { get; set; } = string.Empty;
+    public string VerificationCode { get; set; } = string.Empty;
+
+    public bool IsOk()
+    {
+        return !string.IsNullOrWhiteSpace(UserToken)
+            && VerificationCode.Length == 6;
+    }
+}

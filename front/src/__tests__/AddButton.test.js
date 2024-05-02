@@ -1,0 +1,55 @@
+import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect'; 
+
+import AddButton from '../Components/AddButton';
+
+describe('AddButton component', () => {
+    test('renders button with default styles', () => {
+        const { getByRole } = render(<AddButton />);
+        const button = getByRole('button');
+
+        // Check button styles
+        expect(button).toHaveStyle(`
+            background-color: #F6964B;
+            color: white;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        `);
+    });
+
+    test('button scales up when hovered', () => {
+        const { getByRole } = render(<AddButton />);
+        const button = getByRole('button');
+
+        // Hover over the button
+        fireEvent.mouseEnter(button);
+
+        // Check button styles after hovering
+        expect(button).toHaveStyle(`
+            background-color: #d06514;
+            transform: scale(1.1);
+        `);
+
+        // Move mouse out of the button
+        fireEvent.mouseLeave(button);
+
+        // Check button styles after leaving hover
+        expect(button).toHaveStyle(`
+            background-color: #F6964B;
+            color: white;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        `);
+    });
+
+    test('calls onClick prop when button is clicked', () => {
+        const onClickMock = jest.fn();
+        const { getByRole } = render(<AddButton onClick={onClickMock} />);
+        const button = getByRole('button');
+
+        // Click the button
+        fireEvent.click(button);
+
+        // Check if onClick prop is called
+        expect(onClickMock).toHaveBeenCalledTimes(1);
+    });
+});

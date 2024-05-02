@@ -26,11 +26,6 @@ describe('LogIn Component', () => {
     /**
      * Helper function to render the component within a router context.
      * This is useful for testing components that are connected to the React Router.
-     *
-     * @param {JSX.Element} ui - The component to render.
-     * @param {Object} options - Configuration options for the router.
-     * @param {string} options.route - The route to simulate navigation to.
-     * @returns The render result from testing-library.
      */
     const renderWithRouter = (ui, { route = '/' } = {}) => {
         window.history.pushState({}, 'Test page', route);       

@@ -4,6 +4,8 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 
 using Strikkeapp.User.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace Strikkeapp.Services;
 
@@ -54,6 +56,10 @@ public class UserService : IUserService
             var hasedPwd = HashPassword(userEmail, userPwd);
             userLogin.UserPwd = hasedPwd;
 
+            // ems
+            // Send verification email
+            // SendVerificationEmail(userLogin);
+
             // Save new entry
             _context.UserLogIn.Add(userLogin);
 
@@ -68,8 +74,9 @@ public class UserService : IUserService
             _context.SaveChanges();
 
             // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId, userDetails.IsAdmin);
-            return UserServiceResult.ForSuccess(token, userDetails.IsAdmin);
+            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId, 
+                userDetails.IsAdmin, userLogin.UserStatus);
+            return UserServiceResult.ForSuccess(token, userDetails.IsAdmin, userLogin.UserStatus);
             }
         
 
@@ -78,6 +85,18 @@ public class UserService : IUserService
         {
             return UserServiceResult.ForFailure(ex.Message);
         }
+    }
+
+    private void SendVerificationEmail(UserLogIn userLogin)
+    {
+        var smtpClient = new SmtpClient("smtp.mailersend.net")
+        {
+            Port = 587,
+            Credentials = new NetworkCredential("MS_N11mgG@trial-pr9084z1d8jgw63d.mlsender.net", "qp8NjvpXu7BheAWI"),
+            EnableSsl = true,
+        };
+        // ems
+        smtpClient.Send("no-reply@strikkeapp.com", userLogin.UserEmail, "Verification-Email", "Denne mailen er en test naa bare");
     }
 
     // Log existing user in
@@ -121,8 +140,9 @@ public class UserService : IUserService
                 .FirstOrDefault();
 
             // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId, isAdmin);
-            return UserServiceResult.ForSuccess(token, isAdmin);
+            var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId, 
+                isAdmin, loginInfo.UserStatus);
+            return UserServiceResult.ForSuccess(token, isAdmin, loginInfo.UserStatus);
         }
 
         // Handle errors

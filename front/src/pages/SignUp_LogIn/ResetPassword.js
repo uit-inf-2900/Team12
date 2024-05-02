@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import InputField from '../../Components/InputField';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import CustomButton from '../../Components/Button';
+import { useNavigate, Link } from 'react-router-dom';
 
 import "../../GlobalStyles/main.css";
+import InputField from '../../Components/InputField';
+import CustomButton from '../../Components/Button';
 
 
 
-
-const ResetPassword = ({ toggleForm }) => {
+/**
+ *  ResetPassword component to render the reset password form. 
+ */
+const ResetPassword = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [isValidEmail, setIsValidEmail] = useState(false);
     const navigate = useNavigate();
 
+
+    /**
+     * Handle form submission
+     */ 
     const onSubmit = (data) => {
         console.log('Forgot Password Data', data);
         const isEmailValid = /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/.test(data.email);
@@ -41,6 +46,7 @@ const ResetPassword = ({ toggleForm }) => {
                         errors={errors.email}
                     />
                                         
+                     {/* Display message if email is valid */}
                     <div className='infoText-small'>
                         {isValidEmail && (
                             <p href="#"> 
@@ -49,12 +55,14 @@ const ResetPassword = ({ toggleForm }) => {
                         )}
                     </div>
                     
+                     {/* Display link to login page if email is not valid */}
                     {!isValidEmail && (
                         <div className='infoText-small'>
                             <Link to="/login" className="forgot-password-link">Log In</Link>
                         </div>
                     )}
                     
+                    {/* Render appropriate button based on email validity */}
                     <div>
                         {isValidEmail ? (
                             <CustomButton themeMode="light" onClick={() => navigate('/login')}>Log In</CustomButton>

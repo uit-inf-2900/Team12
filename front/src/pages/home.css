@@ -1,0 +1,20 @@
+/* Home.css */
+
+/* .page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+} */
+
+.customs-box {
+    width: 100%; /* Juster etter behov */
+    height: 600px; /* Juster etter behov */
+    border-radius: 10px; /* Gjenbruk variabelen eller sett en fast verdi */
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}

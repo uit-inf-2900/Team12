@@ -52,5 +52,4 @@ const Stash = () => {
     );
 };
 
-
 export default Stash;

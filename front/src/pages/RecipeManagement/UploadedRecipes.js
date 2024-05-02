@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../../GlobalStyles/main.css";
+import "../../GlobalStyles/Card.css"
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MultiSelect from '../../Components/MultiSelect';
+import Card from '../../Components/Card';
+
+import PDFViewer from '../../Components/PDFwindow';
 
 
 const UploadedRecipes = () => {
@@ -13,6 +17,7 @@ const UploadedRecipes = () => {
     const [recipes, setRecipes] = useState([]);
     const [sortBy, setSortBy] = useState('');
     const [loading, setLoading] = useState(true);
+    const [selectedRecipe, setSelectedRecipe] = useState(null);
 
     // Effect to fetch recipes on component mount
     useEffect(() => {
@@ -23,13 +28,25 @@ const UploadedRecipes = () => {
     const fetchRecipes = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('YOUR_BACKEND_ENDPOINT'); // TODO: Replace with the actual backend endpoint
+            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes' + '?userToken=' + sessionStorage.getItem('token')); // TODO: Replace with the actual backend endpoint
             setRecipes(response.data || []); 
         } catch (error) {
             console.error('Error fetching recipes:', error);
         } finally {
             setLoading(false);
         }
+    };
+
+    const deleteRecipe=async () => {
+        try {
+            const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${id}`);
+            setRecipes(response.data || []); 
+        } catch (error) {
+            console.error('Error deleting recipe:', error);
+        } finally {
+            setLoading(false);
+        }
+
     };
 
     // Handle sort criteria change
@@ -43,6 +60,16 @@ const UploadedRecipes = () => {
             return 0;
         });
         setRecipes(sortedRecipes);
+    };
+
+
+    const handleProjectClick = (recipe) => {
+        setSelectedRecipe(recipe);
+        
+    };
+
+    const handleRecipeDelete = () => {
+        deleteRecipe(recipe.recipeId);
     };
 
     // Menu items for the sort select
@@ -66,14 +93,28 @@ const UploadedRecipes = () => {
             />
             {/* Check if data is still being loaded */}
             {loading ? <p>Loading recipes...</p> : (
-                <ul>
+                <div className='card-container'>
                     {recipes.map((recipe, index) => (
-                        <li key={index}>
-                            {recipe.name} - {recipe.needleSize}, {recipe.type}, {recipe.gauge}
-                        </li>
+                        
+                        <Card
+                            key={recipe.recipeId}
+                            title={recipe.recipeName}
+                            needleSize={recipe.needleSize}
+                            knittingGauge={recipe.knittingGauge}
+                            notes={recipe.notes}
+                            onClick={() => handleProjectClick(recipe)}
+                        />
+                        
                     ))}
-                </ul>
+                    
+                    {selectedRecipe && <PDFViewer id={selectedRecipe.recipeId} />}
+                </div>
+                
+                
             )}
+            
+            
+
         </div>
     );
 };

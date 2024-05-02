@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
@@ -18,6 +19,7 @@ public class InventoryTests : IDisposable
 
     // Create mock service
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
+    private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
 
     private Guid testUserGuid = Guid.NewGuid();
     private Guid testNeedleId = Guid.NewGuid();
@@ -31,7 +33,7 @@ public class InventoryTests : IDisposable
             .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        _context = new StrikkeappDbContext(options);
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
 
         _inventoryService = new InventoryService(_context, _mockTokenService.Object);
 
@@ -120,6 +122,22 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenGet_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToke";
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+
+        // Run service and check correct error
+        var res = _inventoryService.GetInventory(fakeToken);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
     public void AddNeedle_Ok()
     {
         var testRequest = new AddNeedleRequest
@@ -138,6 +156,31 @@ public class InventoryTests : IDisposable
 
         Assert.True(res.Success);
         Assert.NotEqual(Guid.Empty, res.ItemId);
+    }
+
+    [Fact]
+    public void FakeTokenAddNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToke";
+
+        var request = new AddNeedleRequest
+        {
+            UserToken = fakeToken,
+            Type = "Some type",
+            Size = 10,
+            Length = 10
+        };
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+
+        // Run service and check correct error
+        var res = _inventoryService.AddNeedle(request);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
     }
 
     [Fact]
@@ -233,9 +276,34 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenAddYarn_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToke";
+
+        var request = new AddYarnRequest
+        {
+            UserToken = fakeToken,
+            Type = "Some type",
+            Manufacturer = "Some Manufacturer",
+            Color = "Some color",
+        };
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+
+        // Run service and check correct error
+        var res = _inventoryService.AddYarn(request);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
     public void IncreasingYarn_Ok() 
     {
-        var testRequest = new UpdateItemRequest
+        var testRequest = new UpdateYarnRequest
         {
             UserToken = "testToken",
             ItemId = testYarnId,

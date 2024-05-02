@@ -14,13 +14,16 @@ public class UsersController : ControllerBase
     // Set user service
     private readonly IUserService _userService;
     private readonly IMailService _mailService;
+    private readonly IVerificationService _verificationService;
     private readonly StrikkeappDbContext _context; // Legg til referanse til DbContext her
 
-    public UsersController(IUserService userService, StrikkeappDbContext context, IMailService mailService)
+    public UsersController(IUserService userService, StrikkeappDbContext context,
+        IMailService mailService, IVerificationService verificationService)
     {
         _userService = userService;
         _context = context;
         _mailService = mailService;
+        _verificationService = verificationService;
     }
 
 
@@ -69,7 +72,8 @@ public class UsersController : ControllerBase
         var res = new UserResultDto
         {
             Token = result.Token,
-            IsAdmin = result.IsAdmin
+            IsAdmin = result.IsAdmin,
+            UserStatus = result.UserStatus
         };
 
 
@@ -100,7 +104,8 @@ public class UsersController : ControllerBase
         var res = new UserResultDto
         {
             Token = result.Token,
-            IsAdmin = result.IsAdmin
+            IsAdmin = result.IsAdmin,
+            UserStatus = result.UserStatus
         };
 
         // Return userid and token on success
@@ -135,13 +140,16 @@ public class UsersController : ControllerBase
     [Route("updateadmin")]
     public IActionResult UpdateAdmin(UpdateAdminRequest request)
     {
+        // Check request
         if(!request.requestOk())
         {
             return BadRequest();
         }
 
+        // Run service
         var res = _userService.UpdateAdmin(request.UserToken, request.UpdateUser, request.NewAdmin);
 
+        //Check for failure, adn handle them
         if(!res.Success)
         {
             if(res.ErrorMessage == "Unauthorized")
@@ -163,13 +171,16 @@ public class UsersController : ControllerBase
     [Route("banuser")]
     public IActionResult BanUser(BanUserRequest request)
     {
+        // Check request
         if(!request.requestOk())
         {
             return BadRequest();
         }
 
+        // Run service
         var res = _userService.BanUser(request.UserToken, request.BanUserId, request.Ban);
 
+        // Check for errors and handle them
         if(!res.Success)
         {
             if(res.ErrorMessage == "Unauthorized")
@@ -212,4 +223,34 @@ public class UsersController : ControllerBase
         return Ok(users);
     }
 
+    [HttpPatch]
+    [Route("/verifyuser")]
+    public IActionResult VerifyUser([FromQuery] VerificationRequest request)
+    {
+        // Check request
+        if(!request.IsOk())
+        {
+            return BadRequest();
+        }
+
+        // Run service
+        var res = _verificationService.VerifyCode(request.UserToken, request.VerificationCode);
+
+        // Check for error, and handle them
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized(res.ErrorMessage);
+            }
+            if(res.ErrorMessage == "Not found")
+            {
+                return NotFound("Could not find verification");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok("User has been verified");
+    }
 }
