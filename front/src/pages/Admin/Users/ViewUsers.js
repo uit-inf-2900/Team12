@@ -14,12 +14,16 @@ import {
     TextField,
 } from '@mui/material';
 import axios from 'axios';
+
 import SetAlert from '../../../Components/Alert';
 import CustomButton from '../../../Components/Button';
 import {getStatusLabel} from './UserLable';
 
 
-  // Fetch user data from the backend
+/**
+ * Function to fetch all the users from the database
+ * @returns {JSX.Element} ViewUsers UI.
+ */
 const fetchUserData = async () => {
     try {
     const response = await fetch('http://localhost:5002/getUsers');
@@ -35,6 +39,10 @@ const fetchUserData = async () => {
 };
 
 
+/**
+ * Component for viewing and managing users.
+ * @returns {JSX.Element} - ViewUsers UI.
+ */
 const ViewUsers = () => {
     // State declarations
     const [users, setUsers] = useState([]);
@@ -52,9 +60,10 @@ const ViewUsers = () => {
     const [dialogAction, setDialogAction] = useState(() => () => {});
     const [refreshData, setRefreshData] = useState(false);
 
-
+    // Get the user token from the session storage
     const token = sessionStorage.getItem('token');
 
+    // Fetch user data from the server
     useEffect(() => {
         setLoading(true);
         fetchUserData().then(data => {
@@ -74,6 +83,7 @@ const ViewUsers = () => {
         setPage(0);
     };
 
+    // Search and sort handlers so one can search and sort the users alphabetically
     const handleSearchChange = event => setSearchText(event.target.value.toLowerCase());
     const handleSort = field => {
         const isAsc = sortField === field && sortDirection === 'asc';
@@ -81,6 +91,7 @@ const ViewUsers = () => {
         setSortField(field);
     };
 
+    // Dialog box handlers
     const handleActionOpen = (message, action) => {
         setDialogMessage(message);
         setDialogAction(() => action);
@@ -97,7 +108,7 @@ const ViewUsers = () => {
     const filteredUsers = users.filter(user => user.fullName.toLowerCase().includes(searchText) || user.email.toLowerCase().includes(searchText));
     const sortedUsers = filteredUsers.sort((a, b) => (a[sortField] < b[sortField]) ? (sortDirection === 'asc' ? -1 : 1) : (a[sortField] > b[sortField]) ? (sortDirection === 'asc' ? 1 : -1) : 0);
 
-   // Admin status update
+    // Admin status update
     const toggleAdminStatus = async (userId, isAdmin) => {
         // Get the user token from the session storage
         try {
