@@ -3,8 +3,9 @@ import "../../../GlobalStyles/main.css";
 import GeneralCard from './Card'; 
 import StatisticsChart from './ChartData';
 import {getImageByName} from '../../../images/getImageByName';
+import { fetchSubscribers } from '../apiServices';
 
-const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken til usersToken for konsistens
+const Dashboard = ({ toggleView }) => {  
     const [usersData, setUsersData] = useState([]);
     const [activeMessages, setActiveMessages] = useState([]);
     const [inactiveeMessages, setInactiveMessages] = useState([]);
@@ -12,6 +13,7 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
     const [yarnData, setYarnData] = useState([]);
     const [needleData, setNeedleData] = useState([]);
     const [recipesData, setRecipesData] = useState([]);
+    const [subscribers, setSubscribers] = useState([]);
 
     const usersToken = sessionStorage.getItem('token');
 
@@ -46,17 +48,18 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
 
         // Get inventory
         fetch(`http://localhost:5002/api/inventory/get_inventory?userToken=${usersToken}`, { headers: { 'Accept': 'application/json' }})
-        .then(response => response.json())
-        .then(data => {
-            setYarnData(data.yarnInventory);
-            setNeedleData(data.needleInventory);
-        })
-        .catch(error => console.error('Error fetching inventory:', error));
+            .then(response => response.json())
+            .then(data => {
+                setYarnData(data.yarnInventory);
+                setNeedleData(data.needleInventory);
+            })
+            .catch(error => console.error('Error fetching inventory:', error));
 
 
-        // TODO: Add number of subscribers to the newsletter 
-
-        
+        // Get newsletter subscribers 
+        fetchSubscribers().then(data => {
+            setSubscribers(data);
+        }).catch(error => console.error('Error fetching newsletter subscribers:', error));    
     }, [usersToken]);  
 
     const userStats = [
@@ -92,7 +95,7 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
     ];
 
     const Newsletter = [
-        { label: "Total Newsletter", value: 0 },
+        { label: "Newsletter Subscribers", value: subscribers.length },
     ];
 
     return (
@@ -109,8 +112,8 @@ const Dashboard = ({ toggleView }) => {  // Rettet prop-navnet fra usersToken ti
                     title="Newsletter subscripers"
                     stats={Newsletter}
                     image={getImageByName('pileOfSweaters')}
-                    // onClick={() => toggleView('')}
-                />
+                    onClick={() => toggleView('newsletter')} 
+                /> 
 
                 <GeneralCard 
                     title="Message Statistics"
