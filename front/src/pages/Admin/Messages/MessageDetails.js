@@ -130,7 +130,7 @@ const MessageDetails = ({ message, refreshMessages }) => {
     if (!message) return <div>Select a message to view details.</div>;
 
     return (
-        <div className='message-box'>
+        <div className='section-container'>
             <SetAlert open={alertOpen} setOpen={setAlertOpen} severity={alertSeverity} message={alertMessage} />
             <div style={{ textAlign: 'center', width: "100%" }}>
 
