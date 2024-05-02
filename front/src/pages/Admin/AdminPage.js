@@ -6,6 +6,11 @@ import Sidebar from './Sidebar';
 import Dashboard from './Dashboard/Dashboard';
 import ViewSubscribers from './NewsLetter';
 
+
+/**
+ * Component for the admin page, allowing access to different admin functionalities.
+ * @returns {JSX.Element} - Admin page UI.
+ */
 const AdminPage = () => {
     const [activeView, setActiveView] = useState('dashboard');
 

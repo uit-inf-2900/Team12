@@ -15,7 +15,13 @@ import axios from 'axios';
 import CustomButton from '../../Components/Button';
 import SetAlert from '../../Components/Alert';
 
+
+/**
+ * Fuction to fetch all the subscribers from the database
+ * @returns {Array} An array of all the subscribers.
+ */
 const fetchSubscribers = async () => {
+    // Fetch the token from sessionStorage
     try {
         const token = sessionStorage.getItem('token');
         console.log("Token fetched from sessionStorage:", token);
@@ -24,8 +30,9 @@ const fetchSubscribers = async () => {
         });
         console.log("API response:", response);
 
+        // Check if the response is successful, if so, return the data as an array of objects
         if (response.status === 200) {
-            return response.data.map(email => ({ email })); // Hvis du ønsker å behandle hver e-post som et objekt        
+            return response.data.map(email => ({ email }));         
         } else {
             throw new Error('Failed to fetch subscribers');
         }
@@ -36,6 +43,11 @@ const fetchSubscribers = async () => {
     
 };
 
+
+/**
+ * Component to view and manage subscribers.
+ * @returns {JSX.Element} JSX element.
+ */
 const ViewSubscribers = () => {
     const [subscribers, setSubscribers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -47,6 +59,10 @@ const ViewSubscribers = () => {
     const [dialogAction, setDialogAction] = useState(() => () => {});
     const [refreshData, setRefreshData] = useState(false);
 
+
+    /**
+     * Fetch all subscribers when the component mounts or when the refreshData state changes
+     */
     useEffect(() => {
         setLoading(true);
         fetchSubscribers().then(data => {
@@ -58,31 +74,47 @@ const ViewSubscribers = () => {
         });
     }, [refreshData]);
 
+    /**
+     * Function to handle the opening of the dialog box
+     */ 
     const handleActionOpen = (message, action) => {
         setDialogMessage(message);
         setDialogAction(() => action);
         setDialogOpen(true);
     };
 
+    /**
+     * Function for handling the confirmation of the dialog box
+     */
     const handleActionConfirm = () => {
         dialogAction();
         setDialogOpen(false);
         setRefreshData(prev => !prev);
     };
 
+    /**
+     * 
+     * @returns - a function to handle the closing of the dialog box
+     */
     const handleActionCancel = () => setDialogOpen(false);
 
+    /**
+     * A function to delete a subscriber from the database 
+     * @param {*} - the email of the subscriber to be deleted 
+     */
     const deleteSubscriber = async (email) => {
+        // Send a request to the server to delete the subscriber
         try {
             const token = sessionStorage.getItem('token');
             const response = await axios.delete(`http://localhost:5002/api/newsletter/removesubscriber`, {
                 params: { userToken: token, subEmail: email }
             });
+            // Update the subscribers list by removing the deleted subscriber, or throw an error if the response is not successful
             if (response.status === 200) {
-                // Oppdaterer tilstanden for å fjerne den slettede abonnenten
                 setSubscribers(currentSubscribers => 
                     currentSubscribers.filter(subscriber => subscriber.email !== email)
                 );
+                // Display a success message if the subscriber is deleted successfully 
                 setAlertMessage('Subscriber removed successfully');
                 setAlertSeverity('success');
                 setAlertOpen(true);
