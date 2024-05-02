@@ -455,6 +455,33 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void UpdateYarn_Ok()
+    {
+        var testToken = "testToken";
+        var testRequest = new UpdateYarnRequest
+        {
+            UserToken = testToken,
+            ItemId = testYarnId,
+            Type = "New Type",
+            Manufacturer = "New Manufacturer",
+            Color = "New Color",
+            Batch_Number = "New Batch",
+            Weight = 60,
+            Length = 666,
+            Gauge = "666/666",
+            Notes = "New Note"
+        };
+
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.UpdateYarn(testRequest);
+
+        Assert.True(res.Success);
+    }
+
+    [Fact]
     public void IncreseYarnInUse_Ok()
     {
         var testRequest = new UpdateItemRequest
