@@ -10,6 +10,13 @@ import ModalContent from '../../../Components/ModualContent';
 import NeedleInfo from './needletext';
 import AddButton from '../../../Components/AddButton';
 
+
+/**
+ * Component for managing and displaying a needle stash, including the ability to add and delete needles.
+ * @param {function} setNeedleTypes  Function to set the needle types to filter the needle stash.
+ * @param {string[]} needleTypes  The needle types to filter the needle stash. 
+ * @returns {JSX.Element}  A table displaying the needle stash, with buttons for deleting needles and adding new ones.
+ */
 export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     // Set the needle state and the delete modal state
     const [needles, setNeedles] = useState([]);
@@ -44,7 +51,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
 
             try {
                 const response = await fetch(url, {
-                    method: 'DELETE', // or 'DELETE', depending on your API
+                    method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': '*/*'

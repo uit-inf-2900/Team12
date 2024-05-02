@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Box, Grid, Typography, IconButton, Paper, Button } from '@mui/material';
+import { Link, Box, Grid, Typography, IconButton, Paper, Button, Alert } from '@mui/material';
 import Theme from './Theme';
 import { useForm } from 'react-hook-form';
 
@@ -14,14 +14,12 @@ import CustomButton from './Button'
 import SendIcon from '@mui/icons-material/Send';
 import SetAlert from './Alert';
 
-// TODO: Get error if no email is entered
-// TODO: Get error if email is not valid
-// TODO: Get info allert if email is already subscribed
-// TODO: Get success alert if the subscribtion now is successful
-// TODO: Get error alert if the subscribtion is not successful
 
 
-// Pages the footer should link to
+/**
+ * Returns usefull links that is used in the footer 
+ * @returns {JSX.Element}  Usefull links.
+ */
 const FooterRouting = () => {
     return (
         <div>
@@ -36,6 +34,11 @@ const FooterRouting = () => {
     ); 
 };
 
+
+/**
+ * Returns social media icons that is used in the footer
+ * @returns {JSX.Element} Social media icons.
+ */ 
 const SomeFooter = () => {
     return (
         <Box>
@@ -63,25 +66,52 @@ const SomeFooter = () => {
     ); 
 };
 
+
+/**
+ * Component for the footer containing subscription form, social icons, and contact information.
+ * @returns {JSX.Element} - Footer UI.
+ */
 const Footer = () => {
     const [email, setEmail] = useState('');
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [open, setOpen] = useState(false);  
+    const [alert, setAlert] = useState({ severity: '', message: '' });
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
+    const [error, setError] = useState('');
 
 
-    const handleSubscribe = () => {
-        // TODO: implement the subscribe functionality
-        if(email) {
-            // Alert the email
-            <SetAlert severity="success" message={`Subscribe to the newsletter with: ${email}`} />
-            // Reset email state
-            setEmail('');
-        } else {
-            // Handle empty input or add validation
-            <SetAlert severity="error" message="Please enter an email address." />
+    /**
+     * Handles subscription form submission.
+     * Sends a request to the server to subscribe to the newsletter.
+     */
+    const handleSubscribe = async () => {
+        try {
+            const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ subEmail: email })
+            });
+            
+            // Of the response is ok, reset the form state and display a success message 
+            if (response.ok) {
+                reset(); 
+                setAlert({ severity: 'success', message: 'You have successfully subscribed to our newsletter!' })
+                setOpen(true);
+                setError(''); 
+                setEmail(''); 
+
+            } else {
+                const errorText = await response.text();
+                setError(errorText);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+            setError('Network error, please try again later.');
         }
     };
 
-    
 
     return (
         // Use paper for the color (can be changed in Theme)
@@ -92,31 +122,37 @@ const Footer = () => {
                     <Typography variant="h5">
                         Knithub
                     </Typography>
-                    <Box component="form"
-                        onSubmit={handleSubmit(handleSubscribe)}
-                        noValidate
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'flex',
-                            mt: 1,
-                        }}>
+
+                    {/* The input field for the user to add its email addrss */}
+                    <form >
                         <InputField
-                            fullWidth
                             label="Subscribe to our newsletter"
-                            variant="outlined"
-                            type="send"
+                            register={register('email', {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Invalid email address"
+                                }
+                            })}
+                            errors={errors.email}
+                            type="send" 
                             value={email}
-                            onInput={e => setEmail(e.target.value)}
-                            error={errors.email}
-                            helperText={errors.email?.message}
-                            onSubmit={handleSubscribe}
+                            onChange={(event) => setEmail(event.target.value)}
+                            onSubmit={handleSubmit(handleSubscribe)}
                         />
-                    </Box>
+                        {error && <div>{error}</div>}
+                    </form>
+
+                    {/* The SOME links are under the subscription input */}
                     <SomeFooter />
                 </Grid>
+
+                {/* The footer routing is in the middle */}
                 <Grid item xs={12} sm={3}>
                     <FooterRouting />
                 </Grid>
+
+                {/* The contact information is on the right side */}
                 <Grid item xs={12} sm={4}>
                     <Typography variant="h5" gutterBottom>
                         Contact Us
@@ -129,6 +165,7 @@ const Footer = () => {
                     </Typography>
                 </Grid>
             </Grid>
+            <SetAlert open={open} setOpen={setOpen} severity={alert.severity} message={alert.message} />
         </Paper>
     );
 };

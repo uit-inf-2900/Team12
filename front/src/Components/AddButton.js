@@ -3,17 +3,21 @@ import { Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 
-// Creates a + circle button that scales up when hovered
+/** 
+ * Creates a circular footer
+ */ 
+
 const AddButton = ({ onClick }) => {
     const [isHovered, setIsHovered] = useState(false);
 
-    // Define styles
+    /** Default styles for the button */
     const defaultStyle = {
         backgroundColor: '#F6964B', 
         color: 'white',
         transition: 'transform 0.3s ease, background-color 0.3s ease',
     };
 
+    /** Hover style for the button */
     const hoverStyle = {
         backgroundColor: '#d06514', 
         transform: 'scale(1.1)', 
