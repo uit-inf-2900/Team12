@@ -1,62 +1,79 @@
-// ModalCard.js
+import React from 'react';
+import { makeStyles } from '@mui/styles';
+import { Modal, Box, Typography, Button, Grid, Paper } from '@mui/material';
+import "../GlobalStyles/Card.css";
 
-import React from "react";
-import { Modal, Box, Container } from "@mui/material";
-import { Link } from "react-router-dom";
-import { styled, css } from '@mui/system';
-import exampleImage from '../images/reading.png';
-import Card from "./Card";
 
-const ModalCard = ({ isOpen, onClose, project }) => {
-    return (
-        <div>
-            
-            <Modal
-            open={isOpen}
-            onClose={onClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Container
-            maxWidth="sm"
-            >
-            
-                <Box sx={{ 
-                width: 400,
-                height: 600,
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                bgcolor: 'background.paper',
-                border: '2px solid #000',
-                boxShadow: 24,
-                p: 5,
-            
-            }}>
-                <h2 id="modal-modal-title">{project.title}</h2>
-                <p id="modal-modal-description">Status: {project.status}</p>
-                {/* Add more project details here */}
-                <img src={exampleImage} className="card-image" />
-                
-            {/* Add more buttons for routing here*/}
-                <Link to="/about">
-                    <button>About Us</button>
-                </Link>
-                <Link to="/contactus">
-                    <button>Contact Us</button>
-                </Link>
 
-                <button onClick={onClose}>Close</button>
 
-            </Box>
-            </Container>
-            
-        </Modal>
+const ProjectCard = ({ show, project, handleClose }) => {
 
-        </div>
-        
-    );
+  return (
+    <Modal open={show} onClose={handleClose}>
+      <Box className="project-card" sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+      <Grid item xs={8}>
+            <Grid item xs={10}>
+              <Typography variant="h2" gutterBottom>
+                {project.title}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Typography variant="h6" gutterBottom>
+                Notes
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {project.notes}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6" gutterBottom>
+                Status
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {project.status}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6" gutterBottom>
+                Needle
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {project.needle}
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6" gutterBottom>
+                Yarn
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {project.yarn}
+              </Typography>
+            </Grid>
+
+          </Grid>
+      
+
+        {/* Add more project information here as needed */}
+        <Box sx={{ float: "right", display: 'flex', flexDirection: 'column', alignItems: 'flex-end', mt: 2 }}>
+          <Button className="close-button" sx={{ mb: 1 }}>
+            Recipe
+          </Button>
+          <Button className="close-button" sx={{ mb: 1 }}>
+            Calculators
+          </Button>
+          <Button className="close-button"  sx={{ mb: 1 }}>
+            Counter
+          </Button>
+        </Box>
+
+        <Box sx={{ float: "bottom", display: 'flex', flexDirection: 'column-reverse', alignItems: 'flex-end', mt: 2 }}>
+          <Button className="close-button" sx={{ bottom: 0, mb: 1 }} onClick={handleClose}>Close</Button>
+      
+        </Box>
+
+       </Box>
+    </Modal>
+  );
 };
 
-export default ModalCard;
+export default ProjectCard;

@@ -1,20 +1,17 @@
 // https://legacy.reactjs.org/docs/lists-and-keys.html
 
 import React, {useContext, useEffect, useState} from "react";
-import ProjectCard from "../../Components/ProjCard";
+import ProjectCard from "../../Components/ProjectCard";
 import UploadProjects from "./addProject";
 import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
 import axios from 'axios';
 
-import trialCard from "../../Components/test";
+import TrialCard from "./test";
 
 import '../../GlobalStyles/main.css';
 import "../../GlobalStyles/Card.css"
-
-import NeedleInfo from "../Stash/Needle/needletext";
-
 
 import AddButton from "../../Components/AddButton";
 
@@ -25,8 +22,6 @@ import { Fab, Modal, Box } from "@mui/material";
 
 const Projects = () => {
     const [activeStatus, setActiveStatus] = useState('in-progress');
-    const [isOpenModal, setIsOpenModal] = useState(false);
-    const [selectedCard, setSelectedCard] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const [uploading, setUploading] = useState(false);
@@ -34,26 +29,37 @@ const Projects = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
 
+    const [allProjects, setProjects]=useState([]);
 
-    const fetchNeedles = async () => {
+
+    //fetch all projects in DB
+    const fetchProjects = async () => {
         const token = sessionStorage.getItem('token');
-        const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
+        const url = `http://localhost:5002/api/projects/getprojects?userToken=${token}`;
         try {
             const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
-                setNeedles(data.needleInventory || []);
+                setProjects(data.allProjects || []);
             } else {
-                console.error("Failed to fetch needle data.");
+                console.error("Failed to fetch projects data.");
             }
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
-    
     useEffect(() => {
-        fetchNeedles();
+        fetchProjects();
     }, []);
+
+    //delete selected project
+    const deleteProjects = async () => {
+
+    };
+
+
+    
+
 
 
     const toggleUpload = () => {
@@ -61,29 +67,9 @@ const Projects = () => {
     };
 
 
-    const fetchProjects = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get('http://localhost:5002/api/recipe/getprojects' + '?userToken=' + sessionStorage.getItem('token')); 
-            setRecipes(response.data || []); 
-        } catch (error) {
-            console.error('Error fetching recipes:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const toggleModal = (isOpen) => {
-        setIsOpenModal(isOpen);
-    };
-
+    
     
 
-    const openProject = (project) => {
-        setSelectedCard(project);
-        toggleModal(true);
-
-    };
 
     const handleProjectClick = (project) => {
         setSelectedProject(project);
@@ -93,9 +79,7 @@ const Projects = () => {
     const handleCloseModal = () => {
         setShowModal(false);
     };
-    const handleCloseUploading =() =>{
-        setLoading(false);
-    };
+
 
 
     const projects = [
@@ -147,8 +131,8 @@ const Projects = () => {
 
             <AddButton onClick={toggleUpload} />
             
-            <Modal open={uploading} onClose={toggleUpload} >
-                <NeedleInfo onClose={toggleUpload} fetchNeedles={fetchNeedles}/>
+            <Modal open={uploading} onClose={toggleUpload}>
+                <UploadProjects onClose={toggleUpload}/>
             </Modal>
 
             {selectedProject && ( // Render ModalCard only when selectedProject is not null

@@ -30,22 +30,7 @@
     color: var(----box-color-dark);
   }
 
-  .project-card{
-    width: 800px;
-    position: relative;
-    height: 50%;  
-    border-radius: calc(var(--curve) * 1px);
-    overflow: hidden;
-    text-decoration: none;
-    box-shadow: 5px 5px 8px var(--shadow-color);
-    color: var(----box-color-dark);
 
-  }
-  .close-button{
-    position:absolute;
-    bottom:0;
-  }
-  
   .card-image {      
     width: 100%;
     height: auto;
@@ -109,3 +94,73 @@
   .card-content {
     padding: 16px;
   }
+
+
+
+
+  /******* PROJECT CARD**********/
+
+  .project-container{
+    height: 100%;
+    margin: 0;
+    position: relative;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+  
+
+  .left-project-container{
+    overflow: hidden;
+    padding: 40px 0 0 0;
+    position: relative;
+    text-align: center;
+    width: 300px;
+    
+  }
+  .right-project-container{
+    display: grid;
+    grid-template-areas: "." ".";
+    width: 500px;
+    
+  }
+  .header-project-container{
+    overflow: hidden;
+    padding: 40px 0 0 0;
+    position: relative;
+    text-align: center;
+    width: 300px;
+    
+  }
+  .project-footer{
+      align-items: center;
+      background: #fff;
+      display: grid;
+      padding: 5px 40px;
+  }
+
+  .project-upload-container{
+    display: grid;
+    grid-template-areas: "header";
+    grid-template-areas: "left right";
+    max-width: 900px;
+  }
+
+  .project-card{
+    width: 1000px;
+    position: relative;
+    justify-content: space-evenly;
+    height: 60%;  
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 5px 5px 8px var(--box-shadow);
+    background-color:var(--box-color-dark) ;
+
+  }
+
+  .project-card-title{
+    align-items: center;
+  }
+
+
