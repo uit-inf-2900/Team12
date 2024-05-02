@@ -339,6 +339,47 @@ public class InventoryTests : IDisposable
         Assert.Empty(_context.NeedleInventory);
     }
 
+    [Fact]
+    public void FakeTokenDeleteNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run service and check correct error
+        var res = _inventoryService.DeleteNeedle(new DeleteItemRequest
+        {
+            ItemId = testNeedleId,
+            UserToken = fakeToken
+        });
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void DeletingNonExistingNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.DeleteNeedle(new DeleteItemRequest {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found for user", res.ErrorMessage);
+    }
+
 
     [Fact]
     public void AddYarn_Ok() 
