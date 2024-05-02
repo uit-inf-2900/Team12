@@ -24,14 +24,13 @@ const AdminPage = () => {
     };
 
     return (
-        <div  className='Admin-page-content' style={{ display: 'flex', margin: 'auto', paddingTop: '20px', overflow: 'auto', position: 'relative' }}>
-            {/* Back button to navigate to the dashboard */}
-            {activeView !== 'dashboard' && (
-                <button style={{ position: 'absolute', right: 20, top: 20 }} onClick={() => toggleView('dashboard')}>
-                    <FaArrowLeft /> Back to Dashboard
-                </button>
-            )}
-            <div>
+        <div style={{ display: 'flex', margin: 'auto', paddingTop: '20px', overflow: 'auto', position: 'relative' }}>
+            <div  className='Admin-page-content'>
+                {activeView !== 'dashboard' && (
+                    <button style={{ position: 'absolute', right: 20, top: 20 }} onClick={() => toggleView('dashboard')}>
+                        <FaArrowLeft /> Back to Dashboard
+                    </button>
+                )}
                 <h1>Admin Page</h1>
                 {/* Rendering different views based on activeView state */}
                 {activeView === 'users' && <ViewUsers />}

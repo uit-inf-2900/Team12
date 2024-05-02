@@ -23,7 +23,7 @@ const ViewSubscribers = () => {
     }, []);
 
     return (
-        <div className='section-container' style={{justifyContent:'center'}}>
+        <div  style={{justifyContent:'center'}}>
             <h2>View Subscribers</h2>
             <TextField label="Search for subscribers" variant="outlined" fullWidth style={{ marginBottom: '10px' }} />
             <SetAlert />
@@ -50,7 +50,7 @@ const ViewSubscribers = () => {
                                             color="secondary"
                                             onClick={openDialog}
                                         >
-                                            Delete
+                                            Remove Subscribtion
                                         </CustomButton>
                                     </TableCell>
                                 </TableRow>

@@ -59,7 +59,7 @@ const ViewMessages = () => {
     }, [searchText]);
 
     return (
-        <div className='section-container' style={{alignItems: 'flex-start' , width:'100%'}}>
+        
         <Grid container spacing={2} style={{ overflow: 'auto' }}>
             <Grid item xs={12} md={4}>
                 <div className='switch-container'>
@@ -109,11 +109,11 @@ const ViewMessages = () => {
                 {activeMessage ? (
                     <MessageDetails message={activeMessage} refreshMessages={fetchMessages}/>
                     ) : (
-                    <div className='section-container'> Select a message to view details.</div>
+                    <div> Select a message to view details.</div>
                 )}
             </Grid>
         </Grid>
-    </div>
+    
     );
 };
 

@@ -26,11 +26,11 @@ const ViewUsers = () => {
     }, []);
 
     return (
-        <div style={{width:'100%'}}>
+        <div >
             <h2>View Users</h2>
             <SetAlert />
             <TextField label="Search Users" variant="outlined" fullWidth style={{ marginBottom: '10px' }} />
-            <TableContainer style={{ width: '100%' }}>
+            <TableContainer >
                 {loading ? (
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
                         <CircularProgress />
