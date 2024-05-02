@@ -1,22 +1,24 @@
 // https://legacy.reactjs.org/docs/lists-and-keys.html
 
 import React, {useContext, useEffect, useState} from "react";
-import ModalCard from "../../Components/ProjCard";
+import ProjectCard from "../../Components/ProjCard";
 import UploadProjects from "./addProject";
 import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
 import axios from 'axios';
 
+import trialCard from "../../Components/test";
+
 import '../../GlobalStyles/main.css';
 import "../../GlobalStyles/Card.css"
 
+import NeedleInfo from "../Stash/Needle/needletext";
+
 
 import AddButton from "../../Components/AddButton";
-import ModalContent from "../../Components/ModualContent";
-import { AccessibilityNewSharp } from "@material-ui/icons";
 
-import Box from '@mui/material/Box'; // Import Box from MUI
+import { Fab, Modal, Box } from "@mui/material";
 
 
 
@@ -33,9 +35,30 @@ const Projects = () => {
     const [selectedProject, setSelectedProject] = useState(null);
 
 
-    useEffect(()=> {
-        fetchProjects();
-    },[]);
+    const fetchNeedles = async () => {
+        const token = sessionStorage.getItem('token');
+        const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                const data = await response.json();
+                setNeedles(data.needleInventory || []);
+            } else {
+                console.error("Failed to fetch needle data.");
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchNeedles();
+    }, []);
+
+
+    const toggleUpload = () => {
+        setUploading(!uploading);
+    };
 
 
     const fetchProjects = async () => {
@@ -122,16 +145,19 @@ const Projects = () => {
             
             <div className="page-container">
 
-            <AddButton onClick={() => setUploading(true)} />
+            <AddButton onClick={toggleUpload} />
             
-
+            <Modal open={uploading} onClose={toggleUpload} >
+                <NeedleInfo onClose={toggleUpload} fetchNeedles={fetchNeedles}/>
+            </Modal>
 
             {selectedProject && ( // Render ModalCard only when selectedProject is not null
-                <ModalCard
+                <ProjectCard
                     show={showModal}
                     project={selectedProject}
                     handleClose={handleCloseModal}
                 />
+                
             )}
             
 
