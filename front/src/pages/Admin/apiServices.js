@@ -21,7 +21,6 @@ export const fetchSubscribers = async () => {
     }
 };
 
-
 /**
  * Function to fetch all the users from the database
  * @returns {JSX.Element} ViewUsers UI.
@@ -40,4 +39,4 @@ export const fetchUserData = async () => {
     }
 };
 
-// Andre API-funksjoner kan også legges til her...
+

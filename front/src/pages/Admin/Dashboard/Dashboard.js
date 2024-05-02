@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../../GlobalStyles/main.css";
 import GeneralCard from './Card'; 
-import StatisticsChart from './ChartData';
+import StatisticsChart from '../../../data/ChartData';
 import {getImageByName} from '../../../images/getImageByName';
 import { fetchSubscribers } from '../apiServices';
 
