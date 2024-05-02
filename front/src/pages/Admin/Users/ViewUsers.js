@@ -64,8 +64,7 @@ const ViewUsers = () => {
             console.error('Error setting user data:', error);
             setLoading(false);
         });        
-    }, [refreshData]);
-
+    }, [refreshData]); 
 
     // User interaction handlers
     const handleChangePage = (event, newPage) => setPage(newPage);
@@ -103,21 +102,26 @@ const ViewUsers = () => {
         try {
             // Send a PATCH request to the server to update the admin status of the user
             const response = await axios.patch(`http://localhost:5002/Users/updateadmin`, {
-                UserToken: token,
-                UpdateUser: userId,
-                NewAdmin: !isAdmin
+                userToken: token,
+                updateUser: userId,
+                newAdmin: !isAdmin
             }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            
+            console.log("Response: ", response);        
+
             // If the request is successful, update the admin status of the user in the users array
             if (response.status === 200) {
-                setUsers(prevUsers => prevUsers.map(user =>
-                    user.userId === userId ? { ...user, isAdmin: !user.isAdmin } : user
-                ));
-                // Set alert for success
+                setUsers(prevUsers => {
+                    console.log("Before update:", prevUsers);
+                    const updatedUsers = prevUsers.map(user =>
+                        user.userId === userId ? { ...user, isAdmin: !user.isAdmin } : user
+                    );
+                    console.log("After update:", updatedUsers);
+                    return updatedUsers;
+                });
                 setAlertMessage('Admin status updated successfully');
                 setAlertSeverity('success');
                 setAlertOpen(true);
@@ -236,7 +240,7 @@ const ViewUsers = () => {
                                         color={user.isAdmin ? "secondary" : "primary"}
                                         onClick={() => handleActionOpen(
                                             `Are you sure you want to ${user.isAdmin ? 'remove' : 'add'} admin privileges for ${user.fullName} (${user.email})?`,
-                                            () => toggleAdminStatus(user.userId, !user.isAdmin)
+                                            () => toggleAdminStatus(user.userId, user.isAdmin)
                                         )}
                                     >
                                         {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
