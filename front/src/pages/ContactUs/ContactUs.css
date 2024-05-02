@@ -17,7 +17,7 @@
 
 .faq-section {
     margin: 20px;
-    font-family: Arial, sans-serif;
+    font-family: var(--body-font);
 }
 
 .faq-item {
