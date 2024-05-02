@@ -101,7 +101,6 @@ export const Counter = () => {
                 <span>Counter</span>
                 <span>+</span>
                 </div>
-
                 {/* Modal for adding a new counter */}
                 {isAddModalOpen && (
                     <div className="pop">
@@ -121,7 +120,6 @@ export const Counter = () => {
                         </div>
                     </div>
                 )}
-
                 {/* Modal for editing an existing counter */}
                 {isEditModalOpen && editIndex !== null && (
                     <div className="pop">
@@ -142,7 +140,6 @@ export const Counter = () => {
                     </div>
                 </div>
                 )}
-
                 {/* Mapping through the counters array to display each Counter component */}
                 {counters.map((counter, index) => (
                     <Counters
@@ -151,7 +148,7 @@ export const Counter = () => {
                     name={counter.name}
                     value={counter.value}
                     />
-                    ))}
+                ))}
             </div>   
         </div>
     );

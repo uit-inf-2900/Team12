@@ -4,7 +4,7 @@
 
 .card-container {
     display: flex;
-    justify-content: flex-start; /* Adjust spacing between cards */
+    justify-content: space-between; /* Adjust spacing between cards */
     align-items: center; /* Align cards vertically */
     flex-wrap: wrap; /* Allow cards to wrap to the next line if necessary */
     padding: 20px; /* Add padding for spacing */
