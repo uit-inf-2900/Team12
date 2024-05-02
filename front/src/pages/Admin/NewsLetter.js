@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from '@mui/material';
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, TablePagination, TextField } from '@mui/material';
 
 import { fetchSubscribers } from './apiServices';
 import SetAlert from '../../Components/Alert';
@@ -23,15 +23,17 @@ const ViewSubscribers = () => {
     }, []);
 
     return (
-        <div>
+        <div className='section-container' style={{justifyContent:'center'}}>
+            <h2>View Subscribers</h2>
+            <TextField label="Search for subscribers" variant="outlined" fullWidth style={{ marginBottom: '10px' }} />
             <SetAlert />
-            <TableContainer>
+            <TableContainer style={{ width: '100%' }}>
                 {loading ? (
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
                         <CircularProgress />
                     </div>
                 ) : (
-                    <Table>
+                    <Table >
                         <TableHead>
                             <TableRow>
                                 <TableCell>Email</TableCell>
