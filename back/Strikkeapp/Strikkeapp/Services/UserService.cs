@@ -87,18 +87,6 @@ public class UserService : IUserService
         }
     }
 
-    private void SendVerificationEmail(UserLogIn userLogin)
-    {
-        var smtpClient = new SmtpClient("smtp.mailersend.net")
-        {
-            Port = 587,
-            Credentials = new NetworkCredential("MS_N11mgG@trial-pr9084z1d8jgw63d.mlsender.net", "qp8NjvpXu7BheAWI"),
-            EnableSsl = true,
-        };
-        // ems
-        smtpClient.Send("no-reply@strikkeapp.com", userLogin.UserEmail, "Verification-Email", "Denne mailen er en test naa bare");
-    }
-
     // Log existing user in
     public UserServiceResult LogInUser(string userEmail, string userPwd)
     {
