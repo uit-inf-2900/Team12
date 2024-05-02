@@ -555,6 +555,28 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void UpdateNonExistingYarn_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.UpdateYarn(new UpdateYarnRequest
+        {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found", res.ErrorMessage);
+    }
+
+    [Fact]
     public void ExceedingYarnInInventory_Fails()
     {
         // Set up test data and mock service
@@ -597,4 +619,44 @@ public class InventoryTests : IDisposable
         Assert.Empty(_context.YarnInventory);
     }
 
+    [Fact]
+    public void FakeTokenDeleteYarn_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run service and check correct error
+        var res = _inventoryService.DeleteYarn(new DeleteItemRequest
+        {
+            ItemId = testYarnId,
+            UserToken = fakeToken
+        });
+
+        Assert.False(res.Success, "Service should fail with fake token");
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void DeletingNonExistingYarn_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.DeleteYarn(new DeleteItemRequest {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found for user", res.ErrorMessage);
+    }
 }
