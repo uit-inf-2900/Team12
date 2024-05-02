@@ -148,8 +148,6 @@
 
   .project-card{
     width: 1000px;
-    position: relative;
-    justify-content: space-evenly;
     height: 60%;  
     border-radius: calc(var(--curve) * 1px);
     overflow: hidden;

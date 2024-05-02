@@ -81,7 +81,7 @@ const UploadedRecipes = () => {
         { value: 'gauge', name: 'Gauge' }
     ];
 
-    // Show loading state or recipes list
+    // Show loading state or recipes list 
     return (
         <div className="page-container">
             <h1>My Recipes</h1>
