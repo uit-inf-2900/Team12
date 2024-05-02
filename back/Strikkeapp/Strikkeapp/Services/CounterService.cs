@@ -8,6 +8,7 @@ public interface ICounterService
 {
     public CreateCounterResult CreateCounter(string userToken, string name);
     public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum);
+    public CounterResult DeleteCounter(string userToken, Guid counterId);
 }
 
 public class CounterService : ICounterService
@@ -92,4 +93,41 @@ public class CounterService : ICounterService
             }
         }
     }
+
+    public CounterResult DeleteCounter(string userToken, Guid counterId)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return CounterResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var getCounter = _context.CounterInventory
+                    .Where(uid => uid.UserId == tokenResult.UserId)
+                    .FirstOrDefault(cid => cid.CounterId == counterId);
+
+                if (getCounter == null)
+                {
+                    return CounterResult.ForFailure("Not found");
+                }
+
+                _context.CounterInventory.Remove(getCounter);
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return CounterResult.ForSuccess();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return CounterResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+        
 }

@@ -69,6 +69,31 @@ public class CounterController : ControllerBase
         return Ok();
     }
 
+    [HttpDelete]
+    [Route("deletecounter")]
+    public IActionResult DeleteCounter([FromBody] DeleteCounterRequest request)
+    {
+        if (!request.IsOk())
+        {
+            return BadRequest();
+        }
 
+        var res = _counterService.DeleteCounter(request.userToken, request.counterId);
 
+        if (!res.Success)
+        {
+            if (res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+            if (res.ErrorMessage == "Not found")
+            {
+                return NotFound("Could not find counter");
+            }
+
+            return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok("Counter deleted");
+    }
 }

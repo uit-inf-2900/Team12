@@ -60,3 +60,14 @@ public class UpdateCounterRequest
         return !string.IsNullOrWhiteSpace(userToken);
     }
 }
+
+public class DeleteCounterRequest
+{
+    public string userToken { get; set; } = string.Empty;
+    public Guid counterId { get; set; }
+
+    public bool IsOk()
+    {
+        return !string.IsNullOrWhiteSpace(userToken);
+    }
+}
