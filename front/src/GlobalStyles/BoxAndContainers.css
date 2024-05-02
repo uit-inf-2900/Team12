@@ -130,10 +130,10 @@
 
 /* ============= IMAGE CONTAINERS (used in calculators)============= */
 .calculator-image-container {
-    display: flex; /* This sets the container to be a flex container */
-    justify-content: center; /* This centers the child horizontally in the container */
-    align-items: center; /* This centers the child vertically in the container */
-    height: 70px; /* Adjust the height as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
 }
 
 /* DENNE BRUKES FOR Å MINSKE BILDET RIKTIG*/

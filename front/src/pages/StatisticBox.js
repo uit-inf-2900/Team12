@@ -12,8 +12,8 @@ const StatisticBox = ({ icon, label, value }) => {
     return (
     <div className="statistic-box">
         {icon && <img src={icon} alt={label} className="icon" />}
-        <div className="label">{label}</div>
-        <div className="value">{value}</div>
+        <h1 className="label">{label}</h1>
+        <p className="value">{value}</p>
     </div>    
     );
 };

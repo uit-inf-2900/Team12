@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import "../GlobalStyles/navbar.css";
+import ConfirmationModal from './ConfirmationModal';  // Correct way to import default exports
+import { useFormState } from 'react-hook-form';
 
 const VisitorView = () => {
   return (
@@ -34,6 +36,22 @@ const AdminView = ({ isAdmin, isLoggedIn }) => {
 }; 
 
 const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutConfirm(false);
+    handleLogout();
+  };
+
+  const handleCloseModal = () => {
+    setShowLogoutConfirm(false);
+  };
+
   return (
     <header className="header" id="header">
       <nav className="nav container">
@@ -48,7 +66,13 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
         <>
           <div className="nav-items">
             <NavLink to="/profile" className="nav-action">Profile</NavLink>
-            <NavLink onClick={handleLogout}>Logg Ut</NavLink>
+            <NavLink onClick={handleLogoutClick} className="nav-action">Logg Ut</NavLink>
+            <ConfirmationModal 
+              isOpen={showLogoutConfirm}
+              onClose={handleCloseModal}
+              onConfirm={handleConfirmLogout}
+              message="Are you sure you want to log out?"
+            />
           </div>
         </>
         )}
