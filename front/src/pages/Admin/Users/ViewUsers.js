@@ -12,6 +12,9 @@ import { getStatusLabel } from '../../../Components/UserLable';
 const ViewUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const { isOpen, openDialog, closeDialog } = useDialog();
 
     useEffect(() => {
@@ -24,6 +27,25 @@ const ViewUsers = () => {
             setLoading(false);
         });
     }, []);
+
+    const filteredUsers = users.filter(user =>
+        user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
 
     return (
         <div >
@@ -47,7 +69,7 @@ const ViewUsers = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {users.map((user, index) => (
+                            {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, index) => (
                                 <TableRow key={index}>
                                     <TableCell>{user.fullName}</TableCell>
                                     <TableCell>{user.email}</TableCell>
@@ -75,6 +97,15 @@ const ViewUsers = () => {
                         </TableBody>
                     </Table>
                 )}
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={filteredUsers.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </TableContainer>
         </div>
     );
