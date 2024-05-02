@@ -477,6 +477,35 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenUpdateYarn_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run test for updating single yarn and check that it fails
+        var updateYarn = _inventoryService.UpdateYarn(new UpdateYarnRequest
+        {
+            ItemId = testYarnId,
+            UserToken = fakeToken
+        });
+
+        Assert.False(updateYarn.Success, "Service should fail with fake token");
+
+        // Run test for updating yarns in use and check that it fails
+        var updateYarnsUsed = _inventoryService.UpdateYarnUsed(new UpdateItemRequest
+        {
+            UserToken = fakeToken,
+            ItemId = testYarnId,
+            NewNum = 69
+        });
+
+        Assert.False(updateYarnsUsed.Success, "Service should fail with fake token");
+    }
+
+    [Fact]
     public void DeleteYarn_Ok() 
     {
         var testRequest = new DeleteItemRequest
