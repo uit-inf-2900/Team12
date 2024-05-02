@@ -506,6 +506,49 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void UpdateNonExistingYarnUsed_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.UpdateYarnUsed(new UpdateItemRequest
+        {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found for user", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void ExceedingYarnInInventory_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test and check correct error
+        var res = _inventoryService.UpdateYarnUsed(new UpdateItemRequest
+        {
+            ItemId = testYarnId,
+            UserToken = testToken,
+            NewNum = 100
+        });
+
+        Assert.False(res.Success, "Service should fail with too high number");
+        Assert.Equal("Exceeded inventory", res.ErrorMessage);
+    }
+
+    [Fact]
     public void DeleteYarn_Ok() 
     {
         var testRequest = new DeleteItemRequest
