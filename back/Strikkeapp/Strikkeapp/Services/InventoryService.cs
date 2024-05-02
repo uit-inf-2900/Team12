@@ -437,7 +437,7 @@ public class InventoryService : IInventoryService
             {
                 var yarnToDelete = _context.YarnInventory
                     .Where(yi => yi.UserId == userId)
-                    .FirstOrDefault();
+                    .FirstOrDefault(yid => yid.ItemID == request.ItemId);
 
                     if(yarnToDelete == null)
                     {
