@@ -1,11 +1,11 @@
 /* Home.css */
 
-.page-container {
+/* .page-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
+} */
 
 .customs-box {
     width: 100%; /* Juster etter behov */
