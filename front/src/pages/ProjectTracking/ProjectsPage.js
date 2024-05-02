@@ -1,21 +1,54 @@
 // https://legacy.reactjs.org/docs/lists-and-keys.html
 
-import React, {useContext, useState} from "react";
-import ModalCard from "../../Components/ProjectCard";
+import React, {useContext, useEffect, useState} from "react";
+import ModalCard from "../../Components/ProjCard";
+import UploadProjects from "./addProject";
 import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
+import axios from 'axios';
 
 import '../../GlobalStyles/main.css';
+import "../../GlobalStyles/Card.css"
+
+
 import AddButton from "../../Components/AddButton";
 import ModalContent from "../../Components/ModualContent";
+import { AccessibilityNewSharp } from "@material-ui/icons";
+
+import Box from '@mui/material/Box'; // Import Box from MUI
+
+
 
 
 const Projects = () => {
     const [activeStatus, setActiveStatus] = useState('in-progress');
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const [uploading, setUploading] = useState(false);
+   
+    const [showModal, setShowModal] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
+
+
+    useEffect(()=> {
+        fetchProjects();
+    },[]);
+
+
+    const fetchProjects = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get('http://localhost:5002/api/recipe/getprojects' + '?userToken=' + sessionStorage.getItem('token')); 
+            setRecipes(response.data || []); 
+        } catch (error) {
+            console.error('Error fetching recipes:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const toggleModal = (isOpen) => {
         setIsOpenModal(isOpen);
@@ -28,9 +61,17 @@ const Projects = () => {
         toggleModal(true);
 
     };
+
     const handleProjectClick = (project) => {
         setSelectedProject(project);
-        toggleModal(true);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+    const handleCloseUploading =() =>{
+        setLoading(false);
     };
 
 
@@ -78,15 +119,27 @@ const Projects = () => {
             
             
 
-            <AddButton onClick={() => toggleModal(true)} />
+            
+            <div className="page-container">
+
+            <AddButton onClick={() => setUploading(true)} />
+            
+
 
             {selectedProject && ( // Render ModalCard only when selectedProject is not null
                 <ModalCard
-                    isOpen={isOpenModal}
-                    onClose={() => toggleModal(false)}
+                    show={showModal}
                     project={selectedProject}
+                    handleClose={handleCloseModal}
                 />
             )}
+            
+
+            
+            
+
+            </div>
+            
         </div>
     );
 };

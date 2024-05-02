@@ -2,10 +2,11 @@ import React from 'react';
 import exampleImage from '../images/reading.png'; // Import the PNG image
 import UploadedRecipes from '../pages/RecipeManagement/UploadedRecipes';
 
-import "../GlobalStyles/main.css";
+import "../GlobalStyles/Card.css";
 
 const getCustomLabel = (propName) => {
     const labels = {
+        author: "Author",
         knittingGauge: "Knitting Gauge",
         needleSize: "Needle size (mm)",
         notes: "Notes",

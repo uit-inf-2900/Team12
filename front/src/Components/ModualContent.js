@@ -3,9 +3,10 @@ import { Modal, Box } from "@mui/material";
 
 const modalStyle = {
     position: 'absolute',
-    top: '40%',
-    left: '40%',
-};
+    top: '50%',
+    left: '50%',
+    
+}; 
 
 
 const contentStyle = {

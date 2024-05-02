@@ -10,8 +10,6 @@
     padding: 20px; /* Add padding for spacing */
 }
 
-
-
 :root {
     
     --curve: 40;
@@ -30,6 +28,22 @@
     text-decoration: none;
     box-shadow: 5px 5px 8px var(--shadow-color);
     color: var(----box-color-dark);
+  }
+
+  .project-card{
+    width: 800px;
+    position: relative;
+    height: 50%;  
+    border-radius: calc(var(--curve) * 1px);
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 5px 5px 8px var(--shadow-color);
+    color: var(----box-color-dark);
+
+  }
+  .close-button{
+    position:absolute;
+    bottom:0;
   }
   
   .card-image {      

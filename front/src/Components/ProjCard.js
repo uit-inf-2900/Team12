@@ -1,47 +1,54 @@
-import React, { useState } from 'react';
-import { Card, CardActionArea, CardContent, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
-import { Document, Page } from 'react-pdf';
+import React from 'react';
+import { Modal, Box, Typography, Button, Grid } from '@mui/material';
+import "../GlobalStyles/Card.css";
 
-const ProjectCard = ({ project }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+const ModalCard = ({ show, project, handleClose }) => {
   return (
-    <div>
-      <Card>
-        <CardActionArea onClick={handleClickOpen}>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
+    <Modal open={show} onClose={handleClose}>
+      <Box className="project-card" sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+      <Grid container spacing={2}>
+          <Grid item xs={4}>
+            <Typography variant="h6" gutterBottom>
+              Title
+            </Typography>
+            <Typography variant="body1" gutterBottom>
               {project.title}
             </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              {project.description}
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="h6" gutterBottom>
+              Notes
             </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{project.title}</DialogTitle>
-        <DialogContent>
-          <Document file={project.pdfUrl}>
-            <Page pageNumber={1} />
-          </Document>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
+            <Typography variant="body1" gutterBottom>
+              {project.notes}
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Typography variant="h6" gutterBottom>
+              Status
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              {project.status}
+            </Typography>
+          </Grid>
+        </Grid>
+        {/* Add more project information here as needed */}
+        <Box sx={{ float: "right", display: 'flex', flexDirection: 'column', alignItems: 'flex-end', mt: 2 }}>
+          <Button className="close-button" sx={{ mb: 1 }} variant="outlined">
+            Recipe
           </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          <Button className="close-button" sx={{ mb: 1 }}>
+            Calculators
+          </Button>
+          <Button className="close-button"  sx={{ mb: 1 }}>
+            Counter
+          </Button>
+        </Box>
+
+        <Button className="close-button" sx={{ bottom: 0, mb: 1 }} onClick={handleClose}>Close</Button>
+      </Box>
+    </Modal>
   );
 };
 
-export default ProjectCard;
+export default ModalCard;
