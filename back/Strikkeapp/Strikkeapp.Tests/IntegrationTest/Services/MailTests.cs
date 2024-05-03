@@ -124,4 +124,19 @@ public class MailServiceTests
         Assert.False(result.Success, "Service should return failure");
         Assert.Equal("Unauthorized", result.ErrorMessage);
     }
+
+    [Fact]
+    public void NonUser_Fails()
+    {
+        // Set up test data and mock
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        var result = _mailService.SendVerification(testToken);
+
+        Assert.False(result.Success, "Service should return failure");
+        Assert.Equal("Not found", result.ErrorMessage);
+    }
 }
