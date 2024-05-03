@@ -101,7 +101,7 @@ public class CounterTests
     public void UpdateCounter_Ok()
     {
         // Set up test data and mock service
-        string name = "newName";
+        string newName = "newName";
         string testToken = "testToken";
         int newNum = 10;
 
@@ -109,14 +109,14 @@ public class CounterTests
             .Returns(TokenResult.ForSuccess(testUserGuid));
 
         // Run service and verify result
-        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newNum, name);
+        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newNum, newName);
         Assert.True(result.Success, "Counter update failed");
 
         // Verify that the counter was updated with correct info
         var counter = _context.CounterInventory
             .FirstOrDefault(c => c.CounterId == testCounterGuid);
         Assert.NotNull(counter);
-        Assert.Equal(name, counter.Name);
+        Assert.Equal(newName, counter.Name);
         Assert.Equal(newNum, counter.RoundNumber);
     }
 
@@ -151,6 +151,28 @@ public class CounterTests
 
         Assert.False(result.Success, "Counter update should have failed");
         Assert.Equal("Not found", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void OnlyNewNum_Ok()
+    {
+        // Set up test data and mock service
+        string testToken = "testToken";
+        int newNum = 10;
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run service and verify result
+        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newNum, null);
+        Assert.True(result.Success, "Counter update failed");
+
+        // Verify that the counter was updated with correct info
+        var counter = _context.CounterInventory
+            .FirstOrDefault(c => c.CounterId == testCounterGuid);
+        Assert.NotNull(counter);
+        Assert.Equal(newNum, counter.RoundNumber);
+        Assert.Equal("TestCounter", counter.Name);
     }
 
     [Fact]
