@@ -3,7 +3,7 @@ using Strikkeapp.Data.Dto;
 using Strikkeapp.Services;
 
 
-namespace strikkeapp.Controllers; 
+namespace Strikkeapp.Controllers; 
 
 [ApiController]
 [Route("api/[controller]")]
