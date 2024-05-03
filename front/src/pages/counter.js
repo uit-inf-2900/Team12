@@ -153,13 +153,8 @@ export const Counter = () => {
             const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
-                if (data && Array.isArray(data.counterInventory)) {  // Check if data.counterInventory is an array
-                    setCounters(data.counterInventory);
-                    console.log(data.counterInventory);
-                } else {
-                    setCounters([]);  // Ensure that counters is always an array
-                    console.warn("Received non-array data:", data);
-                }
+                setCounters(data.UserCounters);
+                console.log(data.UserCounters);
             } else {
                 setCounters([]);  // Set counters to empty array if response is not OK
                 console.error("Failed to fetch counter data with status:", response.status);
@@ -172,14 +167,15 @@ export const Counter = () => {
         }
     };
 
-    // Function to remove a counter
-    const handleRemoveCounter = () => {
-        setCounters(counters.filter((_, i) => i !== editIndex));
-        // Reset edit state
-        setEditIndex(null);
-        setEditCounterName('');
-        setIsEditModalOpen(false);
-    };  
+    // SKAL FJERNES NÅR ALT ER GOOD
+    // // Function to remove a counter
+    // const handleRemoveCounter = () => {
+    //     setCounters(counters.filter((_, i) => i !== editIndex));
+    //     // Reset edit state
+    //     setEditIndex(null);
+    //     setEditCounterName('');
+    //     setIsEditModalOpen(false);
+    // };  
     
     // Function to cancel the edit operation
     const handleCancelEdit = () => {
@@ -189,6 +185,7 @@ export const Counter = () => {
         setIsEditModalOpen(false);
     };
 
+    // SKAL FJERNES NÅR ALT ER GOOD
     // // Function to handle the submission of a new counter
     // const handleSubmit = (e) => {
     //     e.preventDefault();
@@ -203,7 +200,7 @@ export const Counter = () => {
     }, []);
 
     // Counter component to display each counter with its controls
-    const Counters = ({ index, name, value }) => {
+    const Counters = ({ index, name, value, fetchCounter }) => {
         return (
             <div className="counter-container">
             <div className="counter-info" style={{fontSize: '1.2rem'}}>{name}</div>
@@ -264,12 +261,12 @@ export const Counter = () => {
                 </div>
                 )}
                 {/* Mapping through the counters array to display each Counter component */}
-                {counters.map((counter, index) => (
+                {Array.isArray(counters) && counters.map((index, name) => (
                     <Counters
                     key={index}
                     index={index}
-                    name={counterData.name}
-                    value={counter.value}
+                    name={name.name}
+                    value={index.value}
                     />
                 ))}
                 <SetAlert
