@@ -8,6 +8,10 @@ import InputField from '../../Components/InputField';
 import ModalContent from '../../Components/ModualContent';
 import { CustomButton } from '../../Components/Button';
 import SetAlert from '../../Components/Alert';
+import { Modal, Box } from '@mui/material';
+import '../../GlobalStyles/BoxAndContainers.css';
+
+
 
 const ProfilePage = () => {
     // State to toggle between edit and view mode
@@ -160,27 +164,28 @@ const ProfilePage = () => {
 
     // Handle delete account click
     const handleDeleteClick = () => {
-        setShowModal(true);
         const token = sessionStorage.getItem('token');
         if (token) {
             try {
-                const response = axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
-                
+                axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
                 sessionStorage.removeItem('token');  // Assuming you're using session storage for token management
                 setAlertInfo({
                     open: true,
                     severity: 'success',
                     message: 'Your account has been successfully deleted.'
                 });
-                // Redirect or adjust UI post-deletion
-                
-                window.location.href = '/login'; // Redirect to login or home
-                
-                
-                    
+                setTimeout(() => {
+                // Redirect to login or home
+                window.location.href = '/login';
+                }, 500);
             } catch (error) {
                 console.error("Error fetching profile data: ", error);
                 setProfileFetchError("Failed to fetch profile data.");
+                setAlertInfo({
+                    open: true,
+                    severity: 'error',
+                    message: 'Failed to delete account.'
+                });
             }
         }
         setShowModal(false);
@@ -193,22 +198,34 @@ const ProfilePage = () => {
 
     // Handle confirm delete
     const handleConfirmDelete = () => {
-        setShowModal(false);
+        setShowModal(true);
         // Implement real account deletion here
     };
 
     // Modal content for delete account 
-    const deleteAccountContent = (
-        <div className='box light'>
-            <div className="deleteacc-body">{modalMessage}</div>
-            {!modalMessage.startsWith('Goodbye') && (
-                <div className="deleteacc-footer">
-                    <CustomButton themeMode="light" onClick={handleConfirmDelete}>Yes</CustomButton>
-                    <CustomButton themeMode="light" onClick={handleCloseModal}>No</CustomButton>
-                </div>
-            )}
-        </div>
+    const deleteAccountContent = () => (
+        <Modal open={showModal} onClose={() => setShowModal(false)}>
+            <Box className="box-container">
+                <Box className="box light" sx={{ minWidth: '35rem', height: '15rem' }}>
+                    <h4>Are you sure you want to delete your account? Everything will be lost and it cannot be undone.</h4>
+                    <CustomButton
+                        thememode="dark"
+                        onClick={handleDeleteClick}
+                        style={{ marginTop: '2rem', minWidth: '15rem', height: '4rem' }}
+                    >Yes</CustomButton>
+                    <CustomButton 
+                        thememode="dark" 
+                        onClick={() => setShowModal(false)}
+                        style={{ minWidth: '15rem', height: '4rem' }}
+                    >No</CustomButton>
+                </Box>
+            </Box>
+        </Modal>
     );
+
+    const handleDelete = () => {
+        setShowModal(true);
+    }
 
 
     return (
@@ -228,14 +245,14 @@ const ProfilePage = () => {
                     <Link to="/contactus" style={{color: "black", borderBottom: '1px solid'}}>Contact Us</Link>
                 </div>
                 <div style={{flexGrow: 0.2}}></div>
-                <div onClick={handleDeleteClick} className='infoText-small' style={{color: "black", borderBottom: '1px solid', cursor: 'pointer'}}>
+                <div onClick={handleDelete} className='infoText-small' style={{color: "black", borderBottom: '1px solid', cursor: 'pointer'}}>
                     Delete account
                 </div>
             </div>
             <ModalContent
                 open={showModal}
-                handleClose={handleCloseModal}
-                infobox={deleteAccountContent}
+                handleClose={() => setShowModal(false)}
+                infobox={deleteAccountContent()}
             />
             {/* The right side of the profile page. Can be either view mode or edit mode*/}
             <div className="box light">
