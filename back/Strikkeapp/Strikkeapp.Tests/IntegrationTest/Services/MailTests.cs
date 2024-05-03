@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using MailerSend.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
-
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Xunit;
+
 
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 using Strikkeapp.Services;
-namespace Strikkeapp.Tests;
+
+
+namespace Strikkeapp.Tests.Services;
 
 public class MailServiceTests
 {

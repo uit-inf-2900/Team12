@@ -8,7 +8,7 @@ using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 using Strikkeapp.Services;
 
-namespace Strikkeapp.Tests;
+namespace Strikkeapp.Tests.Services;
 
 public class InventoryTests : IDisposable
 {
