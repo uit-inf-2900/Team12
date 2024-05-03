@@ -121,6 +121,39 @@ public class CounterTests
     }
 
     [Fact]
+    public void FakeTokenUpdateCounter_Fails()
+    {
+        // Set up test data and mock service
+        string fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run service and verify error
+        var result = _counterService.UpdateCounter(fakeToken, testCounterGuid, 10, "newName");
+
+        Assert.False(result.Success, "Counter update should have failed");
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonCounterUpdateCounter_Fails()
+    {
+        // Set up test data and mock service
+        string testToken = "testToken";
+        Guid fakeCounterGuid = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run service and verify error
+        var result = _counterService.UpdateCounter(testToken, fakeCounterGuid, 10, "newName");
+
+        Assert.False(result.Success, "Counter update should have failed");
+        Assert.Equal("Not found", result.ErrorMessage);
+    }
+
+    [Fact]
     public void DeleteCounter_Ok()
     {
         // Set up test data and mock service
