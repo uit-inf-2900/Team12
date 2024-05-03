@@ -109,22 +109,20 @@ const YarnStash = () => {
             <div className="card-container" style={{justifyContent: 'flex-start'}}>
             {yarns.map(yarn => (
                 <GeneralCard
-                        key={yarn.itemId}
-                        ItemId={yarn.ItemID}
-                        title={yarn.type}
-                        stats={[
-                            { label: "Brand type", value: yarn.type},
-                            { label: "Brand", value: yarn.manufacturer},
-                            { label: "Color", value: yarn.color},
-                            { label: "Weight", value: yarn.weight},
-                            { label: "Length", value: yarn.length },
-                            { label: "Gauge", value: yarn.gauge},
-                            { label: "Notes", value: yarn.notes}
-                        ]}
-                        // onDelete={() => handleDeleteYarn(yarn.itemId)}
-                        onClick={() => handleEditYarn(yarn)}
-                    />
-               
+                    key={yarn.itemId}
+                    ItemId={yarn.ItemID}
+                    title={yarn.type}
+                    stats={[
+                        { label: "Brand type", value: yarn.type},
+                        { label: "Brand", value: yarn.manufacturer},
+                        { label: "Color", value: yarn.color},
+                        { label: "Weight", value: yarn.weight},
+                        { label: "Length", value: yarn.length },
+                        { label: "Gauge", value: yarn.gauge},
+                        { label: "Notes", value: yarn.notes}
+                    ]}
+                    onClick={() => handleEditYarn(yarn)}
+                />
             ))}
             </div>
             <AddButton onClick={toggleYarnModal} />
@@ -133,7 +131,7 @@ const YarnStash = () => {
             </Modal>
             <Modal open={editYarnModalOpen} onClose={closeEditModal}>
                 <div className="pop" >
-                    <div className="pop-content" style={{height: '95%', width: '50%', alignContent:'center'}}>
+                    <div className="pop-content" style={{height: '80%', width: '50%', alignContent:'center'}}>
                         <h2>Edit Yarn</h2>
                         <div className="yarn-form" style={{ display: 'flex', flexDirection: 'column'}}>
                             <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
@@ -164,10 +162,10 @@ const YarnStash = () => {
                             <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>
                                 <InputField label="Notes" type= 'text' value={currentYarn.notes || ''} onChange={handleInputChange('notes')} multiline rows={4} />
                             </div>
-                            <div style={{ width: '100%', display: 'flex' }}>
-                                <CustomButton onClick={handleSaveUpdatedYarn}>Save Changes</CustomButton>
-                                <CustomButton onClick={closeEditModal}>Cancel</CustomButton>
-                                <CustomButton onClick={() => handleDeleteYarn(currentYarn.itemId)}>Delete</CustomButton>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <CustomButton onClick={handleSaveUpdatedYarn} style={{ margin: '10px' }}>Save Changes</CustomButton>
+                                <CustomButton onClick={closeEditModal} style={{ margin: '10px' }}>Cancel</CustomButton>
+                                <CustomButton onClick={() => handleDeleteYarn(currentYarn.itemId)} style={{ margin: ' 10px' }}>Delete</CustomButton>
 
                             </div>
                         </div>
