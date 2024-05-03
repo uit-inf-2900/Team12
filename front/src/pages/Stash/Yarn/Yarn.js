@@ -106,7 +106,7 @@ const YarnStash = () => {
 
     return (
         <div>
-            <div className="card-container" style={{justifyContent: 'flex-start'}}>
+            <div className="card-container" style={{justifyContent: 'flex-start', justifyContent: 'center'}}>
             {yarns.map(yarn => (
                 <GeneralCard
                     key={yarn.itemId}
@@ -131,7 +131,7 @@ const YarnStash = () => {
             </Modal>
             <Modal open={editYarnModalOpen} onClose={closeEditModal}>
                 <div className="pop" >
-                    <div className="pop-content" style={{height: '80%', width: '50%', alignContent:'center'}}>
+                    <div className="pop-content" style={{height: '80%', width: '50%'}}>
                         <h2>Edit Yarn</h2>
                         <div className="yarn-form" style={{ display: 'flex', flexDirection: 'column'}}>
                             <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
