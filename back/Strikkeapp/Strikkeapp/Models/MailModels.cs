@@ -2,17 +2,17 @@
 
 public class MailResult
 {
-    public bool Succes { get; set; }
+    public bool Success { get; set; }
     public string ErrorMessage { get; set; } = string.Empty;
 
     public static MailResult ForSuccess() => new MailResult
     {
-        Succes = true
+        Success = true
     };
 
     public static MailResult ForFailure(string message) => new MailResult
     {
-        Succes = false,
+        Success = false,
         ErrorMessage = message
     };
 }

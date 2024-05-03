@@ -31,7 +31,7 @@ public class MailService : IMailService
     public MailResult SendVerification(string userToken)
     {
         var tokenRes = _tokenService.ExtractUserID(userToken);
-        if (tokenRes == null) 
+        if (!tokenRes.Success) 
         {
             return MailResult.ForFailure("Unauthorized");
         }
@@ -65,8 +65,15 @@ public class MailService : IMailService
             $"Verification code: {verificationRes.Code}" +
             "\n\n Best regards, the KnitHub team";
 
-        _mailersend.SendMailAsync(
-            to, subject: "Verification code", text: emailText);
+        try
+        {
+            _mailersend.SendMailAsync(
+                to, subject: "Verification code", text: emailText);
+        }
+        catch (Exception ex) 
+        { 
+            return MailResult.ForFailure(ex.Message);
+        }
 
         return MailResult.ForSuccess();
     }
