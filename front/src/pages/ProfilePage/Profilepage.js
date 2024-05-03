@@ -223,9 +223,6 @@ const ProfilePage = () => {
                 </p>
                 <div style={{flexGrow: 1}}></div>
                 <p className="profile-options" style={{fontWeight: 'bold'}}>My Profile</p>
-                <div className="profile-options">
-                    <Link to="/wishlist" style={{color: "black"}}>Wishlist</Link>
-                </div>
                 <div style={{flexGrow: 2}}></div>
                 <div className='infoText-small'>
                     <Link to="/contactus" style={{color: "black", borderBottom: '1px solid'}}>Contact Us</Link>

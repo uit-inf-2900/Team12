@@ -16,7 +16,6 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
-import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
 import Footer from './Components/Footter';
 import Theme from './Components/Theme';
@@ -86,7 +85,6 @@ export default function App() {
                 <Route path='/yarncalculator' element={<YarnCalculator/>} />
                 <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
                 <Route path="/profile" element={<Profilepage />} />
-                <Route path="/wishlist" element={<WishList />} />
                 <Route path='/counter' element={<Counter/>}/> 
               </>
             )}
