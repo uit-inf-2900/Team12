@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import "../GlobalStyles/navbar.css";
-import ConfirmationModal from './ConfirmationModal';  // Correct way to import default exports
+import ConfirmationLogout from '../pages/SignUp_LogIn/ConfirmationLogout';  // Correct way to import default exports
 import { useFormState } from 'react-hook-form';
 
 const VisitorView = () => {
@@ -67,7 +67,7 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
           <div className="nav-items">
             <NavLink to="/profile" className="nav-action">Profile</NavLink>
             <NavLink onClick={handleLogoutClick} className="nav-action">Logg Ut</NavLink>
-            <ConfirmationModal 
+            <ConfirmationLogout 
               isOpen={showLogoutConfirm}
               onClose={handleCloseModal}
               onConfirm={handleConfirmLogout}
