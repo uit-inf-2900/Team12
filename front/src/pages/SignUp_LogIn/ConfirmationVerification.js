@@ -1,30 +1,53 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {CustomButton} from "../../Components/Button";
-import '../../GlobalStyles/BoxAndContainers.css';
 import { Modal, Box } from '@mui/material';
+
+// Styles 
+import '../../GlobalStyles/BoxAndContainers.css';
+
+// Components 
+import {CustomButton} from "../../Components/Button";
 import InputField from "../../Components/InputField";
 import { useNavigate } from 'react-router-dom'; 
 
+
+/**
+ * A modal component that handles user verification with a code.
+ * @param {Object} props - Component props
+ * @param {boolean} props.isOpen - If true, the modal is visible
+ * @param {function} props.onClose - Function to call on closing the modal
+ * @param {string} props.userToken - Token for user verification
+ * @param {string} [props.navigation] - Path to navigate on successful verification
+ */
 const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) => {
     // State for verification code
     const [verificationCode, setVerificationCode] = useState('');
-    const navigate = useNavigate(); // Bruke useNavigate for navigasjon
+    const navigate = useNavigate(); 
 
+    // Avoid rendering the modal if it should not be open
     if (!isOpen) return null;
 
+
+    /**
+     * Attempts to verify the user with a specified code.
+     */
     const handleVerify = async () => {
         try {
             const response = await axios.patch(`http://localhost:5002/verifyuser?UserToken=${userToken}&VerificationCode=${verificationCode}`);
             console.log("Verification response:", response);
+
+
             if (response.status === 200 ) {
                 console.log("Verification successful, updating session storage.");
                 sessionStorage.setItem('isVerified', 'verified');
                 alert('User has been verified and token updated');
-                onClose(); // Ensure this function does not perform navigation.
-                console.log("Navigating to home page...");
+                onClose();                                          // Close modal upon successful verification
+                console.log("Navigating to home page...");          // Navigate to the home page
+                
+                // If navigation is specified, navigate to the specified path by using the useNavigate hook
+                // Otherwise, redirect to the home page using the window.location.href property to make sure the page is reloaded
                 if (navigation)
-                { navigate(navigation);}
+                    {navigate(navigation);}
                 else { window.location.href = '/'; }
             } else {
                 console.log("Verification failed with status:", response.status);
