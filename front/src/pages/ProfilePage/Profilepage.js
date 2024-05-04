@@ -119,7 +119,6 @@ const ProfilePage = () => {
             return;
         }
     
-        const token = sessionStorage.getItem('token');
         const payload = {
             token: token,
             userFullName: editState.userFullName,
@@ -170,7 +169,6 @@ const ProfilePage = () => {
 
     // Handle delete account click
     const handleDeleteClick = () => {
-        const token = sessionStorage.getItem('token');
         if (token) {
             try {
                 axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
@@ -231,7 +229,7 @@ const ProfilePage = () => {
                 navigation={"/profile"}
                 isOpen={showConfirmationModal}
                 onClose={handleCloseConfirmationModal}
-                userToken={sessionStorage.getItem('token')}
+                userToken={token}
             />
         )}
             {/* The left side of the profile page */}
