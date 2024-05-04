@@ -63,10 +63,13 @@ const Dashboard = ({ toggleView }) => {
         fetchData();
     }, [usersToken]);
 
+
+    // Check if the statistic is valid (greater than 0 and not NaN)
     const isValidStatistic = (stat) => {
         return stat.value > 0 && !isNaN(stat.value);
     };
 
+    // Render the chart component if the statistics are valid, otherwise display an image
     const renderContent = (stats, label, altImage) => {
         if (stats.length > 0 && isValidStatistic(stats[0])) {
             return <StatisticsChart label={label} userStats={stats} />;
