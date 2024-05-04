@@ -7,6 +7,8 @@ import axios from 'axios';
 import "../../GlobalStyles/main.css";
 import { CustomButton } from '../../Components/Button';
 import InputField from '../../Components/InputField';
+import ConfirmationVerification from './ConfirmationVerification'; // Importer riktig sti til denne komponenten
+
 
 
 /**
@@ -15,6 +17,7 @@ import InputField from '../../Components/InputField';
 const LogIn = () => {
     const navigate = useNavigate();
     const [error, setError] = useState(''); 
+    const [isVerified, setIsVerified] = useState(true);
     const { register, handleSubmit, formState: { errors } } = useForm();
     
     /** Function to handle the form submission */ 
@@ -32,9 +35,13 @@ const LogIn = () => {
             if (response.data.token){
                 // Store the token in sessionStorage and redirect the user to the home page
                 sessionStorage.setItem('token', response.data.token)
-                console.log("Token stored in sessionStorage:", response.data.token);
-                window.location.href = '/';
+                sessionStorage.setItem('isVerified', response.data.userStatus);
+                setIsVerified(response.data.userStatus);  // Oppdater tilstanden basert på svaret fra serveren
+                console.log("Token and isVerified stored in sessionStorage:", response.data.token, response.data.userStatus);
                 
+                if (response.data.userStatus) {
+                    window.location.href = '/';
+                }
             } else {
                 console.log("No token received")
             }
@@ -53,6 +60,11 @@ const LogIn = () => {
             }
         })
     };
+
+    const closeHandler = () => {
+        window.location.href = '/'; // Tillater navigering til hjemmesiden selv om ikke verifisert
+    };
+
 
     return (
         <div className="box-container">
@@ -103,6 +115,13 @@ const LogIn = () => {
                     <CustomButton themeMode="dark" onClick={() => navigate('/signup')}>Don't have an account? Sign Up</CustomButton>
                 </div>
             </div>
+            {!isVerified && (
+                <ConfirmationVerification
+                    isOpen={!isVerified}
+                    onClose={closeHandler}
+                    userToken={sessionStorage.getItem('token')}
+                />
+            )}
         </div>
     );
 };

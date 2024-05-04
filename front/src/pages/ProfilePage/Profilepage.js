@@ -10,6 +10,7 @@ import { CustomButton } from '../../Components/Button';
 import SetAlert from '../../Components/Alert';
 import { Modal, Box } from '@mui/material';
 import '../../GlobalStyles/BoxAndContainers.css';
+import ConfirmationVerification from '../SignUp_LogIn/ConfirmationVerification';
 
 
 
@@ -36,7 +37,11 @@ const ProfilePage = () => {
     // State to store error message, show modal and modal message
     const [profileFetchError, setProfileFetchError] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalMessage, setModalMessage] = useState('');
+    const [showConfirmationModal, setShowConfirmationModal] = useState(true);
+
+    const handleCloseConfirmationModal = () => {
+        setShowConfirmationModal(false);
+    };
 
     // For the user to see alert messages 
     const [alertInfo, setAlertInfo] = useState({
@@ -47,8 +52,9 @@ const ProfilePage = () => {
     
 
     // Fetch user profile data on page load
+    const isVerified = sessionStorage.getItem('isVerified');
+    const token = sessionStorage.getItem('token');
     useEffect(() => {
-        const token = sessionStorage.getItem('token');
         if (token) {
             const fetchData = async () => {
                 try {
@@ -191,16 +197,6 @@ const ProfilePage = () => {
         setShowModal(false);
     };
 
-    // Handle close modal
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
-
-    // Handle confirm delete
-    const handleConfirmDelete = () => {
-        setShowModal(true);
-        // Implement real account deletion here
-    };
 
     // Modal content for delete account 
     const deleteAccountContent = () => (
@@ -230,6 +226,13 @@ const ProfilePage = () => {
 
     return (
         <div className="profile-page-container">
+        {isVerified !== 'verified' && (
+            <ConfirmationVerification
+                isOpen={showConfirmationModal}
+                onClose={handleCloseConfirmationModal}
+                userToken={sessionStorage.getItem('token')}
+            />
+        )}
             {/* The left side of the profile page */}
             <div className="box dark">
                 <div className="profile-image-container">

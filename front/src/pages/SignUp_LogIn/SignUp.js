@@ -6,6 +6,7 @@ import axios from 'axios';
 import "../../GlobalStyles/main.css";
 import { CustomButton } from '../../Components/Button';
 import InputField from '../../Components/InputField';
+import ConfirmationVerification from './ConfirmationVerification';
 
 
 /**
@@ -15,6 +16,7 @@ const SignUp = ({ toggleForm }) => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const [error, setError] = useState(''); 
+  const [isVerified, setIsVerified] = useState(true);  // Assume verified until otherwise determined
   
 
   /**
@@ -47,14 +49,12 @@ const SignUp = ({ toggleForm }) => {
     // Make POST request to the API to create a user 
     axios.post('http://localhost:5002/createuser', postData)
     .then(function(response){
-      console.log("Response: ", response)
-      if (response.data.token){
-        // Store the token in sessionStorage and redirect the user to the home page
-        sessionStorage.setItem('token', response.data.token)
+      sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('isVerified', response.data.userStatus);
+      setIsVerified(response.data.userStatus);  // Update the state based on the server response
+
+      if (response.data.userStatus) {
         window.location.href = '/';
-        } 
-      else {
-        console.log("No token received")
       }
     })
     .catch(function(error){
@@ -69,6 +69,10 @@ const SignUp = ({ toggleForm }) => {
     
   };
 
+
+  const closeHandler = () => {
+    window.location.href = '/'; // Navigate to the homepage even if not verified
+  };
 
   return (
     <div className='box-container'>
@@ -169,6 +173,13 @@ const SignUp = ({ toggleForm }) => {
           </div>
         </form>
       </div>
+      {!isVerified && (
+        <ConfirmationVerification
+          isOpen={!isVerified}
+          onClose={closeHandler}
+          userToken={sessionStorage.getItem('token')}
+        />
+      )}
     </div>
   );
 };
