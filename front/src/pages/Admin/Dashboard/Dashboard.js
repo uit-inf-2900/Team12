@@ -63,6 +63,18 @@ const Dashboard = ({ toggleView }) => {
         fetchData();
     }, [usersToken]);
 
+    const isValidStatistic = (stat) => {
+        return stat.value > 0 && !isNaN(stat.value);
+    };
+
+    const renderContent = (stats, label, altImage) => {
+        if (stats.length > 0 && isValidStatistic(stats[0])) {
+            return <StatisticsChart label={label} userStats={stats} />;
+        } else {
+            return <img src={getImageByName(altImage)} alt="No Data" />;
+        }
+    };
+
 
     // Define statistics for each category
     const userStats = [
@@ -116,7 +128,7 @@ const Dashboard = ({ toggleView }) => {
                     title="Newsletter subscripers"
                     stats={Newsletter}
                     hovermessage="Click to view newsletter subscribers"
-                    image={getImageByName('pileOfSweaters')}
+                    chartComponent={renderContent(Messages, "Message Statistics", "pileOfSweaters")}
                     onClick={() => toggleView('newsletter')} 
                 /> 
 
@@ -124,26 +136,27 @@ const Dashboard = ({ toggleView }) => {
                     title="Message Statistics"
                     stats={Messages}
                     hovermessage="Click to view message statistics"
+                    chartComponent={renderContent(Messages, "Message Statistics", "reading")}
                     onClick={() => toggleView('messages')}
-                    chartComponent = {<StatisticsChart lable={"Message Statistics"} userStats={Messages} />}
                 />
 
                 <GeneralCard 
                     title="Yarn Statistics"
                     stats={Yarn}
-                    image={getImageByName('yarnBasket')}
+                    chartComponent={renderContent(Yarn, "Yarn Statistics", "yarnSheep")}
                 />
 
                 <GeneralCard 
                     title="Needle Statistics"
                     stats={Needles}
-                    chartComponent = {<StatisticsChart lable={"Needle Statistics"} userStats={Needles} />}
+                    chartComponent={renderContent(Needles, "Needle Statistics", "yarnBasket")}
+            
                 />
 
                 <GeneralCard 
                     title="Recipes Statistics"
                     stats={Recipes}
-                    image={getImageByName('books')}
+                    chartComponent={renderContent(Recipes, "Recipes Statistics", "books")}
                 />
                 
             </div>
