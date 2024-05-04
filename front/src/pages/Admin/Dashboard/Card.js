@@ -1,13 +1,22 @@
 import exampleImage from '../../../images/reading.png';
 import React, { useState } from 'react';
 
-const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent, onClick, onDelete, onEdit }) => {
+const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent, onClick, onDelete, onEdit, hovermessage }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
         <div className="card" onClick={onClick} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             {/* Render chart if provided */}
-            {chartComponent || <img src={image} alt="Default" className="card-image" />}
+            <div className="card-link" style={{ position: 'relative', cursor: 'pointer' }}>
+                {chartComponent || <img src={image} alt="Default" className="card-image" />}
+                
+                {/* Conditionally render the hover message if hovermessage prop is provided */}
+                {isHovered && hovermessage && (
+                    <div className="hover-message" style={{ display: 'block', position: 'absolute', bottom: '10px', width: '100%', textAlign: 'center', color: 'white', backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: '10px' }}>
+                        {hovermessage}
+                    </div>
+                )}
+            </div>
             <div className={`card-overlay ${isHovered ? 'show' : ''}`}>
                 {isHovered && (
                     <div>

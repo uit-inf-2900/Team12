@@ -3,13 +3,22 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 import '../../GlobalStyles/main.css';
 
+
+/**
+ * InstagramFeed fetches and displays a grid of Instagram posts using the Instagram Graph API.
+ * @param {string} accessToken - Instagram Graph API access token for authentication.
+ */
 const InstagramFeed = ({ accessToken }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+  /**
+   * Fetches posts from Instagram API and updates component state with results.
+   * NB: The access token must be updated every 60 days.
+   */
   useEffect(() => {
-    // Fetch Instagram posts
     const fetchInstagramPosts = async () => {
       try {
         const response = await fetch(`https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url,timestamp&access_token=${accessToken}`);
@@ -18,6 +27,7 @@ const InstagramFeed = ({ accessToken }) => {
         if (!response.ok) {
           throw new Error('Failed to fetch Instagram posts');
         }
+        
         // Parse the response as JSON and shuffel the posts
         const data = await response.json();
         const shuffledPosts = data.data.sort(() => 0.5 - Math.random()).slice(0, 16);

@@ -5,63 +5,66 @@ import StatisticsChart from '../../../data/ChartData';
 import {getImageByName} from '../../../images/getImageByName';
 import { fetchSubscribers } from '../apiServices';
 
+
+/**
+ * The Dashboard component serves as the main view for displaying user statistics,
+ * messages, inventory, recipes, and newsletter subscriptions. Each category is presented
+ * in its own card with relevant statistics and visuals.
+ * 
+ * @param {function} toggleView - Function to change views within the application,
+ * allowing navigation to detailed pages for each statistic.
+ */
 const Dashboard = ({ toggleView }) => {  
     const [usersData, setUsersData] = useState([]);
     const [activeMessages, setActiveMessages] = useState([]);
-    const [inactiveeMessages, setInactiveMessages] = useState([]);
-    const [handledMessages, setHandledMessages] = useState([]);
+    const [inactiveeMessages, setInactiveMessages] = useState([]); 
     const [yarnData, setYarnData] = useState([]);
     const [needleData, setNeedleData] = useState([]);
     const [recipesData, setRecipesData] = useState([]);
     const [subscribers, setSubscribers] = useState([]);
+    const [handledMessages, setHandledMessages] = useState([]);
 
     const usersToken = sessionStorage.getItem('token');
 
 
+    // Fetch data from various APIs to populate the dashboard with updated information.
     useEffect(() => {
-        // Get userinfo
-        fetch('http://localhost:5002/getUsers', { headers: { 'Accept': 'application/json' }})
-            .then(response => response.json())
-            .then(data => setUsersData(data))
-            .catch(error => console.error('Error fetching users:', error));
+        // Fetch data from various APIs to populate the dashboard with updated information.
+        const fetchData = async () => {
+            try {
+                const usersResponse = await fetch('http://localhost:5002/getUsers', { headers: { 'Accept': 'application/json' }});
+                setUsersData(await usersResponse.json());
 
-        // Get messages 
-        fetch('http://localhost:5002/api/Contact?isActive=false&isHandled=false', { headers: { 'Accept': 'application/json' }})
-            .then(response => response.json())
-            .then(data => setInactiveMessages(data))
-            .catch(error => console.error('Error fetching messages:', error));
-        fetch('http://localhost:5002/api/Contact?isActive=false&isHandled=true', { headers: { 'Accept': 'application/json' }})
-            .then(response => response.json())
-            .then(data => setHandledMessages(data))
-            .catch(error => console.error('Error fetching messages:', error));
-        fetch('http://localhost:5002/api/Contact?isActive=true&isHandled=false', { headers: { 'Accept': 'application/json' }})
-            .then(response => response.json())
-            .then(data => setActiveMessages(data))
-            .catch(error => console.error('Error fetching messages:', error));
-        
+                const messagesFetchOptions = { headers: { 'Accept': 'application/json' }};
+                const activeMessagesResponse = await fetch('http://localhost:5002/api/Contact?isActive=true&isHandled=false', messagesFetchOptions);
+                setActiveMessages(await activeMessagesResponse.json());
 
-        // Get recipes
-        fetch(`http://localhost:5002/api/recipe/getallrecipes?userToken=${usersToken}`, { headers: { 'Accept': 'application/json' }})
-            .then(response => response.json())
-            .then(data => setRecipesData(data))
-            .catch(error => console.error('Error fetching recipes:', error));
+                const inactiveMessagesResponse = await fetch('http://localhost:5002/api/Contact?isActive=false&isHandled=false', messagesFetchOptions);
+                setInactiveMessages(await inactiveMessagesResponse.json());
 
-        // Get inventory
-        fetch(`http://localhost:5002/api/inventory/get_inventory?userToken=${usersToken}`, { headers: { 'Accept': 'application/json' }})
-            .then(response => response.json())
-            .then(data => {
-                setYarnData(data.yarnInventory);
-                setNeedleData(data.needleInventory);
-            })
-            .catch(error => console.error('Error fetching inventory:', error));
+                const handledMessagesResponse = await fetch('http://localhost:5002/api/Contact?isActive=false&isHandled=true', messagesFetchOptions);
+                setHandledMessages(await handledMessagesResponse.json());
+
+                const recipesResponse = await fetch(`http://localhost:5002/api/recipe/getallrecipes?userToken=${usersToken}`, { headers: { 'Accept': 'application/json' }});
+                setRecipesData(await recipesResponse.json());
+
+                const inventoryResponse = await fetch(`http://localhost:5002/api/inventory/get_inventory?userToken=${usersToken}`, { headers: { 'Accept': 'application/json' }});
+                const inventoryData = await inventoryResponse.json();
+                setYarnData(inventoryData.yarnInventory);
+                setNeedleData(inventoryData.needleInventory);
+
+                // Fetch newsletter subscribers separately
+                setSubscribers(await fetchSubscribers());
+            } catch (error) {
+                console.error('Error fetching dashboard data:', error);
+            }
+        };
+
+        fetchData();
+    }, [usersToken]);
 
 
-        // Get newsletter subscribers 
-        fetchSubscribers().then(data => {
-            setSubscribers(data);
-        }).catch(error => console.error('Error fetching newsletter subscribers:', error));    
-    }, [usersToken]);  
-
+    // Define statistics for each category
     const userStats = [
         { label: "Total number of users", value: usersData.length },
         { label: "Banned users", value: usersData.filter(user => user.status === 'banned').length },
@@ -105,12 +108,14 @@ const Dashboard = ({ toggleView }) => {
                     title="User Statistics"
                     stats={userStats}
                     onClick={() => toggleView('users')}
+                    hovermessage="Click to view user statistics"
                     chartComponent = {<StatisticsChart lable={"User Statistics"} userStats={userStats} />}
                 />
 
                 <GeneralCard 
                     title="Newsletter subscripers"
                     stats={Newsletter}
+                    hovermessage="Click to view newsletter subscribers"
                     image={getImageByName('pileOfSweaters')}
                     onClick={() => toggleView('newsletter')} 
                 /> 
@@ -118,6 +123,7 @@ const Dashboard = ({ toggleView }) => {
                 <GeneralCard 
                     title="Message Statistics"
                     stats={Messages}
+                    hovermessage="Click to view message statistics"
                     onClick={() => toggleView('messages')}
                     chartComponent = {<StatisticsChart lable={"Message Statistics"} userStats={Messages} />}
                 />
@@ -126,13 +132,11 @@ const Dashboard = ({ toggleView }) => {
                     title="Yarn Statistics"
                     stats={Yarn}
                     image={getImageByName('yarnBasket')}
-                    // onClick={() => toggleView('')}
                 />
 
                 <GeneralCard 
                     title="Needle Statistics"
                     stats={Needles}
-                    // onClick={() => toggleView('')}
                     chartComponent = {<StatisticsChart lable={"Needle Statistics"} userStats={Needles} />}
                 />
 
@@ -140,7 +144,6 @@ const Dashboard = ({ toggleView }) => {
                     title="Recipes Statistics"
                     stats={Recipes}
                     image={getImageByName('books')}
-                    // onClick={() => toggleView('')}
                 />
                 
             </div>
