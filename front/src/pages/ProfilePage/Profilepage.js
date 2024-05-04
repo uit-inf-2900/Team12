@@ -267,7 +267,7 @@ const ProfilePage = () => {
                         <h2>Edit your information</h2>
                         <InputField label="Full Name" type="text" name="userFullName" value={editState.userFullName} onChange={handleChange} />
                         <InputField label="Email" type="email" name="userEmail" value={editState.userEmail} onChange={handleChange} />
-                        <InputField label="Old Password" type="password" name="oldPassword" value={editState.oldPassword} onChange={handleChange} />
+                        <InputField label="Current Password" type="password" name="oldPassword" value={editState.oldPassword} onChange={handleChange} />
                         <InputField label="New Password" type="password" name="newPassword" value={editState.newPassword} onChange={handleChange} />
                         <InputField label="Confirm New Password" type="password" name="confirmNewPassword" value={editState.confirmNewPassword} onChange={handleChange} />
                         <CustomButton themeMode="light" iconName='save' onClick={handleSave}>Save Changes</CustomButton>
