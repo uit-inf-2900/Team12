@@ -5,7 +5,7 @@ using System.Linq;
 
 using Strikkeapp.Models;
 
-namespace strikkeapp.Controllers;
+namespace Strikkeapp.Controllers;
 
 [ApiController]
 [Route("[controller]")]

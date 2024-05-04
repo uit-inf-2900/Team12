@@ -1,4 +1,6 @@
-﻿namespace Strikkeapp.Models;
+﻿using Strikkeapp.Data.Entities;
+
+namespace Strikkeapp.Models;
 
 public class CounterResult
 {
@@ -16,6 +18,26 @@ public class CounterResult
         ErrorMessage = message
     };
 }
+
+public class GetCountersResult
+{
+    public bool Success { get; set; }
+    public string ErrorMessage { get; set; } = string.Empty;
+    public List<Counter> UserCounters { get; set; } = new List<Counter>();
+
+    public static GetCountersResult ForSuccess(List<Counter> counters) => new GetCountersResult
+    {
+        Success = true,
+        UserCounters = counters
+    };
+
+    public static GetCountersResult ForFailure(string message) => new GetCountersResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}
+    
 
 public class CreateCounterResult
 {
@@ -54,6 +76,18 @@ public class UpdateCounterRequest
     public string userToken { get; set; } = string.Empty;
     public Guid counterId { get; set; }
     public int newNum { get; set; }
+    public string? newName { get; set; } = string.Empty;
+
+    public bool IsOk()
+    {
+        return !string.IsNullOrWhiteSpace(userToken);
+    }
+}
+
+public class DeleteCounterRequest
+{
+    public string userToken { get; set; } = string.Empty;
+    public Guid counterId { get; set; }
 
     public bool IsOk()
     {

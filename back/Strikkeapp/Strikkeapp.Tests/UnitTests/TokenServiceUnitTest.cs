@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 using Strikkeapp.Services;
 
-namespace Strikkeapp.Tests;
+namespace Strikkeapp.Tests.UnitTests;
 
 public class TokenServiceTests
 {

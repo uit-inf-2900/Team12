@@ -7,7 +7,9 @@ namespace Strikkeapp.Services;
 public interface ICounterService 
 {
     public CreateCounterResult CreateCounter(string userToken, string name);
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum);
+    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName);
+    public CounterResult DeleteCounter(string userToken, Guid counterId);
+    public GetCountersResult GetCounters(string userToken);
 }
 
 public class CounterService : ICounterService
@@ -56,7 +58,24 @@ public class CounterService : ICounterService
         }
     }
 
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum)
+    public GetCountersResult GetCounters(string userToken)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return GetCountersResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+
+        var counters = _context.CounterInventory
+            .Where(uid => uid.UserId == userId)
+            .ToList();
+
+        return GetCountersResult.ForSuccess(counters);
+    }
+
+    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName)
     {
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
@@ -82,6 +101,12 @@ public class CounterService : ICounterService
                 getCounter.RoundNumber = newNum;
                 _context.SaveChanges();
 
+                if(!string.IsNullOrWhiteSpace(newName))
+                {
+                    getCounter.Name = newName;
+                    _context.SaveChanges();
+                }
+
                 transaction.Commit();
                 return CounterResult.ForSuccess();
             }
@@ -92,4 +117,41 @@ public class CounterService : ICounterService
             }
         }
     }
+
+    public CounterResult DeleteCounter(string userToken, Guid counterId)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return CounterResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var getCounter = _context.CounterInventory
+                    .Where(uid => uid.UserId == tokenResult.UserId)
+                    .FirstOrDefault(cid => cid.CounterId == counterId);
+
+                if (getCounter == null)
+                {
+                    return CounterResult.ForFailure("Not found");
+                }
+
+                _context.CounterInventory.Remove(getCounter);
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return CounterResult.ForSuccess();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return CounterResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+        
 }

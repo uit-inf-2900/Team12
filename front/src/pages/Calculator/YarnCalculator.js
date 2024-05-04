@@ -1,7 +1,6 @@
 import React, { useState} from "react";
 import InputField from "../../Components/InputField";
 import "./Calculator.css"
-// import { Link } from 'react-router-dom';
 import Image from "../../images/knitting.png";
 import { CustomButton } from "../../Components/Button";
 
@@ -10,7 +9,6 @@ export const YarnCalculator = () => {
     const [originalSkeins, setOriginalSkeins] = useState('');
     const [newLength, setNewLength] = useState('');
     const [requiredSkeins, setRequiredSkeins] = useState(null);
-    // Legg inn error msg som i øke og felle her - samme metode da
     const [error, setError] = useState('');
 
     

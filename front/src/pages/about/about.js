@@ -50,6 +50,13 @@ export const About = () => {
 
       {/* Short intro section  */}
       <div className="section-container">
+        <p>Welcome to our website, dedicated to all the passionate knitters out there. Our team has created a platform that simplifies the way you manage your knitting projects and also inspires new innovation in handicrafts.
+          Our team is 
+          The team behind knithub consists of both knitters
+        </p>
+        <p></p>
+
+
         <p>Velkommen til vår nettside, en nettside du som strikker kanskje ikke visste at du trengte. Men fra det øyeblikket du begynner å bruke den, vil du se hvor mye enklere og mer berikende din strikkeopplevelse kan bli.</p>
         <p>I en verden hvor kreativitet og organisering går hånd i hånd, har vi skapt en plattform som ikke bare forenkler måten du håndterer dine strikkeprosjekter på, men også inspirerer til ny innovasjon innen håndarbeid.</p>
       </div>

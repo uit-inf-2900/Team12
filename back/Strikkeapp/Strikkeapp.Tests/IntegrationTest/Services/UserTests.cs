@@ -8,7 +8,7 @@ using Strikkeapp.Data.Entities;
 using Strikkeapp.Services;
 using Strikkeapp.Models;
 
-namespace Strikkeapp.Tests;
+namespace Strikkeapp.Tests.Services;
 
 public class UserServiceTests
 {

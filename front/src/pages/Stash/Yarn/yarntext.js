@@ -85,7 +85,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
 
     return (
         <div className="pop">
-            <div className="pop-content" style={{height: '95%', width: '50%', alignContent:'center'}}>
+            <div className="pop-content" style={{height: '80%', width: '50%', alignContent:'center'}}>
                 <h2> Add Yarn </h2>
                 <form onSubmit={handleSubmit} className="yarn-form" style={{display: 'flex', flexDirection: 'column'}}>
                     <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
