@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {Link,  BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode'
+import ScrollToTop from './Components/scrollToTop';
 
 
 // Import our pages
@@ -54,6 +55,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
     <Router>
+      <ScrollToTop/>
       {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
       <div className="page-container">          
         <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
