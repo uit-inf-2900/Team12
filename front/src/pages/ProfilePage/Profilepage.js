@@ -228,6 +228,7 @@ const ProfilePage = () => {
         <div className="profile-page-container">
         {isVerified !== 'verified' && (
             <ConfirmationVerification
+                navigation={"/profile"}
                 isOpen={showConfirmationModal}
                 onClose={handleCloseConfirmationModal}
                 userToken={sessionStorage.getItem('token')}

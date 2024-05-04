@@ -82,7 +82,7 @@ const LogIn = () => {
             </div>
             {isVerified !== 'verified' && (
                 <ConfirmationVerification
-                    isOpen={true}
+                    isOpen={onSubmit}
                     onClose={closeHandler}
                     userToken={sessionStorage.getItem('token')}
                 />
