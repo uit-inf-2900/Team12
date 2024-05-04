@@ -10,74 +10,69 @@ import ConfirmationVerification from './ConfirmationVerification';
 
 
 /**
- * The SignUp component provides a user interface for creating a new account.
- * It includes form validation and error handling, and it redirects the user upon successful account creation.
+ * SignUp component for registering new users.
+ * It handles user input validation, posts data to a server, and handles the response.
+ * It also manages user verification status and displays a modal if further verification is needed.
  */
-const SignUp = ({ toggleForm }) => {
+const SignUp = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const [error, setError] = useState(''); 
-  const [isVerified, setIsVerified] = useState(true);  // Assume verified until otherwise determined
-  
+  const [isVerified, setIsVerified] = useState(false); // Start with assumption user is not verified
+  const [showVerificationModal, setShowVerificationModal] = useState(false); // Controls the visibility of the modal
+
 
   /**
-   * Handles the submission of the sign-up form by sending user data to the server.
-   * Also, validates the password and checks whether the user's entered passwords match.
-   * @param {Object} data - Contains all user input data from the form.
-  */
+   * Handles form submission for new user registration.
+   * Validates the form data, sends it to the server, and handles the server's response.
+   * @param {Object} data - Contains user input data from the form.
+   */
   const onSubmit = (data) => {
-    // Check if the passwords match before sending the data to the server
     if (data.password !== data.confirmPassword) {
-      setError('confirmPassword', {
-        type: 'manual',
-        message: 'Passwords do not match',
-      });
+      setError("Passwords do not match");
       return;
     }
 
-    // Format date of birth
-    const dob = data.birthday.replace(/-/g, '')
+    // Formats the date of birth by removing dashes
+    const dob = data.birthday.replace(/-/g, '');
 
-    /**
-     * Data to be sent to the API to create a user
-     */
     const postData = {
       userEmail: data.email,
       userPwd: data.password,
       userFullName: data.Name,
       userDOB: dob
     };
-    console.log("User DOB: ", dob)
 
-
-    // Make POST request to the API to create a user 
     axios.post('http://localhost:5002/createuser', postData)
-    .then(function(response){
+    .then(function(response) {
       sessionStorage.setItem('token', response.data.token);
       sessionStorage.setItem('isVerified', response.data.userStatus);
-      setIsVerified(response.data.userStatus);  // Update the state based on the server response
+      setIsVerified(response.data.userStatus === 'verified');
 
-      // Redirect to the homepage if the user is verified 
-      if (response.data.userStatus) {
-        window.location.href = '/';
+      // Show verification modal if user is not verified, else navigate to home page if user is verified
+      if (response.data.userStatus !== 'verified') {
+        setShowVerificationModal(true);
+      } else {
+        window.location.href = '/';  // Redirect to homepage if verifiedt
       }
     })
-    .catch(function(error){
+    .catch(function(error) {
       console.error("Error: ", error);
-      // Handle errors, and customize the error message based on the response status
       if (error.response && error.response.status === 409) {
         setError("A user with this email already exists");
       } else {
         setError("Something went wrong. Please try again later");
       }
-    })
-    
+    });
   };
 
 
-  /** Close the verification modal and redirect to homepage even if the user is not verified */
+  /**
+   * Closes the verification modal and navigates to the homepage.
+   */
   const closeHandler = () => {
-    window.location.href = '/'; 
+    setShowVerificationModal(false);
+    window.location.href = '/';  // Redirect to homepage if verifiedt
   };
 
   return (
@@ -85,103 +80,36 @@ const SignUp = ({ toggleForm }) => {
       <div className="box dark">
         <h2>Hello, Knitter!</h2>
         <p>Already have an account?</p>
-        <div >
-          <CustomButton themeMode="dark" onClick={() => navigate('/login')}>Log in</CustomButton>
-        </div>
+        <CustomButton themeMode="dark" onClick={() => navigate('/login')}>Log in</CustomButton>
       </div>
       <div className="box light">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Sign Up!</h2>
-
-          {/* Use InputField component for Full Name input */}
-          <InputField
-            label="Full name"
-            type="text"
-            register={register("Name", { required: "Name is required." })}
-            errors={errors.Name}
-          />
-
-          {/* Use InputField component for Email input */}
-          <InputField
-            label="Email"
-            type="email"
-            data-testid = "email-input"
-            register={register("email", {
+          <InputField label="Full name" type="text" register={register("Name", { required: "Name is required." })} errors={errors.Name} />
+          <InputField label="Email" type="email" data-testid="email-input" register={register("email", {
               required: "Email is required.",
-              pattern: {
-                value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
-                message: "Email is not valid.",
-              },
-            })}
-            errors={errors.email}
-          />
-
-          {/* Use InputField component for Birthday input */}
-          <InputField
-            label="Birthday"
-            type="date"
-            data-testid="Birthday-input"
-            register={register("birthday", {
-              required: "Birthday is required  (YYYY-MM-DD).",
-              validate: (value) => {
-                const regex = /^\d{4}-\d{2}-\d{2}$/;
-                if (!regex.test(value) && value !== '') {
-                  return "Invalid date format (YYYY-MM-DD)";
-                }
-                return true;
-              },
-            })}
-            errors={errors.birthday}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            inputProps={{
-              placeholder: '', // Emty the placeholder 
-            }}
-          />
-
-
-          {/* Use InputField component for Password input */}
-          <InputField
-            label="Password"
-            type="password"
-            data-testid = "password-input"
-            register={register("password", {
+              pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, message: "Email is not valid." }
+          })} errors={errors.email} />
+          <InputField label="Birthday" type="date" data-testid="Birthday-input" register={register("birthday", {
+              required: "Birthday is required (YYYY-MM-DD).",
+              validate: value => /^\d{4}-\d{2}-\d{2}$/.test(value) || "Invalid date format (YYYY-MM-DD)"
+          })} errors={errors.birthday} InputLabelProps={{ shrink: true }} />
+          <InputField label="Password" type="password" data-testid="password-input" register={register("password", {
               required: "Password is required.",
-              minLength: {
-                value: 6,
-                message: "Password should be at least 6 characters.",
-              },
-              pattern: {
-                value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-                message: "Password must include uppercase and lowercase letters, digits, and special characters (@$!%*?&).",
-              },
-            })}
-            errors={errors.password}
-          />
-
-          {/* Use InputField component for Confirm Password input */}
-          <InputField
-            label="Confirm Password"
-            type="password"
-            data-testid = "confirm-password-input"
-            register={register("confirmPassword", {
+              minLength: { value: 6, message: "Password should be at least 6 characters." },
+              pattern: { value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, message: "Password must include uppercase, lowercase, digits, and special characters." }
+          })} errors={errors.password} />
+          <InputField label="Confirm Password" type="password" data-testid="confirm-password-input" register={register("confirmPassword", {
               required: "Please confirm your password.",
-              validate: (value) => value === watch('password') || "Passwords do not match"
-            })}
-            errors={errors.confirmPassword}
-          />
-
-          <div>
-            {/* Generell feilmeldingsviser */}
-            {error && <div className="errorMsg">{error}</div>}
-            <CustomButton themeMode="light" submit={true}>Sign up</CustomButton>
-          </div>
+              validate: value => value === watch('password') || "Passwords do not match"
+          })} errors={errors.confirmPassword} />
+          {error && <div className="errorMsg">{error}</div>}
+          <CustomButton themeMode="light" submit={true}>Sign up</CustomButton>
         </form>
       </div>
-      {!isVerified && (
+      {showVerificationModal && (
         <ConfirmationVerification
-          isOpen={!isVerified}
+          isOpen={showVerificationModal}
           onClose={closeHandler}
           userToken={sessionStorage.getItem('token')}
         />
