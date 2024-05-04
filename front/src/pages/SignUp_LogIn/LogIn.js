@@ -7,10 +7,11 @@ import axios from 'axios';
 import "../../GlobalStyles/main.css";
 import { CustomButton } from '../../Components/Button';
 import InputField from '../../Components/InputField';
-import ConfirmationVerification from './ConfirmationVerification'; // Pass på riktig sti til denne komponenten
+import ConfirmationVerification from './ConfirmationVerification';
 
 /**
- * LogIn component renders the login form.
+ * The LogIn component provides a user interface for authentication. 
+ * It includes form validation, navigation upon successful login, and handling of login errors.
  */
 const LogIn = () => {
     const navigate = useNavigate();
@@ -18,6 +19,12 @@ const LogIn = () => {
     const [isVerified, setIsVerified] = useState('verified'); // Anta at brukeren er verifisert til det motsatte er bevist
     const { register, handleSubmit, formState: { errors } } = useForm();
 
+
+    /**
+     * Handles the submission of the login form.
+     * Posts the user's credentials to the server and processes the response.
+     * @param {Object} data - The user's login data.
+     */
     const onSubmit = (data) => {
         const postData = {
             userEmail: data.email,
@@ -28,29 +35,40 @@ const LogIn = () => {
         .then(function(response){
             sessionStorage.setItem('token', response.data.token);
             sessionStorage.setItem('isVerified', response.data.userStatus);
-            setIsVerified(response.data.userStatus);  // Oppdater tilstanden basert på svaret fra serveren
+            setIsVerified(response.data.userStatus);  // Update the state based on the server response
             
             if (response.data.userStatus === 'verified') {
-                window.location.href = '/';  // Naviger til hjemmesiden hvis verifisert
+                window.location.href = '/';  // Redirect to homepage if verifiedt
             }
         })
         .catch(function(error){
-            console.error("Error: ", error); 
-            // Handle login errors and display appropriate error message
-            if (error.response.status === 401 && error.response.data === "User is banned" ){
-                setError("Your account has been banned. Please contact the administrator for more information.");
-            }
-            else if (error.response.status === 401 ){
-                setError("Login failed. Check your username and password and try again."); 
-            } 
-            else {
-                setError("Login failed. Please try again later."); 
-            }
-        })
+            console.error("Error: ", error);
+            handleLoginError(error);
+        });
     };
 
+
+    /**
+     * Provides error handling for the login process.
+     * Sets appropriate error messages based on different failure conditions.
+     * @param {Object} error - The error object received from the login attempt.
+     */
+    const handleLoginError = (error) => {
+        if (error.response.status === 401) {
+            if (error.response.data === "User is banned") {
+                setError("Your account has been banned. Please contact the administrator for more information.");
+            } else {
+                setError("Login failed. Check your username and password and try again.");
+            }
+        } else {
+            setError("Login failed. Please try again later.");
+        }
+    };
+
+
+    /** Close the verification modal and redirect to homepage even if the user is not verified */
     const closeHandler = () => {
-        window.location.href = '/'; // Tillater navigering til hjemmesiden selv om ikke verifisert
+        window.location.href = '/'; 
     };
 
     return (

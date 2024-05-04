@@ -10,7 +10,8 @@ import ConfirmationVerification from './ConfirmationVerification';
 
 
 /**
- *  SignUp component renders the sign-up form.
+ * The SignUp component provides a user interface for creating a new account.
+ * It includes form validation and error handling, and it redirects the user upon successful account creation.
  */
 const SignUp = ({ toggleForm }) => {
   const navigate = useNavigate();
@@ -20,9 +21,12 @@ const SignUp = ({ toggleForm }) => {
   
 
   /**
-   * Handle form submission
-   */
+   * Handles the submission of the sign-up form by sending user data to the server.
+   * Also, validates the password and checks whether the user's entered passwords match.
+   * @param {Object} data - Contains all user input data from the form.
+  */
   const onSubmit = (data) => {
+    // Check if the passwords match before sending the data to the server
     if (data.password !== data.confirmPassword) {
       setError('confirmPassword', {
         type: 'manual',
@@ -53,6 +57,7 @@ const SignUp = ({ toggleForm }) => {
       sessionStorage.setItem('isVerified', response.data.userStatus);
       setIsVerified(response.data.userStatus);  // Update the state based on the server response
 
+      // Redirect to the homepage if the user is verified 
       if (response.data.userStatus) {
         window.location.href = '/';
       }
@@ -70,8 +75,9 @@ const SignUp = ({ toggleForm }) => {
   };
 
 
+  /** Close the verification modal and redirect to homepage even if the user is not verified */
   const closeHandler = () => {
-    window.location.href = '/'; // Navigate to the homepage even if not verified
+    window.location.href = '/'; 
   };
 
   return (
