@@ -35,9 +35,16 @@ const LogIn = () => {
             }
         })
         .catch(function(error){
-            console.error("Error: ", error);
-            if (error.response) {
-                setError(`Login failed: ${error.response.data.message || 'Please try again later.'}`);
+            console.error("Error: ", error); 
+            // Handle login errors and display appropriate error message
+            if (error.response.status === 401 && error.response.data === "User is banned" ){
+                setError("Your account has been banned. Please contact the administrator for more information.");
+            }
+            else if (error.response.status === 401 ){
+                setError("Login failed. Check your username and password and try again."); 
+            } 
+            else {
+                setError("Login failed. Please try again later."); 
             }
         })
     };
