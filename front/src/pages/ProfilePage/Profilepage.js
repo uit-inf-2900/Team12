@@ -17,6 +17,7 @@ import ConfirmationVerification from '../SignUp_LogIn/ConfirmationVerification';
 const ProfilePage = () => {
     // State to toggle between edit and view mode
     const [isEditing, setIsEditing] = useState(false);
+    const [showVerificationModal, setShowVerificationModal] = useState(false);  // State to control visibility of the verification modal
 
     // State to store user profile data
     const [userProfileState, setUserProfileState] = useState({
@@ -224,14 +225,6 @@ const ProfilePage = () => {
 
     return (
         <div className="profile-page-container">
-        {isVerified !== 'verified' && (
-            <ConfirmationVerification
-                navigation={"/profile"}
-                isOpen={showConfirmationModal}
-                onClose={handleCloseConfirmationModal}
-                userToken={token}
-            />
-        )}
             {/* The left side of the profile page */}
             <div className="box dark">
                 <div className="profile-image-container">
@@ -242,6 +235,22 @@ const ProfilePage = () => {
                 </p>
                 <div style={{flexGrow: 1}}></div>
                 <p className="profile-options" style={{fontWeight: 'bold'}}>My Profile</p>
+
+                {/* If the user are not verified, show a button with the option to verify */}
+                {isVerified !== 'verified' && (
+                <>
+                    <CustomButton onClick={() => setShowVerificationModal(true)} themeMode="dark">
+                        Verify User
+                    </CustomButton>
+                    <ConfirmationVerification
+                        navigation={"/profile"}
+                        isOpen={showVerificationModal}
+                        onClose={() => setShowVerificationModal(false)}
+                        userToken={token}
+                    />
+                </>
+                )}
+
                 <div style={{flexGrow: 2}}></div>
                 <div className='infoText-small'>
                     <Link to="/contactus" style={{color: "black", borderBottom: '1px solid'}}>Contact Us</Link>
