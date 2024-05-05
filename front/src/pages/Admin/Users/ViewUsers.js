@@ -20,7 +20,7 @@ import { getStatusLabel } from '../../../Components/UserLable';
 
 
   // Fetch user data from the backend
-const fetchUserData = async () => {
+export const fetchUserData = async () => {
     try {
     const response = await fetch('http://localhost:5002/getUsers');
     if (!response.ok) {
