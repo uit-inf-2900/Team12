@@ -1,0 +1,41 @@
+
+.statistic-box {
+    background-color: #FFF; /* White background */
+    border: 2px solid #E1E1E1; /* Gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the box */
+    display: flex; /* Using flex to manage layout */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    justify-content: center; /* Space between children */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+    margin: 20px; /* Margin around the box */
+    text-align: center; /* Center text inside the box */
+    width: 10rem; /* Fixed width */
+    margin-top: 20px;
+    height: 14rem; /* Fixed height */
+}
+
+.label {
+    color: #555; /* Dark gray color for the label */
+    font-size: 1rem; /* Font size for the label */
+    margin-bottom: 0; /* Space between label and value */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 1rem; /* Padding around label */
+}
+
+.value {
+    color: #333; /* Dark color for the value */
+    font-size: 2rem; /* Font size for the value */
+    font-weight: bold; /* Bold font for the value */
+    padding: 1rem; /* Padding around value */
+    text-shadow: 1px 1px 1px #e3e3e3; /* Text shadow for readability */
+    text-overflow: ellipsis;
+}
+
+.icon {
+    max-width: 80%; /* Limits icon size to 50% of the box width */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 5px; /* Reduced space below the icon */
+}

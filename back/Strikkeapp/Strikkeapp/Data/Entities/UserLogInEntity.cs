@@ -17,6 +17,7 @@ public class UserLogIn
     [Required]
     [CustomValidation(typeof(UserLogIn), nameof(ValidateUserStatus))]
     public string UserStatus { get; set; } = "unverified";
+    public int UserVerificationCode { get; internal set; }
 
     // Validation for user status
     private static ValidationResult ValidateUserStatus(string userStatus)

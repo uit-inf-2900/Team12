@@ -197,7 +197,7 @@ public class InventoryController : ControllerBase
 
     [HttpPatch]
     [Route("updateyarn")]
-    public IActionResult UpdateYarn([FromBody] UpdateItemRequest request)
+    public IActionResult UpdateYarn([FromBody] UpdateYarnRequest request)
     {
         if(!request.isOk())
         {

@@ -2,28 +2,110 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import validator from 'validator'; 
 import axios from 'axios';
+import { Link } from "react-router-dom"; 
+
 
 import Image from "../../images/6.png";
 import InputField from "../../Components/InputField";
 import SetAlert from "../../Components/Alert";
 import "../../GlobalStyles/main.css";
 import "./ContactUs.css"
-import CustomButton from "../../Components/Button";
+import { CustomButton } from "../../Components/Button";
 import ContactInformation from '../../Components/ContactInformation';
 
-const FAQItem = ({ question, answer }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const FAQItem = ({ question, answer, isOpen, setIsOpen }) => (
+    <div className="faq-item">
+        <button className={`faq-question ${isOpen ? 'open' : ''}`} onClick={setIsOpen}>
+            <span>{question}</span>
+            <span className="icon">{isOpen ? '−' : '+'}</span> {/* Using Unicode characters for icons */}
+        </button>
+        {isOpen && <div className="faq-answer">{answer}</div>}
+    </div>
+);
 
+
+
+const FAQSection = () => {
+    const [openFAQ, setOpenFAQ] = useState(null);
+
+    const handleFAQClick = (index) => {
+        // Toggle openFAQ state or switch to a new index
+        setOpenFAQ(openFAQ === index ? null : index);
+    };
 
     return (
-        <div className="faq-item">
-            <button className="faq-question" onClick={() => setIsOpen(!isOpen)}>
-                {question}
-            </button>
-            {isOpen && <div className="faq-answer">{answer}</div>}
+        <div className="faq-section">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <FAQItem 
+                question="How do I start a new project?" 
+                answer="To start a new project, go to your project planner, click on the + button, and fill out the information." 
+                isOpen={openFAQ === 1}
+                setIsOpen={() => handleFAQClick(1)}
+            />
+            <FAQItem 
+                question="What do I do if I forget my password?" 
+                answer="Click on 'Forgot password?' on the login page to reset your password." 
+                isOpen={openFAQ === 2}
+                setIsOpen={() => handleFAQClick(2)}
+            />
+            <FAQItem 
+                question="How do i add needles to my stash?" 
+                answer="To add needles, go to your stash page and choose needle. Then click on the + button, and fill out the information."
+                isOpen={openFAQ === 3}
+                setIsOpen={() => handleFAQClick(3)}
+            />
+            <FAQItem 
+                question="How do i add Yarn to my stash?" 
+                answer="To add yarn, go to your stash page and choose yarn. Then click on the + button, and fill out the information."
+                isOpen={openFAQ === 4}
+                setIsOpen={() => handleFAQClick(4)}
+            />
+            <FAQItem 
+                question="How do i add a pattern to my stash?" 
+                answer="To add a pattern, go to your stash page and choose pattern. Then click on the + button, and fill out the information."
+                isOpen={openFAQ === 5}
+                setIsOpen={() => handleFAQClick(5)}
+            /> 
+            <FAQItem 
+                question="How do I update my inventory on Knithub?"
+                answer="To update your inventory, go to the 'Inventory' section on your dashboard. Here, you can add new items, update, or delete items you no longer have. Keeping your inventory updated helps in planning new projects without overbuying materials."
+                isOpen={openFAQ === 6}
+                setIsOpen={() => handleFAQClick(6)}
+            />
+            <FAQItem 
+                question="Is there a way to track the time spent on each knitting project?"
+                answer="While Knithub currently does not automatically track the time spent on projects, you can manually add time logs in the project details section. This helps in understanding the effort involved and planning future projects more effectively."
+                isOpen={openFAQ === 7}
+                setIsOpen={() => handleFAQClick(7)}
+            />
+            <FAQItem 
+                question="How can I find knitting inspiration on Knithub?"
+                answer="Check out the 'Resource Page' on Knithub for a variety of knitting abbreviations, tips, and links to inspirational Instagram images. This page is continuously updated to provide you with fresh ideas and innovative techniques to enhance your knitting projects."
+                isOpen={openFAQ === 8}
+                setIsOpen={() => handleFAQClick(8)}
+            />
+            <FAQItem 
+                question="How can I use the yarn calculators on Knithub?"
+                answer="Knithub offers various yarn calculators, including decrease and increase calculators, as well as a calculator to estimate how much yarn you need if you're substituting the original yarn in a pattern. You can find these tools under the 'Projects' section of your dashboard. They help you adjust your knitting projects according to your yarn choices effectively."
+                isOpen={openFAQ === 9}
+                setIsOpen={() => handleFAQClick(9)}
+            />
+            <FAQItem 
+                question="What are counters, and how can I use them in my projects?"
+                answer="Counters on Knithub are customizable tools that help you keep track of specific elements in your knitting projects, such as rounds on a sleeve or decreases on a sweater. You can name each counter to match its purpose and easily delete them once the project or the specific task is complete. To use a counter, simply add one from the project detail page and start tracking your progress immediately."
+                isOpen={openFAQ === 10}
+                setIsOpen={() => handleFAQClick(10)}
+            />
+            <FAQItem 
+                question="How do I contact you for support or inquiries?"
+                answer="For any support or inquiries, please visit our Contact Us page. You can send us a message directly through our website, and our team will respond as quickly as possible."
+                isOpen={openFAQ === 11}
+                setIsOpen={() => handleFAQClick(11)}
+            />
         </div>
-    );  
+    );
 };
+
 
 const ContactDetails = () => (
     <div className="infoText" style={{"textAlign":"left"}}>
@@ -102,13 +184,7 @@ const ContactUs = () => {
                 <SetAlert open={alertInfo.open} setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} severity={alertInfo.severity} message={alertInfo.message} />
                 
             </div>
-            {/* Frequently Asked Questions (FAQ) Section */}
-            <div className="faq-section">
-                <h2>Frequently Asked Questions (FAQ)</h2>
-                <FAQItem question="How do I start a new project?" answer="To start a new project, go to your project planner and click on 'Add new project'." />
-                <FAQItem question="How can I save my favorite recipes?" answer="Recipes can be saved by clicking on 'Save as favorite' under each recipe." />
-                <FAQItem question="What do I do if I forget my password?" answer="Click on 'Forgot password?' on the login page to reset your password." />
-            </div>
+            <FAQSection /> 
         </div>
     );
 };

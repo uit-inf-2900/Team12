@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import "../GlobalStyles/navbar.css";
+import ConfirmationLogout from '../pages/SignUp_LogIn/ConfirmationLogout';  // Correct way to import default exports
+import { useFormState } from 'react-hook-form';
 
 const VisitorView = () => {
   return (
@@ -17,6 +19,7 @@ const UserView = () => {
       <li className="nav-item"><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
       <li className="nav-item"><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
       <li className="nav-item"><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
+      <li className='nav-item'><NavLink to='/counter' className='nav-link'> Counter </NavLink></li>
     </>
   ); 
 }; 
@@ -33,6 +36,22 @@ const AdminView = ({ isAdmin, isLoggedIn }) => {
 }; 
 
 const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutConfirm(false);
+    handleLogout();
+  };
+
+  const handleCloseModal = () => {
+    setShowLogoutConfirm(false);
+  };
+
   return (
     <header className="header" id="header">
       <nav className="nav container">
@@ -47,7 +66,13 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
         <>
           <div className="nav-items">
             <NavLink to="/profile" className="nav-action">Profile</NavLink>
-            <NavLink onClick={handleLogout}>Logg Ut</NavLink>
+            <NavLink onClick={handleLogoutClick} className="nav-action">Logg Ut</NavLink>
+            <ConfirmationLogout 
+              isOpen={showLogoutConfirm}
+              onClose={handleCloseModal}
+              onConfirm={handleConfirmLogout}
+              message="Are you sure you want to log out?"
+            />
           </div>
         </>
         )}

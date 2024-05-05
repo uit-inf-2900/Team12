@@ -14,29 +14,43 @@
 
 
 /* ------------- FAQ section ------------- */
+
 .faq-section {
-    padding-top: 2rem;
+    margin: 20px;
+    font-family: var(--body-font);
 }
 
-/* The questions that are displayes */
+.faq-item {
+    margin-bottom: 10px;
+}
+
+
 .faq-question {
     background: none;
-    color: var(--primary-color);
-    text-align: left;
-    padding: 0;
-    margin-bottom: 1rem;
-}
-.faq-question:hover{
-    color: var(--shadow-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    border:  var(--primary-color);
+    outline: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 18px;
 }
 
-/* The answers to the questions */
+.faq-question.open {
+    color:var(--link-color); 
+}
+
 .faq-answer {
-    margin-left: 20px;
-    padding-bottom: 1rem;
+    padding: 8px 20px;
+    color: #333; 
+    text-align: le;
+    font-size: 16px;
+    border-top: none; 
 }
 
-
-
-
-
+.icon {
+    font-size: 24px; 
+}

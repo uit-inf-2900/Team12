@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
@@ -8,7 +8,7 @@ using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 using Strikkeapp.Services;
 
-namespace Strikkeapp.Tests;
+namespace Strikkeapp.Tests.Services;
 
 public class InventoryTests : IDisposable
 {
@@ -18,6 +18,7 @@ public class InventoryTests : IDisposable
 
     // Create mock service
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
+    private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
 
     private Guid testUserGuid = Guid.NewGuid();
     private Guid testNeedleId = Guid.NewGuid();
@@ -25,13 +26,16 @@ public class InventoryTests : IDisposable
 
     public InventoryTests()
     {
+        _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
+                .Returns("hashedPassword");
+
         var dbName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
             .UseInMemoryDatabase(databaseName: dbName)
             .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        _context = new StrikkeappDbContext(options);
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
 
         _inventoryService = new InventoryService(_context, _mockTokenService.Object);
 
@@ -120,6 +124,22 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenGet_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToke";
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+
+        // Run service and check correct error
+        var res = _inventoryService.GetInventory(fakeToken);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
     public void AddNeedle_Ok()
     {
         var testRequest = new AddNeedleRequest
@@ -138,6 +158,31 @@ public class InventoryTests : IDisposable
 
         Assert.True(res.Success);
         Assert.NotEqual(Guid.Empty, res.ItemId);
+    }
+
+    [Fact]
+    public void FakeTokenAddNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToke";
+
+        var request = new AddNeedleRequest
+        {
+            UserToken = fakeToken,
+            Type = "Some type",
+            Size = 10,
+            Length = 10
+        };
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+
+        // Run service and check correct error
+        var res = _inventoryService.AddNeedle(request);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
     }
 
     [Fact]
@@ -170,7 +215,7 @@ public class InventoryTests : IDisposable
             UserToken = "testToken"
         };
 
-                // Set up mock service
+        // Set up mock service
         _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
             .Returns(TokenResult.ForSuccess(testUserGuid));
 
@@ -184,6 +229,95 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenUpdateNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToke";
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run test for updating single needle and check that it fails
+        var updateNeedle = _inventoryService.UpdateNeedle(new UpdateItemRequest
+        {
+            ItemId = testNeedleId,
+            UserToken = fakeToken
+        });
+        Assert.False(updateNeedle.Success, "Service should fail with fake token");
+
+        // Run test for updating needles in use and check that it fails
+        var updateNeedlesUsed = _inventoryService.UpdateNeedlesUsed(new UpdateItemRequest
+        {
+            UserToken = fakeToken,
+            ItemId = testNeedleId,
+            NewNum = 69
+        });
+        Assert.False(updateNeedlesUsed.Success, "Service should fail with fake token");
+    }
+    [Fact]
+    public void UpdateNonExistingNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.UpdateNeedle(new UpdateItemRequest {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void UpdatingNonExistingNeedles_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.UpdateNeedlesUsed(new UpdateItemRequest {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found for user", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void ExceedingNeedlesInInventory_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.UpdateNeedlesUsed(new UpdateItemRequest {
+            ItemId = testNeedleId,
+            UserToken = testToken,
+            NewNum = 100
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with too high number");
+        Assert.Equal("Exceeded inventory", res.ErrorMessage);
+    }
+    
+
+    [Fact]
     public void DeleteNeedle_Ok()
     {
         var testRequest = new DeleteItemRequest
@@ -191,7 +325,6 @@ public class InventoryTests : IDisposable
             ItemId = testNeedleId,
             UserToken = "testToken"
         };
-
 
         // Set up mock service
         _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
@@ -203,6 +336,47 @@ public class InventoryTests : IDisposable
         Assert.Equal(res.ItemId, testRequest.ItemId);
         // Make sure database is empty after deletion
         Assert.Empty(_context.NeedleInventory);
+    }
+
+    [Fact]
+    public void FakeTokenDeleteNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run service and check correct error
+        var res = _inventoryService.DeleteNeedle(new DeleteItemRequest
+        {
+            ItemId = testNeedleId,
+            UserToken = fakeToken
+        });
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void DeletingNonExistingNeedle_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.DeleteNeedle(new DeleteItemRequest {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found for user", res.ErrorMessage);
     }
 
 
@@ -233,9 +407,34 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenAddYarn_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToke";
+
+        var request = new AddYarnRequest
+        {
+            UserToken = fakeToken,
+            Type = "Some type",
+            Manufacturer = "Some Manufacturer",
+            Color = "Some color",
+        };
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+
+        // Run service and check correct error
+        var res = _inventoryService.AddYarn(request);
+
+        Assert.False(res.Success);
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
     public void IncreasingYarn_Ok() 
     {
-        var testRequest = new UpdateItemRequest
+        var testRequest = new UpdateYarnRequest
         {
             UserToken = "testToken",
             ItemId = testYarnId,
@@ -252,6 +451,33 @@ public class InventoryTests : IDisposable
         // Assert is mismatch between request and response
         Assert.Equal(res.ItemId, testRequest.ItemId);
         Assert.Equal(res.NewNum, testRequest.NewNum);
+    }
+
+    [Fact]
+    public void UpdateYarn_Ok()
+    {
+        var testToken = "testToken";
+        var testRequest = new UpdateYarnRequest
+        {
+            UserToken = testToken,
+            ItemId = testYarnId,
+            Type = "New Type",
+            Manufacturer = "New Manufacturer",
+            Color = "New Color",
+            Batch_Number = "New Batch",
+            Weight = 60,
+            Length = 666,
+            Gauge = "666/666",
+            Notes = "New Note"
+        };
+
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        var res = _inventoryService.UpdateYarn(testRequest);
+
+        Assert.True(res.Success);
     }
 
     [Fact]
@@ -277,6 +503,100 @@ public class InventoryTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenUpdateYarn_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run test for updating single yarn and check that it fails
+        var updateYarn = _inventoryService.UpdateYarn(new UpdateYarnRequest
+        {
+            ItemId = testYarnId,
+            UserToken = fakeToken
+        });
+
+        Assert.False(updateYarn.Success, "Service should fail with fake token");
+
+        // Run test for updating yarns in use and check that it fails
+        var updateYarnsUsed = _inventoryService.UpdateYarnUsed(new UpdateItemRequest
+        {
+            UserToken = fakeToken,
+            ItemId = testYarnId,
+            NewNum = 69
+        });
+
+        Assert.False(updateYarnsUsed.Success, "Service should fail with fake token");
+    }
+
+    [Fact]
+    public void UpdateNonExistingYarnUsed_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.UpdateYarnUsed(new UpdateItemRequest
+        {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found for user", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void UpdateNonExistingYarn_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.UpdateYarn(new UpdateYarnRequest
+        {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void ExceedingYarnInInventory_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test and check correct error
+        var res = _inventoryService.UpdateYarnUsed(new UpdateItemRequest
+        {
+            ItemId = testYarnId,
+            UserToken = testToken,
+            NewNum = 100
+        });
+
+        Assert.False(res.Success, "Service should fail with too high number");
+        Assert.Equal("Exceeded inventory", res.ErrorMessage);
+    }
+
+    [Fact]
     public void DeleteYarn_Ok() 
     {
         var testRequest = new DeleteItemRequest
@@ -298,4 +618,44 @@ public class InventoryTests : IDisposable
         Assert.Empty(_context.YarnInventory);
     }
 
+    [Fact]
+    public void FakeTokenDeleteYarn_Fails()
+    {
+        // Set up test data and mock service
+        var fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run service and check correct error
+        var res = _inventoryService.DeleteYarn(new DeleteItemRequest
+        {
+            ItemId = testYarnId,
+            UserToken = fakeToken
+        });
+
+        Assert.False(res.Success, "Service should fail with fake token");
+        Assert.Equal("Unauthorized", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void DeletingNonExistingYarn_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+        var fakeItemId = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.DeleteYarn(new DeleteItemRequest {
+            ItemId = fakeItemId,
+            UserToken = testToken
+        });
+
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with fake item id");
+        Assert.Equal("Item not found for user", res.ErrorMessage);
+    }
 }

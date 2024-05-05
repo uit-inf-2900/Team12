@@ -3,7 +3,7 @@ import { IoIosCloudUpload } from "react-icons/io";          // Import the icon c
 import InputField from '../../Components/InputField';
 import './UpLoad.css';
 import "../../GlobalStyles/main.css";
-import CustomButton from '../../Components/Button';
+import { CustomButton } from '../../Components/Button';
 import axios from 'axios';
 
 

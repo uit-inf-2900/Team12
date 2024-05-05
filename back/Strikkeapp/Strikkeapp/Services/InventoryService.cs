@@ -12,7 +12,7 @@ public interface IInventoryService
     public UpdateInventoryResult UpdateNeedlesUsed(UpdateItemRequest request);
     public DeleteItemResult DeleteNeedle(DeleteItemRequest request);
     public InventoryResult AddYarn(AddYarnRequest request);
-    public UpdateInventoryResult UpdateYarn(UpdateItemRequest request);
+    public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request);
     public UpdateInventoryResult UpdateYarnUsed(UpdateItemRequest request);
     public DeleteItemResult DeleteYarn(DeleteItemRequest request);
 }
@@ -298,7 +298,7 @@ public class InventoryService : IInventoryService
 
     }
 
-    public UpdateInventoryResult UpdateYarn(UpdateItemRequest request)
+    public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request)
     {
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
@@ -321,8 +321,51 @@ public class InventoryService : IInventoryService
                     return UpdateInventoryResult.ForFailure("Item not found");
                 }
 
-                yarnInventory.NumItems = request.NewNum;
-                _context.SaveChanges();
+                if(request.NewNum != yarnInventory.NumItems)
+                {
+                    yarnInventory.NumItems = request.NewNum;
+                    _context.SaveChanges();
+                }
+
+                if(request.Type != null){
+                    yarnInventory.Type = request.Type;
+                    _context.SaveChanges();
+                }
+
+                if(request.Manufacturer != null)
+                {
+                    yarnInventory.Manufacturer = request.Manufacturer;
+                    _context.SaveChanges();
+                }
+
+                if(request.Color != null){
+                    yarnInventory.Batch_Number = request.Batch_Number;
+                    yarnInventory.Color = request.Color;
+                }
+
+                if(request.Weight != null)
+                {
+                    yarnInventory.Weight = request.Weight;
+                    _context.SaveChanges();
+                }
+
+                if (request.Length != null)
+                {
+                    yarnInventory.Length = request.Length;
+                    _context.SaveChanges();
+                }
+
+                if(request.Gauge != null)
+                {
+                    yarnInventory.Gauge = request.Gauge;
+                    _context.SaveChanges();
+                }
+
+                if(request.Notes != null)
+                {
+                    yarnInventory.Notes = request.Notes;
+                    _context.SaveChanges();
+                }
 
                 transaction.Commit();
                 return UpdateInventoryResult.ForSuccessNum(yarnInventory.ItemID, yarnInventory.NumItems);
@@ -394,7 +437,7 @@ public class InventoryService : IInventoryService
             {
                 var yarnToDelete = _context.YarnInventory
                     .Where(yi => yi.UserId == userId)
-                    .FirstOrDefault();
+                    .FirstOrDefault(yid => yid.ItemID == request.ItemId);
 
                     if(yarnToDelete == null)
                     {

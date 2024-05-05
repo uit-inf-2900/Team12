@@ -6,12 +6,18 @@ import axios from 'axios';
 import Image from "../../images/6.png";
 import InputField from '../../Components/InputField';
 import ModalContent from '../../Components/ModualContent';
-import CustomButton from '../../Components/Button';
+import { CustomButton } from '../../Components/Button';
 import SetAlert from '../../Components/Alert';
+import { Modal, Box } from '@mui/material';
+import '../../GlobalStyles/BoxAndContainers.css';
+import ConfirmationVerification from '../SignUp_LogIn/ConfirmationVerification';
+
+
 
 const ProfilePage = () => {
     // State to toggle between edit and view mode
     const [isEditing, setIsEditing] = useState(false);
+    const [showVerificationModal, setShowVerificationModal] = useState(false);  // State to control visibility of the verification modal
 
     // State to store user profile data
     const [userProfileState, setUserProfileState] = useState({
@@ -32,7 +38,11 @@ const ProfilePage = () => {
     // State to store error message, show modal and modal message
     const [profileFetchError, setProfileFetchError] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [modalMessage, setModalMessage] = useState('');
+    const [showConfirmationModal, setShowConfirmationModal] = useState(true);
+
+    const handleCloseConfirmationModal = () => {
+        setShowConfirmationModal(false);
+    };
 
     // For the user to see alert messages 
     const [alertInfo, setAlertInfo] = useState({
@@ -43,8 +53,9 @@ const ProfilePage = () => {
     
 
     // Fetch user profile data on page load
+    const isVerified = sessionStorage.getItem('isVerified');
+    const token = sessionStorage.getItem('token');
     useEffect(() => {
-        const token = sessionStorage.getItem('token');
         if (token) {
             const fetchData = async () => {
                 try {
@@ -77,16 +88,30 @@ const ProfilePage = () => {
 
     // Save the updated profile data
     const handleSave = async () => {
-        if (!editState.userFullName || !editState.userEmail) {
+        // Check if full name, email, or old password is empty
+        if (!editState.userFullName || !editState.userEmail || !editState.oldPassword) {
             setAlertInfo({
                 open: true,
                 severity: 'error',
-                message: 'Full name and email cannot be empty.'
+                message: 'Full name, email, and current password must all be provided.'
             });
             return;
         }
-
-        if (editState.newPassword !== editState.confirmNewPassword) {
+    
+        // Handle password update logic
+        let newPasswordToSend = editState.newPassword;
+        if (editState.newPassword === '') {
+            if (editState.confirmNewPassword === '') {
+                newPasswordToSend = editState.oldPassword;
+            } else {
+                setAlertInfo({
+                    open: true,
+                    severity: 'error',
+                    message: 'New password is empty but confirm password is not.'
+                });
+                return;
+            }
+        } else if (editState.newPassword !== editState.confirmNewPassword) {
             setAlertInfo({
                 open: true,
                 severity: 'error',
@@ -95,13 +120,12 @@ const ProfilePage = () => {
             return;
         }
     
-        const token = sessionStorage.getItem('token');
         const payload = {
             token: token,
             userFullName: editState.userFullName,
             userEmail: editState.userEmail,
             oldPassword: editState.oldPassword,
-            newPassword: editState.newPassword
+            newPassword: newPasswordToSend
         };
     
         try {
@@ -120,11 +144,6 @@ const ProfilePage = () => {
                 });
             } else {
                 throw new Error('Failed to update profile');
-                setAlertInfo({
-                    open: true,
-                    severity: 'error',
-                    message: 'Failed to update profile.'
-                })
             }
         } catch (error) {
             console.error("Error updating profile data: ", error);
@@ -136,6 +155,7 @@ const ProfilePage = () => {
             });
         }
     };
+    
     
 
 
@@ -150,34 +170,57 @@ const ProfilePage = () => {
 
     // Handle delete account click
     const handleDeleteClick = () => {
-        setShowModal(true);
-        // TODO: Implement real account deletion here
-        setModalMessage('Are you sure you want to delete your account? Everything will be lost.');
-    };
-
-    // Handle close modal
-    const handleCloseModal = () => {
+        if (token) {
+            try {
+                axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
+                sessionStorage.removeItem('token');  // Assuming you're using session storage for token management
+                setAlertInfo({
+                    open: true,
+                    severity: 'success',
+                    message: 'Your account has been successfully deleted.'
+                });
+                setTimeout(() => {
+                // Redirect to login or home
+                window.location.href = '/login';
+                }, 500);
+            } catch (error) {
+                console.error("Error fetching profile data: ", error);
+                setProfileFetchError("Failed to fetch profile data.");
+                setAlertInfo({
+                    open: true,
+                    severity: 'error',
+                    message: 'Failed to delete account.'
+                });
+            }
+        }
         setShowModal(false);
     };
 
-    // Handle confirm delete
-    const handleConfirmDelete = () => {
-        setShowModal(false);
-        // Implement real account deletion here
-    };
 
     // Modal content for delete account 
-    const deleteAccountContent = (
-        <div className='box light'>
-            <div className="deleteacc-body">{modalMessage}</div>
-            {!modalMessage.startsWith('Goodbye') && (
-                <div className="deleteacc-footer">
-                    <CustomButton themeMode="light" onClick={handleConfirmDelete}>Yes</CustomButton>
-                    <CustomButton themeMode="light" onClick={handleCloseModal}>No</CustomButton>
-                </div>
-            )}
-        </div>
+    const deleteAccountContent = () => (
+        <Modal open={showModal} onClose={() => setShowModal(false)}>
+            <Box className="box-container">
+                <Box className="box light" sx={{ minWidth: '35rem', height: '15rem' }}>
+                    <h4>Are you sure you want to delete your account? Everything will be lost and it cannot be undone.</h4>
+                    <CustomButton
+                        thememode="dark"
+                        onClick={handleDeleteClick}
+                        style={{ marginTop: '2rem', minWidth: '15rem', height: '4rem' }}
+                    >Yes</CustomButton>
+                    <CustomButton 
+                        thememode="dark" 
+                        onClick={() => setShowModal(false)}
+                        style={{ minWidth: '15rem', height: '4rem' }}
+                    >No</CustomButton>
+                </Box>
+            </Box>
+        </Modal>
     );
+
+    const handleDelete = () => {
+        setShowModal(true);
+    }
 
 
     return (
@@ -192,22 +235,35 @@ const ProfilePage = () => {
                 </p>
                 <div style={{flexGrow: 1}}></div>
                 <p className="profile-options" style={{fontWeight: 'bold'}}>My Profile</p>
-                <div className="profile-options">
-                    <Link to="/wishlist" style={{color: "black"}}>Wishlist</Link>
-                </div>
+
+                {/* If the user are not verified, show a button with the option to verify */}
+                {isVerified !== 'verified' && (
+                <>
+                    <CustomButton onClick={() => setShowVerificationModal(true)} themeMode="dark">
+                        Verify User
+                    </CustomButton>
+                    <ConfirmationVerification
+                        navigation={"/profile"}
+                        isOpen={showVerificationModal}
+                        onClose={() => setShowVerificationModal(false)}
+                        userToken={token}
+                    />
+                </>
+                )}
+
                 <div style={{flexGrow: 2}}></div>
                 <div className='infoText-small'>
                     <Link to="/contactus" style={{color: "black", borderBottom: '1px solid'}}>Contact Us</Link>
                 </div>
                 <div style={{flexGrow: 0.2}}></div>
-                <div onClick={handleDeleteClick} className='infoText-small' style={{color: "black", borderBottom: '1px solid', cursor: 'pointer'}}>
+                <div onClick={handleDelete} className='infoText-small' style={{color: "black", borderBottom: '1px solid', cursor: 'pointer'}}>
                     Delete account
                 </div>
             </div>
             <ModalContent
                 open={showModal}
-                handleClose={handleCloseModal}
-                infobox={deleteAccountContent}
+                handleClose={() => setShowModal(false)}
+                infobox={deleteAccountContent()}
             />
             {/* The right side of the profile page. Can be either view mode or edit mode*/}
             <div className="box light">
@@ -218,7 +274,7 @@ const ProfilePage = () => {
                         <h2>Edit your information</h2>
                         <InputField label="Full Name" type="text" name="userFullName" value={editState.userFullName} onChange={handleChange} />
                         <InputField label="Email" type="email" name="userEmail" value={editState.userEmail} onChange={handleChange} />
-                        <InputField label="Old Password" type="password" name="oldPassword" value={editState.oldPassword} onChange={handleChange} />
+                        <InputField label="Current Password" type="password" name="oldPassword" value={editState.oldPassword} onChange={handleChange} />
                         <InputField label="New Password" type="password" name="newPassword" value={editState.newPassword} onChange={handleChange} />
                         <InputField label="Confirm New Password" type="password" name="confirmNewPassword" value={editState.confirmNewPassword} onChange={handleChange} />
                         <CustomButton themeMode="light" iconName='save' onClick={handleSave}>Save Changes</CustomButton>

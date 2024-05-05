@@ -4,6 +4,8 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 
 using Strikkeapp.User.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace Strikkeapp.Services;
 
@@ -12,6 +14,8 @@ public interface IUserService
     public UserServiceResult CreateUser(string userEmail, string userPwd, string userFullName, DateTime userDOB);
     public UserServiceResult LogInUser(string userEmail, string userPwd);
     public DeleteUserResult DeleteUser(string userToken);
+    public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin);
+    public BanUserResult BanUser(string userToken, Guid bannedUser, bool shouldBan);
 }
 
 public class UserService : IUserService
@@ -52,6 +56,10 @@ public class UserService : IUserService
             var hasedPwd = HashPassword(userEmail, userPwd);
             userLogin.UserPwd = hasedPwd;
 
+            // ems
+            // Send verification email
+            // SendVerificationEmail(userLogin);
+
             // Save new entry
             _context.UserLogIn.Add(userLogin);
 
@@ -66,8 +74,9 @@ public class UserService : IUserService
             _context.SaveChanges();
 
             // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId, userDetails.IsAdmin);
-            return UserServiceResult.ForSuccess(token, userDetails.IsAdmin);
+            var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId, 
+                userDetails.IsAdmin, userLogin.UserStatus);
+            return UserServiceResult.ForSuccess(token, userDetails.IsAdmin, userLogin.UserStatus);
             }
         
 
@@ -119,8 +128,9 @@ public class UserService : IUserService
                 .FirstOrDefault();
 
             // Generate and return token
-            var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId, isAdmin);
-            return UserServiceResult.ForSuccess(token, isAdmin);
+            var token = _tokenService.GenerateJwtToken(userEmail, loginInfo.UserId, 
+                isAdmin, loginInfo.UserStatus);
+            return UserServiceResult.ForSuccess(token, isAdmin, loginInfo.UserStatus);
         }
 
         // Handle errors
@@ -166,4 +176,102 @@ public class UserService : IUserService
         }
     }
 
+    public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if(!tokenResult.Success)
+        {
+            return UpdateAdminResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenResult.UserId;
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == userId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if(!isAdmin)
+        {
+            return UpdateAdminResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var user = _context.UserDetails
+                    .FirstOrDefault(u => u.UserId == updatedUser);
+
+                if(user == null)
+                {
+                    return UpdateAdminResult.ForFailure("User not found");
+                }
+
+                user.IsAdmin = newAdmin;
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return UpdateAdminResult.ForSuccess(updatedUser, newAdmin);
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return UpdateAdminResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public BanUserResult BanUser(string userToken, Guid bannedUser, bool shouldBan)
+    {
+        var tokenRes = _tokenService.ExtractUserID(userToken);
+        if(!tokenRes.Success)
+        {
+            return BanUserResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenRes.UserId;
+
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == userId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if(!isAdmin)
+        {
+            return BanUserResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var user = _context.UserLogIn
+                    .FirstOrDefault(u => u.UserId == bannedUser);
+
+                if(user == null)
+                {
+                    return BanUserResult.ForFailure("User not found");
+                }
+
+                if(shouldBan)
+                {
+                    user.UserStatus = "banned";
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    user.UserStatus = "verified";
+                    _context.SaveChanges();
+                }
+
+                transaction.Commit();
+                return BanUserResult.ForSuccess(bannedUser);
+            }
+            catch(Exception ex)
+            {
+                transaction.Rollback();
+                return BanUserResult.ForFailure(ex.Message);
+            }
+        }
+    }
 }

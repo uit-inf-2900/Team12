@@ -28,7 +28,7 @@
 .section-container 
 {
     margin: 0 auto;
-    max-width: 600px; 
+    max-width: 800px; 
     margin-bottom: 50px; 
     padding: 20px; 
     text-align: left; 
@@ -128,4 +128,20 @@
     margin-bottom: 20px;
 }
 
+/* ============= IMAGE CONTAINERS (used in calculators)============= */
+.calculator-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+}
+
+/* DENNE BRUKES FOR Å MINSKE BILDET RIKTIG*/
+.calculator-image-container img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
 

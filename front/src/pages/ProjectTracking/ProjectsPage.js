@@ -18,6 +18,8 @@ import AddButton from "../../Components/AddButton";
 import { Fab, Modal, Box } from "@mui/material";
 
 
+import { AddButton } from "../../Components/Button";
+import ModalContent from "../../Components/ModualContent";
 
 
 const Projects = () => {
@@ -126,8 +128,12 @@ const Projects = () => {
             
             
 
+<<<<<<< HEAD
             
             <div className="page-container">
+=======
+            <AddButton iconName='add' onClick={() => toggleModal(true)} />
+>>>>>>> main
 
             <AddButton onClick={toggleUpload} />
             

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {Link,  BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode'
+import ScrollToTop from './Components/scrollToTop';
 
 
 // Import our pages
@@ -16,12 +17,14 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
-import WishList from './pages/ProfilePage/WishList';
 import NotFound from './pages/NotFound';
 import Footer from './Components/Footter';
 import Theme from './Components/Theme';
 import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
+import Counter from './pages/counter';
+import IncreaseDecreaseCalculator from './pages/Calculator/IncreaseDecreaseCalculator';
+import { YarnCalculator } from './pages/Calculator/YarnCalculator';
 
 
 export default function App() {
@@ -52,6 +55,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
     <Router>
+      <ScrollToTop/>
       {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
       <div className="page-container">          
         <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
@@ -83,8 +87,10 @@ export default function App() {
                 <Route path="/stash" element={<Stash />} />
                 <Route path="/recipes" element={<Recipes />} />
                 <Route path='/projects' element={<Projects/>} />
+                <Route path='/yarncalculator' element={<YarnCalculator/>} />
+                <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
                 <Route path="/profile" element={<Profilepage />} />
-                <Route path="/wishlist" element={<WishList />} />
+                <Route path='/counter' element={<Counter/>}/> 
               </>
             )}
             <Route path="/reset-password" element={<ResetPassword />} />

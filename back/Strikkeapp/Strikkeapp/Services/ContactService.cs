@@ -12,7 +12,7 @@ public interface IContactService
     // Generate a contact request 
     public Guid CreateContactRequest (ContactRequestDto request); 
     // List inncomming contact requests
-    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive); 
+    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled); 
 
 
     // svare på mail 
@@ -59,17 +59,22 @@ public class ContactService : IContactService
 
 
     // Create a list of contact requests
-    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive)
+    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled)
     {
         // Get alle the contact requests
         var contactRequests = _context.ContactRequests.ToList();
 
         // Convert to dto
-        var contactRequestDtos = contactRequests.Where(c => c.IsActive == IsActive).Select(c => new ContactRequestDto
+        var contactRequestDtos = contactRequests
+        .Where(c => c.IsActive == IsActive && c.IsHandled == IsHandled)
+        .Select(c => new ContactRequestDto
         {
+            ContactRequestId = c.ContactRequestId,
             UserEmail = c.Email!,
             UserName = c.FullName!,
-            UserMessage = c.Message!
+            UserMessage = c.Message!,
+            IsActive = c.IsActive, 
+            IsHandled = c.IsHandled
         });
 
         return contactRequestDtos; 
@@ -144,7 +149,9 @@ public class ContactService : IContactService
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
         if (contactRequest == null) return false;
 
-        contactRequest.ResponseMessage = responseMessage;
+
+        // have this '\n new message \n' to see when new message is added
+        contactRequest.Message += $"\n new message \n Response: {responseMessage}";
         _context.SaveChanges();
         return true;
     }

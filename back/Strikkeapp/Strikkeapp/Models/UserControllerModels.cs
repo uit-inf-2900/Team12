@@ -41,8 +41,35 @@ public class LogInUserRequest
     }
 }
 
+public class UpdateAdminRequest
+{
+    public string UserToken { get; set; } = string.Empty;
+    public Guid UpdateUser { get; set; }
+    public bool NewAdmin { get; set; }
+
+    public bool requestOk()
+    {
+        return (!string.IsNullOrWhiteSpace(UserToken)
+            && UpdateUser != Guid.Empty);
+    }
+}
+
+public class BanUserRequest
+{
+    public string UserToken { get; set; } = string.Empty;
+    public Guid BanUserId { get; set; }
+    public bool Ban { get; set; }
+
+    public bool requestOk()
+    {
+        return (!string.IsNullOrWhiteSpace(UserToken)
+            && BanUserId != Guid.Empty);
+    }
+}
+
 public class UserResultDto
 {
     public string? Token { get; set; }
     public bool IsAdmin { get; set; }
+    public string UserStatus { get; set; } = string.Empty;
 }
