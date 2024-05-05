@@ -182,6 +182,8 @@ const ViewUsers = () => {
 
     return (
         <div>
+            <h2>View all Users</h2>
+
             {/* Setup the alert status */}
             <SetAlert 
                 open={alertOpen} 

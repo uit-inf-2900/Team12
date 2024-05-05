@@ -131,7 +131,7 @@ const Dashboard = ({ toggleView }) => {
                     title="Newsletter subscripers"
                     stats={Newsletter}
                     hovermessage="Click to view newsletter subscribers"
-                    chartComponent={renderContent(Messages, "Message Statistics", "pileOfSweaters")}
+                    chartComponent={renderContent(0, "Newsletter Statistics", "pileOfSweaters")}
                     onClick={() => toggleView('newsletter')} 
                 /> 
 
