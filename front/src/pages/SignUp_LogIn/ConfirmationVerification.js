@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Modal, Box } from '@mui/material';
+import { Modal, Box, Typography } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip'; // Import Tooltip component
 
 // Styles 
 import '../../GlobalStyles/BoxAndContainers.css';
@@ -9,7 +10,6 @@ import '../../GlobalStyles/BoxAndContainers.css';
 import {CustomButton} from "../../Components/Button";
 import InputField from "../../Components/InputField";
 import { useNavigate } from 'react-router-dom'; 
-
 
 /**
  * A modal component that handles user verification with a code.
@@ -20,8 +20,8 @@ import { useNavigate } from 'react-router-dom';
  * @param {string} [props.navigation] - Path to navigate on successful verification
  */
 const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) => {
-    // State for verification code
     const [verificationCode, setVerificationCode] = useState('');
+    const [isHovering, setIsHovering] = useState(false); 
     const navigate = useNavigate(); 
 
     // Avoid rendering the modal if it should not be open
@@ -36,14 +36,13 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
             const response = await axios.patch(`http://localhost:5002/verifyuser?UserToken=${userToken}&VerificationCode=${verificationCode}`);
             console.log("Verification response:", response);
 
-
             if (response.status === 200 ) {
                 console.log("Verification successful, updating session storage.");
                 sessionStorage.setItem('isVerified', 'verified');
                 alert('User has been verified and token updated');
-                onClose();                                          // Close modal upon successful verification
-                console.log("Navigating to home page...");          // Navigate to the home page
-                
+                onClose();
+                console.log("Navigating to home page...");
+
                 // If navigation is specified, navigate to the specified path by using the useNavigate hook
                 // Otherwise, redirect to the home page using the window.location.href property to make sure the page is reloaded
                 if (navigation)
@@ -62,7 +61,10 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
         <Modal open={isOpen} onClose={onClose}>
             <Box className="box-container">
                 <Box className="box light" sx={{ minWidth: '35rem', height: '15rem' }}>
-                    <label htmlFor="verificationCode">verification code</label>
+                    <h2 htmlFor="verificationCode">Verification code</h2>
+                    <Typography variant="body1">Please enter the verification code sent to your email.</Typography>
+                    <Typography variant="body2">If you did not receive any message, please contact support.</Typography>
+                    <br />
                     <InputField
                         label="verification code"
                         type="number"
@@ -75,11 +77,17 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
                         onClose={onClose}
                         style={{ minWidth: '15rem', height: '4rem' }}
                     >verify</CustomButton>
-                    <CustomButton 
-                        thememode="dark" 
-                        onClick={onClose} 
-                        style={{ minWidth: '15rem', height: '4rem' }}
-                    >Close</CustomButton>
+                    
+                    {/* Custom Tooltip to show message */}
+                    <Tooltip open={isHovering} title="You can verify your user the next time you log in, or on your profile">
+                        <div onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+                            <CustomButton 
+                                thememode="dark" 
+                                onClick={onClose} 
+                                style={{ minWidth: '15rem', height: '4rem' }}
+                            >Close</CustomButton>
+                        </div>
+                    </Tooltip>
                 </Box>
             </Box>
         </Modal>
