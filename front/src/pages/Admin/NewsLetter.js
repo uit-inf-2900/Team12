@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { TableContainer, TablePagination, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import axios from 'axios';
 
 import { fetchSubscribers } from './apiServices';
@@ -22,11 +22,20 @@ const ViewSubscribers = () => {
     const [emailToRemove, setEmailToRemove] = useState('');
     const [alert, setAlert] = useState({ severity: '', message: '' });
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
     // Fetch the subscribers 
     useEffect(() => {
         loadSubscribers();
     }, []);
+
+    // User interaction handlers
+    const handleChangePage = (event, newPage) => setPage(newPage);
+    const handleChangeRowsPerPage = event => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
 
 
     /**
@@ -120,7 +129,9 @@ const ViewSubscribers = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {filteredSubscribers.map((subscriber, index) => (
+                                    {filteredSubscribers
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((subscriber, index) => (
                                         <TableRow key={index}>
                                             <TableCell>{subscriber.email}</TableCell>
                                             <TableCell>
@@ -148,6 +159,16 @@ const ViewSubscribers = () => {
                             There are no registerd newsletter subscribers at the moment.
                         </div>
                     )}
+                    {/* Navigate between pages of data displayed within a table */}
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={subscribers.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
                 </>
             )}
             {/* Make sure the admin want to remove the subscriber from the newsletter */}
