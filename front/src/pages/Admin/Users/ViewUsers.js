@@ -19,7 +19,11 @@ import {CustomButton} from '../../../Components/Button';
 import { getStatusLabel } from '../../../Components/UserLable';
 
 
-  // Fetch user data from the backend
+
+/**
+ * Function to fetch user data from the server.
+ * @returns {Array} Array of user data.
+ */
 export const fetchUserData = async () => {
     try {
     const response = await fetch('http://localhost:5002/getUsers');
@@ -35,6 +39,10 @@ export const fetchUserData = async () => {
 };
 
 
+/**
+ * React component to view and manage users.
+ * @returns {JSX.Element} ViewUsers component JSX.
+ */
 const ViewUsers = () => {
     // State declarations
     const [users, setUsers] = useState([]);
@@ -53,8 +61,11 @@ const ViewUsers = () => {
     const [refreshData, setRefreshData] = useState(false);
 
 
+    // Get the user token from the session storage
     const token = sessionStorage.getItem('token');
 
+
+    // Fetch user data from the server
     useEffect(() => {
         setLoading(true);
         fetchUserData().then(data => {
@@ -73,6 +84,7 @@ const ViewUsers = () => {
         setPage(0);
     };
 
+    // Sorting and filtering logic
     const handleSearchChange = event => setSearchText(event.target.value.toLowerCase());
     const handleSort = field => {
         const isAsc = sortField === field && sortDirection === 'asc';
@@ -80,6 +92,7 @@ const ViewUsers = () => {
         setSortField(field);
     };
 
+    // Dialog action handlers
     const handleActionOpen = (message, action) => {
         setDialogMessage(message);
         setDialogAction(() => action);
@@ -92,7 +105,7 @@ const ViewUsers = () => {
     };
     const handleActionCancel = () => setDialogOpen(false);
 
-     // Sorting and filtering logic
+    // Sorting and filtering logic
     const filteredUsers = users.filter(user => user.fullName.toLowerCase().includes(searchText) || user.email.toLowerCase().includes(searchText));
     const sortedUsers = filteredUsers.sort((a, b) => (a[sortField] < b[sortField]) ? (sortDirection === 'asc' ? -1 : 1) : (a[sortField] > b[sortField]) ? (sortDirection === 'asc' ? 1 : -1) : 0);
 
