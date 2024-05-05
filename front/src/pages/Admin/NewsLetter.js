@@ -6,7 +6,13 @@ import { fetchSubscribers } from './apiServices';
 import SetAlert from '../../Components/Alert';
 import { CustomButton } from '../../Components/Button';
 
+
+/**
+ * Component for viewing and managing newsletter subscribers.
+ * @returns {JSX.Element} - ViewSubscribers component.
+ */
 const ViewSubscribers = () => {
+    // State variables 
     const [subscribers, setSubscribers] = useState([]);
     const [filteredSubscribers, setFilteredSubscribers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,10 +23,15 @@ const ViewSubscribers = () => {
     const [alert, setAlert] = useState({ severity: '', message: '' });
 
 
+    // Fetch the subscribers 
     useEffect(() => {
         loadSubscribers();
     }, []);
 
+
+    /**
+     * Function to fetch the newsletter subscribers 
+     */
     const loadSubscribers = () => {
         setLoading(true);
         fetchSubscribers().then(data => {
@@ -35,26 +46,33 @@ const ViewSubscribers = () => {
         });
     };
 
+    // Filter subscribers based on search term 
     useEffect(() => {
-        const filtered = subscribers.filter(subscriber =>
-            subscriber.email.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        const filtered = subscribers
+            .filter(subscriber => subscriber.email.toLowerCase().includes(searchTerm.toLowerCase()))
+            .sort((a, b) => a.email.localeCompare(b.email)); // Sort alphabetically
         setFilteredSubscribers(filtered);
     }, [searchTerm, subscribers]);
 
+    // Handle the change when seraching 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
+    // Remove emails from subscription list when clicked on
     const handleRemoveClick = (email) => {
         setEmailToRemove(email);
         setDialogOpen(true);
     };
 
+    // Handle the close of the dialog
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
 
+    /**
+     * Function to remove a subscriber 
+     */
     const confirmRemoveSubscriber = () => {
         axios.delete(`http://localhost:5002/api/newsletter/removesubscriber?subEmail=${encodeURIComponent(emailToRemove)}`)
             .then(response => {
@@ -76,10 +94,12 @@ const ViewSubscribers = () => {
     return (
         <div style={{ justifyContent: 'center' }}>
             <h2>View Subscribers</h2>
+            {/* Show a loding bar when loading from backen */}
             {loading ? (
                 <CircularProgress style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }} />
             ) : (
                 <>
+                    {/* Show the search bar as long as there are users in the subscribers list  */}
                     {subscribers.length > 0 && (
                         <TextField
                             label="Search for subscribers"
@@ -118,25 +138,26 @@ const ViewSubscribers = () => {
                             </Table>
                         </TableContainer>
                     ) : subscribers.length > 0 ? (
+                        // Show a message if the email search is not found 
                         <div style={{ textAlign: 'center', margin: '20px' }}>
-                            There are no registerd newsletter subscribers with the given email.
+                            No subscribers found with the given search term.
                         </div>
                     ) : (
+                        // Show a message if there are no registerd newsletter subscribers
                         <div style={{ textAlign: 'center', margin: '20px' }}>
                             There are no registerd newsletter subscribers at the moment.
                         </div>
                     )}
                 </>
             )}
+            {/* Make sure the admin want to remove the subscriber from the newsletter */}
             <Dialog
                 open={dialogOpen}
                 onClose={handleCloseDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">{"Confirm Removal"}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
+                    <DialogContentText id="alert-dialog-description" color="black">
                         Are you sure you want to remove {emailToRemove} from the newsletter list?
                     </DialogContentText>
                 </DialogContent>
@@ -148,6 +169,7 @@ const ViewSubscribers = () => {
                 </DialogActions>
             </Dialog>
             
+            {/* Alert for the admin to tell the user if all is good, or if something went wrong */}
             <SetAlert open={open} setOpen={setOpen} severity={alert.severity} message={alert.message} />
         </div>
     );
