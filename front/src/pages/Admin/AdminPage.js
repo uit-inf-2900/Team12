@@ -3,7 +3,7 @@ import "../../GlobalStyles/main.css";
 import ViewMessages from './Messages/ViewMessages';
 import ViewUsers from './Users/ViewUsers';
 import Dashboard from './Dashboard/Dashboard';
-import ViewSubscribers from './NewsLetter';
+import ViewSubscribers from './ViewSubscribers';
 import { FaArrowLeft } from 'react-icons/fa';
 
 

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { render, screen , fireEvent} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ViewUsers from '../pages/Admin/Users/ViewUsers';  
+import ViewUsers from '../../pages/Admin/Users/ViewUsers';
 
 
 // Helper function to render the component within the test

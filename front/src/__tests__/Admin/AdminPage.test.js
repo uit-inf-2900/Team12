@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import AdminPage from '../pages/Admin/AdminPage';
+import AdminPage from '../../pages/Admin/AdminPage';
 import { createRoot } from 'react-dom';
 
 describe('AdminPage', () => {
