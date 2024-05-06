@@ -128,12 +128,9 @@ const Projects = () => {
             
             
 
-<<<<<<< HEAD
             
             <div className="page-container">
-=======
             <AddButton iconName='add' onClick={() => toggleModal(true)} />
->>>>>>> main
 
             <AddButton onClick={toggleUpload} />
             
