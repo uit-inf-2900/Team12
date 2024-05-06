@@ -35,7 +35,7 @@ const Projects = () => {
     //fetch all projects in DB
     const fetchProjects = async () => {
         const token = sessionStorage.getItem('token');
-        const url = `http://localhost:5002/api/projects/getprojects?userToken=${token}`;
+        const url = `http://localhost:5002/api/projects/projects?userToken=${token}`;
         try {
             const response = await fetch(url);
             if (response.ok) {

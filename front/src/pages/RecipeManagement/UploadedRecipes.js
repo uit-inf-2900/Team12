@@ -8,8 +8,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MultiSelect from '../../Components/MultiSelect';
 import Card from '../../Components/Card';
-import PDF from '../../Components/PDFviewer';
-import PDFViewer from '../../Components/PDFwindow';
+import PDFViewer from '../../Components/PDFviewer';
+
 import { Fab, Modal, Box } from "@mui/material";
 
 const UploadedRecipes = () => {
@@ -23,7 +23,7 @@ const UploadedRecipes = () => {
 
     const toggleRecipeCard = () => {
         setRecipeCard(!recipeCard);
-    }
+    };
 
     // Effect to fetch recipes on component mount
     useEffect(() => {
@@ -73,6 +73,7 @@ const UploadedRecipes = () => {
         setSelectedRecipe(recipe);
         setRecipeCard(true);
         
+        
     };
 
     const handleRecipeDelete = () => {
@@ -116,11 +117,12 @@ const UploadedRecipes = () => {
                         
                     ))}
                     
-                    {selectedRecipe && 
+                    {selectedRecipe && (
+
                         <Modal open={recipeCard} onClose={toggleRecipeCard}>
-                            <PDF id={selectedRecipe.recipeId} onClose={toggleRecipeCard} />
+                            <PDFViewer id={selectedRecipe.recipeId} onClose={toggleRecipeCard} />
                         </Modal>
-                    }   
+                    )}   
                 </div>
                 
                 
