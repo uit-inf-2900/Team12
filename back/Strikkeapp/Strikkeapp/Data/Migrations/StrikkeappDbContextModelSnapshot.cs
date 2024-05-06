@@ -162,6 +162,12 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ProjectInventoryIds")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectName")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("RecipeId")
                         .HasColumnType("TEXT");
 
@@ -224,6 +230,31 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("ProjectTracking");
                 });
 
+            modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectYarnInventoryEntity", b =>
+                {
+                    b.Property<Guid>("ProjectInventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("NumberInUse")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProjectInventoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProjectYarnInventory");
+                });
+
             modelBuilder.Entity("Strikkeapp.Data.Entities.UserDetails", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -246,8 +277,8 @@ namespace Strikkeapp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("b3616d88-501b-4395-a317-daf11f9a5fea"),
-                            DateOfBirth = new DateTime(2024, 5, 6, 9, 24, 59, 341, DateTimeKind.Local).AddTicks(3440),
+                            UserId = new Guid("6fbe0ff0-1ac7-4852-ac3a-bb212f19fb61"),
+                            DateOfBirth = new DateTime(2024, 5, 6, 22, 4, 40, 804, DateTimeKind.Local).AddTicks(9100),
                             IsAdmin = true,
                             UserFullName = "Knithub Admin"
                         });
@@ -284,9 +315,9 @@ namespace Strikkeapp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("b3616d88-501b-4395-a317-daf11f9a5fea"),
+                            UserId = new Guid("6fbe0ff0-1ac7-4852-ac3a-bb212f19fb61"),
                             UserEmail = "admin@knithub.no",
-                            UserPwd = "AQAAAAIAAYagAAAAEPOL2TGlbemVJUakbYxrBQP5UiH1r4Mz22xvX9nsP3smhMWfJctUI/Pt1VX9lRzz3g==",
+                            UserPwd = "AQAAAAIAAYagAAAAEIptBNtmjydTTmmse38vtyH+lsr+qFoj5oMxIskybBNwU8Q9qXv2cW13LPXa3AVGLg==",
                             UserStatus = "verified",
                             UserVerificationCode = 999999
                         });
@@ -407,6 +438,15 @@ namespace Strikkeapp.Data.Migrations
                         .HasForeignKey("KnittingRecipeId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectYarnInventoryEntity", b =>
+                {
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithMany()
                         .HasForeignKey("UserId")
