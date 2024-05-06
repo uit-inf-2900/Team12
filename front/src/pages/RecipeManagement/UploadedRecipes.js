@@ -8,7 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MultiSelect from '../../Components/MultiSelect';
 import Card from '../../Components/Card';
-
+import PDF from '../../Components/PDFviewer';
 import PDFViewer from '../../Components/PDFwindow';
 
 
@@ -81,7 +81,7 @@ const UploadedRecipes = () => {
         { value: 'gauge', name: 'Gauge' }
     ];
 
-    // Show loading state or recipes list
+    // Show loading state or recipes list 
     return (
         <div className="page-container">
             <h1>My Recipes</h1>
