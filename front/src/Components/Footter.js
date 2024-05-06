@@ -83,7 +83,7 @@ const Footer = () => {
      * Sends a request to the server to subscribe to the newsletter.
      */
    const handleSubscribe = async (data) => {
-        event.preventDefault(); // Forhindre standard innsending atferd
+        event.preventDefault(); 
         try {
             const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
                 method: 'POST',
@@ -139,6 +139,8 @@ const Footer = () => {
                             }}
                             onSubmit={handleSubmit(handleSubscribe)}
                         />
+
+                        {/* Show error messages */}
                         {errors.email && <div>{errors.email.message}</div>}
                     </form>
 
