@@ -11,6 +11,7 @@ public class ProjectModel
     public IEnumerable<NeedleInventoryDto>? Needles { get; set; }
     public IEnumerable<YarnInventoryDto>? Yarns { get; set; }
     public string? Notes { get; set; }
+    public string? ProjectName { get; set; }
 }
 
 public class ProjectCreateModel
@@ -18,6 +19,7 @@ public class ProjectCreateModel
     public Guid? RecipeId { get; set; }
     public ProjectStatus Status { get; set; }
     public List<Guid>? NeedleIds { get; set; }
-    public List<Guid>? YarnIds { get; set; }
+    public Dictionary<Guid, int>? YarnIds { get; set; }
     public string? Notes { get; set; }
+    public string? ProjectName { get; set; }
 }
