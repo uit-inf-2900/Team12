@@ -177,6 +177,13 @@ public class ContactTests : IDisposable
         Assert.True(request!.IsHandled);
     }
     
-    
+    [Fact]
+    public void RespondToMessage_Ok()
+    {
+        string message = "Test response";
+
+        var result = _contactService.ResponseMessage(testRequestId, message);
+        Assert.True(result);
+    }    
 
 }
