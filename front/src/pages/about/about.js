@@ -32,8 +32,8 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
       {imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
       <div className="section-container"  style={{display:'block'}}>
         <h3>{name}</h3>
-        <p>Rolle: {role}</p>
-        <p>Bakgrunn: {background}</p>
+        <p>Role: {role}</p>
+        <p>Background: {background}</p>
       </div>
       {!imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
     </div>
@@ -45,52 +45,46 @@ export const About = () => {
   return (
     <div className="page-container">
       <h1>
-        About us
+        About KnitHub
       </h1>
 
       {/* Short intro section  */}
-      <div className="section-container">
-        <p>Welcome to our website, dedicated to all the passionate knitters out there. Our team has created a platform that simplifies the way you manage your knitting projects and also inspires new innovation in handicrafts.
-          Our team is 
-          The team behind knithub consists of both knitters
-        </p>
-        <p></p>
-
-
-        <p>Velkommen til vår nettside, en nettside du som strikker kanskje ikke visste at du trengte. Men fra det øyeblikket du begynner å bruke den, vil du se hvor mye enklere og mer berikende din strikkeopplevelse kan bli.</p>
-        <p>I en verden hvor kreativitet og organisering går hånd i hånd, har vi skapt en plattform som ikke bare forenkler måten du håndterer dine strikkeprosjekter på, men også inspirerer til ny innovasjon innen håndarbeid.</p>
+      <div className="section-container" style={{ textAlign: 'center' }}>
+        <p>Welcome to our website, dedicated to all the passionate knitters out there. Our team has created a platform that simplifies the way you manage your knitting projects and also inspires new innovation in handicrafts.</p>
+        <p>The team consists of both knitters and developers, and together we have made it as simple as possible for knitters to keep track of their projects and samples all in one place.</p>
+        <p>The idea of Knithub came from Sera, a knitter and developer, who lost track of her projects and yarn at home.</p>      
       </div>
 
       {/* Features section */}
-      <h2>Fantastiske funksjoner:</h2>
+      <h2>KnitHubs functions:</h2>
       <div className="section-container">
         <FeatureItem
           imagePosition = "left"
           imageSrc={getImageByName('stash')}
           title="Resources page"
-          description="En oversikt over alt du kan trenge av ressurser for strikking. Her finner du blant annet et table med alle forkortelsene du trenger å vite."
+          description="Knithub do also provide a resource page where you can look up a lot of different qbbreviations, and look at some instagram images to get some inspiration for your next project."
         />
         <FeatureItem
           imageSrc={getImageByName('yarnSheep')}
-          title="Garnlageret"
-          description="Hold orden på garnsamlingen din."
+          title="Yarn Stash"
+          description="Say goodbye to manual searches through your yarn. Knithub's inventory system keeps you informed about what you have and what you need for upcoming projects."
         />
         <FeatureItem
           imagePosition = "left"
           imageSrc={getImageByName('yarnBasket')}
-          title="Strikkepinne lager"
-          description="Hold orden på Strikkepinnene dine, og få full oversikt over hvilke strikkepinner som er i bruk."
+          title="Needle Stash"
+          description="Say goodbye to manual searches through all your needles. Knithub's inventory system keeps you informed about what needles you have for your upcoming projects."
         />
         <FeatureItem
           imageSrc={getImageByName('books')}
-          title="Oppskriftsbibliotek"
-          description="Tilgang til et bredt utvalg av oppskrifter."
+          title="Pattern Organization"
+          description="Knithub allows users to upload, organize, and annotate your digital knitting patterns in one central location. This feature simplifies tracking of modifications and personal touches to each pattern."
         />
         <FeatureItem
           imagePosition = "left"
           imageSrc={getImageByName('reading')}
-          title="Prosjektplanlegger"
-          description="Organiser dine strikkeprosjekter."
+          title="Project Tracking"
+          description=" With Knithub's project dashboard, users can easily monitor their knitting progress. The platform displays completed projects, ongoing work, and upcoming tasks, facilitating better planning and organization."
         />
         <FeatureItem
           imageSrc={getImageByName('openBook')}
@@ -110,39 +104,39 @@ export const About = () => {
       </div>
 
       {/* Team-members */}
-      <h2>Møt Teamet Bak Magien</h2>
+      <h2>Meet the team behind the magic</h2>
       <div className="section-container">
         <TeamMember
           name="Eline"
-          role="Rolle i Prosjektet"
-          background="Kort beskrivelse av bakgrunn og ekspertise"
+          role="Full Stack Developer"
+          background="Eline is a third-year Medical Informatics student at UiT in Tromsø, specializing in the intersection of healthcare and technology. With experience in both frontend and backend development"
           imageSrc={getImageByName('yarnSheep')}
         />
         <TeamMember
           imagePosition = "left"
           name="Emilie"
-          role="Rolle i Prosjektet"
-          background="Kort beskrivelse av bakgrunn og ekspertise"
+          role="Full Stack Developer"
+          background="Emilie is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
           imageSrc={getImageByName('yarnSheep')}
         />
         <TeamMember
           imageSrc={getImageByName('huggingYarn')}
           name="Marie"
-          role="Rolle i Prosjektet"
-          background="Kort beskrivelse av bakgrunn og ekspertise"
+          role="Full Stack Developer"
+          background="Marie is a third-year Informatics student at UiT in Tromsø,  with experience in both frontend and backend development."
         />
         <TeamMember
           imagePosition = "left"
           imageSrc={getImageByName('knitting')}
           name="Sera"
-          role="Rolle i Prosjektet"
-          background="Kort beskrivelse av bakgrunn og ekspertise"
+          role="Full Stack Developer"
+          background="Sera is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
         />
         <TeamMember
           imageSrc={getImageByName('yarnSheep')}
           name="Skjalg"
-          role="Rolle i Prosjektet"
-          background="Kort beskrivelse av bakgrunn og ekspertise"
+          role="Full Stack Developer"
+          background="Skjalg is a third-year Cybersecurity student at UiT in Tromsø, with experience in mainly backend development."
         />
       </div>
     </div>
