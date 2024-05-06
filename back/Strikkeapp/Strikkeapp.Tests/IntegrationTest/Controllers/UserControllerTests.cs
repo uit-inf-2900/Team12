@@ -105,6 +105,21 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public void BadRequest_Fails()
+    {
+        var request = new CreateUserRequest
+        {
+            UserEmail = "",
+            UserPwd = "",
+            UserFullName = "",
+            UserDOB = 0
+        };
+        var result = _controller.CreateUser(request);
+
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
     public void CreateDuplicate_Falils()
     {
         var request = new CreateUserRequest
