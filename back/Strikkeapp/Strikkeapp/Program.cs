@@ -31,6 +31,7 @@ builder.Services.AddScoped<IMailService,  MailService>();
 builder.Services.AddScoped<ICounterService, CounterService>();
 builder.Services.AddScoped<INewsletterService, NewsletterService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectYarnInventoryService, ProjectYarnInventoryService>();
 
 builder.Services.AddSingleton<IPasswordHasher<object>, PasswordHasher<object>>();
 
