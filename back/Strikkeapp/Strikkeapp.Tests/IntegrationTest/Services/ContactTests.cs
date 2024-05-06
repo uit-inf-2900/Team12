@@ -209,6 +209,33 @@ public class ContactTests : IDisposable
 
         var result = _contactService.ResponseMessage(testRequestId, message);
         Assert.True(result);
-    }    
+    }
 
+    [Fact]
+    public void ValidateWrongRequest_Fails()
+    {
+        var nonEmail = new ContactRequestDto
+        {
+            UserEmail = "",
+            UserMessage = "Test message",
+            UserName = "Test User"
+        };
+        Assert.Throws<ArgumentException>(() => _contactService.CreateContactRequest(nonEmail));
+
+        var nonMessage = new ContactRequestDto
+        {
+            UserEmail = "test@example.com",
+            UserMessage = "",
+            UserName = "Test User"
+        };
+        Assert.Throws<ArgumentException>(() => _contactService.CreateContactRequest(nonMessage));
+
+        var nonName = new ContactRequestDto
+        {
+            UserEmail = "test@example.com",
+            UserMessage = "Test message",
+            UserName = ""
+        };
+        Assert.Throws<ArgumentException>(() => _contactService.CreateContactRequest(nonName));
+    }
 }
