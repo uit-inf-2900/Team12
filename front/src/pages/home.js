@@ -14,6 +14,8 @@ import OpenBookImage from "../images/openBook.png"; // Other status
 import HuggingYarnImage from "../images/huggingYarn.png";
 import CustomButton from '../Components/Button';
 
+import "./about/about.css";
+
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -72,25 +74,22 @@ export const Home = () => {
 
   return (
     <div className="page-container">
-      <header className="main-header">
-        <h2>God dag {userProfileState.userFullName || 'Loading...'}!</h2>
-      </header>
-      <div className="content-container">
-        <div className="statistics-container" style={{ flex: '2' }}> {/* Updated */}
+      <h2>God dag {userProfileState.userFullName || ''}!</h2>
+      <div className="home-container">
+        <div className="section-container"> {/* Updated */}
           <h4>Her har du en oversikt over ditt arbeid sålangt:</h4>
           <StatisticBox icon={KnittingImage} label="yarns in stash" value={yarnInventoryLength.toString()} />
           <StatisticBox icon={SixImage} label="needles in stash" value={needleInventoryLength.toString()} />
           <StatisticBox icon={KnittingImage} label="complete projects" value={completeProjects.toString()} />
           <StatisticBox icon={SixImage} label="ongoing projects" value={ongoingProjects.toString()} />          
         </div>
-        
-        <div className="creative-content-container" style={{ flex: '3' }}> {/*  */}
+        <div className="creative-content-container"> {/*  */}
           <h4>I dag er dagen for å være kreativ</h4>
           <img src={PileOfSweatersImage} className="creative-image" />
           </div>
       </div>
-      <h2>Inspiration from Instagram </h2>
-            <InstagramFeed accessToken={accessTokenInsta} />
+        <h2>Inspiration from Instagram </h2>
+        {/* <InstagramFeed accessToken={accessTokenInsta} /> */}
     </div>
   );
 };
