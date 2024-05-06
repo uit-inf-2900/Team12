@@ -171,6 +171,17 @@ public class ContactTests : IDisposable
     }
 
     [Fact]
+    public void UpdateIsActiveNonRequest_Fails()
+    {
+        // Set up test data and run test
+        Guid fakeId = Guid.NewGuid();
+        var result = _contactService.UpdateIsActiveStatus(fakeId, true);
+
+        // Check that service fails
+        Assert.False(result, "Should not be able to update non-existing request");
+    }
+
+    [Fact]
     public void UpdateIsHandledStatus_Ok() 
     {
         var result = _contactService.UpdateIsHandledStatus(testRequestId, true);
