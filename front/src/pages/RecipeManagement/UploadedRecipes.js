@@ -10,7 +10,7 @@ import MultiSelect from '../../Components/MultiSelect';
 import Card from '../../Components/Card';
 import PDF from '../../Components/PDFviewer';
 import PDFViewer from '../../Components/PDFwindow';
-
+import { Fab, Modal, Box } from "@mui/material";
 
 const UploadedRecipes = () => {
     // State for storing recipes, sorting criteria, and loading status
@@ -18,6 +18,12 @@ const UploadedRecipes = () => {
     const [sortBy, setSortBy] = useState('');
     const [loading, setLoading] = useState(true);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [recipeCard, setRecipeCard]=useState(false);
+
+
+    const toggleRecipeCard = () => {
+        setRecipeCard(!recipeCard);
+    }
 
     // Effect to fetch recipes on component mount
     useEffect(() => {
@@ -65,6 +71,7 @@ const UploadedRecipes = () => {
 
     const handleProjectClick = (recipe) => {
         setSelectedRecipe(recipe);
+        setRecipeCard(true);
         
     };
 
@@ -94,6 +101,7 @@ const UploadedRecipes = () => {
             {/* Check if data is still being loaded */}
             {loading ? <p>Loading recipes...</p> : (
                 <div className='card-container'>
+                    
                     {recipes.map((recipe, index) => (
                         
                         <Card
@@ -105,14 +113,21 @@ const UploadedRecipes = () => {
                             onClick={() => handleProjectClick(recipe)}
                         />
                         
+                        
                     ))}
                     
-                    {selectedRecipe && <PDFViewer id={selectedRecipe.recipeId} />}
+                    {selectedRecipe && 
+                        <Modal open={recipeCard} onClose={toggleRecipeCard}>
+                            <PDF id={selectedRecipe.recipeId} onClose={toggleRecipeCard} />
+                        </Modal>
+                    }   
                 </div>
                 
                 
             )}
             
+
+           
             
 
         </div>
