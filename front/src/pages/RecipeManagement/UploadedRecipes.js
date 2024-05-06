@@ -8,8 +8,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MultiSelect from '../../Components/MultiSelect';
 import Card from '../../Components/Card';
-import PDF from '../../Components/PDFviewer';
-import PDFViewer from '../../Components/PDFwindow';
+import PDFViewer from '../../Components/PDFviewer';
+import PDFwindow from '../../Components/PDFwindow';
 
 
 const UploadedRecipes = () => {
@@ -18,6 +18,7 @@ const UploadedRecipes = () => {
     const [sortBy, setSortBy] = useState('');
     const [loading, setLoading] = useState(true);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [showPDF, setShowPDF]=useState(false);
 
     // Effect to fetch recipes on component mount
     useEffect(() => {
@@ -63,13 +64,20 @@ const UploadedRecipes = () => {
     };
 
 
+
     const handleProjectClick = (recipe) => {
         setSelectedRecipe(recipe);
+        togglePDF();
+        
         
     };
 
     const handleRecipeDelete = () => {
         deleteRecipe(recipe.recipeId);
+    };
+    const togglePDF = () => {
+        setShowPDF(!showPDF);
+
     };
 
     // Menu items for the sort select
@@ -107,7 +115,7 @@ const UploadedRecipes = () => {
                         
                     ))}
                     
-                    {selectedRecipe && <PDFViewer id={selectedRecipe.recipeId} />}
+                    {selectedRecipe && <PDFViewer id={selectedRecipe.recipeId} onClose={togglePDF}/>}
                 </div>
                 
                 
