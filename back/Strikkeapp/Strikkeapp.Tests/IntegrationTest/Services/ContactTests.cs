@@ -21,21 +21,104 @@ public class ContactTests : IDisposable
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
 
+    private Guid testUserId = Guid.NewGuid();
+    private Guid adminUserId = Guid.NewGuid();
+    private Guid testRequestId = Guid.NewGuid();
+
     public ContactTests()
     {
+        // Set up password hasher
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
                 .Returns("hashedPassword");
         
+        // Set up in memory db
         var dbName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
             .UseInMemoryDatabase(databaseName: dbName)
             .ConfigureWarnings(warnings => warnings.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
-        
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
 
+        // Set up service
         _contactService = new ContactService(_context);
+        
+        // Seed db with test data
+        SeedTestData();
     }
+
+    private void SeedTestData()
+    {
+        // Test user
+        var login = new UserLogIn
+        {
+            UserId = testUserId,
+            UserEmail = "user@knithub.no",
+            UserPwd = "hashedPassword",
+            UserStatus = "verified"
+        };
+        _context.UserLogIn.Add(login);
+
+        // Set up admin user
+        var loginAdmin = new UserLogIn
+        {
+            UserId = adminUserId,
+            UserEmail = "admin@knithub.no",
+            UserPwd = "hashedPassword",
+            UserStatus = "verified"
+        };
+        _context.UserLogIn.Add(loginAdmin);
+
+        var detailsAdmin = new UserDetails
+        {
+            UserId = adminUserId,
+            UserFullName = "Admin User",
+            DateOfBirth = DateTime.Now,
+            IsAdmin = true
+        };
+        _context.UserDetails.Add(detailsAdmin);
+
+        // Add test contact requests
+        var req1 = new ContactRequest
+        {
+            ContactRequestId = testRequestId,
+            FullName = "Test User",
+            Email = "test@example.com",
+            Message = "Test message",
+            TimeCreated = DateTime.Now,
+        };
+        _context.ContactRequests.Add(req1);
+
+        var req2 = new ContactRequest
+        {
+            FullName = "Some User",
+            Email = "someone@example.com",
+            Message = "Some message",
+            IsActive = true
+        };
+        _context.ContactRequests.Add(req2);
+
+        var req3 = new ContactRequest
+        {
+            FullName = "Some User",
+            Email = "someone@example.com",
+            Message = "Ishandled",
+            IsHandled = true
+        };
+        _context.ContactRequests.Add(req3);
+
+        var req4 = new ContactRequest
+        {
+            FullName = "Some User",
+            Email = "someone@example.com",
+            Message = "Everything is true",
+            IsActive = true,
+            IsHandled = true
+        };
+        _context.ContactRequests.Add(req4);
+
+        _context.SaveChanges();
+    }
+
 
     public void Dispose()
     {
@@ -56,5 +139,44 @@ public class ContactTests : IDisposable
         var result = _contactService.CreateContactRequest(request);
         Assert.NotEmpty(result.ToString());
     }
+
+    [Fact]
+    public void GetRequest_Ok ()
+    {
+        // Run test and check result
+        var result1 = _contactService.GetContactRequests(false, false);
+        Assert.Single(result1);
+
+        var result2 = _contactService.GetContactRequests(true, false);
+        Assert.Single(result2);
+
+        var result3 = _contactService.GetContactRequests(false, true);
+        Assert.Single(result3);
+
+        var result4 = _contactService.GetContactRequests(true, true);
+        Assert.Single(result4);
+    }
+
+    [Fact]
+    public void UpdateIsActiveStatus_Ok() 
+    {
+        var result = _contactService.UpdateIsActiveStatus(testRequestId, true );
+        Assert.True(result);
+
+        var request = _context.ContactRequests.Find(testRequestId);
+        Assert.True(request!.IsActive);
+    }
+
+    [Fact]
+    public void UpdateIsHandledStatus_Ok() 
+    {
+        var result = _contactService.UpdateIsHandledStatus(testRequestId, true );
+        Assert.True(result);
+
+        var request = _context.ContactRequests.Find(testRequestId);
+        Assert.True(request!.IsHandled);
+    }
+    
+    
 
 }
