@@ -121,6 +121,7 @@ const YarnStash = () => {
                         { label: "Gauge", value: yarn.gauge},
                         { label: "Notes", value: yarn.notes}
                     ]}
+                    hovermessage = 'Click to view, edit or delete'
                     onClick={() => handleEditYarn(yarn)}
                 />
             ))}
