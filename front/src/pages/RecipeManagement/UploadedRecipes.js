@@ -8,33 +8,24 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MultiSelect from '../../Components/MultiSelect';
 import Card from '../../Components/Card';
-import PDFViewer from '../../Components/PDFviewer';
-
-import { Fab, Modal, Box } from "@mui/material";
+import PDFViewer from '../../Components/PDFviewer'; // Import PDFViewer component
+import { Fab, Modal, Box, Button } from "@mui/material";
 
 const UploadedRecipes = () => {
-    // State for storing recipes, sorting criteria, and loading status
     const [recipes, setRecipes] = useState([]);
     const [sortBy, setSortBy] = useState('');
     const [loading, setLoading] = useState(true);
     const [selectedRecipe, setSelectedRecipe] = useState(null);
-    const [recipeCard, setRecipeCard]=useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false); // State for controlling modal open/close
 
-
-    const toggleRecipeCard = () => {
-        setRecipeCard(!recipeCard);
-    };
-
-    // Effect to fetch recipes on component mount
     useEffect(() => {
         fetchRecipes();
     }, []);
 
-    // Fetch recipes from the backend
     const fetchRecipes = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes' + '?userToken=' + sessionStorage.getItem('token')); // TODO: Replace with the actual backend endpoint
+            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes' + '?userToken=' + sessionStorage.getItem('token'));
             setRecipes(response.data || []); 
         } catch (error) {
             console.error('Error fetching recipes:', error);
@@ -43,19 +34,6 @@ const UploadedRecipes = () => {
         }
     };
 
-    const deleteRecipe=async () => {
-        try {
-            const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${id}`);
-            setRecipes(response.data || []); 
-        } catch (error) {
-            console.error('Error deleting recipe:', error);
-        } finally {
-            setLoading(false);
-        }
-
-    };
-
-    // Handle sort criteria change
     const handleSortChange = (event) => {
         setSortBy(event.target.value);
         const sortedRecipes = [...recipes].sort((a, b) => {
@@ -68,19 +46,22 @@ const UploadedRecipes = () => {
         setRecipes(sortedRecipes);
     };
 
-
     const handleProjectClick = (recipe) => {
         setSelectedRecipe(recipe);
-        setRecipeCard(true);
-        
-        
+        setIsModalOpen(true); // Open modal
     };
 
-    const handleRecipeDelete = () => {
-        deleteRecipe(recipe.recipeId);
+    const handleRecipeDelete = async (recipeId) => {
+        try {
+            const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${recipeId}`);
+            setRecipes(response.data || []); 
+        } catch (error) {
+            console.error('Error deleting recipe:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    // Menu items for the sort select
     const sortMenuItems = [
         { value: '', name: 'Select' },
         { value: 'author', name: 'Author' },
@@ -89,7 +70,6 @@ const UploadedRecipes = () => {
         { value: 'gauge', name: 'Gauge' }
     ];
 
-    // Show loading state or recipes list 
     return (
         <div className="page-container">
             <h1>My Recipes</h1>
@@ -99,12 +79,10 @@ const UploadedRecipes = () => {
                 handleChange={handleSortChange}
                 menuItems={sortMenuItems}
             />
-            {/* Check if data is still being loaded */}
+            
             {loading ? <p>Loading recipes...</p> : (
                 <div className='card-container'>
-                    
                     {recipes.map((recipe, index) => (
-                        
                         <Card
                             key={recipe.recipeId}
                             title={recipe.recipeName}
@@ -112,26 +90,20 @@ const UploadedRecipes = () => {
                             knittingGauge={recipe.knittingGauge}
                             notes={recipe.notes}
                             onClick={() => handleProjectClick(recipe)}
+                            onDelete={() => handleRecipeDelete(recipe.recipeId)}
                         />
-                        
-                        
                     ))}
-                    
-                    {selectedRecipe && (
-
-                        <Modal open={recipeCard} onClose={toggleRecipeCard}>
-                            <PDFViewer id={selectedRecipe.recipeId} onClose={toggleRecipeCard} />
-                        </Modal>
-                    )}   
                 </div>
-                
-                
             )}
-            
 
-           
-            
-
+            {/* Modal for displaying PDFViewer */}
+            {selectedRecipe && (
+                <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                    <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 800, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+                        <PDFViewer id={selectedRecipe.recipeId} onClose={() => setIsModalOpen(false)} />
+                    </Box>
+                </Modal>
+            )}
         </div>
     );
 };

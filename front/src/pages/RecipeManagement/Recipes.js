@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import FileUpload from './UpLoad';
+import Upload from './UpLoad';
 import UploadedRecipes from './UploadedRecipes'; 
 import "../../GlobalStyles/main.css";
 import Button from '@mui/material/Button';
@@ -56,7 +56,7 @@ const RecipesPage = () => {
             <ModalContent 
                 open={uploading}
                 handleClose={() => setUploading(false)} 
-                infobox={<FileUpload onClose={() => setUploading(false)} />} 
+                infobox={<Upload onClose={() => setUploading(false)} />} 
             />
         </div>
     );

@@ -21,7 +21,7 @@ import { Fab, Modal, Box } from "@mui/material";
 
 
 const Projects = () => {
-    const [activeStatus, setActiveStatus] = useState('in-progress');
+    const [activeStatus, setActiveStatus] = useState(1);
     const [loading, setLoading] = useState(true);
 
     const [uploading, setUploading] = useState(false);
@@ -29,23 +29,35 @@ const Projects = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedProject, setSelectedProject] = useState(null);
 
-    const [allProjects, setProjects]=useState([]);
+    const [allProjects, setAllProjects]=useState([]);
 
 
     //fetch all projects in DB
+    // const fetchProjects = async () => {
+    //     const token = sessionStorage.getItem('token');
+    //     const url = `http://localhost:5002/api/projects?userToken=${token}`;
+    //     try {
+    //         const response = await fetch(url);
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setAllProjects(response.data || []);
+    //         } else {
+    //             console.error("Failed to fetch projects data.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching data:", error);
+    //     }
+    // };
+
     const fetchProjects = async () => {
-        const token = sessionStorage.getItem('token');
-        const url = `http://localhost:5002/api/projects/projects?userToken=${token}`;
+        setLoading(true);
         try {
-            const response = await fetch(url);
-            if (response.ok) {
-                const data = await response.json();
-                setProjects(data.allProjects || []);
-            } else {
-                console.error("Failed to fetch projects data.");
-            }
+            const response = await axios.get('http://localhost:5002/api/projects' + '?userToken=' + sessionStorage.getItem('token'));
+            setAllProjects(response.data || []); 
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error('Error fetching recipes:', error);
+        } finally {
+            setLoading(false);
         }
     };
     useEffect(() => {
@@ -81,44 +93,43 @@ const Projects = () => {
     };
 
 
-
-    const projects = [
-        { id: 1, title: 'Honey clutch', status: 'planned', knittingGauge: '10/10' },
-        { id: 2, title: 'Summer scarf', status: 'in-progress', knittingGauge: '10/10' },
-        { id: 3, title: 'Winter hat', status: 'completed', knittingGauge: '10/10' },
-        { id: 4, title: 'Skappel luft', status: 'planned' },
-        { id: 5, title: 'Oslo lue', status: 'in-progress' },
-        { id: 6, title: 'Votter', status: 'completed' },
-        // ... flere prosjekter
-    ];
-
     const options = [
-        { id: 'planned', label: 'Planned' },
-        { id: 'in-progress', label: 'In Progress' },
-        { id: 'completed', label: 'Completed' }
+        
+        { id: 0, label: 'Planned' },
+        { id: 1, label: 'In Progress' },
+        { id: 2, label: 'Completed' }
     ];
 
-    const filteredProjects = projects.filter(project => project.status === activeStatus);
-
+    const filteredProjects = allProjects.filter(project => project.status === activeStatus);
+    console.log(allProjects);
     return (
         <div className="page-container">
-            <SwitchContainer
+            
+             <SwitchContainer
                 options={options}
                 activeStatus={activeStatus}
                 setActiveStatus={setActiveStatus}
+                
             />
+            
 
             <div className="card-container">
                 {filteredProjects.map(project => (
                     
+                    
                         <Card
-                            key={project.id}
+                            key={project.projectId}
                             title={project.title}
-                            needleSize={project.needleSize}
-                            knittingGauge={project.knittingGauge}
-                            notes={project.notes}
+                            status={project.status}
+                            yarns={project.yarns}
+                            needles={project.needleIds}
+                            Notes={project.notes}
+                            
+                            
                             onClick={() => handleProjectClick(project)} //pass project to openProject
                         />
+                        
+                        
                     
                     
                 ))}
@@ -141,6 +152,8 @@ const Projects = () => {
                     project={selectedProject}
                     handleClose={handleCloseModal}
                 />
+                    
+            
                 
             )}
             

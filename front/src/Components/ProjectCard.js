@@ -17,34 +17,50 @@ const ProjectCard = ({ show, project, handleClose }) => {
         <Grid container spacing={2}>
           {/* Left Column */}
           <Grid item xs={12} md={6}>
+
             <Typography variant="h6" gutterBottom>
               Status
             </Typography>
             <Typography variant="body1" gutterBottom>
               {project.status}
             </Typography>
+
             <Typography variant="h6" gutterBottom>
               Needle
             </Typography>
             <Typography variant="body1" gutterBottom>
-              {project.needle}
+              {project.needles}
             </Typography>
           </Grid>
 
           {/* Right Column */}
           <Grid item xs={12} md={6}>
+
+          <Typography variant="h6" gutterBottom>
+              Needles
+            </Typography>
+            {project.needles.map((type, itemId) => (
+              <Typography key={itemId} variant="body1" gutterBottom>
+                {type}
+              </Typography>
+            ))}
+
             <Typography variant="h6" gutterBottom>
               Yarn
             </Typography>
             <Typography variant="body1" gutterBottom>
-              {project.yarn}
+              {project.yarns}
             </Typography>
+
+
+
             <Typography variant="h6" gutterBottom>
               Notes
             </Typography>
             <Typography variant="body1" gutterBottom>
               {project.notes}
             </Typography>
+
           </Grid>
         </Grid>
 

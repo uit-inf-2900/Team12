@@ -1,37 +1,89 @@
 import React, { useState, useEffect, useRef } from 'react';
 import InputField from '../../Components/InputField';
 import CustomButton from '../../Components/Button';
+import SetAlert from '../../Components/Alert';
 import axios from 'axios';
 
 
 const UploadProjects = ({ onClose, fetchProjects }) => {
 
   const token = sessionStorage.getItem('token');
+  const [alertInfo, setAlertInfo] = useState({open: false, severity: 'info', message: 'test message'});
   const [loading, setLoading] = useState(true);
   const [recipes, setRecipes] = useState([]);
-  const [projectInfo, setProjectInfo] = useState({
-    projectName: '',
-    recipe: '',
+  const [projectData, setProjectData] = useState({
+
+    recipeId: '',
     status: '',
-    needle: '',
-    yarn: '',
-    notes: ''
+    needleIds: [],
+    yarnIds: [],
+    notes: '',
+    userToken: token
+    
   });
-  const handleInputChange = (e) => {
-    setProjectInfo({ ...projectInfo, [e.target.name]: e.target.value });
+  const Options = [
+        
+    { id: 0, label: 'Planned' },
+    { id: 1, label: 'In Progress' },
+    { id: 2, label: 'Completed' }
+  ];
+
+  const handleInputChange = (prop) => (e) => {
+    setProjectData({ ...projectData, [prop]: e.target.value });
   };
+
   const handleStatusChange = (event) => {
     const { value } = event.target;
-    setProjectInfo({ ...projectInfo, status: value });
+    setProjectData({ ...projectData, status: value });
   };
+
   const handleRecipeChange = (event) => {
     const { value } = event.target;
-    setProjectInfo({ ...projectInfo, recipe: value });
+    setProjectData({ ...projectData, recipeId: value });
   };
 
-  const postProject = async () => {
+  
+
+  const handleSubmit = async (e) => {
+
+
+    e.preventDefault();
+    
+
+  const payload = {
+    userToken: token,
+    RecipeId: projectData.recipeId,
+    Status: projectData.status,
+    Needles: projectData.needleIds,
+    Yarns: projectData.yarnIds,
+    Notes: projectData.notes
+    
+
 
   };
+
+ 
+
+  try {
+      const response = await axios.post('http://localhost:5002/api/projects'+ '?userToken=' + sessionStorage.getItem('token'),payload,{
+        headers: {
+          'Content-Type': 'application/JSON',
+          
+        },
+        
+        
+        
+
+      });
+      console.log(response.data); // Handle success
+      console.log(payload)
+    } catch (error) {
+      console.error(error); // Handle error
+    }
+    
+  };
+
+
 
   //TODO fetch all recipes and display in options for new Project
   //this to connect recipe to project so one could directly open 
@@ -52,44 +104,6 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
   }, []);
 
 
-  const handleUpload = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-
-    formData.append("ProjectName", projectInfo.name);
-    formData.append("UserToken", token);
-    formData.append("Needle", parseInt(projectInfo.needle));
-    formData.append("Yarn", projectInfo.yarn);
-    formData.append("Notes", projectInfo.notes);
-
-    try{
-      axios.post('http://localhost:5002/api/projects/createProject', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then(reponse => {
-            console.log("Project creation success:", reponse);
-        }).catch(error => {
-            // Handle error 
-            console.error("Project creation error:", error);
-        });
-    }
-    catch (error) {
-      console.error('Error:', error);
-      setAlertInfo({
-          open: true,
-          severity: 'error',
-          message: 'An error occurred while creating the project.'
-      });
-  }
-
-  };
-    
-
-
-
-
-
 
 
   return (
@@ -102,27 +116,24 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
         <InputField 
                     label="Status" 
                     type="select"
-                    value={projectInfo.status}
+                    value={projectData.status}
                     onChange={handleStatusChange}
-                    options={[
-                        { value: 'planned', label: 'Planned' },
-                        { value: 'in-progress', label: 'In Progress' },
-                        { value: 'completed', label: 'Completed' },
-        
-                    ]}
+                    options={Options.map(option => ({ value: option.id, label: option.label }))}
                 />   
-        <InputField label="Needle" name="needle" type="number" onChange={handleInputChange} />     
-        <InputField label="Yarn" name="yarn" type="text" onChange={handleInputChange} />    
-        <InputField label="Notes" name="notes" type="text" onChange={handleInputChange} /> 
+        <InputField label="Needles" value={projectData.needleIds} type="number" onChange={handleInputChange('needleIds')} />     
+        <InputField label="Yarn"  type="text" value={projectData.yarnIds} onChange={handleInputChange('yarnIds')} />    
+        <InputField label="Notes" type="text" value={projectData.notes} onChange={handleInputChange('notes')} /> 
         <InputField 
                     label="Choose recipe" 
                     type="select"
-                    value={projectInfo.recipe}
+                    value={projectData.recipeId}
                     onChange={handleRecipeChange}
                     options={recipes.map(recipe => ({ value: recipe.recipeId, label: recipe.recipeName }))}
-                /> 
+                />
 
-          
+      
+
+        <button className='close-button' onClick={handleSubmit}>Upload</button>
         <button className='close-button' onClick={onClose}>close</button>
       </div>
             

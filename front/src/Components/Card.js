@@ -12,6 +12,10 @@ const getCustomLabel = (propName) => {
         Gauge: "Gauge",
         Weight: "Weight",
         Length: "Length",
+        NeedleSize: "Needle Size",
+        Yarns: "Yarns",
+        Notes: "Notes",
+        Needles: "Needles"
         // Add more labels here
     };
 
@@ -22,7 +26,7 @@ const getCustomLabel = (propName) => {
   
 
 
-const Card = ({ title, onClick, onDelete, ...descriptions }) => {
+const Card = ({ title, onClick, onDelete, yarns, ...descriptions }) => {
     return (
         <div className="card" onClick={onClick}>
           <img src={exampleImage} alt={title} className="card-image" /> {/* Use imported image */}
@@ -36,6 +40,20 @@ const Card = ({ title, onClick, onDelete, ...descriptions }) => {
                 {Object.keys(descriptions).map(key => (
                     <p className="card-description" key={key}> {getCustomLabel(key)}: {descriptions[key]}</p>
                 ))}
+                {yarns && (
+                    <div className="card-description">
+                        <p>{getCustomLabel('Yarns')}:</p>
+                        <ul>
+                            {yarns.map((yarn) => (
+                                <li key={yarn.itemId}>
+                                    <strong> {yarn.type} by {yarn.manufacturer}</strong>
+
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+                
             </div>
             
         </div>

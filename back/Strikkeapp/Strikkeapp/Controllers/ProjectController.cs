@@ -16,7 +16,9 @@ public class ProjectController
 		_projectService = projectService;
 	}
 
+
 	[HttpGet]
+	
 	public List<ProjectModel> GetProjects([FromQuery] string userToken)
 	{
 		var projects = _projectService.GetProjects(userToken);
@@ -24,10 +26,13 @@ public class ProjectController
 	}
 
 	[HttpPost]
-	public bool PostProject([FromQuery] string userToken, [FromBody] ProjectCreateModel projectModel)
+    public bool PostProject([FromQuery] string userToken, [FromBody] ProjectCreateModel projectModel)
 	{
 		var result = _projectService.CreateProject(userToken, projectModel);
 		return result;
 	}
+
+
+    
 }
 

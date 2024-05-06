@@ -14,17 +14,16 @@ const PDFViewer = ({ id, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-
     const options = {
         cMapUrl: 'cmaps/',
         cMapPacked: true,
         standardFontDataUrl: 'standard_fonts/',
     };
-    
+
     useEffect(() => {
         fetchPDF();
         return () => {
-            if (file) URL.revokeObjectURL(file); // Clean up URL object
+            if (file) URL.revokeObjectURL(file);
         };
     }, []);
 
@@ -47,7 +46,7 @@ const PDFViewer = ({ id, onClose }) => {
 
     function onDocumentLoadSuccess({ numPages }) {
         setNumPages(numPages);
-        setCurrentPage(1); // Reset to first page when a new document is loaded
+        setCurrentPage(1);
     }
 
     const goToPrevPage = () => {
@@ -63,21 +62,21 @@ const PDFViewer = ({ id, onClose }) => {
         if (!elem) {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+            } else if (document.documentElement.mozRequestFullScreen) {
                 document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            } else if (document.documentElement.webkitRequestFullscreen) {
                 document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+            } else if (document.documentElement.msRequestFullscreen) {
                 document.documentElement.msRequestFullscreen();
             }
         } else {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+            } else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) { /* Firefox */
+            } else if (document.mozCancelFullScreen) {
                 document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) { /* IE/Edge */
+            } else if (document.msExitFullscreen) {
                 document.msExitFullscreen();
             }
         }
@@ -85,7 +84,7 @@ const PDFViewer = ({ id, onClose }) => {
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-    if (!file) return null; // If no file is loaded, don't render anything
+    if (!file) return null;
 
     return (
         <div className="resume-section">
