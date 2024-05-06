@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.IdentityModel.Tokens;
 using Strikkeapp.Data.Entities;
 
@@ -26,6 +28,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<UserVerification> UserVerification { get; set; }
     public virtual DbSet<Counter> CounterInventory { get; set; }
     public virtual DbSet<Newsletter> Newsletter { get; set; }
+    public virtual DbSet<ProjectEntity> Projects { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -106,6 +109,35 @@ public class StrikkeappDbContext : DbContext
             .HasForeignKey(c => c.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ProjectEntity>()
+            .Property(p => p.NeedleIds)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null),
+                    new ValueComparer<List<Guid>>(
+                    (c1, c2) => c1.SequenceEqual(c2),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()));
+
+        modelBuilder.Entity<ProjectEntity>()
+            .Property(p => p.YarnIds)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null),
+                    new ValueComparer<List<Guid>>(
+                    (c1, c2) => c1.SequenceEqual(c2),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()));
+
+        modelBuilder.Entity<ProjectEntity>()
+            .HasOne<UserLogIn>()
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+
 
 
         // Set default admin user

@@ -20,5 +20,8 @@ public class KnittingRecipes
     [Required]
     public string KnittingGauge { get; set; } = string.Empty;
 
+    [Required]
     public string? RecipePath { get; set; }
+
+    public string? Notes { get; set; } = string.Empty;
 }

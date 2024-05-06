@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Strikkeapp.Data.Context;
 
@@ -10,9 +11,11 @@ using Strikkeapp.Data.Context;
 namespace Strikkeapp.Data.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    partial class StrikkeappDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240505200648_Projects")]
+    partial class Projects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
@@ -87,15 +90,11 @@ namespace Strikkeapp.Data.Migrations
                     b.Property<int>("NeedleSize")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Notes")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("RecipeName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RecipePath")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -246,8 +245,8 @@ namespace Strikkeapp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("b3616d88-501b-4395-a317-daf11f9a5fea"),
-                            DateOfBirth = new DateTime(2024, 5, 6, 9, 24, 59, 341, DateTimeKind.Local).AddTicks(3440),
+                            UserId = new Guid("7b8fe2d6-c9e3-4f52-ab9b-20858723a359"),
+                            DateOfBirth = new DateTime(2024, 5, 5, 22, 6, 48, 84, DateTimeKind.Local).AddTicks(2790),
                             IsAdmin = true,
                             UserFullName = "Knithub Admin"
                         });
@@ -284,9 +283,9 @@ namespace Strikkeapp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("b3616d88-501b-4395-a317-daf11f9a5fea"),
+                            UserId = new Guid("7b8fe2d6-c9e3-4f52-ab9b-20858723a359"),
                             UserEmail = "admin@knithub.no",
-                            UserPwd = "AQAAAAIAAYagAAAAEPOL2TGlbemVJUakbYxrBQP5UiH1r4Mz22xvX9nsP3smhMWfJctUI/Pt1VX9lRzz3g==",
+                            UserPwd = "AQAAAAIAAYagAAAAEPa42+iw8bfII1SnYZ0jL8KF3ZTO6tg7HDhqcBEbBSaaiDgh2QUISpqazzYIcpPjbA==",
                             UserStatus = "verified",
                             UserVerificationCode = 999999
                         });
