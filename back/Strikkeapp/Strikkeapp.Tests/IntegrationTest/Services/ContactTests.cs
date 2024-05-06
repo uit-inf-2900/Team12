@@ -143,7 +143,8 @@ public class ContactTests : IDisposable
     [Fact]
     public void GetRequest_Ok ()
     {
-        // Run test and check result
+        // Run tests and check result
+        // Should only return one request
         var result1 = _contactService.GetContactRequests(false, false);
         Assert.Single(result1);
 
@@ -160,9 +161,11 @@ public class ContactTests : IDisposable
     [Fact]
     public void UpdateIsActiveStatus_Ok() 
     {
-        var result = _contactService.UpdateIsActiveStatus(testRequestId, true );
+        // Run test, and check success
+        var result = _contactService.UpdateIsActiveStatus(testRequestId, true);
         Assert.True(result);
 
+        // Run test, and check success
         var request = _context.ContactRequests.Find(testRequestId);
         Assert.True(request!.IsActive);
     }
@@ -170,11 +173,22 @@ public class ContactTests : IDisposable
     [Fact]
     public void UpdateIsHandledStatus_Ok() 
     {
-        var result = _contactService.UpdateIsHandledStatus(testRequestId, true );
+        var result = _contactService.UpdateIsHandledStatus(testRequestId, true);
         Assert.True(result);
 
         var request = _context.ContactRequests.Find(testRequestId);
         Assert.True(request!.IsHandled);
+    }
+
+    [Fact]
+    public void UpdateHandledNonRequest_Fails()
+    {
+        // Set up test data and run test
+        Guid fakeId = Guid.NewGuid();
+        var result = _contactService.UpdateIsHandledStatus(fakeId, true);
+
+        // Check that service fails
+        Assert.False(result, "Should not be able to update non-existing request");
     }
     
     [Fact]
