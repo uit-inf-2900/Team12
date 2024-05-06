@@ -75,15 +75,15 @@ const Footer = () => {
     const [email, setEmail] = useState('');
     const [open, setOpen] = useState(false);  
     const [alert, setAlert] = useState({ severity: '', message: '' });
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const [error, setError] = useState('');
+    const { register, handleSubmit, formState: { errors }, reset, setError, clearErrors } = useForm();
 
 
     /**
      * Handles subscription form submission.
      * Sends a request to the server to subscribe to the newsletter.
      */
-    const handleSubscribe = async () => {
+   const handleSubscribe = async (data) => {
+        event.preventDefault(); 
         try {
             const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
                 method: 'POST',
@@ -93,22 +93,18 @@ const Footer = () => {
                 },
                 body: JSON.stringify({ subEmail: email })
             });
-            
-            // Of the response is ok, reset the form state and display a success message 
             if (response.ok) {
                 reset(); 
-                setAlert({ severity: 'success', message: 'You have successfully subscribed to our newsletter!' })
+                setAlert({ severity: 'success', message: 'You have successfully subscribed to our newsletter!' });
                 setOpen(true);
-                setError(''); 
                 setEmail(''); 
-
             } else {
                 const errorText = await response.text();
-                setError(errorText);
+                setError('email', { type: 'manual', message: errorText });
             }
         } catch (error) {
             console.error('Network error:', error);
-            setError('Network error, please try again later.');
+            setError('email', { type: 'manual', message: 'Network error, please try again later.' });
         }
     };
 
@@ -137,10 +133,15 @@ const Footer = () => {
                             errors={errors.email}
                             type="send" 
                             value={email}
-                            onChange={(event) => setEmail(event.target.value)}
+                            onChange={(event) => {
+                                setEmail(event.target.value);
+                                clearErrors('email');
+                            }}
                             onSubmit={handleSubmit(handleSubscribe)}
                         />
-                        {error && <div>{error}</div>}
+
+                        {/* Show error messages */}
+                        {errors.email && <div>{errors.email.message}</div>}
                     </form>
 
                     {/* The SOME links are under the subscription input */}
