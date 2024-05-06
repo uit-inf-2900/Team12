@@ -88,8 +88,14 @@ const Dashboard = ({ toggleView }) => {
         { label: "Admins", value: usersData.filter(user => user.isAdmin).length },
     ];
 
-    const totalMessages = activeMessages.length + inactiveeMessages.length + handledMessages.length;
-    const Messages = [
+    // To avoid getting NaN if one or more are note defined
+    const activeMessagesLength = activeMessages.length || 0;
+    const inactiveMessagesLength = inactiveeMessages.length || 0;
+    const handledMessagesLength = handledMessages.length || 0;
+
+    const totalMessages = activeMessagesLength + inactiveMessagesLength + handledMessagesLength;
+    console.log("Total Messages:", totalMessages);
+        const Messages = [
         { label: "Total Messages", value: totalMessages },
         { label: "Active", value: activeMessages.length }, 
         { label: "Inactive", value: inactiveeMessages.length},
