@@ -2,6 +2,7 @@ import exampleImage from '../../../images/reading.png';
 import React, { useState } from 'react';
 
 const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent, onClick, onDelete, onEdit, hovermessage }) => {
+    // Check if the card is hovered to deside if you should show the message 
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -17,6 +18,8 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                     </div>
                 )}
             </div>
+
+            {/* Setup the card overlay (the info part with text) */}
             <div className={`card-overlay `}>
                     <div>
                         <div className="card-header">
@@ -30,11 +33,10 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                     </div>
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                    
+                    {/* Conditionally render the edit and delete buttons if onEdit and onDelete props are provided */}
                     {onEdit && (<button onClick={onEdit} variant="outlined" color="primary">
                         Edit
                     </button>)}
-
                     {onDelete && (<button onClick={onDelete} variant="outlined" color="secondary">
                         Delete
                     </button>)}

@@ -8,14 +8,18 @@ import MessageDetails from './MessageDetails';
 import {  TablePagination } from '@mui/material';
 
 
+/**
+ * Component for viewing incoming messages and their details.
+ */
 const ViewMessages = () => {
+    // state varibles
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('active');
     const [activeMessage, setActiveMessage] = useState(null);
     const [messageError, setMessageError] = useState('');
-    const [searchText, setSearchText] = useState('');
 
+    // Function to fetch messages from the server based on selected filter
     const fetchMessages = async () => {
         setIsLoading(true);
         let queryParams = '';
@@ -46,32 +50,21 @@ const ViewMessages = () => {
         }
     };
 
+    // Fetch messages when the selected filter changes
     useEffect(() => {
         fetchMessages();
     }, [selectedFilter]);
 
-    useEffect(() => {
-        const filtered = messages.filter(message =>
-            message.text && message.text.toLowerCase().includes(searchText.toLowerCase())
-        );
-        
-        setMessages(filtered);
-    }, [searchText]);
 
     return (
         
         <Grid container spacing={2} style={{ overflow: 'auto' }}>
+            {/* Message List */}
             <Grid item xs={12} md={4}>
                 <div className='switch-container'>
                     <h2>Incoming Messages</h2>
-                    {/* <TextField
-                        label="Search Messages"
-                        variant="outlined"
-                        value={searchText}
-                        onChange={e => setSearchText(e.target.value)}
-                        style={{ margin: '20px 0' }}
-                    /> */}
                     <div>
+                        {/* Filter options */}
                         <div 
                             className={`switch-option ${selectedFilter === 'active' ? 'active' : 'inactive'}`}
                             onClick={() => setSelectedFilter('active')}
@@ -91,7 +84,8 @@ const ViewMessages = () => {
                             Handled
                         </div>
                     </div>
-                    
+
+                    {/* Message list */}
                     <div className="messages-list-container">
                         {isLoading ? (
                             <div>Loading messages...</div>
@@ -105,6 +99,8 @@ const ViewMessages = () => {
                     </div>
                 </div>
             </Grid>
+
+            {/* Message Details */}
             <Grid item xs={12} md={8}>
                 {activeMessage ? (
                     <MessageDetails message={activeMessage} refreshMessages={fetchMessages}/>

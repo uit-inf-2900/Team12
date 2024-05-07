@@ -88,7 +88,7 @@ const AddButton = ({ onClick, hoverTitle }) => {
         transition: 'transform 0.3s ease, background-color 0.3s ease',
     };
 
-    // Define custom styles for this specific tooltip that displays a message 
+    /** Define custom styles for this specific tooltip that displays a message */
     const tooltipStyles = { 
         backgroundColor: '#F6964B', 
         fontSize: '0.8rem', 

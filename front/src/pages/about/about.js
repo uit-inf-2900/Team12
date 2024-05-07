@@ -42,7 +42,9 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
 
 
 export const About = () => {
+  // Get the token to see if the user is login 
   const token = sessionStorage.getItem('token');
+  
   return (
     <div className="page-container">
       <h1>
