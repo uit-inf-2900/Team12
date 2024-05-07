@@ -8,7 +8,7 @@ const ConfirmationLogout = ({ isOpen, onClose, onConfirm, message }) => {
 
     return (
         <Modal open={isOpen} onClose={onClose}>
-            <Box className="box-container">
+            <Box className="popup-box-container ">
                 <Box className="box light" sx={{ minWidth: '35rem', height: '15rem' }}>
                     <h4>{message}</h4>
                     <CustomButton

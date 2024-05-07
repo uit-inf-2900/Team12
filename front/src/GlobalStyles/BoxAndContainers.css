@@ -64,6 +64,16 @@
     padding-bottom: 20px;                           /* Added padding at the bottom */
 }
 
+.popup-box-container {
+    display: flex;                                  /* Use flexbox for layout */
+    flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */
+    justify-content: center;                        /* Center children horizontally */
+    align-items: center;                            /* Center children vertically */
+    height: 100vh;                                  /* Full viewport height */
+    max-width: 70%;                                 /* Limit max width to 70% of the viewport */
+    margin: 0 auto;                                 /* Center the container in the viewport */
+}
+
 
 
 /* information about each background box */

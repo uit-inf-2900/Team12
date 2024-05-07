@@ -64,7 +64,7 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
 
     return (
         <Modal open={isOpen} onClose={onClose}>
-            <Box className="box-container">
+            <Box className="popup-box-container">
                 <Box className="box light" sx={{ minWidth: '35rem', height: '15rem' }}>
                     <h2 htmlFor="verificationCode">Verification code</h2>
                     <Typography variant="body1">Please enter the verification code sent to your email.</Typography>
