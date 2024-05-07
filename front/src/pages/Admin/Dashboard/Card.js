@@ -18,7 +18,6 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                 )}
             </div>
             <div className={`card-overlay `}>
-                
                     <div>
                         <div className="card-header">
                             <div className="card-header-text">
@@ -29,7 +28,6 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                             <p className="card-description" key={index}>{stat.label}: {stat.value}</p>
                         ))}
                     </div>
-             
                 
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                     
