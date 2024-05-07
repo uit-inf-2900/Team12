@@ -281,4 +281,18 @@ public class UsersControllerTests
         adminUser = _context.UserDetails.Find(testUserId);
         Assert.False(adminUser!.IsAdmin);
     }
+    
+    [Fact]
+    public void BadRequestAdmin_Fails()
+    {
+        // Run controller with bad request, and verify failure
+        var result = _controller.UpdateAdmin(new UpdateAdminRequest
+        {
+            UserToken = "",
+            UpdateUser = Guid.Empty,
+            NewAdmin = false
+        });
+
+        Assert.IsType<BadRequestResult>(result);
+    }
 }
