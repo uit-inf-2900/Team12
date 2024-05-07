@@ -17,8 +17,8 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                     </div>
                 )}
             </div>
-            <div className={`card-overlay ${isHovered ? 'show' : ''}`}>
-                {isHovered && (
+            <div className={`card-overlay `}>
+                
                     <div>
                         <div className="card-header">
                             <div className="card-header-text">
@@ -26,10 +26,11 @@ const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent,
                             </div>
                         </div>
                         {stats.map((stat, index) => (
-                            <p key={index}>{stat.label}: {stat.value}</p>
+                            <p className="card-description" key={index}>{stat.label}: {stat.value}</p>
                         ))}
                     </div>
-                )}
+             
+                
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
                     
                     {onEdit && (<button onClick={onEdit} variant="outlined" color="primary">
