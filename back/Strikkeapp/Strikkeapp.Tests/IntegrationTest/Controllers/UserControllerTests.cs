@@ -179,4 +179,44 @@ public class UsersControllerTests
         var bannedResult = Assert.IsType<UnauthorizedObjectResult>(result);
         Assert.Contains("User is banned", bannedResult.Value!.ToString());
     }
+
+    [Fact]
+    public void WrongPasswordLogin_Fails()
+    {
+        _mockPasswordHasher.Setup(p => p.VerifyHashedPassword(It.IsAny<object>(), It.IsAny<string>(), "somePassword"))
+            .Returns(PasswordVerificationResult.Failed);
+
+        var result = _controller.LogInUser(new LogInUserRequest
+        {
+            UserEmail = "test@user.com",
+            UserPwd = "somePassword"
+        });
+
+        var failedResult = Assert.IsType<UnauthorizedObjectResult>(result);
+        Assert.Contains("Invalid login attempt", failedResult.Value!.ToString());
+    }
+
+    [Fact]
+    public void DeleteUser_Ok()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        // Run controller, and verify success
+        var result = _controller.DeleteUser("token");
+        Assert.IsType<OkResult>(result);
+    }
+
+    [Fact]
+    public void DeleteInvalidToken_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run controller, and verify failure
+        var result = _controller.DeleteUser("fakeToken");
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
 }
