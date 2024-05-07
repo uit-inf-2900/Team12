@@ -64,23 +64,70 @@ export const Counter = () => {
     
     const { counterData, handleChange, handleSubmit } = useCounterStash(fetchCounter, setAlertInfo);
 
-    const handleIncrement = (id) => {
-        const newCounters = counters.map(counter => {
-            if (counter.counterId === id) {
-                const newValue = (counter.value !== undefined ? counter.value : 0) + 1;
-                return { ...counter, value: newValue };
+    const handleIncrement = async (id) => {
+        const token = sessionStorage.getItem('token');
+        const url = `http://localhost:5002/api/counter/updatecounter`;
+        const payload = {
+            userToken: token,
+            ...currentCounter
+        };
+        try {
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setCounters(currentCounters => currentCounters.map(counter => 
+                    counter.counterId === id ? { ...counter, roundNumber: data.newRoundNumber } : counter
+                ));
+            } else {
+                console.error("Failed to increment the counter", await response.text());
             }
-            return counter;
-        });
-        setCounters(newCounters);
+        } catch (error) {
+            console.error("Error incrementing counter:", error);
+        }
     };
+    
+    const handleDecrement = async (id) => {
+        const token = sessionStorage.getItem('token');
+        const url = `http://localhost:5002/api/counter/updatecounter`;
+        const payload = {
+            userToken: token,
+            ...currentCounter
+        };
+        try {
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                // setCounters(currentCounters => currentCounters.map(counter => {
+                //     if (counter.counterId === id){
 
-    const handleDecrement = (id) => {
-        const newCounters = counters.map(counter => 
-            counter.counterId === id ? { ...counter, value: Math.max(counter.value - 1, 0) } : counter
-        );
-        setCounters(newCounters);
+                //         const newValue = {counter.roundNumber !== undefined ?  counter.roundNumber : 0} + 1;
+                //         return{...counter, roundNumber: newValue};
+                //     };
+                //     return counter;
+                // }
+                // ));
+            } else {
+                console.error("Failed to decrement the counter", await response.text());
+            }
+        } catch (error) {
+            console.error("Error decrementing counter:", error);
+        }
     };
+    
 
     const handleEdit = (counter) => {
         setCurrentCounter({ ...counter, newName: counter.name });
@@ -197,7 +244,7 @@ const CounterItem = ({ counter, onEdit, onIncrement, onDecrement }) => {
     return (
         <div className="counter-container">
             <div className="counter-info" style={{ fontSize: '1.2rem' }}>{counter.name}</div>
-            <div className="counter-info">{counter.value !== undefined ? counter.value : 0}</div>
+            <div className="counter-info">{counter.roundNumber !== undefined ? counter.roundNumber : 0}</div>
             <div className="counter-controls">
                 <button className="light-button" onClick={() => onDecrement(counter.counterId)}>-</button>
                 <button className="light-button" onClick={() => onIncrement(counter.counterId)}>+</button>
