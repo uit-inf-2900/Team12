@@ -28,9 +28,9 @@ const ProjectCard = ({ show, project, handleClose }) => {
             <Typography variant="h6" gutterBottom>
               Needle
             </Typography>
-            <Typography variant="body1" gutterBottom>
+            {/* <Typography variant="body1" gutterBottom>
               {project.needles}
-            </Typography>
+            </Typography> */}
           </Grid>
 
           {/* Right Column */}
@@ -39,18 +39,22 @@ const ProjectCard = ({ show, project, handleClose }) => {
           <Typography variant="h6" gutterBottom>
               Needles
             </Typography>
-            {project.needles.map((type, itemId) => (
-              <Typography key={itemId} variant="body1" gutterBottom>
-                {type}
+            {project.needles.map((needle) => (
+              <Typography key={needle.itemId} variant="body1" gutterBottom>
+                {needle.type} needle size {needle.size} and {needle.length} cm long
               </Typography>
             ))}
 
             <Typography variant="h6" gutterBottom>
               Yarn
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              {project.yarns}
-            </Typography>
+            {project.yarns.map((yarn) => (
+              <Typography key={yarn.itemId} variant="body1" gutterBottom>
+                {yarn.type} by {yarn.manufacturer}, color: {yarn.color}
+                Amount needed: {yarn.inUse}
+              </Typography>
+              
+            ))}
 
 
 

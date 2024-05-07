@@ -26,20 +26,33 @@ const getCustomLabel = (propName) => {
   
 
 
-const Card = ({ title, onClick, onDelete, yarns, ...descriptions }) => {
+const Card = ({ title, onClick, onDelete, yarns, needles, ...descriptions }) => {
     return (
         <div className="card" onClick={onClick}>
           <img src={exampleImage} alt={title} className="card-image" /> {/* Use imported image */}
             <div className="card-overlay">
                 <div className="card-header">
                     <div className="card-header-text">
-                        <h3 className="card-title">{title}</h3>
+                        <h2 className="card-title">{title}</h2>
                     </div>
                     
                 </div>
                 {Object.keys(descriptions).map(key => (
                     <p className="card-description" key={key}> {getCustomLabel(key)}: {descriptions[key]}</p>
                 ))}
+                {needles && (
+                    <div className="card-description">
+                        <p>{getCustomLabel('Needles')}:</p>
+                        <ul>
+                            {needles.map((needle) => (
+                                <li key={needle.itemId}>
+                                    <strong> {needle.type}, size {needle.size} and {needle.length} cm long</strong>
+
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
                 {yarns && (
                     <div className="card-description">
                         <p>{getCustomLabel('Yarns')}:</p>

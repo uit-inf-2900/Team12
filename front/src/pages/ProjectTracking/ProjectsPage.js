@@ -119,11 +119,10 @@ const Projects = () => {
                     
                         <Card
                             key={project.projectId}
-                            title={project.title}
-                            status={project.status}
+                            title={project.projectName}
+                            
                             yarns={project.yarns}
-                            needles={project.needleIds}
-                            Notes={project.notes}
+                            needles={project.needles}
                             
                             
                             onClick={() => handleProjectClick(project)} //pass project to openProject
