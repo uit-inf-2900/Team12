@@ -91,7 +91,7 @@ const YarnStash = () => {
             if (response.ok) {
                 const data = await response.json();
                 setYarns(data.yarnInventory);
-                console.log(data.yarnInventory)
+                console.log('Fetched yarns', data.yarnInventory)
             } else {
                 console.error("Failed to fetch yarn data.");
             }
