@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Fab, Modal, Box } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import MultiSelect from '../../../Components/MultiSelect';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import "../../../GlobalStyles/main.css";
 import { CustomButton } from '../../../Components/Button';
-import ModalContent from '../../../Components/ModualContent';
 import NeedleInfo from './needletext';
 import { AddButton } from '../../../Components/Button';
+import SetAlert from '../../../Components/Alert';
 
 
 /**
@@ -23,6 +21,10 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [needleToDelete, setNeedleToDelete] = useState(null);
     const [openNeedleModal, setOpenNeedleModal] = useState(false);
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertSeverity, setAlertSeverity] = useState('info');
+    const [alertMessage, setAlertMessage] = useState('');
 
 
     // Toggle the needle modal
@@ -61,12 +63,21 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
 
                 if (response.ok) {
                     console.log("Needle deleted successfully");
+                    setAlertMessage("Needle deleted successfully");
+                    setAlertSeverity('success');
+                    setAlertOpen(true);
                     fetchNeedles(); // Refresh the list after deletion
                 } else {
                     console.error("Failed to delete the needle", await response.text());
+                    setAlertMessage(`Failed to delete the needle`);
+                    setAlertSeverity('error');
+                    setAlertOpen(true);
                 }
             } catch (error) {
                 console.error("Error deleting needle:", error);
+                setAlertMessage('Error deleting needle');
+                setAlertSeverity('error');
+                setAlertOpen(true);
             }
         }
 
@@ -123,6 +134,12 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
 
     return (
         <div>
+            <SetAlert 
+                open={alertOpen} 
+                setOpen={setAlertOpen} 
+                severity={alertSeverity} 
+                message={alertMessage} 
+            />
         <>
         {/* Check if there are any needles to display */}
         {needles.length > 0 ? (
