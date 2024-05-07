@@ -141,4 +141,53 @@ public class UserInfoControllerTests
         Assert.Contains("UserEmail", updateRes);
         Assert.Contains("UserPassword", updateRes);
     }
+
+    [Fact]
+    public void FakeTokenUpdate_Fails()
+    {
+        // Mock token service
+        _mockTokenService.Setup(s => s.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        // Run service and verify failure
+        var result = _controller.UpdateProfileInfo(new UserInfoController.UpdateRequest
+        {
+            Token = "fakeToken",
+            UserFullName = "New Name",
+
+        });
+
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void UpdateNoFields_Fails()
+    {
+        // Mock token service
+        _mockTokenService.Setup(s => s.ExtractUserID("testToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        // Run service and verify failure
+        var result = _controller.UpdateProfileInfo(new UserInfoController.UpdateRequest
+        {
+            Token = "testToken"
+        });
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public void NonUserUpdate_Fails()
+    {
+        // Mock token service
+        _mockTokenService.Setup(s => s.ExtractUserID("testToken"))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        // Run service and verify failure
+        var result = _controller.UpdateProfileInfo(new UserInfoController.UpdateRequest
+        {
+            Token = "testToken",
+            UserFullName = "New Name",
+        });
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
 }
