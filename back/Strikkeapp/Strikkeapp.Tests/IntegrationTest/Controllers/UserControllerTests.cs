@@ -9,7 +9,6 @@ using Strikkeapp.Controllers;
 using Strikkeapp.Services;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Models;
-using Strikkeapp.User.Models;
 using Strikkeapp.Data.Entities;
 
 
