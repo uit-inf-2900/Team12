@@ -127,7 +127,7 @@ img{
 .nav-signup,
 .nav-toggle,
 .nav-close{
-    font-size: 1.25rem;
+    font-size: var(--h3-font-size);
     color: var(--color-text-navbar);
     cursor: pointer;
     transition: color .4s;
@@ -198,7 +198,7 @@ img{
     left: 0;
     right: 0;
     margin-inline: auto;
-    font-size: 2rem;
+    font-size: var(--h1-font-size);
 }
   
 .login-form {

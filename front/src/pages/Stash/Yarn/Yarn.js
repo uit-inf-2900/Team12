@@ -3,10 +3,9 @@ import { Modal } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
 import "../../Counter.css";
-import { AddButton } from '../../../Components/Button';
 import GeneralCard from '../../Admin/Dashboard/Card';
 import InputField from '../../../Components/InputField';
-import { CustomButton } from '../../../Components/Button';
+import { CustomButton, AddButton } from '../../../Components/Button';
 import yarnBasket from '../../../images/yarnSheep.png';
 
 const YarnStash = () => {
@@ -126,7 +125,7 @@ const YarnStash = () => {
                 />
             ))}
             </div>
-            <AddButton onClick={toggleYarnModal} />
+            <AddButton hoverTitble="Click here to add Yarn" onClick={toggleYarnModal} />
             <Modal open={openYarnModal} onClose={toggleYarnModal}>
                 <TextYarn onClose={toggleYarnModal} fetchYarns={fetchYarns} />
             </Modal>

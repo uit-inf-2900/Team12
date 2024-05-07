@@ -57,6 +57,11 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
         }
     };
 
+    const tooltipStyles = { 
+        fontSize: '0.8rem', 
+        font: '"Rigot", sans-serif'
+    };
+
     return (
         <Modal open={isOpen} onClose={onClose}>
             <Box className="box-container">
@@ -79,7 +84,7 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
                     >verify</CustomButton>
                     
                     {/* Custom Tooltip to show message */}
-                    <Tooltip open={isHovering} title="You can verify your user the next time you log in, or on your profile">
+                    <Tooltip open={isHovering} title="You can verify your user the next time you log in, or on your profile"  componentsProps={{ tooltip: { sx: tooltipStyles } }}>
                         <div onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
                             <CustomButton 
                                 thememode="dark" 

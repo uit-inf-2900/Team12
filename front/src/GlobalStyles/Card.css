@@ -73,14 +73,14 @@
   }
   
   .card-title {
-    font-size: 1em;
+    font-size: var(--normal-font-size);
     margin: 0 0 .1em;
     color: var(--main-color);
   }
   
   
   .card-status {
-    font-size: .8em;
+    font-size: var(--small-font-size);
     color: #D7BDCA;
   }
   
@@ -127,7 +127,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2em;
+  font-size:  var(--h3-font-size);
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
