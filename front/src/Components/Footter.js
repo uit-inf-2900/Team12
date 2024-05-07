@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, Box, Grid, Typography, IconButton, Paper, Button, Alert } from '@mui/material';
-import Theme from './Theme';
 import { useForm } from 'react-hook-form';
 
 
@@ -10,8 +9,7 @@ import PinterestIcon from '@mui/icons-material/Pinterest';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ContactInformation from './ContactInformation'; 
 import InputField from './InputField';
-import { CustomButton } from './Button'
-import SendIcon from '@mui/icons-material/Send';
+
 import SetAlert from './Alert';
 
 

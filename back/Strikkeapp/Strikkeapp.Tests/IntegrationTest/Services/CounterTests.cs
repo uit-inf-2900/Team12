@@ -10,7 +10,7 @@ using Strikkeapp.Models;
 
 namespace Strikkeapp.Tests.Services;
 
-public class CounterTests
+public class CounterTests : IDisposable
 {
     private readonly StrikkeappDbContext _context;
     private readonly CounterService _counterService;
@@ -27,8 +27,9 @@ public class CounterTests
                 .Returns("hashedPassword");
 
         // Set up in memory database
+        string databaseName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
-            .UseInMemoryDatabase(databaseName: "UserServiceDb")
+            .UseInMemoryDatabase(databaseName: databaseName)
             .ConfigureWarnings(war => war.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
@@ -58,6 +59,12 @@ public class CounterTests
         });
 
         _context.SaveChanges();
+    }
+
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 
     [Fact]

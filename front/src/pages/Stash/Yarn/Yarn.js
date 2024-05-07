@@ -3,10 +3,9 @@ import { Modal } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
 import "../../Counter.css";
-import { AddButton } from '../../../Components/Button';
 import GeneralCard from '../../Admin/Dashboard/Card';
 import InputField from '../../../Components/InputField';
-import { CustomButton } from '../../../Components/Button';
+import { CustomButton, AddButton } from '../../../Components/Button';
 import yarnBasket from '../../../images/yarnSheep.png';
 
 const YarnStash = () => {
@@ -111,21 +110,22 @@ const YarnStash = () => {
                 <GeneralCard
                     key={yarn.itemId}
                     ItemId={yarn.ItemID}
-                    title={yarn.type}
+                    title={`${yarn.manufacturer}, ${yarn.type}`}
                     stats={[
-                        { label: "Brand type", value: yarn.type},
                         { label: "Brand", value: yarn.manufacturer},
+                        { label: "Type", value: yarn.type},
                         { label: "Color", value: yarn.color},
                         { label: "Weight", value: yarn.weight},
-                        { label: "Length", value: yarn.length },
                         { label: "Gauge", value: yarn.gauge},
-                        { label: "Notes", value: yarn.notes}
+
+                        // { label: "Length", value: yarn.length },
                     ]}
+                    hovermessage = 'Click to view, edit or delete'
                     onClick={() => handleEditYarn(yarn)}
                 />
             ))}
             </div>
-            <AddButton onClick={toggleYarnModal} />
+            <AddButton hoverTitble="Click here to add Yarn" onClick={toggleYarnModal} />
             <Modal open={openYarnModal} onClose={toggleYarnModal}>
                 <TextYarn onClose={toggleYarnModal} fetchYarns={fetchYarns} />
             </Modal>

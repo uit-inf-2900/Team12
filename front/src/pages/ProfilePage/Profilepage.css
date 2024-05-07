@@ -24,27 +24,27 @@
 
 /* Light purple color */
 .profile-page.light {
-    width: 60%; /* Take up half of the container's width */
-    background-color: var(--box-color-light); /* Light purple background */
+    width: 60%;  
+    background-color: var(--box-color-light);  
     height: 50%;
 }
 
 .profile-info {
-    font-size: 1em; /* Adjust the size as needed */
-    margin: 5px 0; /* This gives a little space above and below each line */
+    font-size: var(--normal-font-size);  
+    margin: 5px 0; /* Gives a little space above and below each line */
 }
 .profile-options {
-    font-size: 1em; /* Adjust the size as needed */
+    font-size: var(--normal-font-size); 
 }
 
 .profile-page.dark {
-    width: 40%; /* Take up half of the container's width */
-    background-color: var(--box-color-dark); /* Darker purple background */
+    width: 40%; 
+    background-color: var(--box-color-dark);  
     height: 50%;
-    display: flex; /* This is already specified, included for clarity */
-    flex-direction: column; /* Stack children vertically */
-    justify-content: space-between; /* Spread out children vertically */
-    align-items: center; /* Center children horizontally */
+    display: flex;  
+    flex-direction: column;  
+    justify-content: space-between;  
+    align-items: center; 
 }
 
 .box.dark p:first-child {
@@ -52,14 +52,14 @@
 }
 
 .profile-image-container img {
-    width: 70px; /* Adjust the size as needed */
-    height: 70px; /* Adjust the size as needed */
-    border-radius: 50%; /* This makes the image round */
-    object-fit: cover; /* This ensures the image covers the area without stretching */
+    width: 70px; 
+    height: 70px;  
+    border-radius: 50%; 
+    object-fit: cover;  
 }
 
 .profile-name {
     text-align: center;
-    margin-top: 10px; /* adjust as needed */
-    font-size: 1.2em; /* adjust as needed */
+    margin-top: 10px;  
+    font-size: var(--normal-font-size);  
 }

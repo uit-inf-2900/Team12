@@ -143,13 +143,13 @@ const ContactUs = () => {
     return (
         <div className="page-container">
             <h1>Contact Us</h1>
-            <div className="section-container" style={{"max-width":"800px"}}>
+            <div className="section-container" style={{'max-width':'100%'}}>
                 <div className="infoText" >
                     <h2>Contact Details</h2>
                     <ContactDetails />
                 </div>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="box dark" style={{"width": "50%", "height":"100%"}}>
+                <form onSubmit={handleSubmit(onSubmit)} className="box dark" style={{"max-width": "50%", "height":"100%"}}>
                     <h2>Send us a message</h2>
                     <InputField
                         label="Full Name"

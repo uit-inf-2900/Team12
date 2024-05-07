@@ -42,6 +42,9 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
 
 
 export const About = () => {
+  // Get the token to see if the user is login 
+  const token = sessionStorage.getItem('token');
+  
   return (
     <div className="page-container">
       <h1>
@@ -94,14 +97,16 @@ export const About = () => {
       </div>
 
 
-      {/* Button for registration */}
-      <div  style={{"justify-content":"center", width:'100%'}}>
-          <Link to="/signup " className="section-container" style={{'text-decoration': 'none'}}>
-            <CustomButton themeMode="light" submit={true} fullWidth={true}>
-              Sign up 
-            </CustomButton>
-          </Link>
-      </div>
+      {/* Button for registration. Should only be there if you are not signed in*/}
+      {!token && (
+        <div  style={{"justify-content":"center", width:'100%'}}>
+            <Link to="/signup " className="section-container" style={{'text-decoration': 'none'}}>
+              <CustomButton themeMode="light" submit={true} fullWidth={true}>
+                Sign up 
+              </CustomButton>
+            </Link>
+        </div>
+      )}
 
       {/* Team-members */}
       <h2>Meet the team behind the magic</h2>
