@@ -33,6 +33,7 @@
     box-shadow: 5px 5px 8px var(--shadow-color);
     color: var(----box-color-dark);
     margin-bottom: 20px;
+    font-family: "Syne", sans-serif; 
   }
   
   .card-image {      
@@ -88,7 +89,7 @@
     padding: 0 0.5em 0.5em;
     margin: 0;
     color: var(--text-color);
-    font-family: var(--main-font);   
+    /* font-family: var(--main-font);    */
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
@@ -130,6 +131,7 @@
   font-size:  var(--h3-font-size);
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+  font-family: var(--main-font);
 }
 
 .card-link:hover .hover-message {
