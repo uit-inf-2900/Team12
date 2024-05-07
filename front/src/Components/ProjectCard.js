@@ -3,7 +3,10 @@ import { makeStyles } from '@mui/styles';
 import { Modal, Box, Typography, Button, Grid, Avatar } from '@mui/material';
 import "../GlobalStyles/Card.css";
 
-const ProjectCard = ({ show, project, handleClose }) => {
+const ProjectCard = ({ show, project, handleClose, onDelete }) => {
+
+  
+  
 
   return (
     <Modal open={show} onClose={handleClose}>
@@ -51,7 +54,7 @@ const ProjectCard = ({ show, project, handleClose }) => {
             {project.yarns.map((yarn) => (
               <Typography key={yarn.itemId} variant="body1" gutterBottom>
                 {yarn.type} by {yarn.manufacturer}, color: {yarn.color}
-                Amount needed: {yarn.inUse}
+                Amount in use: {yarn.inUse}
               </Typography>
               
             ))}
@@ -79,6 +82,9 @@ const ProjectCard = ({ show, project, handleClose }) => {
             </Button>
             <Button variant="contained" color="primary" sx={{ mr: 1 }}>
               Counter
+            </Button>
+            <Button variant="contained" onClick={onDelete} color="primary" sx={{ mr: 1 }}>
+              Delete project
             </Button>
           </Box>
           <Button variant="contained" onClick={handleClose}>Close</Button>

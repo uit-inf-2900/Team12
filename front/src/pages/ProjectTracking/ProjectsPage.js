@@ -32,22 +32,6 @@ const Projects = () => {
     const [allProjects, setAllProjects]=useState([]);
 
 
-    //fetch all projects in DB
-    // const fetchProjects = async () => {
-    //     const token = sessionStorage.getItem('token');
-    //     const url = `http://localhost:5002/api/projects?userToken=${token}`;
-    //     try {
-    //         const response = await fetch(url);
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             setAllProjects(response.data || []);
-    //         } else {
-    //             console.error("Failed to fetch projects data.");
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching data:", error);
-    //     }
-    // };
 
     const fetchProjects = async () => {
         setLoading(true);
@@ -64,9 +48,20 @@ const Projects = () => {
         fetchProjects();
     }, []);
 
-    //delete selected project
-    const deleteProjects = async () => {
+    const deleteProject = async (ProjectId) => {
 
+        try{
+          const response = await axios.delete(`http://localhost:5002/api/projects?userToken=${sessionStorage.getItem('token')}&projectId=${ProjectId}`)
+        } catch (error) {
+          console.error('Error deleting Project:', error);
+  
+  
+        }
+  
+        handleCloseModal();
+        fetchProjects();
+        
+        
     };
 
 
@@ -120,9 +115,10 @@ const Projects = () => {
                         <Card
                             key={project.projectId}
                             title={project.projectName}
-                            
+                        
                             yarns={project.yarns}
                             needles={project.needles}
+                            
                             
                             
                             onClick={() => handleProjectClick(project)} //pass project to openProject
@@ -142,7 +138,7 @@ const Projects = () => {
             <AddButton onClick={toggleUpload} />
             
             <Modal open={uploading} onClose={toggleUpload}>
-                <UploadProjects onClose={toggleUpload}/>
+                <UploadProjects onClose={toggleUpload} fetchProjects={()=>fetchProjects()} />
             </Modal>
 
             {selectedProject && ( // Render ModalCard only when selectedProject is not null
@@ -150,6 +146,8 @@ const Projects = () => {
                     show={showModal}
                     project={selectedProject}
                     handleClose={handleCloseModal}
+                    onDelete={()=> deleteProject(selectedProject.projectId)}
+                    
                 />
                     
             

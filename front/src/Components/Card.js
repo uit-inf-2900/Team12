@@ -33,7 +33,7 @@ const Card = ({ title, onClick, onDelete, yarns, needles, ...descriptions }) => 
             <div className="card-overlay">
                 <div className="card-header">
                     <div className="card-header-text">
-                        <h2 className="card-title">{title}</h2>
+                        <h3 className="card-title">{title}</h3>
                     </div>
                     
                 </div>
