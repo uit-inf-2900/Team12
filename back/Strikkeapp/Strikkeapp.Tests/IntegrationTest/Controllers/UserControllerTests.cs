@@ -15,6 +15,7 @@ namespace Strikkeapp.Tests.Controllers;
 
 public class UsersControllerTests
 {
+    // Initialize db, controller and services
     private readonly UsersController _controller;
     private readonly IUserService _userService;
     private readonly IVerificationService _verificationService;
@@ -29,6 +30,7 @@ public class UsersControllerTests
     private Guid testUserId = Guid.NewGuid();
     private string testVerification = String.Empty;
     private Guid testAdminId = Guid.NewGuid();
+    
     public UsersControllerTests()
     {
         // Set up mock services
