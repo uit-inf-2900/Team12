@@ -137,6 +137,21 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public void CreateInvalidRequest_Fails()
+    {
+        var request = new CreateUserRequest
+        {
+            UserEmail = "",
+            UserPwd = "",
+            UserFullName = "",
+            UserDOB = 0
+        };
+        var result = _controller.CreateUser(request);
+
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
     public void LoginUser_Ok()
     {
         var request = new LogInUserRequest
@@ -218,5 +233,52 @@ public class UsersControllerTests
         // Run controller, and verify failure
         var result = _controller.DeleteUser("fakeToken");
         Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void DeleteUserNotFound_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        // Run controller, and verify failure
+        var result = _controller.DeleteUser("token");
+        var foundResult = Assert.IsType<ObjectResult>(result);
+        Assert.Contains("Unable to find user", foundResult.Value!.ToString());
+    }
+
+    [Fact]
+    public void UpdateAdmin_Ok()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
+
+        // Add admin, and verify success
+        var addAdmin = _controller.UpdateAdmin(new UpdateAdminRequest
+        {
+            UserToken = "adminToken",
+            UpdateUser = testUserId,
+            NewAdmin = true
+        });
+        Assert.IsType<OkObjectResult>(addAdmin);
+
+        // Check that user is now admin
+        var adminUser = _context.UserDetails.Find(testUserId);
+        Assert.True(adminUser!.IsAdmin);
+
+        // Remove admin, and verify success
+        var removeAdmin = _controller.UpdateAdmin(new UpdateAdminRequest
+        {
+            UserToken = "adminToken",
+            UpdateUser = testUserId,
+            NewAdmin = false
+        });
+        Assert.IsType<OkObjectResult>(removeAdmin);
+
+        // Check that user is no longer admin
+        adminUser = _context.UserDetails.Find(testUserId);
+        Assert.False(adminUser!.IsAdmin);
     }
 }
