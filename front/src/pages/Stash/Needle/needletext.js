@@ -109,7 +109,7 @@ const NeedleInfo = ({ onClose, fetchNeedles }) => {
 
     return (
         <div className="pop">
-            <div className="pop-content" style={{ height: '50%', width: '30%', alignContent: 'center', overflow: 'auto' }}>
+            <div className="pop-content" style={{ height: 'auto', maxWidth: '40%', alignContent: 'center', overflow: 'auto' }}>
                 <form onSubmit={handleSubmit}>
                     <h2>Please add the information about your needle</h2>
                     <div style={{ display: 'flex' }}>
@@ -152,7 +152,7 @@ const NeedleInfo = ({ onClose, fetchNeedles }) => {
                             />
                         </div>
                         <div style={{ flex: '40%', padding: '10px', textAlign: 'center' }}>
-                            <img src={getImageByName('yarnBasket')} alt="Yarn Basket" style={{ maxWidth: '70%', height: 'auto' }} />
+                            <img src={getImageByName('yarnBasket')} alt="Yarn Basket" style={{ maxWidth: '80%', height: 'auto' }} />
                         </div>
                     </div>
                     {error.error && <div>{error.error}</div>}

@@ -152,7 +152,7 @@ const Dashboard = ({ toggleView }) => {
                 <GeneralCard 
                     title="Yarn Statistics"
                     stats={Yarn}
-                    chartComponent={renderContent(Yarn, "Yarn Statistics", "yarnSheep")}
+                    chartComponent={renderContent(0, "Yarn Statistics", "yarnSheep")}
                 />
 
                 <GeneralCard 
@@ -165,7 +165,7 @@ const Dashboard = ({ toggleView }) => {
                 <GeneralCard 
                     title="Recipes Statistics"
                     stats={Recipes}
-                    chartComponent={renderContent(Recipes, "Recipes Statistics", "books")}
+                    chartComponent={renderContent(0, "Recipes Statistics", "books")}
                 />
                 
             </div>
