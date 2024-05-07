@@ -72,7 +72,7 @@ const LogIn = () => {
     };
 
     return (
-        <div className="box-container">
+        <div className="box-container" style={{paddingTop:'50px', paddingBottom:'50px'}}>
             <div className="box light">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h2>Welcome back!</h2>

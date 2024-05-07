@@ -226,74 +226,77 @@ const ProfilePage = () => {
     return (
         <div className="profile-page-container">
             {/* The left side of the profile page */}
-            <div className="box dark">
-                <div className="profile-image-container">
-                    <img src={Image} alt="Profile" />
-                </div>
-                <p className="profile-name" style={{fontSize: '24px'}}>
-                    {profileFetchError || userProfileState.userFullName || 'Loading...'}
-                </p>
-                <div style={{flexGrow: 1}}></div>
-                <p className="profile-options" style={{fontWeight: 'bold'}}>My Profile</p>
+            <div className='box-container' style={{height:'50%', width:'90%'}}>
 
-                {/* If the user are not verified, show a button with the option to verify */}
-                {isVerified !== 'verified' && (
-                <>
-                    <CustomButton onClick={() => setShowVerificationModal(true)} themeMode="dark">
-                        Verify User
-                    </CustomButton>
-                    <ConfirmationVerification
-                        navigation={"/profile"}
-                        isOpen={showVerificationModal}
-                        onClose={() => setShowVerificationModal(false)}
-                        userToken={token}
+                <div className="box dark">
+                    <div className="profile-image-container">
+                        <img src={Image} alt="Profile" />
+                    </div>
+                    <p className="profile-name" style={{fontSize: '24px'}}>
+                        {profileFetchError || userProfileState.userFullName || 'Loading...'}
+                    </p>
+                    <div style={{flexGrow: 1}}></div>
+                    <p className="profile-options" style={{fontWeight: 'bold'}}>My Profile</p>
+
+                    {/* If the user are not verified, show a button with the option to verify */}
+                    {isVerified !== 'verified' && (
+                        <>
+                        <CustomButton onClick={() => setShowVerificationModal(true)} themeMode="dark">
+                            Verify User
+                        </CustomButton>
+                        <ConfirmationVerification
+                            navigation={"/profile"}
+                            isOpen={showVerificationModal}
+                            onClose={() => setShowVerificationModal(false)}
+                            userToken={token}
+                            />
+                    </>
+                    )}
+
+                    <div style={{flexGrow: 2}}></div>
+                    <div className='infoText-small'>
+                        <Link to="/contactus" style={{color: "black", borderBottom: '1px solid'}}>Contact Us</Link>
+                    </div>
+                    <div style={{flexGrow: 0.2}}></div>
+                    <div onClick={handleDelete} className='infoText-small' style={{color: "black", borderBottom: '1px solid', cursor: 'pointer'}}>
+                        Delete account
+                    </div>
+                </div>
+                <ModalContent
+                    open={showModal}
+                    handleClose={() => setShowModal(false)}
+                    infobox={deleteAccountContent()}
                     />
-                </>
-                )}
-
-                <div style={{flexGrow: 2}}></div>
-                <div className='infoText-small'>
-                    <Link to="/contactus" style={{color: "black", borderBottom: '1px solid'}}>Contact Us</Link>
+                {/* The right side of the profile page. Can be either view mode or edit mode*/}
+                <div className="box light" >
+                    {profileFetchError ? (
+                        <p className="error-message">{profileFetchError}</p>
+                        ) : isEditing ? (
+                            <>
+                            <h2>Edit your information</h2>
+                            <InputField label="Full Name" type="text" name="userFullName" value={editState.userFullName} onChange={handleChange} />
+                            <InputField label="Email" type="email" name="userEmail" value={editState.userEmail} onChange={handleChange} />
+                            <InputField label="Current Password" type="password" name="oldPassword" value={editState.oldPassword} onChange={handleChange} />
+                            <InputField label="New Password" type="password" name="newPassword" value={editState.newPassword} onChange={handleChange} />
+                            <InputField label="Confirm New Password" type="password" name="confirmNewPassword" value={editState.confirmNewPassword} onChange={handleChange} />
+                            <CustomButton themeMode="light" iconName='save' onClick={handleSave}>Save Changes</CustomButton>
+                            <CustomButton themeMode="light" onClick={handleEditToggle}>Cancel</CustomButton>
+                        </>
+                    ) : (
+                        <>
+                            <h2> My Account </h2>
+                            <InputField label="Full Name" readOnly={true} type="text" value={userProfileState.userFullName} />
+                            <InputField label="Email" readOnly={true} type="email" value={userProfileState.userEmail} />
+                            <CustomButton themeMode="light" onClick={handleEditToggle} iconName="edit">Edit Profile</CustomButton>
+                        </>
+                    )}
+                    <SetAlert
+                        open={alertInfo.open}
+                        setOpen={(isOpen) => setAlertInfo({ ...alertInfo, open: isOpen })}
+                        severity={alertInfo.severity}
+                        message={alertInfo.message}
+                        />
                 </div>
-                <div style={{flexGrow: 0.2}}></div>
-                <div onClick={handleDelete} className='infoText-small' style={{color: "black", borderBottom: '1px solid', cursor: 'pointer'}}>
-                    Delete account
-                </div>
-            </div>
-            <ModalContent
-                open={showModal}
-                handleClose={() => setShowModal(false)}
-                infobox={deleteAccountContent()}
-            />
-            {/* The right side of the profile page. Can be either view mode or edit mode*/}
-            <div className="box light">
-                {profileFetchError ? (
-                    <p className="error-message">{profileFetchError}</p>
-                ) : isEditing ? (
-                    <>
-                        <h2>Edit your information</h2>
-                        <InputField label="Full Name" type="text" name="userFullName" value={editState.userFullName} onChange={handleChange} />
-                        <InputField label="Email" type="email" name="userEmail" value={editState.userEmail} onChange={handleChange} />
-                        <InputField label="Current Password" type="password" name="oldPassword" value={editState.oldPassword} onChange={handleChange} />
-                        <InputField label="New Password" type="password" name="newPassword" value={editState.newPassword} onChange={handleChange} />
-                        <InputField label="Confirm New Password" type="password" name="confirmNewPassword" value={editState.confirmNewPassword} onChange={handleChange} />
-                        <CustomButton themeMode="light" iconName='save' onClick={handleSave}>Save Changes</CustomButton>
-                        <CustomButton themeMode="light" onClick={handleEditToggle}>Cancel</CustomButton>
-                    </>
-                ) : (
-                    <>
-                        <h2> My Account </h2>
-                        <InputField label="Full Name" readOnly={true} type="text" value={userProfileState.userFullName} />
-                        <InputField label="Email" readOnly={true} type="email" value={userProfileState.userEmail} />
-                        <CustomButton themeMode="light" onClick={handleEditToggle} iconName="edit">Edit Profile</CustomButton>
-                    </>
-                )}
-                <SetAlert
-                    open={alertInfo.open}
-                    setOpen={(isOpen) => setAlertInfo({ ...alertInfo, open: isOpen })}
-                    severity={alertInfo.severity}
-                    message={alertInfo.message}
-                />
             </div>
         </div>
     );

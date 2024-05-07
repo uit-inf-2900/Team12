@@ -76,7 +76,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className='box-container'>
+    <div className='box-container' style={{paddingTop:'50px', paddingBottom:'50px'}}>
       <div className="box dark">
         <h2>Hello, Knitter!</h2>
         <p>Already have an account?</p>
