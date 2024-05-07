@@ -19,11 +19,12 @@ public class UsersControllerTests
 {
     private readonly UsersController _controller;
     private readonly IUserService _userService;
+    private readonly IVerificationService _verificationService;
     private readonly StrikkeappDbContext _context;
+
 
     // Set up mock services
     private readonly Mock<IMailService> _mockMailService = new Mock<IMailService>();
-    private readonly Mock<IVerificationService> _mockVerificationService = new Mock<IVerificationService>();
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
 
@@ -40,9 +41,6 @@ public class UsersControllerTests
 
         _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string>()))
             .Returns("token");
-        _mockVerificationService.Setup(v => v.CreateVerification(It.IsAny<string>()))
-            .Returns(VerificationResultCreate.ForSuccess("123456"));
-        
 
         // Set up in memory database
         string databaseName = Guid.NewGuid().ToString();
@@ -54,7 +52,8 @@ public class UsersControllerTests
         // Set up context and service
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
         _userService = new UserService(_context, _mockTokenService.Object, _mockPasswordHasher.Object);
-        _controller = new UsersController(_userService, _context, _mockMailService.Object, _mockVerificationService.Object);
+        _verificationService = new VerificationService(_context, _mockTokenService.Object);
+        _controller = new UsersController(_userService, _context, _mockMailService.Object, _verificationService);
 
         SeedDatabase();
     }
@@ -451,11 +450,6 @@ public class UsersControllerTests
         _mockTokenService.Setup(s => s.ExtractUserID("userToken"))
             .Returns(TokenResult.ForSuccess(testUserId));
 
-        _mockVerificationService.Setup(v => v.VerifyCode("userToken", testVerification))
-            .Returns(VerificationResult.ForSuccess());
-
-        //Assert.Null(_mockVerificationService.Object.VerifyCode);
-
         var result = _controller.VerifyUser(new VerificationRequest
         {
             UserToken = "userToken",
@@ -463,6 +457,54 @@ public class UsersControllerTests
         });
 
         Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public void VerifyUserBadRequest_Fails()
+    {
+        // Run controller with bad request, and verify failure
+        var result = _controller.VerifyUser(new VerificationRequest
+        {
+            UserToken = "",
+            VerificationCode = ""
+        });
+
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public void VerifyUserInvalidToken_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run controller with invalid token, and verify failure
+        var result = _controller.VerifyUser(new VerificationRequest
+        {
+            UserToken = "fakeToken",
+            VerificationCode = testVerification
+        });
+
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void VerifyNonUser_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        // Run controller with invalid user, and verify failure
+        var result = _controller.VerifyUser(new VerificationRequest
+        {
+            UserToken = "userToken",
+            VerificationCode = testVerification
+        });
+
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Contains("Could not find verification", notFoundResult.Value!.ToString());
     }
 
 }
