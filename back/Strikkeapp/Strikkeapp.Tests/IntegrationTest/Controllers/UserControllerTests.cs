@@ -31,22 +31,29 @@ public class UsersControllerTests
     private Guid testAdminId = Guid.NewGuid();
     public UsersControllerTests()
     {
-            _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
-                .Returns("hashedPassword");
+        // Set up mock services
+        _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
+            .Returns("hashedPassword");
+        _mockPasswordHasher.Setup(p => p.VerifyHashedPassword(It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string>()))
+            .Returns(PasswordVerificationResult.Success);
 
-            // Set up in memory database
-            string databaseName = Guid.NewGuid().ToString();
-            var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
-                .UseInMemoryDatabase(databaseName: databaseName)
-                .ConfigureWarnings(war => war.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-                .Options;
+        _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string>()))
+            .Returns("token");
+        
 
-            // Set up context and service
-            _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
-            _userService = new UserService(_context, _mockTokenService.Object, _mockPasswordHasher.Object);
-            _controller = new UsersController(_userService, _context, _mockMailService.Object, _mockVerificationService.Object);
-    
-            SeedDatabase();
+        // Set up in memory database
+        string databaseName = Guid.NewGuid().ToString();
+        var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
+            .UseInMemoryDatabase(databaseName: databaseName)
+            .ConfigureWarnings(war => war.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+            .Options;
+
+        // Set up context and service
+        _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
+        _userService = new UserService(_context, _mockTokenService.Object, _mockPasswordHasher.Object);
+        _controller = new UsersController(_userService, _context, _mockMailService.Object, _mockVerificationService.Object);
+
+        SeedDatabase();
     }
 
     private void SeedDatabase()
@@ -84,6 +91,13 @@ public class UsersControllerTests
             IsAdmin = true
         });
 
+        _context.UserLogIn.Add(new UserLogIn
+        {
+            UserEmail = "banned@user.com",
+            UserPwd = "hashedPassword",
+            UserStatus = "banned"
+        });
+
         _context.SaveChanges();
     }
 
@@ -105,7 +119,7 @@ public class UsersControllerTests
     }
 
     [Fact]
-    public void BadRequest_Fails()
+    public void BadRequestLogin_Fails()
     {
         var request = new CreateUserRequest
         {
@@ -130,7 +144,39 @@ public class UsersControllerTests
             UserDOB = 20240101
         };
         var result = _controller.CreateUser(request);
+        
+        // Extract response and check it is correct
+        var conflicResult = Assert.IsType<ConflictObjectResult>(result);
+        Assert.NotNull(conflicResult);
+        Assert.Contains("Email already exsits", conflicResult.Value!.ToString());
+    }
 
-        Assert.IsType<ConflictObjectResult>(result);
+    [Fact]
+    public void LoginUser_Ok()
+    {
+        var request = new LogInUserRequest
+        {
+            UserEmail = "admin@knithub.no",
+            UserPwd = "somePassword"
+        };
+
+        var result = _controller.LogInUser(request);
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public void BannedUserLogin_Fails()
+    {
+        // Set up request for banned user
+        var request = new LogInUserRequest
+        {
+            UserEmail = "banned@user.com",
+            UserPwd = "somePassword"
+        };
+
+        // Call controller and check response
+        var result = _controller.LogInUser(request);
+        var bannedResult = Assert.IsType<UnauthorizedObjectResult>(result);
+        Assert.Contains("User is banned", bannedResult.Value!.ToString());
     }
 }
