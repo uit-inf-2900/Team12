@@ -10,6 +10,8 @@ public interface ICounterService
     public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName);
     public CounterResult DeleteCounter(string userToken, Guid counterId);
     public GetCountersResult GetCounters(string userToken);
+    public CounterResult IncrementCounter(string userToken, Guid counterId);
+    public CounterResult DecrementCounter(string userToken, Guid counterId);
 }
 
 public class CounterService : ICounterService
@@ -106,6 +108,76 @@ public class CounterService : ICounterService
                     getCounter.Name = newName;
                     _context.SaveChanges();
                 }
+
+                transaction.Commit();
+                return CounterResult.ForSuccess();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return CounterResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public CounterResult IncrementCounter(string userToken, Guid counterId)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return CounterResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var getCounter = _context.CounterInventory
+                    .Where(uid => uid.UserId == tokenResult.UserId)
+                    .FirstOrDefault(cid => cid.CounterId == counterId);
+
+                if (getCounter == null)
+                {
+                    return CounterResult.ForFailure("Not found");
+                }
+
+                getCounter.RoundNumber++;
+                _context.SaveChanges();
+
+                transaction.Commit();
+                return CounterResult.ForSuccess();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return CounterResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public CounterResult DecrementCounter(string userToken, Guid counterId)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return CounterResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var getCounter = _context.CounterInventory
+                    .Where(uid => uid.UserId == tokenResult.UserId)
+                    .FirstOrDefault(cid => cid.CounterId == counterId);
+
+                if (getCounter == null)
+                {
+                    return CounterResult.ForFailure("Not found");
+                }
+
+                getCounter.RoundNumber--;
+                _context.SaveChanges();
 
                 transaction.Commit();
                 return CounterResult.ForSuccess();

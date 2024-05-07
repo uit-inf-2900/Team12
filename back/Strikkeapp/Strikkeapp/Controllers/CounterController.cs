@@ -88,6 +88,50 @@ public class CounterController : ControllerBase
         return Ok();
     }
 
+    [HttpPatch]
+    [Route("incrementcounter")]
+    public IActionResult IncrementCounter([FromQuery] string userToken, Guid counterId)
+    {
+        var result = _counterService.IncrementCounter(userToken, counterId);
+
+        if (!result.Success)
+        {
+            if (result.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+            if (result.ErrorMessage == "Not found")
+            {
+                return NotFound("Could not find counter");
+            }
+
+            return StatusCode(500, result.ErrorMessage);
+        }
+
+        return Ok();
+    }
+
+    [HttpPatch]
+    [Route("decrementcounter")]
+    public IActionResult DecrementCounter([FromQuery] string userToken, Guid counterId)
+    {
+        var result = _counterService.DecrementCounter(userToken, counterId);
+
+        if (!result.Success)
+        {
+            if (result.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+            if (result.ErrorMessage == "Not found")
+            {
+                return NotFound("Could not find counter");
+            }
+        }
+
+        return Ok();
+    }
+
     [HttpDelete]
     [Route("deletecounter")]
     public IActionResult DeleteCounter([FromBody] DeleteCounterRequest request)
