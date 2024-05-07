@@ -126,7 +126,7 @@ const Dashboard = ({ toggleView }) => {
         <div>
             <div style={{ display: "flex",flexWrap: "wrap", justifyContent: "space-between" }}>
                 <GeneralCard 
-                    title="User Statistics"
+                    title={`User Statistics: ${usersData.length} users`}
                     stats={userStats}
                     onClick={() => toggleView('users')}
                     hovermessage="Click to view user statistics"
@@ -134,7 +134,7 @@ const Dashboard = ({ toggleView }) => {
                 />
 
                 <GeneralCard 
-                    title="Newsletter subscripers"
+                    title={`Newsletter: ${subscribers.length} subscripers`}
                     stats={Newsletter}
                     hovermessage="Click to view newsletter subscribers"
                     chartComponent={renderContent(0, "Newsletter Statistics", "pileOfSweaters")}
@@ -142,7 +142,7 @@ const Dashboard = ({ toggleView }) => {
                 /> 
 
                 <GeneralCard 
-                    title="Message Statistics"
+                    title={`Message: ${totalMessages} Message`}
                     stats={Messages}
                     hovermessage="Click to view message statistics"
                     chartComponent={renderContent(Messages, "Message Statistics", "reading")}
@@ -150,13 +150,13 @@ const Dashboard = ({ toggleView }) => {
                 />
 
                 <GeneralCard 
-                    title="Yarn Statistics"
+                    title={`Yarn: ${yarnData.length}`}
                     stats={Yarn}
                     chartComponent={renderContent(0, "Yarn Statistics", "yarnSheep")}
                 />
 
                 <GeneralCard 
-                    title="Needle Statistics"
+                    title={`Needle: ${needleData.length} `}
                     stats={Needles}
                     chartComponent={renderContent(Needles, "Needle Statistics", "yarnBasket")}
             

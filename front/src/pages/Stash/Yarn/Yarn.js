@@ -113,13 +113,13 @@ const YarnStash = () => {
                     ItemId={yarn.ItemID}
                     title={`${yarn.manufacturer}, ${yarn.type}`}
                     stats={[
-                        { label: "Type", value: yarn.type},
                         { label: "Brand", value: yarn.manufacturer},
+                        { label: "Type", value: yarn.type},
                         { label: "Color", value: yarn.color},
                         { label: "Weight", value: yarn.weight},
-                        { label: "Length", value: yarn.length },
-                        // { label: "Gauge", value: yarn.gauge},
-                        // { label: "Notes", value: yarn.notes}
+                        { label: "Gauge", value: yarn.gauge},
+
+                        // { label: "Length", value: yarn.length },
                     ]}
                     hovermessage = 'Click to view, edit or delete'
                     onClick={() => handleEditYarn(yarn)}
