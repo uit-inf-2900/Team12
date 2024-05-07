@@ -73,4 +73,72 @@ public class UserInfoControllerTests
 
         _context.SaveChanges();
     }
+
+    [Fact]
+    public void GetProfileInfo_Ok()
+    {
+        // Mock token service
+        _mockTokenService.Setup(s => s.ExtractUserID("testToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        // Run service and verify success
+        var result = _controller.GetProfileInfo("testToken");
+        var okRes = Assert.IsType<OkObjectResult>(result);
+
+        // Verify response
+        Assert.Contains("UserFullName = Test User", okRes.Value!.ToString());
+        Assert.Contains("UserEmail = test@user.com", okRes.Value!.ToString());
+    }
+
+    [Fact]
+    public void FakeTokenGetProfile_Fails()
+    {
+        // Mock token service
+        _mockTokenService.Setup(s => s.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        // Run service and verify failure
+        var result = _controller.GetProfileInfo("fakeToken");
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public void NonUserGet_Fails()
+    {
+        // Mock token service
+        _mockTokenService.Setup(s => s.ExtractUserID("testToken"))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        // Run service and verify failure
+        var result = _controller.GetProfileInfo("testToken");
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    [Fact]
+    public void UpdateProfileInfo_Ok()
+    {
+        // Mock token service
+        _mockTokenService.Setup(s => s.ExtractUserID("testToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), "newPassword"))
+            .Returns("newHashedPassword");
+
+        // Run service and verify success
+        var result = _controller.UpdateProfileInfo(new UserInfoController.UpdateRequest
+        {
+            Token = "testToken",
+            UserFullName = "New Name",
+            UserEmail = "new@email.com",
+            OldPassword = "password",
+            NewPassword = "newPassword"
+        });
+        var okRes = Assert.IsType<OkObjectResult>(result);
+        var updateRes = Assert.IsType<List<string>>(okRes.Value);
+
+        // Verify response
+        Assert.Contains("UserFullName", updateRes);
+        Assert.Contains("UserEmail", updateRes);
+        Assert.Contains("UserPassword", updateRes);
+    }
 }
