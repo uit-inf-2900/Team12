@@ -28,6 +28,7 @@ public class UsersControllerTests
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
 
     private Guid testUserId = Guid.NewGuid();
+    private string testVerification = String.Empty;
     private Guid testAdminId = Guid.NewGuid();
     public UsersControllerTests()
     {
@@ -39,6 +40,8 @@ public class UsersControllerTests
 
         _mockTokenService.Setup(x => x.GenerateJwtToken(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<string>()))
             .Returns("token");
+        _mockVerificationService.Setup(v => v.CreateVerification(It.IsAny<string>()))
+            .Returns(VerificationResultCreate.ForSuccess("123456"));
         
 
         // Set up in memory database
@@ -73,6 +76,13 @@ public class UsersControllerTests
             DateOfBirth = DateTime.Now,
             IsAdmin = false
         });
+        _context.UserVerification.Add(new UserVerification
+        {
+            UserId = testUserId,
+        });
+        // Save verification code
+        testVerification = _context.UserVerification
+            .Find(testUserId)!.VerificationCode;
 
         // Add test admin to database
         _context.UserLogIn.Add(new UserLogIn
@@ -91,6 +101,7 @@ public class UsersControllerTests
             IsAdmin = true
         });
 
+        // Add banned user to database
         _context.UserLogIn.Add(new UserLogIn
         {
             UserEmail = "banned@user.com",
@@ -98,6 +109,7 @@ public class UsersControllerTests
             UserStatus = "banned"
         });
 
+        // Save changes
         _context.SaveChanges();
     }
 
@@ -295,4 +307,162 @@ public class UsersControllerTests
 
         Assert.IsType<BadRequestResult>(result);
     }
+
+    [Fact]
+    public void InvalidTokenAdmin_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run controller with invalid token, and verify failure
+        var result = _controller.UpdateAdmin(new UpdateAdminRequest
+        {
+            UserToken = "fakeToken",
+            UpdateUser = testUserId,
+            NewAdmin = false
+        });
+
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public void UpdateAdminNotFound_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
+
+        // Run controller with invalid user, and verify failure
+        var result = _controller.UpdateAdmin(new UpdateAdminRequest
+        {
+            UserToken = "adminToken",
+            UpdateUser = Guid.NewGuid(),
+            NewAdmin = false
+        });
+
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Contains("User not found", notFoundResult.Value!.ToString());
+    }
+
+    [Fact]
+    public void BanUser_Ok()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
+
+        // Ban user, and verify success
+        var result = _controller.BanUser(new BanUserRequest
+        {
+            UserToken = "adminToken",
+            BanUserId = testUserId,
+            Ban = true
+        });
+
+        Assert.IsType<OkObjectResult>(result);
+
+        // Check that user is banned
+        var bannedUser = _context.UserLogIn.Find(testUserId);
+        Assert.Equal("banned", bannedUser!.UserStatus);
+
+        // Unban user, and verify success
+        result = _controller.BanUser(new BanUserRequest
+        {
+            UserToken = "adminToken",
+            BanUserId = testUserId,
+            Ban = false
+        });
+
+        Assert.IsType<OkObjectResult>(result);
+
+        // Check that user is no longer banned
+        bannedUser = _context.UserLogIn.Find(testUserId);
+        Assert.Equal("verified", bannedUser!.UserStatus);
+    }
+
+    [Fact]
+    public void BanUserBadRequest_Fails()
+    {
+        // Run controller with bad request, and verify failure
+        var result = _controller.BanUser(new BanUserRequest
+        {
+            UserToken = "",
+            BanUserId = Guid.Empty,
+            Ban = false
+        });
+
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public void NonAdminBan_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        // Run controller with non-admin token, and verify failure
+        var result = _controller.BanUser(new BanUserRequest
+        {
+            UserToken = "userToken",
+            BanUserId = testUserId,
+            Ban = false
+        });
+
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public void BanNonUser_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
+
+        // Run controller with invalid user, and verify failure
+        var result = _controller.BanUser(new BanUserRequest
+        {
+            UserToken = "adminToken",
+            BanUserId = Guid.NewGuid(),
+            Ban = false
+        });
+
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Contains("Could not find user to ban", notFoundResult.Value!.ToString());
+    }
+
+    [Fact]
+    public void GetUsers_Ok()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
+
+        // Run controller, and verify success
+        var result = _controller.GetAllUsers();
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public void VerifyUser_Ok()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        _mockVerificationService.Setup(v => v.VerifyCode("userToken", testVerification))
+            .Returns(VerificationResult.ForSuccess());
+
+        //Assert.Null(_mockVerificationService.Object.VerifyCode);
+
+        var result = _controller.VerifyUser(new VerificationRequest
+        {
+            UserToken = "userToken",
+            VerificationCode = testVerification
+        });
+
+        Assert.IsType<OkObjectResult>(result);
+    }
+
 }
