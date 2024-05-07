@@ -104,10 +104,10 @@ const Dashboard = ({ toggleView }) => {
 
     const Needles = [
         { label: "Total Needles", value: needleData.length },
-        { label: "Interchangeble", value: needleData.filter(needle => needle.type === 'Interchangeble').length },
+        { label: "Interchangeable", value: needleData.filter(needle => needle.type === 'Interchangeable').length },
         { label: "DoublePointed", value: needleData.filter(needle => needle.type === 'DoublePointed').length },
         { label: "Circular", value: needleData.filter(needle => needle.type === 'Circular').length },
-        { label: "Other", value: needleData.filter(needle => needle.type !== 'Interchangeble' && needle.type !== 'DoublePointed' && needle.type !== 'Circular').length }
+        { label: "Other", value: needleData.filter(needle => needle.type !== 'Interchangeable' && needle.type !== 'DoublePointed' && needle.type !== 'Circular').length }
     ];
 
     const Yarn = [
