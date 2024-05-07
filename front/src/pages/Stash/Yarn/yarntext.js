@@ -8,9 +8,8 @@ import SetAlert from '../../../Components/Alert';
 
 const TextYarn = ({onClose, fetchYarns}) => {
     const [alertInfo, setAlertInfo] = useState({open: false, severity: 'info', message: 'test message'});
-    const token = sessionStorage.getItem('token');
     const [yarnData, setYarnData] = useState({
-        UserToken: token,
+        UserToken: sessionStorage.getItem('token'),
         Manufacturer: '',
         Type: '',
         Weight: '',
@@ -28,7 +27,6 @@ const TextYarn = ({onClose, fetchYarns}) => {
     
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         // Check if all fields are filled in
         if (!yarnData.Type || !yarnData.Manufacturer || !yarnData.Color) {
             setAlertInfo({
@@ -38,7 +36,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
             });
             return;
         }
-        
+
         // Get the payload ready for the POST request
         const payload = {
             UserToken: yarnData.UserToken,
@@ -110,7 +108,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
                             <InputField label="Weight" type="number" value={yarnData.Weight} onChange={handleChange('Weight')}/>
                         </div>
                         <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
-                        <InputField label="Batch number" type="text" value={yarnData.Batch_Number} onChange={handleChange('Batch_Number')}/>
+                            <InputField label="Batch number" type="text" value={yarnData.Batch_Number} onChange={handleChange('Batch_Number')}/>
                         </div>
                     </div>
                     <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>
@@ -125,10 +123,10 @@ const TextYarn = ({onClose, fetchYarns}) => {
                     open={alertInfo.open} 
                     setOpen={(isOpen) => setAlertInfo({...alertInfo, open: isOpen})} 
                     severity={alertInfo.severity} 
-                    message={alertInfo.message} />
+                    message={alertInfo.message} 
+                />
             </div>
         </div>
     )
-}
-
+};
 export default TextYarn;

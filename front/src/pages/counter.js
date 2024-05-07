@@ -11,9 +11,9 @@ export const Counter = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false); 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [alertInfo, setAlertInfo] = useState({ open: false, severity: 'info', message: 'test message' });
+    const token = sessionStorage.getItem('token');
 
     const fetchCounter = async () => {
-        const token = sessionStorage.getItem('token');
         const url = `http://localhost:5002/api/counter/getcounters?userToken=${token}`;
         try {
             const response = await fetch(url);
@@ -37,7 +37,7 @@ export const Counter = () => {
     
         const url = `http://localhost:5002/api/counter/updatecounter`;
         const payload = {
-            userToken: sessionStorage.getItem('token'),
+            userToken: token,
             ...currentCounter
         };
         try {
@@ -65,7 +65,6 @@ export const Counter = () => {
     const { counterData, handleChange, handleSubmit } = useCounterStash(fetchCounter, setAlertInfo);
 
     const handleIncrement = async (id) => {
-        const token = sessionStorage.getItem('token');
         const url = `http://localhost:5002/api/counter/updatecounter`;
         const payload = {
             userToken: token,
@@ -94,7 +93,6 @@ export const Counter = () => {
     };
     
     const handleDecrement = async (id) => {
-        const token = sessionStorage.getItem('token');
         const url = `http://localhost:5002/api/counter/updatecounter`;
         const payload = {
             userToken: token,
@@ -128,14 +126,12 @@ export const Counter = () => {
         }
     };
     
-
     const handleEdit = (counter) => {
         setCurrentCounter({ ...counter, newName: counter.name });
         setIsEditModalOpen(true);
     };
 
     const handleDeleteCounter = async (id) => {
-        const token = sessionStorage.getItem('token');
         const url = `http://localhost:5002/api/counter/deletecounter`;
         const payload = {
             UserToken: token,
@@ -185,12 +181,7 @@ export const Counter = () => {
                     <div className="pop">
                         <div className="pop-content">
                             <form onSubmit={(event) => handleSubmit(event, setIsAddModalOpen)}>
-                                <InputField
-                                    label="Name"
-                                    type="text"
-                                    value={counterData.name}
-                                    onChange={handleChange('name')}
-                                />
+                                <InputField label="Name" type="text" value={counterData.name} onChange={handleChange('name')}/>
                                 <div className="counter-controls">    
                                     <button className="light-button" type="submit">Add</button>
                                     <button className="light-button" type="button" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
@@ -203,12 +194,7 @@ export const Counter = () => {
                     <div className="pop">
                         <div className="pop-content">
                             <form onSubmit={handleSaveUpdatedCounter}>
-                                <InputField
-                                    label="Edit Name"
-                                    type="text"
-                                    value={currentCounter.newName || ''}
-                                    onChange={handleInputChange('newName')}
-                                />
+                                <InputField label="Edit Name" type="text" value={currentCounter.newName || ''} onChange={handleInputChange('newName')}/>
                                 <div className="counter-controls">
                                     <button className="light-button" type="submit">Update</button>
                                     <button className="light-button" type="button" onClick={(handleCancelEdit)}>Cancel</button>
@@ -219,25 +205,13 @@ export const Counter = () => {
                     </div>
                 )}
                 {counters.map(counter => (
-                    <CounterItem
-                        key={counter.counterId}
-                        counter={counter}
-                        onEdit={handleEdit}
-                        onIncrement={handleIncrement}
-                        onDecrement={handleDecrement}
-                    />
+                    <CounterItem key={counter.counterId} counter={counter} onEdit={handleEdit} onIncrement={handleIncrement} onDecrement={handleDecrement}/>
                 ))}
-                <SetAlert
-                    open={alertInfo.open} 
-                    setOpen={(isOpen) => setAlertInfo({ ...alertInfo, open: isOpen })} 
-                    severity={alertInfo.severity} 
-                    message={alertInfo.message} 
-                />
+                <SetAlert open={alertInfo.open} setOpen={(isOpen) => setAlertInfo({ ...alertInfo, open: isOpen })} severity={alertInfo.severity} message={alertInfo.message}/>
             </div>   
         </div>
     );
 };
-
 export default Counter;
 
 const CounterItem = ({ counter, onEdit, onIncrement, onDecrement }) => {

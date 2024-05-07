@@ -14,10 +14,6 @@ const YarnStash = () => {
     const [editYarnModalOpen, setEditYarnModalOpen] = useState(false);
     const [currentYarn, setCurrentYarn] = useState({});
 
-    const toggleYarnModal = () => {
-        setOpenYarnModal(!openYarnModal);
-    };
-
     const handleDeleteYarn = async (ItemID) => {
         const url = `http://localhost:5002/api/inventory/deleteyarn`;
         const payload = {
@@ -35,7 +31,7 @@ const YarnStash = () => {
             });
             if (response.ok) {
                 setYarns(currentYarns => currentYarns.filter(yarn => yarn.itemId !== ItemID));
-                closeEditModal();
+                setEditYarnModalOpen(false);
             } else {
                 console.error("Failed to delete the yarn", await response.text());
             }
@@ -47,10 +43,6 @@ const YarnStash = () => {
     const handleEditYarn = (yarn) => {
         setCurrentYarn(yarn);
         setEditYarnModalOpen(true);
-    };
-
-    const closeEditModal = () => {
-        setEditYarnModalOpen(false);
     };
 
     const handleInputChange = (prop) => (event) => {
@@ -73,7 +65,7 @@ const YarnStash = () => {
             });
             if (response.ok) {
                 setYarns(currentYarns => currentYarns.map(yarn => yarn.itemId === currentYarn.itemId ? {...yarn, ...currentYarn} : yarn));
-                closeEditModal();
+                setEditYarnModalOpen(false);
             } else {
                 console.error("Failed to update the yarn", await response.text());
             }
@@ -106,30 +98,28 @@ const YarnStash = () => {
     return (
         <div>
             <div className="card-container" style={{justifyContent: 'flex-start', justifyContent: 'center'}}>
-            {yarns.map(yarn => (
-                <GeneralCard
-                    key={yarn.itemId}
-                    ItemId={yarn.ItemID}
-                    title={`${yarn.manufacturer}, ${yarn.type}`}
-                    stats={[
-                        { label: "Brand", value: yarn.manufacturer},
-                        { label: "Type", value: yarn.type},
-                        { label: "Color", value: yarn.color},
-                        { label: "Weight", value: yarn.weight},
-                        { label: "Gauge", value: yarn.gauge},
-
-                        // { label: "Length", value: yarn.length },
-                    ]}
-                    hovermessage = 'Click to view, edit or delete'
-                    onClick={() => handleEditYarn(yarn)}
-                />
-            ))}
+                {yarns.map(yarn => (
+                    <GeneralCard
+                        key={yarn.itemId}
+                        ItemId={yarn.ItemID}
+                        title={`${yarn.manufacturer}, ${yarn.type}`}
+                        stats={[
+                            { label: "Brand", value: yarn.manufacturer},
+                            { label: "Type", value: yarn.type},
+                            { label: "Color", value: yarn.color},
+                            { label: "Weight", value: yarn.weight},
+                            { label: "Gauge", value: yarn.gauge},
+                        ]}
+                        hovermessage = 'Click to view, edit or delete'
+                        onClick={() => handleEditYarn(yarn)}
+                    />
+                ))}
             </div>
-            <AddButton hoverTitble="Click here to add Yarn" onClick={toggleYarnModal} />
-            <Modal open={openYarnModal} onClose={toggleYarnModal}>
-                <TextYarn onClose={toggleYarnModal} fetchYarns={fetchYarns} />
+            <AddButton onClick={() => setOpenYarnModal(!openYarnModal)}/>
+            <Modal open={openYarnModal} onClose={() => setOpenYarnModal(!openYarnModal)}>
+                <TextYarn onClose={() => setOpenYarnModal(!openYarnModal)} fetchYarns={fetchYarns}/>
             </Modal>
-            <Modal open={editYarnModalOpen} onClose={closeEditModal}>
+            <Modal open={editYarnModalOpen} onClose={() => setEditYarnModalOpen(false)}>
                 <div className="pop" >
                     <div className="pop-content" style={{height: '80%', width: '50%'}}>
                         <h2>Edit Yarn</h2>
@@ -156,7 +146,7 @@ const YarnStash = () => {
                                     <InputField label="Weight" type= 'number' value={currentYarn.weight || ''} onChange={handleInputChange('weight')} />
                                 </div>
                                 <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
-                                        <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number')} />
+                                    <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number')} />
                                 </div>
                             </div>
                             <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>
@@ -164,9 +154,8 @@ const YarnStash = () => {
                             </div>
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                                 <CustomButton onClick={handleSaveUpdatedYarn} style={{ margin: '10px' }}>Save Changes</CustomButton>
-                                <CustomButton onClick={closeEditModal} style={{ margin: '10px' }}>Cancel</CustomButton>
+                                <CustomButton onClick={() => setEditYarnModalOpen(false)} style={{ margin: '10px' }}>Cancel</CustomButton>
                                 <CustomButton onClick={() => handleDeleteYarn(currentYarn.itemId)} style={{ margin: ' 10px' }}>Delete</CustomButton>
-
                             </div>
                         </div>
                     </div>
@@ -175,5 +164,4 @@ const YarnStash = () => {
         </div>
     );
 };
-
 export default YarnStash;
