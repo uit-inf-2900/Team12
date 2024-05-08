@@ -110,13 +110,12 @@ public class CounterTests : IDisposable
         // Set up test data and mock service
         string newName = "newName";
         string testToken = "testToken";
-        int newNum = 10;
 
         _mockTokenService.Setup(s => s.ExtractUserID(testToken))
             .Returns(TokenResult.ForSuccess(testUserGuid));
 
         // Run service and verify result
-        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newNum, newName);
+        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newName);
         Assert.True(result.Success, "Counter update failed");
 
         // Verify that the counter was updated with correct info
@@ -124,7 +123,6 @@ public class CounterTests : IDisposable
             .FirstOrDefault(c => c.CounterId == testCounterGuid);
         Assert.NotNull(counter);
         Assert.Equal(newName, counter.Name);
-        Assert.Equal(newNum, counter.RoundNumber);
     }
 
     [Fact]
@@ -137,7 +135,7 @@ public class CounterTests : IDisposable
             .Returns(TokenResult.ForFailure("Invalid token"));
 
         // Run service and verify error
-        var result = _counterService.UpdateCounter(fakeToken, testCounterGuid, 10, "newName");
+        var result = _counterService.UpdateCounter(fakeToken, testCounterGuid, "newName");
 
         Assert.False(result.Success, "Counter update should have failed");
         Assert.Equal("Unauthorized", result.ErrorMessage);
@@ -154,32 +152,10 @@ public class CounterTests : IDisposable
             .Returns(TokenResult.ForSuccess(testUserGuid));
 
         // Run service and verify error
-        var result = _counterService.UpdateCounter(testToken, fakeCounterGuid, 10, "newName");
+        var result = _counterService.UpdateCounter(testToken, fakeCounterGuid, "newName");
 
         Assert.False(result.Success, "Counter update should have failed");
         Assert.Equal("Not found", result.ErrorMessage);
-    }
-
-    [Fact]
-    public void OnlyNewNum_Ok()
-    {
-        // Set up test data and mock service
-        string testToken = "testToken";
-        int newNum = 10;
-
-        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
-            .Returns(TokenResult.ForSuccess(testUserGuid));
-
-        // Run service and verify result
-        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newNum, null);
-        Assert.True(result.Success, "Counter update failed");
-
-        // Verify that the counter was updated with correct info
-        var counter = _context.CounterInventory
-            .FirstOrDefault(c => c.CounterId == testCounterGuid);
-        Assert.NotNull(counter);
-        Assert.Equal(newNum, counter.RoundNumber);
-        Assert.Equal("TestCounter", counter.Name);
     }
 
     [Fact]
