@@ -29,23 +29,23 @@ public class ContactController : ControllerBase
     // Get all contact requests
     // If empty, return ok with a message 
     [HttpGet]
-    public IActionResult GetContactRequests([FromQuery] bool isActive, bool isHandled)
+    public IActionResult GetContactRequests([FromQuery] bool isActive, bool isHandled, string userToken)
     {
-        var contactRequests = _contactService.GetContactRequests(isActive, isHandled);
+        var contactRequests = _contactService.GetContactRequests(isActive, isHandled, userToken);
         if (contactRequests == null || !contactRequests.Any())
         {
             // Instead of returning NotFound, return Ok with a specific message indicating the list is empty.
             // This is a better practice because the client can still expect a response from the server, since a emty list in this case not is an error. 
             return Ok(new { Message = "No contact requests found." });
         }
-        return Ok(_contactService.GetContactRequests(isActive, isHandled));
+        return Ok(contactRequests);
     }
 
         // Oppdater IsActive status
     [HttpPatch("{contactRequestId}/IsActive")]
-    public IActionResult UpdateIsActive(Guid contactRequestId, [FromBody] bool isActive)
+    public IActionResult UpdateIsActive(Guid contactRequestId, [FromBody] bool isActive, string userToken)
     {
-        var result = _contactService.UpdateIsActiveStatus(contactRequestId, isActive);
+        var result = _contactService.UpdateIsActiveStatus(contactRequestId, isActive, userToken);
         if (!result) return NotFound();
         return Ok(new 
         {
@@ -56,9 +56,9 @@ public class ContactController : ControllerBase
 
     // Oppdater IsHandled status
     [HttpPatch("{contactRequestId}/IsHandled")]
-    public IActionResult UpdateIsHandled(Guid contactRequestId, [FromBody] bool isHandled)
+    public IActionResult UpdateIsHandled(Guid contactRequestId, [FromBody] bool isHandled, string userToken)
     {
-        var result = _contactService.UpdateIsHandledStatus(contactRequestId, isHandled);
+        var result = _contactService.UpdateIsHandledStatus(contactRequestId, isHandled, userToken);
         if (!result) return NotFound();
         return Ok();
     }

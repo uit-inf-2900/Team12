@@ -22,16 +22,18 @@ const ViewMessages = () => {
     const [messageError, setMessageError] = useState('');
     const [searchQuery, setSearchQuery] = useState(''); 
 
+    const sessionToken = sessionStorage.getItem('token');
+
     // Function to fetch messages from the server based on selected filter
     const fetchMessages = async () => {
         setIsLoading(true);
         let queryParams = '';
         if (selectedFilter === 'active') {
-            queryParams = 'isActive=true&isHandled=false';
+            queryParams = 'isActive=true&isHandled=false&userToken=' + sessionToken;
         } else if (selectedFilter === 'handled') {
-            queryParams = 'isActive=false&isHandled=true';
+            queryParams = 'isActive=false&isHandled=true&userToken=' + sessionToken;
         } else if (selectedFilter === 'inactive') {
-            queryParams = 'isActive=false&isHandled=false';
+            queryParams = 'isActive=false&isHandled=false&userToken=' + sessionToken;
         }
         try {
             const response = await axios.get(`http://localhost:5002/api/Contact?${queryParams}`);

@@ -16,6 +16,8 @@ const MessageDetails = ({ message, refreshMessages }) => {
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
 
+    const sessionToken = sessionStorage.getItem('token');
+
 
     const updateAlert = (message, severity) => {
         setAlertMessage(message);
@@ -27,12 +29,12 @@ const MessageDetails = ({ message, refreshMessages }) => {
     // Function to update the conversation status
     const updateConversationStatus = async (contactRequestId, isActive, isHandled) => {
         try {
-            await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsActive`, JSON.stringify(isActive), {
+            await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsActive?userToken=${sessionToken}`, JSON.stringify(isActive), {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsHandled`, JSON.stringify(isHandled), {
+            await axios.patch(`http://localhost:5002/api/Contact/${contactRequestId}/IsHandled?userToken=${sessionToken}`, JSON.stringify(isHandled), {
                 headers: {
                     'Content-Type': 'application/json'
                 }

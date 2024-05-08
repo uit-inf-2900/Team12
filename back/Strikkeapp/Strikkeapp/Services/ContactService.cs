@@ -12,7 +12,7 @@ public interface IContactService
     // Generate a contact request 
     public Guid CreateContactRequest (ContactRequestDto request); 
     // List inncomming contact requests
-    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled); 
+    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled, string userToken); 
 
 
     // svare på mail 
@@ -21,19 +21,21 @@ public interface IContactService
 
 
     // kunne endre status 
-    bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive);
-    bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled);
+    public bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive, string userToken);
+    public bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled, string userToken);
 }
 
 public class ContactService : IContactService
 {   
     // context defines tables
     private readonly StrikkeappDbContext _context;
+    private readonly ITokenService _tokenService;
 
     // Build the service
-    public ContactService(StrikkeappDbContext context)
+    public ContactService(StrikkeappDbContext context, ITokenService tokenService)
     {
         _context = context;
+        _tokenService = tokenService;
     }
 
     // Send the contact request to the database
@@ -59,8 +61,24 @@ public class ContactService : IContactService
 
 
     // Create a list of contact requests
-    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled)
+    public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled, string userToken)
     {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            throw new ArgumentException("Unauthorized");
+        }
+
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == tokenResult.UserId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if (!isAdmin)
+        {
+            throw new ArgumentException("Unauthorized");
+        }
+
         // Get alle the contact requests
         var contactRequests = _context.ContactRequests.ToList();
 
@@ -123,8 +141,24 @@ public class ContactService : IContactService
 
 
     // Update the status of the contact request 
-    public bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive)
+    public bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive, string userToken)
     {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            throw new ArgumentException("Unauthorized");
+        }
+
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == tokenResult.UserId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if (!isAdmin)
+        {
+            throw new ArgumentException("Unauthorized");
+        }
+
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
         if (contactRequest == null) return false;
 
@@ -133,8 +167,24 @@ public class ContactService : IContactService
         return true;
     }
 
-    public bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled)
+    public bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled, string userToken)
     {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            throw new ArgumentException("Unauthorized");
+        }
+
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == tokenResult.UserId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if (!isAdmin)
+        {
+            throw new ArgumentException("Unauthorized");
+        }
+
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
         if (contactRequest == null) return false;
 
