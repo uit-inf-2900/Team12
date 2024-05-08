@@ -18,7 +18,8 @@ const TextYarn = ({onClose, fetchYarns}) => {
         Gauge: '',
         Color: '',
         Batch_Number: '',
-        Notes: ''
+        Notes: '',
+        Amount: ''
     });
 
     // Function to update yarn details state
@@ -50,7 +51,8 @@ const TextYarn = ({onClose, fetchYarns}) => {
             Weight: parseInt(yarnData.Weight, 10),
             Length: parseInt(yarnData.Length, 10),
             Gauge: yarnData.Gauge,
-            Notes: yarnData.Notes
+            Notes: yarnData.Notes,
+            NumItem: parseInt(yarnData.Amount,10)
         };
 
         // POST request to the API
@@ -94,6 +96,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
                             <InputField label="Length" type="text" value={yarnData.Length} onChange={handleChange('Length')}/>
                             <InputField label="Gauge" type="text" value={yarnData.Gauge} onChange={handleChange('Gauge')}/>
                             <InputField label="Color" type="text" value={yarnData.Color} onChange={handleChange('Color')}/>
+                            <InputField label="Amount" type="number" value={yarnData.Amount} onChange={handleChange('Amount')}/>
                         </div>
                         <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
                             <InputField label="Type" type="text" value={yarnData.Type} onChange={handleChange('Type')}/>

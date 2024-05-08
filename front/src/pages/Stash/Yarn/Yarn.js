@@ -119,7 +119,10 @@ const YarnStash = () => {
                         { label: "Weight", value: yarn.weight},
                         { label: "Length", value: yarn.length },
                         { label: "Gauge", value: yarn.gauge},
+                        { label: "Amount in storage", value: yarn.numItems },
+                        { label: "Amount in use", value: yarn.inUse },
                         { label: "Notes", value: yarn.notes}
+                        
                     ]}
                     onClick={() => handleEditYarn(yarn)}
                 />

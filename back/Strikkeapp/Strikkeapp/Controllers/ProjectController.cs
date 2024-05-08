@@ -18,7 +18,6 @@ public class ProjectController
 
 
 	[HttpGet]
-	
 	public List<ProjectModel> GetProjects([FromQuery] string userToken)
 	{
 		var projects = _projectService.GetProjects(userToken);
