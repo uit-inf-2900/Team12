@@ -34,7 +34,7 @@ const MessageDetails = ({ message, refreshMessages }) => {
             setIsHandled(isHandled);
             refreshMessages(); 
             setAlertMessage(isHandled ? 'Conversation marked as handled' : 'Status updated');
-            setAlertSeverity(isHandled ? 'success' : 'info');
+            setAlertSeverity(isHandled ? 'success' : 'success');
             setAlertOpen(true);
         } catch (err) {
             console.error('Error updating conversation status:', err);
@@ -98,8 +98,10 @@ const MessageDetails = ({ message, refreshMessages }) => {
                 }
             });
             console.log('The response was sent successfully', response.data);
+
+            setMessages(prevMessages => [...prevMessages, { text: reply, isResponse: true }]);
+
             setReply('');
-            setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);
             setIsActive(true);
             setIsHandled(false);
             updateConversationStatus(message.contactRequestId, true, false);
