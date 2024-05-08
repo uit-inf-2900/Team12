@@ -5,15 +5,25 @@ import '../../GlobalStyles/main.css';
 import NeedleStash from "./Needle/Needles";
 import YarnStash from "./Yarn/Yarn";
 
-const Stash = () => {
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const defaultTab = queryParams.get('tab');
 
+/**
+ * Stash Component
+ * Displays and manages the stash inventory, either needles or yarn.
+ * Users can switch between 'Needles' and 'Yarn' views via a tab switcher.
+ */
+const Stash = () => {
+    const location = useLocation();                             // Accessing URL location
+    const queryParams = new URLSearchParams(location.search);   // Parsing query parameters from URL
+    const defaultTab = queryParams.get('tab');                  // Extract 'tab' query parameter to set the default view
+
+    // State to track the active tab status, defaulting to 'yarn' or a URL query parameter
     const [activeStatus, setActiveStatus] = useState(defaultTab || 'yarn');
+
+    // State to track the needle and yarn types for filtering the stash inventory
     const [needleTypes, setNeedleTypes] = useState(['All']);
     const [yarnTypes, setYarnTypes] = useState(['All']);
 
+    // Effect hook to update activeStatus based on the defaultTab query parameter
     useEffect(() => {
         if (defaultTab) {
             setActiveStatus(defaultTab);
