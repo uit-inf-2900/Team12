@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import "../GlobalStyles/main.css";
 import axios from 'axios';
 import StatisticBox from './StatisticBox';
 import { useNavigate } from 'react-router-dom';
-import './StatisticBox.css';
-import InstagramFeed from './KnitHubResources/InstagramFeed'; // Importer InstagramFeed-komponenten
-// Import images
-import KnittingImage from "../images/knitting.png";
-import SixImage from "../images/6.png"; // Status of yarn used
-import StashImage from "../images/stash.png"; // Status of needles used
-import PileOfSweatersImage from "../images/pileOfSweaters.png"; // Status of completed projects
-import OpenBookImage from "../images/openBook.png"; // Other status
-import HuggingYarnImage from "../images/huggingYarn.png";
-import CustomButton from '../Components/Button';
 
+// Import images
+import { getImageByName } from '../images/getImageByName';
+
+// Css styles
+import "../GlobalStyles/main.css";
 import "./about/about.css";
+import './StatisticBox.css';
+import InstagramFeed from './KnitHubResources/InstagramFeed'; 
+
 
 
 export const Home = () => {
@@ -79,15 +76,15 @@ export const Home = () => {
         <div className="statistics-container" style={{width:'40%', alignSself: 'flex-start'}}>
           <h3>Her har du en oversikt over ditt arbeid sålangt:</h3>
           <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent:'center' }}> 
-            <StatisticBox icon={KnittingImage} label="yarns in stash" value={yarnInventoryLength.toString()} />
-            <StatisticBox icon={SixImage} label="needles in stash" value={needleInventoryLength.toString()} />
-            <StatisticBox icon={PileOfSweatersImage} label="complete projects" value={completeProjects.toString()} />
-            <StatisticBox icon={OpenBookImage} label="ongoing projects" value={ongoingProjects.toString()} />
+            <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} />
+            <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} />
+            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completeProjects.toString()} />
+            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingProjects.toString()} />
           </div>
         </div>
         <div className="creative-content-container" style={{width:'60%', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
           <h3>I dag er dagen for å være kreativ</h3>
-          <img src={PileOfSweatersImage} style={{ alignItems: 'center'}}/>
+          <img src={getImageByName('huggingYarn')} style={{ alignItems: 'center'}} alt="Pile of sweaters"/>
         </div>
       </div>
 
