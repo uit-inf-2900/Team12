@@ -202,25 +202,21 @@ public class UsersController : ControllerBase
 
     [HttpGet]
     [Route("/getUsers")]
-    public IActionResult GetAllUsers()
+    public IActionResult GetAllUsers([FromQuery] string userToken)
     {
-        var users = _context.UserLogIn.Join(_context.UserDetails,
-                                            login => login.UserId,
-                                            details => details.UserId,
-                                            (login, details) => new {
-                                                FullName = details.UserFullName,
-                                                Email = login.UserEmail,
-                                                Status = login.UserStatus,
-                                                IsAdmin = details.IsAdmin, 
-                                                UserId = login.UserId
-                                            }).ToList();
+        var res = _userService.GetAllUsers(userToken);
 
-        if (!users.Any())
+        if(!res.Success)
         {
-            return NotFound("No users found");
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+
+            return StatusCode(500, res.ErrorMessage);
         }
 
-        return Ok(users);
+        return Ok(res.Users);
     }
 
     [HttpPatch]
