@@ -439,7 +439,7 @@ public class UsersControllerTests
             .Returns(TokenResult.ForSuccess(testAdminId));
 
         // Run controller, and verify success
-        var result = _controller.GetAllUsers();
+        var result = _controller.GetAllUsers("adminToken");
         Assert.IsType<OkObjectResult>(result);
     }
 
