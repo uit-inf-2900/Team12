@@ -149,6 +149,7 @@ public class ContactControllerTests
     [Fact]
     public void BadIsActive_Fails()
     {
+        // Set up mock to return failure
         _mockTokenService.Setup(x => x.ExtractUserID("fakeToken"))
             .Returns(TokenResult.ForFailure("Invalid token"));
 
@@ -156,9 +157,58 @@ public class ContactControllerTests
         var badRequest = _controller.UpdateIsActive(Guid.NewGuid(), true, "adminToken");
         Assert.IsType<NotFoundResult>(badRequest);
 
+        // Update request with bad token
         var badToken = _controller.UpdateIsActive(testRequestId, true, "fakeToken");
         Assert.IsType<NotFoundResult>(badToken);
     }
 
-    
+    [Fact]
+    public void UpdateIsHandled_Ok()
+    {
+        // Update request and check if set to handled
+        var handled = _controller.UpdateIsHandled(testRequestId, true, "adminToken");
+        Assert.IsType<OkResult>(handled);
+
+        var request = _context.ContactRequests.Find(testRequestId);
+        Assert.True(request!.IsHandled);
+
+        // Update request and check if set to not handled
+        var notHandled = _controller.UpdateIsHandled(testRequestId, false, "adminToken");
+        Assert.IsType<OkResult>(notHandled);
+
+        request = _context.ContactRequests.Find(testRequestId);
+        Assert.False(request!.IsHandled);
+    }
+
+    [Fact]
+    public void BadIsHandled_Fails()
+    {
+        // Set up mock to return failure
+        _mockTokenService.Setup(x => x.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Update request that does not exist
+        var badRequest = _controller.UpdateIsHandled(Guid.NewGuid(), true, "adminToken");
+        Assert.IsType<NotFoundResult>(badRequest);
+
+        // Update request with bad token
+        var badToken = _controller.UpdateIsHandled(testRequestId, true, "fakeToken");
+        Assert.IsType<NotFoundResult>(badToken);
+    }
+
+    [Fact]
+    public void Response_Ok()
+    {
+        // Create response and check if ok
+        var response = _controller.PostResponseMessage(testRequestId, "Some response");
+        Assert.IsType<OkObjectResult>(response);
+    }
+
+    [Fact]
+    public void NonRequesdtResponse_Fails()
+    {
+        // Response to request that does not exist
+        var response = _controller.PostResponseMessage(Guid.NewGuid(), "Some response");
+        Assert.IsType<NotFoundObjectResult>(response);
+    }
 }
