@@ -1,34 +1,29 @@
-/* Home.css */
-
-.home-page-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%; /* Ensures the container fills the width of the viewport */
-}
-
 .home-container {
-    display: flex; /* Ensures flexbox layout */
-    flex-direction: row; /* Aligns children in a row */
-    width: 100%; /* Ensures the container fills the width */
-    max-width: 1200px; /* Maximum width */
-    margin: 20px auto; /* Centers the container with vertical margin */
-    overflow: hidden; /* Prevents overflow */
+    display: flex;
+    flex-wrap: wrap; /* Tillater elementer å wrappe om nødvendig */
+    justify-content: space-between; /* Fordeler rom mellom hovedelementene */
+    align-items: flex-start; /* Linjer opp elementene øverst */
+    padding: 20px;
+    gap: 20px; /* Mellomrom mellom statistikk og kreativt innhold */
 }
 
 .statistics-container {
     display: flex;
-    flex: 2; /* Takes 2/5 of the space */
     flex-wrap: wrap;
-    gap: 10px;
-    padding: 20px;
+
+    padding: 0px 0;
+    justify-content: space-between; /* Dette sikrer at elementene fordeles jevnt */
+}
+
+.StatisticBox {
+    flex: 1 1 48%; /* Lar hver boks ta nesten halvparten av bredden, slik at to bokser vises per rad */
+    margin-bottom: 20px; /* Gir litt vertikalt rom mellom radene */
 }
 
 .creative-content-container {
+    flex: 1 0 100%; /* Tar full bredde ved smal skjerm, endre til 50% for å teste */
     display: flex;
-    flex: 3; /* Takes 3/5 of the space */
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     padding: 20px;
 }
