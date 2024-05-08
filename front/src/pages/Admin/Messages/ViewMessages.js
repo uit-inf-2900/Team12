@@ -45,7 +45,13 @@ const ViewMessages = () => {
         fetchMessages();
     }, [selectedFilter]);
 
-
+    const refreshMessages = (newFilter) => {
+        if (newFilter) {
+            setSelectedFilter(newFilter);
+        } else {
+            fetchMessages();
+        }
+    };
 
     return (
         
