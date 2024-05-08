@@ -25,14 +25,19 @@ public class ContactControllerTests
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
 
+    // Test data
     private Guid testUserId = Guid.NewGuid();
     private Guid testAdminId = Guid.NewGuid();
+    private Guid testRequestId = Guid.NewGuid();
 
     public ContactControllerTests()
     {   
         // Set up mock services
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
             .Returns("hashedPassword");
+
+        _mockTokenService.Setup(x => x.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
 
         // Set up in memory database
         string databaseName = Guid.NewGuid().ToString();
@@ -84,6 +89,16 @@ public class ContactControllerTests
             IsAdmin = true
         });
 
+        // Add test request to database
+        _context.ContactRequests.Add(new ContactRequest
+        {
+            ContactRequestId = testRequestId,
+            UserId = testUserId,
+            FullName = "Test User",
+            Email = "test@user.com",
+            Message = "Some message",
+        });
+
         _context.SaveChanges();
     }
 
@@ -101,5 +116,49 @@ public class ContactControllerTests
         var result = _controller.PostContactRequest(request);
         Assert.IsType<OkObjectResult>(result);
     }
+
+    [Fact]
+    public void GetRequests_Ok()
+    {
+        var allFalse = _controller.GetContactRequests(false, false, "adminToken");
+        Assert.IsType<OkObjectResult>(allFalse);
+
+        var allTrue = _controller.GetContactRequests(true, true, "adminToken");
+        var response = Assert.IsType<OkObjectResult>(allTrue);
+        Assert.Contains("No contact requests found.", response.Value!.ToString());
+    }
+
+    [Fact]
+    public void UpdateIsActive_Ok()
+    {
+        // Update request and check if set to active
+        var active = _controller.UpdateIsActive(testRequestId, true, "adminToken");
+        Assert.IsType<OkObjectResult>(active);
+
+        var request = _context.ContactRequests.Find(testRequestId);
+        Assert.True(request!.IsActive);
+
+        // Update request and check if set to inactive
+        var inactive = _controller.UpdateIsActive(testRequestId, false, "adminToken");
+        Assert.IsType<OkObjectResult>(inactive);
+
+        request = _context.ContactRequests.Find(testRequestId);
+        Assert.False(request!.IsActive);
+    }
+
+    [Fact]
+    public void BadIsActive_Fails()
+    {
+        _mockTokenService.Setup(x => x.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Update request that does not exist
+        var badRequest = _controller.UpdateIsActive(Guid.NewGuid(), true, "adminToken");
+        Assert.IsType<NotFoundResult>(badRequest);
+
+        var badToken = _controller.UpdateIsActive(testRequestId, true, "fakeToken");
+        Assert.IsType<NotFoundResult>(badToken);
+    }
+
     
 }
