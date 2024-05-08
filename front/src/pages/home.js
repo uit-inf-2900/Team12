@@ -73,23 +73,26 @@ export const Home = () => {
     
 
   return (
-    <div className="page-container">
-      <h2>God dag {userProfileState.userFullName || ''}!</h2>
-      <div className="home-container">
-        <div className="section-container"> {/* Updated */}
-          <h4>Her har du en oversikt over ditt arbeid sålangt:</h4>
-          <StatisticBox icon={KnittingImage} label="yarns in stash" value={yarnInventoryLength.toString()} />
-          <StatisticBox icon={SixImage} label="needles in stash" value={needleInventoryLength.toString()} />
-          <StatisticBox icon={KnittingImage} label="complete projects" value={completeProjects.toString()} />
-          <StatisticBox icon={SixImage} label="ongoing projects" value={ongoingProjects.toString()} />          
-        </div>
-        <div className="creative-content-container"> {/*  */}
-          <h4>I dag er dagen for å være kreativ</h4>
-          <img src={PileOfSweatersImage} className="creative-image" />
+    <div className='page-container'>
+      <h1 style={{padding: '20px'}}>God dag {userProfileState.userFullName || ''}!</h1>
+      <div className="home-container" style={{'display': 'flex', padding: '20px', alignItems:'flex-start'}}>
+        <div className="statistics-container" style={{width:'40%', alignSself: 'flex-start'}}>
+          <h3>Her har du en oversikt over ditt arbeid sålangt:</h3>
+          <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent:'center' }}> 
+            <StatisticBox icon={KnittingImage} label="yarns in stash" value={yarnInventoryLength.toString()} />
+            <StatisticBox icon={SixImage} label="needles in stash" value={needleInventoryLength.toString()} />
+            <StatisticBox icon={PileOfSweatersImage} label="complete projects" value={completeProjects.toString()} />
+            <StatisticBox icon={OpenBookImage} label="ongoing projects" value={ongoingProjects.toString()} />
           </div>
+        </div>
+        <div className="creative-content-container" style={{width:'60%', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
+          <h3>I dag er dagen for å være kreativ</h3>
+          <img src={PileOfSweatersImage} style={{ alignItems: 'center'}}/>
+        </div>
       </div>
-        <h2>Inspiration from Instagram </h2>
-        {/* <InstagramFeed accessToken={accessTokenInsta} /> */}
+
+      <h2  style={{padding: '20px', paddingTop:'30px'}}>Inspiration from Instagram </h2>
+      <InstagramFeed accessToken={accessTokenInsta} />
     </div>
   );
 };
