@@ -154,27 +154,22 @@ const ViewUsers = () => {
         }
     };
     
-
-    // User banning logic with admin privilege removal if banned
+    // User banning logic
     const banUser = async (userId, banStatus) => {
         try {
-            const user = users.find(u => u.userId === userId);
-            const isAdmin = user.isAdmin && banStatus; // Check if the user is currently an admin and needs to be banned
-
-            // Send a POST request to the server to ban the user and remove admin privileges if necessary
+            // Send a POST request to the server to ban the user
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
                 userToken: token,
                 banUserId: userId, 
-                ban: banStatus,
-                removeAdmin: isAdmin // Send removeAdmin flag to server if admin privileges need to be removed
+                ban: banStatus
             });
             console.log("Response: ", response);
 
-            // If the request is successful, update the users array to reflect the changes
+            // If the request is successful, update the users array to remove the banned user
             if (response.status === 200) {
                 setUsers(prevUsers => prevUsers.map(user => {
                     if (user.userId === userId) {
-                        return { ...user, status: banStatus ? "banned" : "active", isAdmin: isAdmin ? false : user.isAdmin };
+                        return { ...user, status: banStatus ? "banned" : "active" }; // Oppdater status basert på banStatus
                     }
                     return user;
                 }));
@@ -196,7 +191,6 @@ const ViewUsers = () => {
             console.error('Error banning user:', error);
         }
     };
-
 
 
     return (
