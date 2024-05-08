@@ -13,6 +13,7 @@ export const Counter = () => {
     const [alertInfo, setAlertInfo] = useState({ open: false, severity: 'info', message: 'test message' });
     const token = sessionStorage.getItem('token');
 
+    // Fetch counter from backend
     const fetchCounter = async () => {
         const url = `http://localhost:5002/api/counter/getcounters?userToken=${token}`;
         try {
@@ -20,34 +21,24 @@ export const Counter = () => {
             if (response.ok) {
                 const data = await response.json();
                 setCounters(data || []);
-                console.log("Fetched counters:", data);
             } else {
-                setCounters([]);
                 const errorText = await response.text();
-                console.error("Failed to fetch counter data with status:", response.status, "and error:", errorText);
+                console.error("Fetch error:", errorText);
+                setCounters([]);
             }
         } catch (error) {
+            console.error("Fetch error:", error);
             setCounters([]);
-            console.error("Error fetching data:", error);
         }
     };
 
+    // Handle updating a counter
     const handleSaveUpdatedCounter = async (event) => {
-        event.preventDefault(); // Prevent the default form submission
-    
+        event.preventDefault();
         const url = `http://localhost:5002/api/counter/updatecounter`;
-        const payload = {
-            userToken: token,
-            ...currentCounter
-        };
+        const payload = {userToken: token, ...currentCounter};
         try {
-            const response = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            });
+            const response = await fetch(url, {method: 'PATCH', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)});
             if (response.ok) {
                 setCounters(currentCounters => currentCounters.map(counter => counter.counterId === currentCounter.counterId ? {...counter, ...currentCounter} : counter));
                 // Close the modal after update
@@ -64,99 +55,70 @@ export const Counter = () => {
     
     const { counterData, handleChange, handleSubmit } = useCounterStash(fetchCounter, setAlertInfo);
 
+    // Handle incrementing the counter
     const handleIncrement = async (id) => {
-        console.log("Attempting to increment counter with ID:", id);
-        const url = `http://localhost:5002/api/counter/incrementcounter?userToken=${token}&counterId${id}`;
-        // const payload = {
-        //     userToken: token,
-        //     counterId: id
-        // };
-        // console.log("Payload for increment:", payload);
-    
+        const url = `http://localhost:5002/api/counter/incrementcounter?userToken=${encodeURIComponent(token)}&counterId=${encodeURIComponent(id)}`;
         try {
-            const response = await fetch(url, {
-                method: 'PATCH', // Make sure this is the correct method accepted by the backend.
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                // body: JSON.stringify(payload),
-            });
-            console.log("Response status:", response.status);
-    
+            const response = await fetch(url, {method: 'PATCH'});
             if (response.ok) {
-                const data = await response.json();
-                console.log("Increment response data:", data);
                 setCounters(currentCounters => currentCounters.map(counter =>
                     counter.counterId === id ? { ...counter, roundNumber: counter.roundNumber + 1 } : counter
                 ));
             } else {
-                console.error("Failed to increment the counter", await response.text());
-            }
-        } catch (error) {
-            console.error("Error incrementing counter:", error);
-        }
-    };
-    
-    const handleDecrement = async (id) => {
-        console.log("Decrementing counter with ID:", id);
-        const url = `http://localhost:5002/api/counter/decrementcounter?userToken=${token}&counterId${id}`;
-        const payload = {
-            userToken: token,
-            counterId: id
-        };
-        try {
-            const response = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload),
-            });
-            console.log("Response received:", response.status);
-            if (response.ok) {
-                const data = await response.json();
-                setCounters(currentCounters => currentCounters.map(counter => 
-                    counter.counterId === id ? { ...counter, roundNumber: data.newRoundNumber } : counter
-                ));
-            } else {
                 const errorText = await response.text();
-                console.error("Failed to decrement the counter", errorText);
+                console.error("Increment failed", errorText);
             }
         } catch (error) {
-            console.error("Error decrementing counter:", error);
+            console.error("Increment failed:", error);
         }
     };
     
+    // Handle decrement counter
+    const handleDecrement = async (id) => {
+        // Checking if the counter is greater than zero
+        const currentCounter = counters.find(counter => counter.counterId === id);
+        if (currentCounter && currentCounter.roundNumber > 0){
+            const url = `http://localhost:5002/api/counter/decrementcounter?userToken=${encodeURIComponent(token)}&counterId=${encodeURIComponent(id)}`;
+            try {
+                const response = await fetch(url, {method: 'PATCH'});
+                if (response.ok) {
+                    console.log("Decrement successful");
+                    setCounters(currentCounters => currentCounters.map(counter =>
+                        counter.counterId === id ? { ...counter, roundNumber: counter.roundNumber - 1 } : counter
+                    ));
+                } else {
+                    const errorText = await response.text();
+                    console.error("Decrement failed", errorText);
+                }
+            } catch (error) {
+                console.error("Decrement failed:", error);
+            }
+        // denna kan fjernes om det ikke er vits/ønskelig
+        } else {
+            alert("Counter cannot go below zero.");
+        }
+    };
+    
+    // Edit, delete and input change handler
     const handleEdit = (counter) => {
         setCurrentCounter({ ...counter, newName: counter.name });
         setIsEditModalOpen(true);
     };
 
+    // Handle to delete counter
     const handleDeleteCounter = async (id) => {
         const url = `http://localhost:5002/api/counter/deletecounter`;
-        const payload = {
-            UserToken: token,
-            counterId: id
-        };
+        const payload = {UserToken: token, counterId: id};
         try {
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload)
-            });
+            const response = await fetch(url, {method: 'DELETE', headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}, body: JSON.stringify(payload)});
             if (response.ok) {
                 setCounters(currentCounter => currentCounter.filter(counter => counter.counterId !== id));
                 setIsEditModalOpen(false);
             } else {
-                console.error("Failed to delete the counter", await response.text());
+                console.error("Delete failed", await response.text());
             }
         } catch (error) {
-            console.error("Error deleting counter:", error);
+            console.error("Delete failed:", error);
         }
     };
 
@@ -176,6 +138,7 @@ export const Counter = () => {
     return (
         <div className="page-container">
             <div className="boxes-container">
+                {/* Render counters, modals, and alert components */}
                 <div className="add-counter-box" onClick={() => setIsAddModalOpen(true)}>
                     <span>Counter</span>
                     <span>+</span>
