@@ -9,7 +9,6 @@ import SetAlert from '../../../Components/Alert';
 
 const MessageDetails = ({ message, refreshMessages }) => {
     const [reply, setReply] = useState('');
-    // const [errorMessage, setErrorMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [isActive, setIsActive] = useState(message?.isActive);
     const [isHandled, setIsHandled] = useState(message?.isHandled);
@@ -31,11 +30,12 @@ const MessageDetails = ({ message, refreshMessages }) => {
                 }
             });
             console.log('Conversation status updated successfully');
-            if (isHandled === true) {
-                setAlertMessage('Conversation is now marked as handled');
-                setAlertSeverity('success');
-                setAlertOpen(true);
-            }
+            setIsActive(isActive);
+            setIsHandled(isHandled);
+            refreshMessages(); 
+            setAlertMessage(isHandled ? 'Conversation marked as handled' : 'Status updated');
+            setAlertSeverity(isHandled ? 'success' : 'info');
+            setAlertOpen(true);
         } catch (err) {
             console.error('Error updating conversation status:', err);
             setAlertMessage('Failed to update conversation status');
@@ -62,13 +62,11 @@ const MessageDetails = ({ message, refreshMessages }) => {
             setIsHandled(message.isHandled);
         }
         setReply('');
-        // setErrorMessage('');
     }, [message]);
 
     // Function to handle changes to the reply input field and clear the error message
     const handleReplyChanges = (e) => {
         setReply(e.target.value);
-        // setErrorMessage('');
     };
 
     // Function to handle the form submission and send the reply to the server
@@ -77,7 +75,6 @@ const MessageDetails = ({ message, refreshMessages }) => {
 
         // Validate the reply and message before sending 
         if (!reply.trim()) {
-            // setErrorMessage('Please write a reply before sending.');
             setAlertMessage('Please write a reply before sending.');
             setAlertSeverity('error');
             setAlertOpen(true);
@@ -87,7 +84,6 @@ const MessageDetails = ({ message, refreshMessages }) => {
         // Check that it is a valid message object and has a ContactRequestId property
         if (!message) {
             console.error('Invalid message object or missing ContactRequestId');
-            // setErrorMessage('Invalid message, please select a valid message.');
             setAlertMessage('Invalid message, please select a valid message.');
             setAlertSeverity('error');
             setAlertOpen(true);
@@ -103,8 +99,9 @@ const MessageDetails = ({ message, refreshMessages }) => {
             });
             console.log('The response was sent successfully', response.data);
             setReply('');
-            // setErrorMessage('');
             setMessages([...messages, { text: `Response: ${reply}`, isResponse: true }]);
+            setIsActive(true);
+            setIsHandled(false);
             updateConversationStatus(message.contactRequestId, true, false);
             refreshMessages(); 
             setAlertMessage('Reply sent successfully');
@@ -112,7 +109,6 @@ const MessageDetails = ({ message, refreshMessages }) => {
             setAlertOpen(true);
         } catch (error) {
             console.error(`Failed to send reply for message ${message.contactRequestId}`, error);
-            // setErrorMessage('Failed to send reply. Please check the data you are sending.');
             setAlertMessage('Failed to send reply. Please check the data you are sending.');
             setAlertSeverity('error');
             setAlertOpen(true);
@@ -121,8 +117,6 @@ const MessageDetails = ({ message, refreshMessages }) => {
 
     const handleFinishConversation = () => {
         updateConversationStatus(message.contactRequestId, false, true);
-        setIsActive(false);
-        setIsHandled(true);
     };
 
 

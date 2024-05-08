@@ -23,25 +23,15 @@ const ViewMessages = () => {
     const fetchMessages = async () => {
         setIsLoading(true);
         let queryParams = '';
-        if (selectedFilter === 'active') {
-            queryParams = 'isActive=true&isHandled=false';
-        } else if (selectedFilter === 'handled') {
-            queryParams = 'isActive=false&isHandled=true';
-        } else if (selectedFilter === 'inactive') {
-            queryParams = 'isActive=false&isHandled=false';
+        switch(selectedFilter) {
+            case 'active': queryParams = 'isActive=true&isHandled=false'; break;
+            case 'handled': queryParams = 'isActive=false&isHandled=true'; break;
+            case 'inactive': queryParams = 'isActive=false&isHandled=false'; break;
         }
         try {
             const response = await axios.get(`http://localhost:5002/api/Contact?${queryParams}`);
-            if (response.data && response.data.length > 0) {
-                setMessages(response.data);
-                setMessageError('');
-            } else if (response.data && response.data.Message) {
-                setMessages([]);
-                setMessageError(response.data.Message);
-            } else {
-                setMessages([]);
-                setMessageError('There are no contact requests available.');
-            }
+            setMessages(response.data);
+            setMessageError('');
         } catch (error) {
             console.error('An error occurred when fetching the messages:', error);
             setMessageError('Failed to fetch messages due to a server error.');
@@ -56,6 +46,7 @@ const ViewMessages = () => {
     }, [selectedFilter]);
 
 
+
     return (
         
         <Grid container spacing={2} style={{ overflow: 'auto' }}>
@@ -65,22 +56,13 @@ const ViewMessages = () => {
                     <h2>Incoming Messages</h2>
                     <div>
                         {/* Filter options */}
-                        <div 
-                            className={`switch-option ${selectedFilter === 'active' ? 'active' : 'inactive'}`}
-                            onClick={() => setSelectedFilter('active')}
-                            >
+                        <div className={`switch-option ${selectedFilter === 'active' ? 'active' : 'inactive'}`} onClick={() => setSelectedFilter('active')}>
                             Active
                         </div>
-                        <div 
-                            className={`switch-option ${selectedFilter === 'inactive' ? 'active' : 'inactive'}`}
-                            onClick={() => setSelectedFilter('inactive')}
-                            >
+                        <div className={`switch-option ${selectedFilter === 'inactive' ? 'active' : 'inactive'}`}  onClick={() => setSelectedFilter('inactive')}>
                             Inactive
                         </div>
-                        <div 
-                            className={`switch-option ${selectedFilter === 'handled' ? 'active' : 'inactive'}`}
-                            onClick={() => setSelectedFilter('handled')}
-                            >
+                        <div className={`switch-option ${selectedFilter === 'handled' ? 'active' : 'inactive'}`} onClick={() => setSelectedFilter('handled')}>
                             Handled
                         </div>
                     </div>
@@ -103,7 +85,7 @@ const ViewMessages = () => {
             {/* Message Details */}
             <Grid item xs={12} md={8}>
                 {activeMessage ? (
-                    <MessageDetails message={activeMessage} refreshMessages={fetchMessages}/>
+                    <MessageDetails message={activeMessage} refreshMessages={refreshMessages}/>
                     ) : (
                     <div> Select a message to view details.</div>
                 )}
