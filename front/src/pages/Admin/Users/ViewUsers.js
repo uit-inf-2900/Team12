@@ -154,22 +154,27 @@ const ViewUsers = () => {
         }
     };
     
-    // User banning logic
+
+    // User banning logic with admin privilege removal if banned
     const banUser = async (userId, banStatus) => {
         try {
-            // Send a POST request to the server to ban the user
+            const user = users.find(u => u.userId === userId);
+            const isAdmin = user.isAdmin && banStatus; // Check if the user is currently an admin and needs to be banned
+
+            // Send a POST request to the server to ban the user and remove admin privileges if necessary
             const response = await axios.patch('http://localhost:5002/Users/banUser', {
                 userToken: token,
                 banUserId: userId, 
-                ban: banStatus
+                ban: banStatus,
+                removeAdmin: isAdmin // Send removeAdmin flag to server if admin privileges need to be removed
             });
             console.log("Response: ", response);
 
-            // If the request is successful, update the users array to remove the banned user
+            // If the request is successful, update the users array to reflect the changes
             if (response.status === 200) {
                 setUsers(prevUsers => prevUsers.map(user => {
                     if (user.userId === userId) {
-                        return { ...user, status: banStatus ? "banned" : "active" }; // Oppdater status basert på banStatus
+                        return { ...user, status: banStatus ? "banned" : "active", isAdmin: isAdmin ? false : user.isAdmin };
                     }
                     return user;
                 }));
@@ -191,6 +196,7 @@ const ViewUsers = () => {
             console.error('Error banning user:', error);
         }
     };
+
 
 
     return (
@@ -248,7 +254,7 @@ const ViewUsers = () => {
                                 <TableCell>{user.fullName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{getStatusLabel(user.status)}</TableCell>
-                                <TableCell>{user.isAdmin ? 'Yes' : 'No'}
+                                <TableCell>
                                     <CustomButton
                                         style={{alignItems: 'right'}}
                                         variant="contained"
@@ -258,19 +264,19 @@ const ViewUsers = () => {
                                             () => toggleAdminStatus(user.userId, user.isAdmin)
                                         )}
                                     >
-                                        {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
+                                        {user.isAdmin ? 'Remove Admin' : 'Add Admin'} {/* change button text based on status */}
                                     </CustomButton>
                                 </TableCell>
-                                <TableCell >{user.status}
+                                <TableCell >
                                 <CustomButton
                                     variant="contained"
-                                    color={user.status === "banned" ? "primary" : "secondary"} // Endre farge basert på status
+                                    color={user.status === "banned" ? "primary" : "secondary"} 
                                     onClick={() => handleActionOpen(
                                         `Are you sure you want to ${user.status === "banned" ? "unban" : "ban"} ${user.fullName} (${user.email})?`,
                                         () => banUser(user.userId, user.status !== "banned")
                                     )}
                                 >
-                                    {user.status === "banned" ? "Unban User" : "Ban User"} {/* Endre knappetekst basert på status */}
+                                    {user.status === "banned" ? "Unban User" : "Ban User"} {/* change button text based on status */}
                                 </CustomButton>
                                 </TableCell>
                             </TableRow>
