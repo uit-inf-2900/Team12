@@ -209,5 +209,48 @@ public class CounterControllerTests
         Assert.IsType<NotFoundObjectResult>(response);
     }
 
+    [Fact]
+    public void IncDecCounter_Ok()
+    {
+        // Call controller and verify response
+        var incResult = _controller.IncrementCounter("userToken", testCounterId);
+        Assert.IsType<OkResult>(incResult);
 
+        // Verify that the counter was incremented
+        var counter = _context.CounterInventory.Find(testCounterId);
+        Assert.Equal(6, counter!.RoundNumber);
+
+        var decResult = _controller.DecrementCounter("userToken", testCounterId);
+        Assert.IsType<OkResult>(decResult);
+
+        // Verify that the counter was decremented
+        counter = _context.CounterInventory.Find(testCounterId);
+        Assert.Equal(5, counter!.RoundNumber);
+    }
+
+    [Fact]
+    public void InDecFakeToken_Fails()
+    {
+        // Mock service to return unauthorized
+        _mockTokenService.Setup(x => x.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        // Call controller with fake token and verify response
+        var incResult = _controller.IncrementCounter("fakeToken", testCounterId);
+        Assert.IsType<UnauthorizedResult>(incResult);
+
+        var decResult = _controller.DecrementCounter("fakeToken", testCounterId);
+        Assert.IsType<UnauthorizedResult>(decResult);
+    }
+
+    [Fact]
+    public void NonCounterIncDec_Fails()
+    {
+        // Call controller with non counter id
+        var incResult = _controller.IncrementCounter("userToken", Guid.NewGuid());
+        Assert.IsType<NotFoundObjectResult>(incResult);
+
+        var decResult = _controller.DecrementCounter("userToken", Guid.NewGuid());
+        Assert.IsType<NotFoundObjectResult>(decResult);
+    }
 }
