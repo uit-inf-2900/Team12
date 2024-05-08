@@ -66,7 +66,7 @@ public class ContactService : IContactService
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
-            throw new ArgumentException("Unauthorized");
+            return null!;
         }
 
         var isAdmin = _context.UserDetails
@@ -76,7 +76,7 @@ public class ContactService : IContactService
 
         if (!isAdmin)
         {
-            throw new ArgumentException("Unauthorized");
+            return null!;
         }
 
         // Get alle the contact requests
@@ -146,7 +146,7 @@ public class ContactService : IContactService
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
-            throw new ArgumentException("Unauthorized");
+            return false;
         }
 
         var isAdmin = _context.UserDetails
@@ -156,7 +156,7 @@ public class ContactService : IContactService
 
         if (!isAdmin)
         {
-            throw new ArgumentException("Unauthorized");
+            return false;
         }
 
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
@@ -172,7 +172,7 @@ public class ContactService : IContactService
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
-            throw new ArgumentException("Unauthorized");
+            return false;
         }
 
         var isAdmin = _context.UserDetails
@@ -182,7 +182,7 @@ public class ContactService : IContactService
 
         if (!isAdmin)
         {
-            throw new ArgumentException("Unauthorized");
+            return false;
         }
 
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
