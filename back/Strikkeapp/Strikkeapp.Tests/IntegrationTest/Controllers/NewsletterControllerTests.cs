@@ -34,7 +34,7 @@ public class NewsletterControllerTests
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
             .Returns("hashedPassword");
 
-            // Set up in memory database
+        // Set up in memory database
         string databaseName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
             .UseInMemoryDatabase(databaseName: databaseName)
