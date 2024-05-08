@@ -71,10 +71,10 @@ export const Home = () => {
 
   return (
     <div className='page-container'>
-      <h1 style={{padding: '20px'}}>God dag {userProfileState.userFullName || ''}!</h1>
+      <h1 style={{padding: '20px'}}>Hello, good to see you {userProfileState.userFullName || ''}!</h1>
       <div className="home-container" style={{'display': 'flex', padding: '20px', alignItems:'flex-start'}}>
         <div className="statistics-container" style={{width:'40%', alignSself: 'flex-start'}}>
-          <h3>Her har du en oversikt over ditt arbeid sålangt:</h3>
+          <h3>Here is an overview of your projects and inventory:</h3>
           <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent:'center' }}> 
             <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} />
             <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} />
@@ -83,12 +83,12 @@ export const Home = () => {
           </div>
         </div>
         <div className="creative-content-container" style={{width:'60%', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
-          <h3>I dag er dagen for å være kreativ</h3>
+          <h3>Today is the day to be creative! </h3>
           <img src={getImageByName('huggingYarn')} style={{ alignItems: 'center'}} alt="Pile of sweaters"/>
         </div>
       </div>
 
-      <h2  style={{padding: '20px', paddingTop:'30px'}}>Inspiration from Instagram </h2>
+      <h2  style={{padding: '20px', paddingTop:'30px'}}>Here are some inspiration from Instagram </h2>
       <InstagramFeed accessToken={accessTokenInsta} />
     </div>
   );
