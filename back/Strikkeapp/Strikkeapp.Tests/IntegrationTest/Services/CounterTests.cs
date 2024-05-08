@@ -178,6 +178,37 @@ public class CounterTests : IDisposable
     }
 
     [Fact]
+    public void FakeTokenDeleteCounter_Fails()
+    {
+        // Set up test data and mock service
+        string fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        // Run service and verify error
+        var result = _counterService.DeleteCounter(fakeToken, testCounterGuid);
+        Assert.False(result.Success, "Counter deletion should have failed");
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonCounterDelete_Fails()
+    {
+        // Set up test data and mock service
+        string testToken = "testToken";
+        Guid fakeCounterGuid = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run service and verify error
+        var result = _counterService.DeleteCounter(testToken, fakeCounterGuid);
+        Assert.False(result.Success, "Counter deletion should have failed");
+        Assert.Equal("Not found", result.ErrorMessage);
+    }
+
+    [Fact]
     public void GetCounters_Ok()
     {
         // Set up test data and mock service
