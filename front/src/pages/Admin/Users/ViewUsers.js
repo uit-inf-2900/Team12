@@ -24,9 +24,9 @@ import { getStatusLabel } from '../../../Components/UserLable';
  * Function to fetch user data from the server.
  * @returns {Array} Array of user data.
  */
-export const fetchUserData = async () => {
+export const fetchUserData = async (userToken) => {
     try {
-    const response = await fetch('http://localhost:5002/getUsers');
+    const response = await fetch('http://localhost:5002/getUsers?userToken=' + userToken);
     if (!response.ok) {
         throw new Error('Failed to fetch user data');
     }
@@ -68,7 +68,7 @@ const ViewUsers = () => {
     // Fetch user data from the server
     useEffect(() => {
         setLoading(true);
-        fetchUserData().then(data => {
+        fetchUserData(token).then(data => {
             setUsers(data);
             setLoading(false);
         }).catch(error => {
