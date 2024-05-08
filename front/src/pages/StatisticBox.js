@@ -8,9 +8,9 @@ import './StatisticBox.css';
 {/* Hente antall fullførte prosjekter */}
 {/* Hente antall .... */}
 
-const StatisticBox = ({ icon, label, value }) => {
+const StatisticBox = ({ icon, label, value, onClick }) => {
     return (
-    <div className="statistic-box">
+    <div className="statistic-box" onClick={onClick}>
         {icon && <img src={icon} alt={label} className="icon" />}
         <h1 className="label">{label}</h1>
         <p className="value">{value}</p>

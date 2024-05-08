@@ -5,6 +5,7 @@ import ProjectCard from "../../Components/ProjectCard";
 import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
+import { useLocation } from "react-router-dom";
 
 import '../../GlobalStyles/main.css';
 import { AddButton } from "../../Components/Button";
@@ -12,7 +13,10 @@ import ModalContent from "../../Components/ModualContent";
 
 
 const Projects = () => {
-    const [activeStatus, setActiveStatus] = useState('in-progress');
+    const location = useLocation(); 
+    const queryParams = new URLSearchParams(location.search); 
+    const defaultTab = queryParams.get('tab')
+    const [activeStatus, setActiveStatus] = useState(defaultTab ||'In Progress' );
     const [isOpenModal, setIsOpenModal] = useState(false);
 
     // Simplify the modal toggle to a single state since there's only one modal shown in the snippet
