@@ -363,7 +363,7 @@ public class InventoryService : IInventoryService
                     return UpdateInventoryResult.ForFailure("Item not found");
                 }
 
-                if(request.NewNum != yarnInventory.NumItems)
+                if(request.NewNum != yarnInventory.NumItems && request.NewNum>0)
                 {
                     yarnInventory.NumItems = request.NewNum;
                     _context.SaveChanges();

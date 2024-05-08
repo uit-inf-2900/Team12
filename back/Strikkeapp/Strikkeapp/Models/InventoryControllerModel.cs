@@ -49,6 +49,7 @@ public class UpdateItemRequest
         return !string.IsNullOrWhiteSpace(UserToken) &&
             !(ItemId == Guid.Empty) &&
             !(NewNum < 0);
+
     }
 }
 
@@ -57,6 +58,7 @@ public class UpdateYarnRequest
     public string UserToken { get; set; } = string.Empty;
     public Guid ItemId { get; set; } = Guid.Empty;
     public int NewNum { get; set; }
+    public int NumItems { get; set; }
     public string? Type { get; set; }
     public string? Manufacturer { get; set; }
     public string? Color { get; set; }
@@ -65,6 +67,7 @@ public class UpdateYarnRequest
     public int? Length { get; set; }
     public string? Gauge { get; set; }
     public string? Notes { get; set; }
+
 
     public bool isOk()
     {

@@ -52,11 +52,14 @@ const YarnStash = () => {
 
     const closeEditModal = () => {
         setEditYarnModalOpen(false);
+        fetchYarns();
     };
 
     const handleInputChange = (prop) => (event) => {
         setCurrentYarn({ ...currentYarn, [prop]: event.target.value });
+
     };
+
 
     const handleSaveUpdatedYarn = async () => {
         const url = `http://localhost:5002/api/inventory/updateyarn`;
@@ -75,6 +78,7 @@ const YarnStash = () => {
             if (response.ok) {
                 setYarns(currentYarns => currentYarns.map(yarn => yarn.itemId === currentYarn.itemId ? {...yarn, ...currentYarn} : yarn));
                 closeEditModal();
+                
             } else {
                 console.error("Failed to update the yarn", await response.text());
             }
@@ -143,6 +147,7 @@ const YarnStash = () => {
                                     <InputField label="Length" type= 'text' value={currentYarn.length || ''} onChange={handleInputChange('length')} />
                                     <InputField label="Gauge" type= 'text' value={currentYarn.gauge || ''} onChange={handleInputChange('gauge')} />
                                     <InputField label="Color" type= 'text' value={currentYarn.color || ''} onChange={handleInputChange('color')} />
+                                    <InputField label='New amount of yarn' type= 'number' value={currentYarn.newNum || '' } onChange={handleInputChange('newNum')} />
                                 </div>
                                 <div className="input-wrapper" style={{  width: 'calc(50% + 100px)', marginRight: '10px'}}>
                                     <InputField label="Type" type= 'text' value={currentYarn.type || ''} onChange={handleInputChange('type')} />
@@ -159,7 +164,7 @@ const YarnStash = () => {
                                     <InputField label="Weight" type= 'number' value={currentYarn.weight || ''} onChange={handleInputChange('weight')} />
                                 </div>
                                 <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
-                                        <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number')} />
+                                        <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number') } />
                                 </div>
                             </div>
                             <div className="input-wrapper" style={{ width:'100%', marginBottom: '10px'}}>

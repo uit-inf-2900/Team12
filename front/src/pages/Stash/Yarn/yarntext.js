@@ -52,7 +52,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
             Length: parseInt(yarnData.Length, 10),
             Gauge: yarnData.Gauge,
             Notes: yarnData.Notes,
-            NumItem: parseInt(yarnData.Amount,10)
+            NumItems: parseInt(yarnData.Amount,10)
         };
 
         // POST request to the API
