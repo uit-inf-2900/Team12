@@ -253,4 +253,68 @@ public class CounterControllerTests
         var decResult = _controller.DecrementCounter("userToken", Guid.NewGuid());
         Assert.IsType<NotFoundObjectResult>(decResult);
     }
+
+    [Fact]
+    public void DeleteCounter_Ok()
+    {
+        // Call controller with valid request and verify response
+        var request = new DeleteCounterRequest
+        {
+            userToken = "userToken",
+            counterId = testCounterId
+        };
+
+        var response = _controller.DeleteCounter(request);
+        Assert.IsType<OkObjectResult>(response);
+    }
+
+    [Fact]
+    public void BadRequestDelete_Fails()
+    {
+        // Empty request
+        var request = new DeleteCounterRequest
+        {
+            userToken = "",
+            counterId = Guid.Empty
+        };
+
+        // Call controller with empty request and verify response
+        var response = _controller.DeleteCounter(request);
+        Assert.IsType<BadRequestResult>(response);
+    }
+
+    [Fact]
+    public void FakeTokenDelete_Fails()
+    {
+        // Mock service to return unauthorized
+        _mockTokenService.Setup(x => x.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        // Call controller with fake token and verify response
+        var request = new DeleteCounterRequest
+        {
+            userToken = "fakeToken",
+            counterId = testCounterId
+        };
+
+        var response = _controller.DeleteCounter(request);
+        Assert.IsType<UnauthorizedResult>(response);
+    }
+
+    [Fact]
+    public void NonCounterDelete_Fails()
+    {
+        // Call controller with non counter id
+        var request = new DeleteCounterRequest
+        {
+            userToken = "userToken",
+            counterId = Guid.NewGuid()
+        };
+
+        var response = _controller.DeleteCounter(request);
+        var nfRes = Assert.IsType<NotFoundObjectResult>(response);
+
+        // Verify that the correct error message was returned
+        Assert.Equal("Could not find counter", nfRes.Value);
+    }
 }
