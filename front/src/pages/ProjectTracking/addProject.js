@@ -25,7 +25,8 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     recipeId: '',
     status: '',
     needleIds: [], 
-    yarnIds: [],
+    yarnIds: '',
+    yarnType: '',
     yarnAmount: '',
     notes: '',
     projectName: '',
@@ -71,23 +72,27 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
 
   };
 
-  const handleYarnAmount = (e) =>{
-    const {value} = e.target;
-    setYarnAmount({value});
+  const handleYarnIds = () =>{
+    setProjectData(() => ({
+      ...projectData,
+      yarnIds: { [projectData.yarnType] : projectData.yarnAmount},
+      //yarnIds: [value, Amount]
+    }));
 
 
   };
 
   const handleYarnChange = (e) => {
     const {value} = e.target;
-    console.log('value: ',value);
-    console.log('yarnAmount in projectsData:', projectData.yarnAmount);
+  
+    setProjectData({...projectData, yarnType: [value]});
     
-    setProjectData(() => ({
-      ...projectData,
-      yarnIds: {[value]:projectData.yarnAmount},
-      //yarnIds: [value, Amount]
-    }));
+    
+    // setProjectData(() => ({
+    //   ...projectData,
+    //   yarnIds: { [value] : projectData.yarnAmount},
+    //   //yarnIds: [value, Amount]
+    // }));
 
   };
 
@@ -95,14 +100,15 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+    
   
-  const payload = {
+  const payload ={
     userToken: token,
     ProjectName: projectData.projectName,
     RecipeId: projectData.recipeId,
     Status: projectData.status,
     NeedleIds: projectData.needleIds,
-    YarnIds: projectData.yarnIds,
+    YarnIds: { [projectData.yarnType] : projectData.yarnAmount},
     Notes: projectData.notes
     
 
@@ -221,11 +227,11 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
         
                   label="Yarn"
                   type="select"
-                  value={projectData.yarnIds}
+                  value={projectData.yarnType}
                   onChange={handleYarnChange}
                   options={yarns.map(yarn=> ({
                     value: yarn.itemId,
-                    label: `${yarn.type} by ${yarn.manufacturer} in color ${yarn.color} *need to fix color in backend*`
+                    label: `${yarn.type} by ${yarn.manufacturer}`
                   }))}
         />
         <InputField label="Amount yarn needed"  type="number" value={projectData.yarnAmount} onChange={handleInputChange('yarnAmount')} />    

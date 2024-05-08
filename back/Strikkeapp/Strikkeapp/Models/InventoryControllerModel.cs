@@ -6,6 +6,7 @@ public class AddNeedleRequest
     public string Type { get; set; } = string.Empty;
     public int Size { get; set; }
     public int Length { get; set; }
+    public int? NumItem { get; set; }
 
     public bool isOk()
     {
@@ -26,6 +27,7 @@ public class AddYarnRequest
     public int? Length { get; set; }
     public string? Gauge { get; set; }
     public string? Notes { get; set; }
+    public int? NumItem { get; set; }
 
     public bool isOk()
     {

@@ -1,12 +1,18 @@
-﻿using Strikkeapp.Data.Context;
+﻿using Azure.Core;
+using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
+using Strikkeapp.Data.Migrations;
 using Strikkeapp.Models;
+using AutoMapper;
 
 namespace Strikkeapp.Services;
 
 public interface IInventoryService
 {
     public InventoryGetResult GetInventory(string jwtToken);
+    public YarnInventoryDto GetSingleYarnFromInventory(string userToken, Guid itemId);
+    public IEnumerable<NeedleInventoryDto> GetNeedles(string userToken, IEnumerable<Guid>? needleIds);
+    public IEnumerable<YarnInventoryDto> GetYarns(string userToken, IEnumerable<Guid>? yarnIds);
     public InventoryResult AddNeedle(AddNeedleRequest request);
     public UpdateInventoryResult UpdateNeedle(UpdateItemRequest request);
     public UpdateInventoryResult UpdateNeedlesUsed(UpdateItemRequest request);
@@ -21,11 +27,13 @@ public class InventoryService : IInventoryService
 {
     private readonly StrikkeappDbContext _context;
     private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
 
-    public InventoryService(StrikkeappDbContext context, ITokenService tokenService)
+    public InventoryService(StrikkeappDbContext context, ITokenService tokenService, IMapper mapper)
     {
         _context = context;
         _tokenService = tokenService;
+        _mapper = mapper;
     }
 
     public InventoryGetResult GetInventory(string jwtToken)
@@ -81,6 +89,59 @@ public class InventoryService : IInventoryService
         }
     }
 
+    public YarnInventoryDto GetSingleYarnFromInventory(string userToken, Guid itemId)
+    {
+        // Check for valid token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            throw new ArgumentException("User token is invalid");
+        }
+
+        var yarnInventory = _context.YarnInventory.Where(yi => yi.ItemID == itemId && yi.UserId == tokenResult.UserId).FirstOrDefault();
+
+        if (yarnInventory == null)
+            throw new Exception("This yarn does not exist in user´s inventory");
+
+        return _mapper.Map<YarnInventoryDto>(yarnInventory);
+    }
+
+    public IEnumerable<NeedleInventoryDto> GetNeedles(string userToken, IEnumerable<Guid>? needleIds)
+    {
+        // Check for valid token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+            throw new ArgumentException("User token is invalid");  
+
+        if (needleIds == null || !needleIds.Any())
+            return new List<NeedleInventoryDto>();
+
+        var needles = _context.NeedleInventory
+                        .Where(ni => needleIds.Contains(ni.ItemID))
+                        .Select(ni => _mapper.Map<NeedleInventoryDto>(ni))
+                        .AsEnumerable();
+
+        return needles;
+    }
+
+    public IEnumerable<YarnInventoryDto> GetYarns(string userToken, IEnumerable<Guid>? yarnIds)
+    {
+        // Check for valid token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+            throw new ArgumentException("User token is invalid");
+
+        if (yarnIds == null || !yarnIds.Any())
+            return new List<YarnInventoryDto>();
+
+        var yarns = _context.YarnInventory
+                        .Where(yi => yarnIds.Contains(yi.ItemID))
+                        .Select(yi => _mapper.Map<YarnInventoryDto>(yi))
+                        .AsEnumerable();
+
+        return yarns;
+    }
+
     public InventoryResult AddNeedle(AddNeedleRequest request)
     {
         // Check for valid token
@@ -97,15 +158,8 @@ public class InventoryService : IInventoryService
             try
             {
                 // Create new entry
-                var needleInventory = new NeedleInventory
-                {
-                    UserId = userId,
-                    Type = request.Type,
-                    Size = request.Size,
-                    Length = request.Length,
-                    NumItem = 1,
-                    NumInUse = 0
-                };
+                var needleInventory = _mapper.Map<NeedleInventory>(request);
+                needleInventory.UserId = tokenResult.UserId;
 
                 // Add entry to database
                 _context.NeedleInventory.Add(needleInventory);
@@ -265,20 +319,8 @@ public class InventoryService : IInventoryService
             try
             {
                 // Create new entry
-                var yarnInventory = new YarnInventory
-                {
-                    UserId = userId,
-                    Type = request.Type,
-                    Manufacturer = request.Manufacturer,
-                    Color = request.Color,
-                    Batch_Number = request.Batch_Number,
-                    Weight = request.Weight,
-                    Length = request.Length,
-                    Gauge = request.Gauge,
-                    NumItems = 1,
-                    InUse = 0,
-                    Notes = request.Notes
-                };
+                var yarnInventory = _mapper.Map<YarnInventory>(request);
+                yarnInventory.UserId = tokenResult.UserId;
 
                 // Add new entry to db
                 _context.YarnInventory.Add(yarnInventory);

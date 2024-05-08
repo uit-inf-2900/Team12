@@ -3,6 +3,8 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Models;
 using Strikkeapp.Recipes.Models;
 using Strikkeapp.Data.Entities;
+using AutoMapper;
+using Strikkeapp.Data.Migrations;
 
 namespace Strikkeapp.Services;
 
@@ -11,7 +13,7 @@ public interface IProjectService
     List<ProjectModel> GetProjects(string jwtToken);
     bool CreateProject(string jwtToken, ProjectCreateModel project);
     bool DeleteProject(Guid projectId, string userToken);
-
+    public bool CompleteProject(string userToken, Guid projectId);
 }
 
 public class ProjectService : IProjectService
@@ -19,13 +21,17 @@ public class ProjectService : IProjectService
     private readonly ITokenService _tokenService;
     private readonly StrikkeappDbContext _context;
     private readonly IProjectYarnInventoryService _projectYarnService;
+    private readonly IInventoryService _inventoryService;
+    private readonly IMapper _mapper;
 
 
-    public ProjectService(ITokenService tokenService, StrikkeappDbContext context, IProjectYarnInventoryService projectYarnInventoryService)
+    public ProjectService(ITokenService tokenService, StrikkeappDbContext context, IProjectYarnInventoryService projectYarnInventoryService, IInventoryService inventoryService, IMapper mapper)
 	{
         _tokenService = tokenService;
         _context = context;
         _projectYarnService = projectYarnInventoryService;
+        _inventoryService = inventoryService;
+        _mapper = mapper;
 	}
 
     public List<ProjectModel> GetProjects(string jwtToken)
@@ -40,62 +46,14 @@ public class ProjectService : IProjectService
         try
         {
             // fetch project data from database
-            var projectEntities = _context.Projects
-                .Where(p => p.UserId == tokenResult.UserId)
-                .Select(p => new 
-                {
-                    ProjectId = p.ProjectId,
-                    RecipeId = p.RecipeId,
-                    Status = p.Status,
-                    Needles = p.NeedleIds,
-                    Yarns = p.YarnIds,
-                    Notes = p.Notes,
-                    ProjectName = p.ProjectName
-                }
-            ).ToList();
-
+            var projectEntities = _context.Projects.Where(p => p.UserId == tokenResult.UserId).ToList();
             var projectModels = new List<ProjectModel>();
 
-            // Get necessary data to create a project model
             foreach (var project in projectEntities)
             {
-                var projectModel = new ProjectModel
-                {
-                    ProjectId = project.ProjectId,
-                    RecipeId = project.RecipeId,
-                    Status = project.Status,
-                    // Get needle info from needle inventory table
-                    Needles = _context.NeedleInventory
-                        .Where(ni => project.Needles.Contains(ni.ItemID))
-                        .Select(ni => new NeedleInventoryDto
-                        {
-                            ItemId = ni.ItemID,
-                            Type = ni.Type,
-                            Size = ni.Size,
-                            Length = ni.Length,
-                            NumItem = ni.NumItem,
-                            NumInUse = ni.NumInUse
-                        }).AsEnumerable(),
-                    // get yarn info from yarn inventory table
-                    Yarns = _context.YarnInventory
-                        .Where(yi => project.Yarns.Contains(yi.ItemID))
-                        .Select(yi => new YarnInventoryDto
-                        {
-                            ItemId = yi.ItemID,
-                            Type = yi.Type,
-                            Manufacturer = yi.Manufacturer,
-                            Weight = yi.Weight,
-                            Length = yi.Length,
-                            Gauge = yi.Gauge,
-                            NumItems = yi.NumItems,
-                            // get the number of yarn in use for the project from project inventory
-                            InUse = _projectYarnService.GetNumInUseByProject(yi.ItemID, project.ProjectId, jwtToken),
-                            Notes = yi.Notes
-                        }).AsEnumerable(),
-                    Notes = project.Notes,
-                    ProjectName = project.ProjectName
-
-                };
+                var projectModel = _mapper.Map<ProjectModel>(project);
+                projectModel.Needles = _inventoryService.GetNeedles(jwtToken, project.NeedleIds);
+                projectModel.Yarns = GetYarnsForProject(jwtToken, project.YarnIds, project.ProjectId);
                 projectModels.Add(projectModel);
             }
             // return all projects found
@@ -106,8 +64,6 @@ public class ProjectService : IProjectService
         {
             throw new Exception("Error when getting projects: " + ex.Message);
         }
-
-        
     }
 
     public bool CreateProject(string jwtToken, ProjectCreateModel project)
@@ -119,16 +75,11 @@ public class ProjectService : IProjectService
             throw new ArgumentException(tokenResult.ErrorMessage);
         }
 
-        var projectEntity = new ProjectEntity
-        {
-            RecipeId = project.RecipeId,
-            Status = project.Status,
-            NeedleIds = project.NeedleIds,
-            YarnIds = project.YarnIds != null ? project.YarnIds.Keys.ToList() : null,
-            Notes = project.Notes,
-            UserId = tokenResult.UserId,
-            ProjectName = project.ProjectName
-        };
+        if (project.Status == Enums.ProjectStatus.Completed)
+            throw new Exception("Project cannot be created as completed. Create project with different status, then set as completed.");
+
+        var projectEntity = _mapper.Map<ProjectEntity>(project);
+        projectEntity.UserId = tokenResult.UserId;
 
         var addedProject = _context.Projects.Add(projectEntity);
 
@@ -161,6 +112,32 @@ public class ProjectService : IProjectService
 
     }
 
+    public bool CompleteProject(string userToken, Guid projectId)
+    {
+        // Get and check token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (tokenResult.Success == false)
+            throw new ArgumentException(tokenResult.ErrorMessage);
+
+        var project = _context.Projects.Where(p => p.ProjectId == projectId && p.UserId == tokenResult.UserId).FirstOrDefault();
+
+        if (project == null)
+            throw new ArgumentException($"Project with id: {projectId} does not exist for logged in user");
+
+        if (project.Status == Enums.ProjectStatus.Completed)
+            throw new ArgumentException($"Project with id: {projectId} is already set as completed");
+
+        var updateInventory = _projectYarnService.SetYarnInventoryForCompletedProject(userToken, project.YarnIds, project.ProjectId);
+
+        project.Status = Enums.ProjectStatus.Completed;
+
+        var result = _context.SaveChanges();
+
+        if (result > 0)
+            return true;
+        return false;
+    }
+
     public bool DeleteProject(Guid projectId, string userToken)
     {
         // Get and check token
@@ -188,5 +165,15 @@ public class ProjectService : IProjectService
         return false;
     }
 
+    private IEnumerable<YarnInventoryDto> GetYarnsForProject(string userToken, IEnumerable<Guid>? yarnIds, Guid projectId)
+    {
+        var yarns = _inventoryService.GetYarns(userToken, yarnIds);
+
+        foreach (var yarn in yarns)
+        {
+            yarn.InUse = _projectYarnService.GetNumInUseByProject(yarn.ItemId, projectId, userToken);
+        }
+        return yarns;
+    }
 }
 

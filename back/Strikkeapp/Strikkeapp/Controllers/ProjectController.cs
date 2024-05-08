@@ -32,13 +32,18 @@ public class ProjectController
 		return result;
 	}
 
-	[HttpDelete]
+	[HttpPost("complete")]
+	public bool CompleteProject([FromQuery] string userToken, [FromQuery] Guid projectId)
+	{
+		var result = _projectService.CompleteProject(userToken, projectId);
+		return result;
+	}
+
+
+    [HttpDelete]
 	public bool DeleteProject([FromQuery] string userToken, [FromQuery] Guid projectId)
 	{
 		var result = _projectService.DeleteProject(projectId, userToken);
 		return result;
-	}
-
-    
+	}  
 }
-

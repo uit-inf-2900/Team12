@@ -6,6 +6,7 @@ using System.Text;
 using Strikkeapp.Services;
 using Microsoft.AspNetCore.Identity;
 using MailerSend.AspNetCore;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,9 +33,9 @@ builder.Services.AddScoped<ICounterService, CounterService>();
 builder.Services.AddScoped<INewsletterService, NewsletterService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectYarnInventoryService, ProjectYarnInventoryService>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddSingleton<IPasswordHasher<object>, PasswordHasher<object>>();
-
 
 var jwtKey = builder.Configuration["Jwt:key"];
 if(string.IsNullOrWhiteSpace(jwtKey))

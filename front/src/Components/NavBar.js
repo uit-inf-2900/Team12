@@ -3,6 +3,10 @@ import { NavLink } from "react-router-dom";
 import "../GlobalStyles/navbar.css";
 import ConfirmationLogout from '../pages/SignUp_LogIn/ConfirmationLogout';  // Correct way to import default exports
 import { useFormState } from 'react-hook-form';
+import logoIMG from "../images/logo/logoStart.svg";
+import Logo from "../images/logo/logoBlack.svg";
+import allBlackShort from "../images/homepage/allBlackShort.svg";
+import NameLong from "../images/logo/KHorange.svg"
 
 const VisitorView = () => {
   return (
@@ -54,17 +58,25 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
 
   return (
     <header className="header" id="header">
-      <nav className="nav container">
-        <NavLink to="/" className="nav-logo">**LOGO**</NavLink>
+      <nav className="nav-container">
         <ul className="nav-list">
-          <li className="nav-item"><NavLink to="/" className="nav-link">Home</NavLink></li>
+          <li className='nav-items nav-logo'>
+            <NavLink to="/" className='nav-logo'>
+            <img src={allBlackShort} className='nav-logo-img'></img>
+          </NavLink>
+          </li>
+        
+        
+       
+          <li className="nav-items"><NavLink to="/" className="nav-link">Home</NavLink></li>
           {!isLoggedIn && <VisitorView/>}
           {isLoggedIn && <UserView />}
           <AdminView isAdmin={isAdmin} isLoggedIn={isLoggedIn} />
-        </ul>
+        
+        
         {isLoggedIn && (
         <>
-          <div className="nav-items">
+          <li className="nav-items">
             <NavLink to="/profile" className="nav-action">Profile</NavLink>
             <NavLink onClick={handleLogoutClick} className="nav-action">Logg Ut</NavLink>
             <ConfirmationLogout 
@@ -73,17 +85,18 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
               onConfirm={handleConfirmLogout}
               message="Are you sure you want to log out?"
             />
-          </div>
+          </li>
         </>
         )}
         {!isLoggedIn && (
         <>
-          <div className="nav-items">
+          <li className="nav-items">
             <NavLink to="/signup" className="nav-action">Sign Up</NavLink>
             <NavLink to="/login" className="nav-action">Log In</NavLink>
-          </div>
+          </li>
         </>
         )}
+        </ul>
       </nav>
     </header>
   );

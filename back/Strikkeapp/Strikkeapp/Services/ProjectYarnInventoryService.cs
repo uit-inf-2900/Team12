@@ -2,6 +2,7 @@
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
+using AutoMapper;
 
 namespace Strikkeapp.Services;
 
@@ -11,6 +12,9 @@ public interface IProjectYarnInventoryService
     bool DeleteYarnInventory(Guid projectInventoryId, string userToken);
     bool DeleteYarnInventory(List<Guid> projectInventoryId, string userToken);
     int GetNumInUseByProject(Guid itemId, Guid projectId, string userToken);
+    public bool SetYarnInventoryForCompletedProject(string userToken, Guid itemId, Guid projectId);
+    public bool SetYarnInventoryForCompletedProject(string userToken, List<Guid>? itemId, Guid projectId);
+
 }
 
 public class ProjectYarnInventoryService : IProjectYarnInventoryService
@@ -18,13 +22,15 @@ public class ProjectYarnInventoryService : IProjectYarnInventoryService
     private readonly StrikkeappDbContext _context;
     private readonly IInventoryService _inventoryService;
     private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
 
 
-    public ProjectYarnInventoryService(StrikkeappDbContext context, IInventoryService inventoryService, ITokenService tokenService)
+    public ProjectYarnInventoryService(StrikkeappDbContext context, IInventoryService inventoryService, ITokenService tokenService, IMapper mapper)
 	{
         _context = context;
         _inventoryService = inventoryService;
         _tokenService = tokenService;
+        _mapper = mapper;
 	}
 
     public Guid? CreateYarnInventory(Guid yarnId, Guid projectId, string userToken, int numUse)
@@ -37,10 +43,7 @@ public class ProjectYarnInventoryService : IProjectYarnInventoryService
         }
 
         // validate that amount of yarn is available and exists
-        var yarnInventory = _context.YarnInventory.Where(yi => yi.ItemID == yarnId).FirstOrDefault();
-
-        if (yarnInventory == null)
-            throw new ArgumentException("Selected yarn does not exist in users inventory");
+        var yarnInventory = _inventoryService.GetSingleYarnFromInventory(userToken, yarnId);
 
         if (yarnInventory.NumItems - yarnInventory.InUse < numUse)
             throw new ArgumentException($@"Inventory of this yarn is lower than requested amount. 
@@ -93,10 +96,7 @@ public class ProjectYarnInventoryService : IProjectYarnInventoryService
             throw new Exception("Project does not have this in its inventory");
 
         // validate that amount of yarn is available and exists
-        var yarnInventory = _context.YarnInventory.Where(yi => yi.ItemID == projectInventory.ItemId).FirstOrDefault();
-
-        if (yarnInventory == null)
-            throw new Exception("This yarn does not exist in users inventory");
+        var yarnInventory = _inventoryService.GetSingleYarnFromInventory(userToken, projectInventory.ItemId);
 
         var updateInventoryRequest = new UpdateItemRequest
         {
@@ -137,10 +137,7 @@ public class ProjectYarnInventoryService : IProjectYarnInventoryService
         foreach (var inventory in projectInventory)
         {
             // validate that amount of yarn exists
-            var yarnInventory = _context.YarnInventory.Where(yi => yi.ItemID == inventory.ItemId).FirstOrDefault();
-
-            if (yarnInventory == null)
-                throw new Exception("This yarn does not exist in users inventory");
+            var yarnInventory = _inventoryService.GetSingleYarnFromInventory(userToken, inventory.ItemId);
 
             var updateInventoryRequest = new UpdateItemRequest
             {
@@ -166,6 +163,88 @@ public class ProjectYarnInventoryService : IProjectYarnInventoryService
         return false;
     }
 
+    public bool SetYarnInventoryForCompletedProject(string userToken, Guid itemId, Guid projectId)
+    {
+        // Get and check token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (tokenResult.Success == false)
+        {
+            throw new ArgumentException(tokenResult.ErrorMessage);
+        }
+
+        var inventory = GetProjectYarnInventoryEntity(itemId, tokenResult.UserId, projectId);
+
+        if (inventory == null)
+            return false;
+
+        var yarn = _inventoryService.GetSingleYarnFromInventory(userToken, inventory.ItemId);
+
+        var updateInventoryRequest = new UpdateItemRequest
+        {
+            UserToken = userToken,
+            ItemId = inventory.ItemId,
+            NewNum = yarn.InUse - inventory.NumberInUse,
+        };
+
+        var updateInventoryResult = _inventoryService.UpdateYarnUsed(updateInventoryRequest);
+
+        if (!updateInventoryResult.Success)
+            return false;
+
+        var updateYarnRequest = _mapper.Map<UpdateYarnRequest>(yarn);
+        updateYarnRequest.NewNum = yarn.NumItems - inventory.NumberInUse;
+
+        var update = _inventoryService.UpdateYarn(updateYarnRequest);
+
+        if (!update.Success)
+            return false;
+        return true;
+    }
+
+    public bool SetYarnInventoryForCompletedProject(string userToken, List<Guid>? itemId, Guid projectId)
+    {
+        // Get and check token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (tokenResult.Success == false)
+        {
+            throw new ArgumentException(tokenResult.ErrorMessage);
+        }
+
+        if (itemId == null || !itemId.Any())
+            return true;
+
+        foreach (var id in itemId)
+        {
+            var inventory = GetProjectYarnInventoryEntity(id, tokenResult.UserId, projectId);
+
+            if (inventory == null)
+                return false;
+
+            var yarn = _inventoryService.GetSingleYarnFromInventory(userToken, inventory.ItemId);
+
+            var updateInventoryRequest = new UpdateItemRequest
+            {
+                UserToken = userToken,
+                ItemId = inventory.ItemId,
+                NewNum = yarn.InUse - inventory.NumberInUse,
+            };
+
+            var updateInventoryResult = _inventoryService.UpdateYarnUsed(updateInventoryRequest);
+
+            if (!updateInventoryResult.Success)
+                return false;
+
+            var updateYarnRequest = _mapper.Map<UpdateYarnRequest>(yarn);
+            updateYarnRequest.NewNum = yarn.NumItems - inventory.NumberInUse;
+
+            var update = _inventoryService.UpdateYarn(updateYarnRequest);
+
+            if (!update.Success)
+                return false;
+        }
+        return true;
+    }
+
     public int GetNumInUseByProject(Guid itemId, Guid projectId, string userToken)
     {
         // Get and check token
@@ -175,12 +254,22 @@ public class ProjectYarnInventoryService : IProjectYarnInventoryService
             throw new ArgumentException(tokenResult.ErrorMessage);
         }
 
-        var inventory = _context.ProjectYarnInventory.Where(pyi => pyi.ItemId == itemId && pyi.ProjectId == projectId && pyi.UserId == tokenResult.UserId).FirstOrDefault();
+        var inventory = GetProjectYarnInventoryEntity(itemId, tokenResult.UserId, projectId);
 
         if (inventory == null)
             return 0;
 
         return inventory.NumberInUse;
+    }
+
+    private ProjectYarnInventoryEntity? GetProjectYarnInventoryEntity(Guid itemId, Guid userId, Guid projectId)
+    {
+        var inventory = _context.ProjectYarnInventory.Where(pyi => pyi.ItemId == itemId && pyi.ProjectId == projectId && pyi.UserId == userId).FirstOrDefault();
+
+        if (inventory == null)
+            return null;
+
+        return inventory;
     }
 }
 
