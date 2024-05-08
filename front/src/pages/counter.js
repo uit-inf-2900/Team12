@@ -65,24 +65,30 @@ export const Counter = () => {
     const { counterData, handleChange, handleSubmit } = useCounterStash(fetchCounter, setAlertInfo);
 
     const handleIncrement = async (id) => {
-        const url = `http://localhost:5002/api/counter/updatecounter`;
-        const payload = {
-            userToken: token,
-            ...currentCounter
-        };
+        console.log("Attempting to increment counter with ID:", id);
+        const url = `http://localhost:5002/api/counter/incrementcounter?userToken=${token}&counterId${id}`;
+        // const payload = {
+        //     userToken: token,
+        //     counterId: id
+        // };
+        // console.log("Payload for increment:", payload);
+    
         try {
             const response = await fetch(url, {
-                method: 'PATCH',
+                method: 'PATCH', // Make sure this is the correct method accepted by the backend.
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify(payload),
+                // body: JSON.stringify(payload),
             });
+            console.log("Response status:", response.status);
+    
             if (response.ok) {
                 const data = await response.json();
-                setCounters(currentCounters => currentCounters.map(counter => 
-                    counter.counterId === id ? { ...counter, roundNumber: data.newRoundNumber } : counter
+                console.log("Increment response data:", data);
+                setCounters(currentCounters => currentCounters.map(counter =>
+                    counter.counterId === id ? { ...counter, roundNumber: counter.roundNumber + 1 } : counter
                 ));
             } else {
                 console.error("Failed to increment the counter", await response.text());
@@ -93,10 +99,11 @@ export const Counter = () => {
     };
     
     const handleDecrement = async (id) => {
-        const url = `http://localhost:5002/api/counter/updatecounter`;
+        console.log("Decrementing counter with ID:", id);
+        const url = `http://localhost:5002/api/counter/decrementcounter?userToken=${token}&counterId${id}`;
         const payload = {
             userToken: token,
-            ...currentCounter
+            counterId: id
         };
         try {
             const response = await fetch(url, {
@@ -107,19 +114,15 @@ export const Counter = () => {
                 },
                 body: JSON.stringify(payload),
             });
+            console.log("Response received:", response.status);
             if (response.ok) {
                 const data = await response.json();
-                // setCounters(currentCounters => currentCounters.map(counter => {
-                //     if (counter.counterId === id){
-
-                //         const newValue = {counter.roundNumber !== undefined ?  counter.roundNumber : 0} + 1;
-                //         return{...counter, roundNumber: newValue};
-                //     };
-                //     return counter;
-                // }
-                // ));
+                setCounters(currentCounters => currentCounters.map(counter => 
+                    counter.counterId === id ? { ...counter, roundNumber: data.newRoundNumber } : counter
+                ));
             } else {
-                console.error("Failed to decrement the counter", await response.text());
+                const errorText = await response.text();
+                console.error("Failed to decrement the counter", errorText);
             }
         } catch (error) {
             console.error("Error decrementing counter:", error);
