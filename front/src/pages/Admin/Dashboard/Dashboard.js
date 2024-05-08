@@ -174,4 +174,5 @@ const Dashboard = ({ toggleView }) => {
     );
 };
 
-export default Dashboard;
+
+export default Dashboard; 
