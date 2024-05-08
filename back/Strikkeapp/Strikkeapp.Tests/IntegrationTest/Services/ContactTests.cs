@@ -30,6 +30,12 @@ public class ContactTests : IDisposable
         // Set up password hasher
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
                 .Returns("hashedPassword");
+
+        _mockTokenService.Setup(x => x.ExtractUserID("testToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+        _mockTokenService.Setup(x => x.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(adminUserId));
+
         
         // Set up in memory db
         var dbName = Guid.NewGuid().ToString();
@@ -40,7 +46,7 @@ public class ContactTests : IDisposable
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
 
         // Set up service
-        _contactService = new ContactService(_context);
+        _contactService = new ContactService(_context, _mockTokenService.Object);
         
         // Seed db with test data
         SeedTestData();
@@ -145,16 +151,16 @@ public class ContactTests : IDisposable
     {
         // Run tests and check result
         // Should only return one request
-        var result1 = _contactService.GetContactRequests(false, false);
+        var result1 = _contactService.GetContactRequests(false, false, "adminToken");
         Assert.Single(result1);
 
-        var result2 = _contactService.GetContactRequests(true, false);
+        var result2 = _contactService.GetContactRequests(true, false, "adminToken");
         Assert.Single(result2);
 
-        var result3 = _contactService.GetContactRequests(false, true);
+        var result3 = _contactService.GetContactRequests(false, true, "adminToken");
         Assert.Single(result3);
 
-        var result4 = _contactService.GetContactRequests(true, true);
+        var result4 = _contactService.GetContactRequests(true, true, "adminToken");
         Assert.Single(result4);
     }
 
@@ -162,7 +168,7 @@ public class ContactTests : IDisposable
     public void UpdateIsActiveStatus_Ok() 
     {
         // Run test, and check success
-        var result = _contactService.UpdateIsActiveStatus(testRequestId, true);
+        var result = _contactService.UpdateIsActiveStatus(testRequestId, true, "adminToken");
         Assert.True(result);
 
         // Run test, and check success
@@ -175,7 +181,7 @@ public class ContactTests : IDisposable
     {
         // Set up test data and run test
         Guid fakeId = Guid.NewGuid();
-        var result = _contactService.UpdateIsActiveStatus(fakeId, true);
+        var result = _contactService.UpdateIsActiveStatus(fakeId, true, "adminToken");
 
         // Check that service fails
         Assert.False(result, "Should not be able to update non-existing request");
@@ -184,7 +190,7 @@ public class ContactTests : IDisposable
     [Fact]
     public void UpdateIsHandledStatus_Ok() 
     {
-        var result = _contactService.UpdateIsHandledStatus(testRequestId, true);
+        var result = _contactService.UpdateIsHandledStatus(testRequestId, true, "adminToken");
         Assert.True(result);
 
         var request = _context.ContactRequests.Find(testRequestId);
@@ -196,7 +202,7 @@ public class ContactTests : IDisposable
     {
         // Set up test data and run test
         Guid fakeId = Guid.NewGuid();
-        var result = _contactService.UpdateIsHandledStatus(fakeId, true);
+        var result = _contactService.UpdateIsHandledStatus(fakeId, true, "adminToken");
 
         // Check that service fails
         Assert.False(result, "Should not be able to update non-existing request");
