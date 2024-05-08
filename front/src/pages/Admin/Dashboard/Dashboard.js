@@ -31,11 +31,11 @@ const Dashboard = ({ toggleView }) => {
 
     // Fetch data from various APIs to populate the dashboard with updated information.
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (userToken) => {
             try {
                 const fetchOptions = { headers: { 'Accept': 'application/json' } };
 
-                const usersResponse = await fetch(`${API_BASE_URL}/getUsers`, fetchOptions);
+                const usersResponse = await fetch(`${API_BASE_URL}/getUsers?userToken=` + userToken, fetchOptions);
                 setUsersData(await usersResponse.json());
 
                 const activeMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=true&isHandled=false`, fetchOptions);
@@ -61,7 +61,7 @@ const Dashboard = ({ toggleView }) => {
             }
         };
 
-        fetchData();
+        fetchData(usersToken);
     }, [usersToken]);
 
     // Desides if you want a image or a chart. We only want charts if there are something to display on the cart 
