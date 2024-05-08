@@ -110,13 +110,12 @@ public class CounterTests : IDisposable
         // Set up test data and mock service
         string newName = "newName";
         string testToken = "testToken";
-        int newNum = 10;
 
         _mockTokenService.Setup(s => s.ExtractUserID(testToken))
             .Returns(TokenResult.ForSuccess(testUserGuid));
 
         // Run service and verify result
-        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newNum, newName);
+        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newName);
         Assert.True(result.Success, "Counter update failed");
 
         // Verify that the counter was updated with correct info
@@ -124,7 +123,6 @@ public class CounterTests : IDisposable
             .FirstOrDefault(c => c.CounterId == testCounterGuid);
         Assert.NotNull(counter);
         Assert.Equal(newName, counter.Name);
-        Assert.Equal(newNum, counter.RoundNumber);
     }
 
     [Fact]
@@ -137,7 +135,7 @@ public class CounterTests : IDisposable
             .Returns(TokenResult.ForFailure("Invalid token"));
 
         // Run service and verify error
-        var result = _counterService.UpdateCounter(fakeToken, testCounterGuid, 10, "newName");
+        var result = _counterService.UpdateCounter(fakeToken, testCounterGuid, "newName");
 
         Assert.False(result.Success, "Counter update should have failed");
         Assert.Equal("Unauthorized", result.ErrorMessage);
@@ -154,32 +152,10 @@ public class CounterTests : IDisposable
             .Returns(TokenResult.ForSuccess(testUserGuid));
 
         // Run service and verify error
-        var result = _counterService.UpdateCounter(testToken, fakeCounterGuid, 10, "newName");
+        var result = _counterService.UpdateCounter(testToken, fakeCounterGuid, "newName");
 
         Assert.False(result.Success, "Counter update should have failed");
         Assert.Equal("Not found", result.ErrorMessage);
-    }
-
-    [Fact]
-    public void OnlyNewNum_Ok()
-    {
-        // Set up test data and mock service
-        string testToken = "testToken";
-        int newNum = 10;
-
-        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
-            .Returns(TokenResult.ForSuccess(testUserGuid));
-
-        // Run service and verify result
-        var result = _counterService.UpdateCounter(testToken, testCounterGuid, newNum, null);
-        Assert.True(result.Success, "Counter update failed");
-
-        // Verify that the counter was updated with correct info
-        var counter = _context.CounterInventory
-            .FirstOrDefault(c => c.CounterId == testCounterGuid);
-        Assert.NotNull(counter);
-        Assert.Equal(newNum, counter.RoundNumber);
-        Assert.Equal("TestCounter", counter.Name);
     }
 
     [Fact]
@@ -230,5 +206,57 @@ public class CounterTests : IDisposable
 
         Assert.False(result.Success, "Get counters should have failed");
         Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void IncrementCounterAndDecrementCounter_Ok()
+    {
+        // Set up test data and mock service
+        string testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run service and verify result
+        var incrementResult = _counterService.IncrementCounter(testToken, testCounterGuid);
+        Assert.True(incrementResult.Success, "Increment counter failed");
+
+        var decrementResult = _counterService.DecrementCounter(testToken, testCounterGuid);
+        Assert.True(decrementResult.Success, "Decrement counter failed");
+    }
+
+    [Fact]
+    public void FakeTokenIncDecCounter_Fails()
+    {
+        // Set up test data and mock service
+        string fakeToken = "fakeToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(fakeToken))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run service and verify error
+        var incrementResult = _counterService.IncrementCounter(fakeToken, testCounterGuid);
+        Assert.False(incrementResult.Success, "Increment counter should have failed");
+
+        var decrementResult = _counterService.DecrementCounter(fakeToken, testCounterGuid);
+        Assert.False(decrementResult.Success, "Decrement counter should have failed");
+    }
+
+    [Fact]
+    public void NonCounterIncDecCounter_Fails()
+    {
+        // Set up test data and mock service
+        string testToken = "testToken";
+        Guid fakeCounterGuid = Guid.NewGuid();
+
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run service and verify error
+        var incrementResult = _counterService.IncrementCounter(testToken, fakeCounterGuid);
+        Assert.False(incrementResult.Success, "Increment counter should have failed");
+
+        var decrementResult = _counterService.DecrementCounter(testToken, fakeCounterGuid);
+        Assert.False(decrementResult.Success, "Decrement counter should have failed");
     }
 }
