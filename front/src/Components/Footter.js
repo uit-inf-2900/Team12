@@ -72,15 +72,23 @@ const SomeFooter = () => {
 const Footer = () => {
     const [email, setEmail] = useState('');
     const [open, setOpen] = useState(false);  
-    const [alert, setAlert] = useState({ severity: '', message: '' });
     const { register, handleSubmit, formState: { errors }, reset, setError, clearErrors } = useForm();
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertSeverity, setAlertSeverity] = useState('info');
+    const [alertMessage, setAlertMessage] = useState('');
 
+
+    const updateAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setAlertOpen(true);
+    };
 
     /**
      * Handles subscription form submission.
      * Sends a request to the server to subscribe to the newsletter.
      */
-   const handleSubscribe = async (data) => {
+    const handleSubscribe = async (data) => {
         event.preventDefault(); 
         try {
             const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
@@ -93,8 +101,7 @@ const Footer = () => {
             });
             if (response.ok) {
                 reset(); 
-                setAlert({ severity: 'success', message: 'You have successfully subscribed to our newsletter!' });
-                setOpen(true);
+                updateAlert('You have successfully subscribed to our newsletter!', 'success');
                 setEmail(''); 
             } else {
                 const errorText = await response.text();
@@ -116,6 +123,7 @@ const Footer = () => {
                     <Typography variant="h5">
                         Knithub
                     </Typography>
+                    <SetAlert open={alertOpen} setOpen={setAlertOpen} severity={alertSeverity} message={alertMessage} />
 
                     {/* The input field for the user to add its email addrss */}
                     <form >
@@ -164,7 +172,6 @@ const Footer = () => {
                     </Typography>
                 </Grid>
             </Grid>
-            <SetAlert open={open} setOpen={setOpen} severity={alert.severity} message={alert.message} />
         </Paper>
     );
 };

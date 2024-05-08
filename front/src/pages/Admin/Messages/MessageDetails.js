@@ -16,6 +16,14 @@ const MessageDetails = ({ message, refreshMessages }) => {
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
 
+
+    const updateAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setAlertOpen(true);
+    };
+    
+
     // Function to update the conversation status
     const updateConversationStatus = async (contactRequestId, isActive, isHandled) => {
         try {
@@ -33,14 +41,11 @@ const MessageDetails = ({ message, refreshMessages }) => {
             setIsActive(isActive);
             setIsHandled(isHandled);
             refreshMessages(); 
-            setAlertMessage(isHandled ? 'Conversation marked as handled' : 'Status updated');
-            setAlertSeverity(isHandled ? 'success' : 'success');
-            setAlertOpen(true);
+
+            updateAlert(isHandled ? 'Conversation marked as handled' : 'Status updated', 'success');
         } catch (err) {
             console.error('Error updating conversation status:', err);
-            setAlertMessage('Failed to update conversation status');
-            setAlertSeverity('error');
-            setAlertOpen(true);
+            updateAlert('Failed to update conversation status', 'error')
         }
     };
     // Function to split the message text into individual messages
@@ -75,18 +80,14 @@ const MessageDetails = ({ message, refreshMessages }) => {
 
         // Validate the reply and message before sending 
         if (!reply.trim()) {
-            setAlertMessage('Please write a reply before sending.');
-            setAlertSeverity('error');
-            setAlertOpen(true);
+            updateAlert('Please write a reply before sending.', 'error')
             return;
         }
 
         // Check that it is a valid message object and has a ContactRequestId property
         if (!message) {
             console.error('Invalid message object or missing ContactRequestId');
-            setAlertMessage('Invalid message, please select a valid message.');
-            setAlertSeverity('error');
-            setAlertOpen(true);
+            updateAlert('Invalid message, please select a valid message.', 'error');
             return;
         }
 
@@ -106,14 +107,10 @@ const MessageDetails = ({ message, refreshMessages }) => {
             setIsHandled(false);
             updateConversationStatus(message.contactRequestId, true, false);
             refreshMessages(); 
-            setAlertMessage('Reply sent successfully');
-            setAlertSeverity('success');
-            setAlertOpen(true);
+            updateAlert('Reply sent successfully', 'success');
         } catch (error) {
             console.error(`Failed to send reply for message ${message.contactRequestId}`, error);
-            setAlertMessage('Failed to send reply. Please check the data you are sending.');
-            setAlertSeverity('error');
-            setAlertOpen(true);
+            updateAlert('Failed to send reply. Please check the data you are sending.', 'error');
         }
     };
 
