@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Modal, Box, Typography, Button, Grid, Avatar } from '@mui/material';
 import "../GlobalStyles/Card.css";
+import IncreaseDecreaseCalculator from '../pages/Calculator/IncreaseDecreaseCalculator';
+import Counter from '../pages/counter';
 
 const ProjectCard = ({ show, project, handleClose, onDelete }) => {
 
+
+  const [openCalculator, setOpenCalculator]=useState(false);
+  const [openCounter, setOpenCounter]=useState(false);
+
+  const increaseDecrease = () => {
+    setOpenCalculator(!openCalculator);
+    setOpenCounter(false);
+  };
   
+  const counters = () => {
+    setOpenCounter(!openCounter);
+    setOpenCalculator(false);
+
+  };
   
 
   return (
@@ -77,10 +92,10 @@ const ProjectCard = ({ show, project, handleClose, onDelete }) => {
             <Button variant="contained" color="primary" sx={{ mr: 1 }}>
               Recipe
             </Button>
-            <Button variant="contained" color="primary" sx={{ mr: 1 }}>
+            <Button variant="contained" onClick={()=>increaseDecrease()} color="primary" sx={{ mr: 1 }}>
               Calculators
             </Button>
-            <Button variant="contained" color="primary" sx={{ mr: 1 }}>
+            <Button variant="contained" onClick={()=> counters()} color="primary" sx={{ mr: 1 }}>
               Counter
             </Button>
             <Button variant="contained" onClick={onDelete} color="primary" sx={{ mr: 1 }}>
@@ -89,6 +104,14 @@ const ProjectCard = ({ show, project, handleClose, onDelete }) => {
           </Box>
           <Button variant="contained" onClick={handleClose}>Close</Button>
         </Box>
+
+        {openCalculator && (
+          <IncreaseDecreaseCalculator></IncreaseDecreaseCalculator>
+        )}
+
+        {openCounter && (
+          <Counter></Counter>
+        )}
       </Box>
     </Modal>
   );

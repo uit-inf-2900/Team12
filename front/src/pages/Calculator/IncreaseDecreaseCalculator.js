@@ -5,7 +5,7 @@ import {DecreaseCalculator} from "./DecreaseCalculator";
 import {YarnCalculator} from "./YarnCalculator";
 
 const IncreaseDecreaseCalculator = () => {
-    const[activeStatus, setActiveStatus] = useState('oke');
+    const[activeStatus, setActiveStatus] = useState('increase');
 
     // The components in the switch container
     const options = [

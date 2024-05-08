@@ -28,9 +28,9 @@ export const YarnCalculator = () => {
             <h1 style={{color:"#F2E4E1"}}> Yarn Calculator </h1>
             <h4 style={{color:"#F2E4E1"}}>Calculate how many skeins your project requires</h4>
             <div className="calculator-container">
-                    <label htmlFor="yarn lenght">In the recipe</label>
+                    <label htmlFor="yarn length">In the recipe</label>
                     <InputField
-                        label="yarn lenght" 
+                        label="yarn length" 
                         name="original-length"
                         type="number"
                         onChange={e => setOriginalLength(e.target.value)}
