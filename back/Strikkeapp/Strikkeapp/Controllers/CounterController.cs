@@ -69,7 +69,7 @@ public class CounterController : ControllerBase
             return BadRequest();
         }
 
-        var res = _counterService.UpdateCounter(request.userToken, request.counterId, request.newNum, request.newName);
+        var res = _counterService.UpdateCounter(request.userToken, request.counterId, request.newName);
 
         if (!res.Success)
         {

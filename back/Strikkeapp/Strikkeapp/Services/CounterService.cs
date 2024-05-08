@@ -7,7 +7,7 @@ namespace Strikkeapp.Services;
 public interface ICounterService 
 {
     public CreateCounterResult CreateCounter(string userToken, string name);
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName);
+    public CounterResult UpdateCounter(string userToken, Guid counterId, string newName);
     public CounterResult DeleteCounter(string userToken, Guid counterId);
     public GetCountersResult GetCounters(string userToken);
     public CounterResult IncrementCounter(string userToken, Guid counterId);
@@ -77,7 +77,7 @@ public class CounterService : ICounterService
         return GetCountersResult.ForSuccess(counters);
     }
 
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName)
+    public CounterResult UpdateCounter(string userToken, Guid counterId, string newName)
     {
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
@@ -91,29 +91,29 @@ public class CounterService : ICounterService
         {
             try
             {
+                // Get counter
                 var getCounter = _context.CounterInventory
                     .Where(uid => uid.UserId == userId)
                     .FirstOrDefault(cid => cid.CounterId == counterId);
 
+                // Check if counter exists
                 if (getCounter == null)
                 {
+                    // Return not found if counter does not exist
                     return CounterResult.ForFailure("Not found");
                 }
 
-                getCounter.RoundNumber = newNum;
+                // Update counter name
+                getCounter.Name = newName;
                 _context.SaveChanges();
-
-                if(!string.IsNullOrWhiteSpace(newName))
-                {
-                    getCounter.Name = newName;
-                    _context.SaveChanges();
-                }
-
+                
+                // Commit transaction and return success
                 transaction.Commit();
                 return CounterResult.ForSuccess();
             }
             catch (Exception ex)
             {
+                // Handle exception and return failure
                 transaction.Rollback();
                 return CounterResult.ForFailure(ex.Message);
             }
