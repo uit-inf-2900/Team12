@@ -9,11 +9,13 @@ import { CustomButton, AddButton } from '../../../Components/Button';
 import yarnBasket from '../../../images/yarnSheep.png';
 
 const YarnStash = () => {
+    // State declarations
     const [yarns, setYarns] = useState([]);
     const [openYarnModal, setOpenYarnModal] = useState(false);
     const [editYarnModalOpen, setEditYarnModalOpen] = useState(false);
     const [currentYarn, setCurrentYarn] = useState({});
 
+    // Handling the deletion of yarn
     const handleDeleteYarn = async (ItemID) => {
         const url = `http://localhost:5002/api/inventory/deleteyarn`;
         const payload = {
@@ -30,6 +32,7 @@ const YarnStash = () => {
                 body: JSON.stringify(payload)
             });
             if (response.ok) {
+                // If deletion was successful, update yarns state by removing deleted yarn
                 setYarns(currentYarns => currentYarns.filter(yarn => yarn.itemId !== ItemID));
                 setEditYarnModalOpen(false);
             } else {
@@ -40,15 +43,18 @@ const YarnStash = () => {
         }
     };
 
+    // Function to handle editing of yarn
     const handleEditYarn = (yarn) => {
         setCurrentYarn(yarn);
         setEditYarnModalOpen(true);
     };
 
+    // Function to handle input change for yarn attributes
     const handleInputChange = (prop) => (event) => {
         setCurrentYarn({ ...currentYarn, [prop]: event.target.value });
     };
 
+    // Handling saving updated yarn
     const handleSaveUpdatedYarn = async () => {
         const url = `http://localhost:5002/api/inventory/updateyarn`;
         const payload = {
@@ -64,6 +70,7 @@ const YarnStash = () => {
                 body: JSON.stringify(payload)
             });
             if (response.ok) {
+                // If update successful, update yarns state with updated yarn
                 setYarns(currentYarns => currentYarns.map(yarn => yarn.itemId === currentYarn.itemId ? {...yarn, ...currentYarn} : yarn));
                 setEditYarnModalOpen(false);
             } else {
@@ -74,6 +81,7 @@ const YarnStash = () => {
         }
     };
 
+    // Function to fetch yarn data
     const fetchYarns = async () => {
         const token = sessionStorage.getItem('token');
         const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
@@ -91,12 +99,14 @@ const YarnStash = () => {
         }
     };
 
+    // Fetch yarns on component mount
     useEffect(() => {
         fetchYarns();
     }, []);
 
     return (
         <div>
+            {/* Displaying yarn cards */}
             <div className="card-container" style={{justifyContent: 'flex-start', justifyContent: 'center'}}>
                 {yarns.map(yarn => (
                     <GeneralCard
@@ -116,12 +126,14 @@ const YarnStash = () => {
                 ))}
             </div>
             <AddButton onClick={() => setOpenYarnModal(!openYarnModal)}/>
+            {/* Modal for adding yarn */}
             <Modal open={openYarnModal} onClose={() => setOpenYarnModal(!openYarnModal)}>
                 <TextYarn onClose={() => setOpenYarnModal(!openYarnModal)} fetchYarns={fetchYarns}/>
             </Modal>
+            {/* Modal for editing yarn */}
             <Modal open={editYarnModalOpen} onClose={() => setEditYarnModalOpen(false)}>
                 <div className="pop" >
-                    <div className="pop-content" style={{height: '80%', width: '50%'}}>
+                    <div className="pop-content" style={{height: 'auto', width: '50%'}}>
                         <h2>Edit Yarn</h2>
                         <div className="yarn-form" style={{ display: 'flex', flexDirection: 'column'}}>
                             <div className="input-row" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', margin: '0 auto' }}>
@@ -153,6 +165,7 @@ const YarnStash = () => {
                                 <InputField label="Notes" type= 'text' value={currentYarn.notes || ''} onChange={handleInputChange('notes')} multiline rows={4} />
                             </div>
                             <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                {/* Buttons for saving changes, canceling and deleting yarn */}
                                 <CustomButton onClick={handleSaveUpdatedYarn} style={{ margin: '10px' }}>Save Changes</CustomButton>
                                 <CustomButton onClick={() => setEditYarnModalOpen(false)} style={{ margin: '10px' }}>Cancel</CustomButton>
                                 <CustomButton onClick={() => handleDeleteYarn(currentYarn.itemId)} style={{ margin: ' 10px' }}>Delete</CustomButton>
