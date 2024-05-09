@@ -80,7 +80,7 @@ const Dashboard = ({ toggleView }) => {
         { label: "Banned users", value: usersData.filter(user => user.status === 'banned').length },
         { label: "Unverified users", value: usersData.filter(user => user.status === 'unverified' && !user.isAdmin).length },
         { label: "Verified users", value: usersData.filter(user => user.status === 'verified' && !user.isAdmin).length },
-        { label: "Admins", value: usersData.filter(user => user.isAdmin && !user.status === 'banned').length },
+        { label: "Admins", value: usersData.filter(user => user.isAdmin).length },
     ];
 
     
