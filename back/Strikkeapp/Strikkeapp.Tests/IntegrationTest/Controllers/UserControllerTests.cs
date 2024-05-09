@@ -442,6 +442,18 @@ public class UsersControllerTests
     }
 
     [Fact]
+    public void FakeUsersGet_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run controller with invalid token, and verify failure
+        var result = _controller.GetAllUsers("fakeToken");
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
     public void VerifyUser_Ok()
     {
         // Set up mock service
