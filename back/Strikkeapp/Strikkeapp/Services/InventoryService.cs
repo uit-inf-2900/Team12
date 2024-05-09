@@ -49,6 +49,8 @@ public class InventoryService : IInventoryService
                     ItemId = yi.ItemID,
                     Type = yi.Type,
                     Manufacturer = yi.Manufacturer,
+                    Batch_Number = yi.Batch_Number,
+                    Color = yi.Color,
                     Weight = yi.Weight,
                     Length = yi.Length,
                     Gauge = yi.Gauge,
