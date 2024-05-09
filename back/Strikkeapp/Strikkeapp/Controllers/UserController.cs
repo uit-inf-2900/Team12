@@ -85,6 +85,12 @@ public class UsersController : ControllerBase
     [Route("/login")]
     public IActionResult LogInUser([FromBody] LogInUserRequest request)
     {
+        // Check request
+        if (!request.requestOk())
+        {
+            return BadRequest();
+        }
+
         // Call service
         var result = _userService.LogInUser(request.UserEmail, request.UserPwd);
         // Check for success
