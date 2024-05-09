@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 using Strikkeapp.Controllers;
 using Strikkeapp.Services;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Models;
 using Strikkeapp.Data.Entities;
-using Newtonsoft.Json.Linq;
 
 namespace Strikkeapp.Tests.Controllers;
 
@@ -232,6 +232,74 @@ public class InventoryControllerTests
 
         // Run controller and verify response
         var result = _controller.UpdateNeedle(request);
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void NonNeedleUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = Guid.NewGuid(),
+            NewNum = 10
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateNeedle(request);
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    [Fact]
+    public void UpdateNeedlesUsed_Ok()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = testNeedleId,
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateNeedlesUsed(request);
+        var okRes = Assert.IsType<OkObjectResult>(result);
+        Assert.NotNull(okRes.Value);
+
+        Assert.Contains(testNeedleId.ToString(), okRes.Value.ToString());
+        Assert.Contains("4", okRes.Value.ToString());
+    }
+
+    [Fact]
+    public void BadNeedleUsedUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "",
+            ItemId = testNeedleId,
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateNeedlesUsed(request);
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public void FakeTokenUpdateNeedleUsed_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "fakeToken",
+            ItemId = testNeedleId,
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateNeedlesUsed(request);
         Assert.IsType<UnauthorizedObjectResult>(result);
     }
 
