@@ -516,4 +516,36 @@ public class InventoryControllerTests
         var result = _controller.UpdateYarn(request);
         Assert.IsType<BadRequestResult>(result);
     }
+
+    [Fact]
+    public void FakeTokenUpdateYarn_Fails()
+    {
+        // Set up request
+        var request = new UpdateYarnRequest
+        {
+            UserToken = "fakeToken",
+            ItemId = testYarnId,
+            NewNum = 10
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateYarn(request);
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void NonYarnUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateYarnRequest
+        {
+            UserToken = "userToken",
+            ItemId = Guid.NewGuid(),
+            NewNum = 10
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateYarn(request);
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
 }
