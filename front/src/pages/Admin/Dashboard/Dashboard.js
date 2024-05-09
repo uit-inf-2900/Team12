@@ -74,14 +74,15 @@ const Dashboard = ({ toggleView }) => {
     };
 
     
-    // User info that is sendt into the card
+    // User info that is sendt into the card (do not want to count users with admin status)
     const userStats = [
         { label: "Total number of users", value: usersData.length },
         { label: "Banned users", value: usersData.filter(user => user.status === 'banned').length },
-        { label: "Unverified users", value: usersData.filter(user => user.status === 'unverified').length },
-        { label: "Verified users", value: usersData.filter(user => user.status === 'verified').length },
-        { label: "Admins", value: usersData.filter(user => user.isAdmin).length },
+        { label: "Unverified users", value: usersData.filter(user => user.status === 'unverified' && !user.isAdmin).length },
+        { label: "Verified users", value: usersData.filter(user => user.status === 'verified' && !user.isAdmin).length },
+        { label: "Admins", value: usersData.filter(user => user.isAdmin && !user.status === 'banned').length },
     ];
+
     
     // To avoid getting NaN if one or more are note defined
     const activeMessagesLength = activeMessages.length || 0;
@@ -173,4 +174,5 @@ const Dashboard = ({ toggleView }) => {
     );
 };
 
-export default Dashboard;
+
+export default Dashboard; 
