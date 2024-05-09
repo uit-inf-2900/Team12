@@ -41,7 +41,15 @@ const TextYarn = ({onClose, fetchYarns}) => {
 
         const payload = {
             UserToken: yarnData.UserToken,
-            ...yarnData
+            ItemId: yarnData.ItemId,
+            Type: yarnData.Type,
+            Manufacturer: yarnData.Manufacturer,
+            Color: yarnData.Color,
+            Batch_Number: yarnData.Batch_Number,
+            Weight: parseInt(yarnData.Weight, 10),
+            Length: parseInt(yarnData.Length, 10),
+            Gauge: yarnData.Gauge,
+            Notes: yarnData.Notes
         };
 
         const response = await fetch('http://localhost:5002/api/inventory/addyarn', {
