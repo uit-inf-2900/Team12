@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import TextYarn from '../pages/Stash/Yarn/yarntext';
 import YarnStash from '../pages/Stash/Yarn/Yarn';
 import '@testing-library/jest-dom';
@@ -16,7 +16,7 @@ describe('TextYarn Component', () => {
             ok: true,
             json: () => Promise.resolve({ success: true }),
         });
-    
+
         // Render TextYarn component
         const { getByLabelText, getByText } = render(<TextYarn fetchYarns={fetchYarns} onClose={onClose} />);
     
@@ -42,7 +42,6 @@ describe('YarnStash component', () => {
         jest.spyOn(global, 'fetch').mockRestore();
     });
 
-    //PASS
     test('fetches yarns on mount', async () => {
         // Mock the response of the fetch call
         const mockYarnData = {
