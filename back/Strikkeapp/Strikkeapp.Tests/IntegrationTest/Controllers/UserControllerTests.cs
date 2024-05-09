@@ -175,17 +175,15 @@ public class UsersControllerTests
         Assert.IsType<OkObjectResult>(result);
     }
 
-        [Fact]
+    [Fact]
     public void BadRequestLogin_Fails()
     {
-        var request = new CreateUserRequest
+        var request = new LogInUserRequest
         {
             UserEmail = "",
             UserPwd = "",
-            UserFullName = "",
-            UserDOB = 0
         };
-        var result = _controller.CreateUser(request);
+        var result = _controller.LogInUser(request);
 
         Assert.IsType<BadRequestResult>(result);
     }
