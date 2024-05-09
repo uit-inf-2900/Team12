@@ -175,17 +175,15 @@ public class UsersControllerTests
         Assert.IsType<OkObjectResult>(result);
     }
 
-        [Fact]
+    [Fact]
     public void BadRequestLogin_Fails()
     {
-        var request = new CreateUserRequest
+        var request = new LogInUserRequest
         {
             UserEmail = "",
             UserPwd = "",
-            UserFullName = "",
-            UserDOB = 0
         };
-        var result = _controller.CreateUser(request);
+        var result = _controller.LogInUser(request);
 
         Assert.IsType<BadRequestResult>(result);
     }
@@ -441,6 +439,18 @@ public class UsersControllerTests
         // Run controller, and verify success
         var result = _controller.GetAllUsers("adminToken");
         Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public void FakeUsersGet_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Invalid token"));
+
+        // Run controller with invalid token, and verify failure
+        var result = _controller.GetAllUsers("fakeToken");
+        Assert.IsType<UnauthorizedResult>(result);
     }
 
     [Fact]
