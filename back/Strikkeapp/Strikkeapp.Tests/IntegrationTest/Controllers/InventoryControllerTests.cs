@@ -548,4 +548,150 @@ public class InventoryControllerTests
         var result = _controller.UpdateYarn(request);
         Assert.IsType<NotFoundObjectResult>(result);
     }
+
+    [Fact]
+    public void UpdateYarnUsed_Ok()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = testYarnId,
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateYarnUsed(request);
+        var okRes = Assert.IsType<OkObjectResult>(result);
+        Assert.NotNull(okRes.Value);
+
+        Assert.Contains(testYarnId.ToString(), okRes.Value.ToString());
+        Assert.Contains("4", okRes.Value.ToString());
+    }
+
+    [Fact]
+    public void BadYarnUsedUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "",
+            ItemId = testYarnId,
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateYarnUsed(request);
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public void ExceedYarnUsedUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = testYarnId,
+            NewNum = 100
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateYarnUsed(request);
+        var response = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal("Not enough yarn in inventory", response.Value!.ToString());
+    }
+
+    [Fact]
+    public void FakeTokenUpdateYarnUsed_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "fakeToken",
+            ItemId = testYarnId,
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateYarnUsed(request);
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void NonYarnUsedUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = Guid.NewGuid(),
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateYarnUsed(request);
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    [Fact]
+    public void DeleteYarn_Ok()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = testYarnId
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteYarn(request);
+        var okRes = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(testYarnId.ToString(), okRes.Value!.ToString());
+    }
+
+    [Fact]
+    public void BadYarnDelete_Fails()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "",
+            ItemId = testYarnId
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteYarn(request);
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public void FakeTokenDeleteYarn_Fails()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "fakeToken",
+            ItemId = testYarnId
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteYarn(request);
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void NonYarnDelete_Fails()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = Guid.NewGuid()
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteYarn(request);
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
 }
