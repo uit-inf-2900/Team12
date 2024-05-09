@@ -288,6 +288,23 @@ public class InventoryControllerTests
     }
 
     [Fact]
+    public void ExceedNeedlesUsedUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = testNeedleId,
+            NewNum = 100
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateNeedlesUsed(request);
+        var response = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal("Not enough needles in inventory", response.Value!.ToString());
+    }
+
+    [Fact]
     public void FakeTokenUpdateNeedleUsed_Fails()
     {
         // Set up request
@@ -301,6 +318,83 @@ public class InventoryControllerTests
         // Run controller and verify response
         var result = _controller.UpdateNeedlesUsed(request);
         Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void NonNeedleUsedUpdate_Fails()
+    {
+        // Set up request
+        var request = new UpdateItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = Guid.NewGuid(),
+            NewNum = 4
+        };
+
+        // Run controller and verify response
+        var result = _controller.UpdateNeedlesUsed(request);
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
+
+    [Fact]
+    public void DeleteNeedle_Ok()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = testNeedleId
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteNeedle(request);
+        var okRes = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(testNeedleId.ToString(), okRes.Value!.ToString());
+    }
+
+    [Fact]
+    public void BadNeedleDelete_Fails()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "",
+            ItemId = testNeedleId
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteNeedle(request);
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public void FakeTokenDeleteNeedle_Fails()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "fakeToken",
+            ItemId = testNeedleId
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteNeedle(request);
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void NonNeedleDelete_Fails()
+    {
+        // Set up request
+        var request = new DeleteItemRequest
+        {
+            UserToken = "userToken",
+            ItemId = Guid.NewGuid()
+        };
+
+        // Run controller and verify response
+        var result = _controller.DeleteNeedle(request);
+        Assert.IsType<NotFoundObjectResult>(result);
     }
 
     [Fact]
