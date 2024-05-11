@@ -57,10 +57,6 @@ public class UserService : IUserService
             var hasedPwd = HashPassword(userEmail, userPwd);
             userLogin.UserPwd = hasedPwd;
 
-            // ems
-            // Send verification email
-            // SendVerificationEmail(userLogin);
-
             // Save new entry
             _context.UserLogIn.Add(userLogin);
 
