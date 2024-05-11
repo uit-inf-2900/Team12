@@ -247,5 +247,41 @@ public class RecipeControllerTests : IDisposable
         Assert.True(fileRes.FileContents.Length > 0);
     }
 
+    [Fact]
+    public void FakeTokenGetPDF_Fails()
+    {
+        // Call controller and verify failure
+        var result = _controller.GetRecipePDF("fakeToken", testRecipeId);
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public void NonRecipeGetPDF_Fails()
+    {
+        // Call controller and verify failure
+        var result = _controller.GetRecipePDF("userToken", Guid.NewGuid());
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public void DeleteRecipe_Ok()
+    {
+        // Call controller and verify success
+        var result = _controller.DeleteRecipePDF("userToken", testRecipeId);
+        Assert.IsType<OkResult>(result);
+
+        // Verify recipe is deleted
+        var recipe = _context.KnittingRecipes.Find(testRecipeId);
+        Assert.Null(recipe);
+    }
+
+    [Fact]
+    public void NonRecipeDelete_Fails()
+    {
+        // Call controller and verify failure
+        var result = _controller.DeleteRecipePDF("userToken", Guid.NewGuid());
+        Assert.IsType<NotFoundResult>(result);
+    }
+
 
 }
