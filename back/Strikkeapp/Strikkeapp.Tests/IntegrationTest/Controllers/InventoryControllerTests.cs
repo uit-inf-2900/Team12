@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using AutoMapper;
 
 using Strikkeapp.Controllers;
 using Strikkeapp.Services;
@@ -19,6 +20,7 @@ public class InventoryControllerTests
     private readonly InventoryController _controller;
     private readonly InventoryService _inventoryService;
     private readonly StrikkeappDbContext _context;
+    private readonly IMapper _mapper;
 
     // Set up mocks
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
@@ -32,6 +34,12 @@ public class InventoryControllerTests
 
     public InventoryControllerTests()
     {
+        // Setup AutoMapper configuration
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<AutoMapperProfile>();
+        });
+
         // Set up mock services
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
             .Returns("hashedPassword");
@@ -49,7 +57,8 @@ public class InventoryControllerTests
 
         // Initialize controller and service
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
-        _inventoryService = new InventoryService(_context, _mockTokenService.Object);
+        _mapper = mapperConfig.CreateMapper();
+        _inventoryService = new InventoryService(_context, _mockTokenService.Object, _mapper);
         _controller = new InventoryController(_inventoryService);
 
         // Seed database
