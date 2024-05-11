@@ -124,9 +124,7 @@ public class RecipeTests : IDisposable
         var knittingGauge = "20 stitches = 4 inches";
         var notes = "Some notes here";
 
-
-
-        // Run servicewith fake token and verify failure
+        // Run service with fake token and verify failure
         var result = _recipeService.StoreRecipe(mockFileStream.Object, "fakeToken", recipeName, needleSize, knittingGauge, notes);
         Assert.False(result.Success);
         Assert.Equal("Unauthorized", result.ErrorMesssage);
