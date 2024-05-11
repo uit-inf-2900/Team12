@@ -63,6 +63,10 @@ public class RecipeController : ControllerBase
         var result = _recipeService.GetRecipes(userToken);
         if (!result.Success)
         {
+            if (result.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
             return StatusCode(500, result.ErrorMessage);
         }
 

@@ -94,7 +94,7 @@ public class RecipeService : IRecipeService
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (tokenResult.Success == false)
         {
-            return RecipeServiceResultGet.ForFailure(tokenResult.ErrorMessage);
+            return RecipeServiceResultGet.ForFailure("Unauthorized");
         }
 
         try
