@@ -59,6 +59,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
             // Handle error 
             console.error("Upload error:", error);
         })
+        fetchRecipes();
     };
 
 
@@ -71,7 +72,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
-                <button className="close-button" onClick={onClose}>X</button>
+                
                 <div className="upload-flex-container"> 
                     <div className="box light" 
                         style={{"border-radius": "50%", 
