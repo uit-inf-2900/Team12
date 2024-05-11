@@ -24,7 +24,7 @@ public class RecipeTests : IDisposable
     private readonly string _mockStoragePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
     private Guid testUserId = Guid.NewGuid();
-
+    private Guid testRecipeId = Guid.NewGuid();
     public RecipeTests()
     {
         // Set up mocks
@@ -60,14 +60,25 @@ public class RecipeTests : IDisposable
 
     private void SeedTestData()
     {
+        // Ensure the storage path exists. If not, create it
+        if (!Directory.Exists(_mockStoragePath))
+        {
+            Directory.CreateDirectory(_mockStoragePath);
+        }
+
+        // Create a test recipe
+        var recipeFilePath = Path.Combine(_mockStoragePath, $"{testRecipeId}.pdf");
+        File.WriteAllBytes(recipeFilePath, new byte[] { 1, 2, 3, 4, 5 });
+
         _context.KnittingRecipes.Add(new KnittingRecipes
         {
-            KnittingRecipeId = Guid.NewGuid(),
+            KnittingRecipeId = testRecipeId,
             UserId = testUserId,
             RecipeName = "Test Recipe",
             NeedleSize = 5,
             KnittingGauge = "10x10",
-            Notes = "Test notes"
+            Notes = "Test notes",
+            RecipePath = recipeFilePath
         });
 
         _context.SaveChanges();
@@ -75,6 +86,13 @@ public class RecipeTests : IDisposable
 
     public void Dispose()
     {
+        // Delete the created PDF file
+        var recipeFilePath = Path.Combine(_mockStoragePath, $"{testRecipeId}.pdf");
+        if (File.Exists(recipeFilePath))
+        {
+            File.Delete(recipeFilePath);
+        }
+
         _context.Database.EnsureDeleted();
         _context.Dispose();
     }
@@ -141,5 +159,24 @@ public class RecipeTests : IDisposable
         Assert.Single(result.Recipes);
         Assert.Equal("Test Recipe", result.Recipes.First().RecipeName);
         
+    }
+
+    [Fact]
+    public void FakeTokenGet_Fails()
+    {
+        // Run service with fake token and verify failure
+        var result = _recipeService.GetRecipes("fakeToken");
+        Assert.False(result.Success);
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void GetRecipePDF_Ok()
+    {
+        // Run service and verify success
+        var result = _recipeService.GetRecipePDF(testRecipeId, "userToken");
+        Assert.True(result.Success, result.ErrorMessage);
+        Assert.NotNull(result.PDFData);
+        Assert.True(result.PDFData.Length > 0);
     }
 }
