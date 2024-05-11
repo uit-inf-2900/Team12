@@ -143,22 +143,7 @@ const YarnStash = () => {
                 />
             ))}
 
-                {yarns.map(yarn => (
-                    <GeneralCard
-                        key={yarn.itemId}
-                        ItemId={yarn.ItemID}
-                        title={`${yarn.manufacturer}, ${yarn.type}`}
-                        stats={[
-                            { label: "Brand", value: yarn.manufacturer},
-                            { label: "Type", value: yarn.type},
-                            { label: "Color", value: yarn.color},
-                            { label: "Weight", value: yarn.weight},
-                            { label: "Gauge", value: yarn.gauge},
-                        ]}
-                        hovermessage = 'Click to view, edit or delete'
-                        onClick={() => handleEditYarn(yarn)}
-                    />
-                ))}
+              
 
             </div>
             <AddButton onClick={() => setOpenYarnModal(!openYarnModal)}/>

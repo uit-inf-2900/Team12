@@ -40,7 +40,6 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
 
     // Handle the file upload
     const uploadFile = () => {
-        // TODO: Implement file upload logic
         const formData = new FormData(); 
 
         formData.append("RecipeFile", file);
@@ -59,7 +58,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
             // Handle error 
             console.error("Upload error:", error);
         })
-        fetchRecipes();
+       
     };
 
 
@@ -72,7 +71,6 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
-                
                 <div className="upload-flex-container"> 
                     <div className="box light" 
                         style={{"border-radius": "50%", 

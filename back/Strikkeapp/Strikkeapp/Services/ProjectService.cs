@@ -5,6 +5,7 @@ using Strikkeapp.Recipes.Models;
 using Strikkeapp.Data.Entities;
 using AutoMapper;
 using Strikkeapp.Data.Migrations;
+using Morcatko.AspNetCore.JsonMergePatch;
 
 namespace Strikkeapp.Services;
 
@@ -12,8 +13,11 @@ public interface IProjectService
 {
     List<ProjectModel> GetProjects(string jwtToken);
     bool CreateProject(string jwtToken, ProjectCreateModel project);
+    ProjectModel GetProject(string jwtToken, Guid projectId);
     bool DeleteProject(Guid projectId, string userToken);
-    public bool CompleteProject(string userToken, Guid projectId);
+    bool CompleteProject(string userToken, Guid projectId);
+    bool PatchProject(Guid projectId, JsonMergePatchDocument<ProjectCreateModel> projectPatch, string userToken);
+
 }
 
 public class ProjectService : IProjectService
@@ -66,6 +70,29 @@ public class ProjectService : IProjectService
         }
     }
 
+    public ProjectModel GetProject(string jwtToken, Guid projectId)
+    {
+        var tokenResult = _tokenService.ExtractUserID(jwtToken);
+        if (tokenResult.Success == false)
+        {
+            throw new ArgumentException(tokenResult.ErrorMessage);
+        }
+
+        var project = _context.Projects.Where(p => p.ProjectId == projectId && p.UserId == tokenResult.UserId).FirstOrDefault();
+
+        if (project == null)
+            throw new ArgumentException("could not fetch project from ID");
+
+
+        var projectModel = _mapper.Map<ProjectModel>(project);
+        projectModel.Needles = _inventoryService.GetNeedles(jwtToken, project.NeedleIds);
+        projectModel.Yarns = GetYarnsForProject(jwtToken, project.YarnIds, project.ProjectId);
+
+        return projectModel;
+
+    }
+
+ 
     public bool CreateProject(string jwtToken, ProjectCreateModel project)
     {
         // Get and check token
@@ -136,6 +163,49 @@ public class ProjectService : IProjectService
         if (result > 0)
             return true;
         return false;
+    }
+
+    public bool PatchProject(Guid projectId, JsonMergePatchDocument<ProjectCreateModel> projectPatch, string userToken)
+    {
+        // Get and check token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (tokenResult.Success == false)
+            throw new ArgumentException(tokenResult.ErrorMessage);
+
+        var project = _context.Projects.Where(p => p.ProjectId == projectId && p.UserId == tokenResult.UserId).FirstOrDefault();
+
+        if (project == null)
+            throw new ArgumentException($"Project with id: {projectId} does not exist for logged in user");
+
+        if (project.Status == Enums.ProjectStatus.Completed)
+            throw new ArgumentException($"Project with id: {projectId} is already set as completed");
+
+        List<Guid>? yarnInventory = null;
+        List<Guid>? yarnIds = null;
+
+        // if the patch contains yarns, patch the yarns in the project inventory
+        if (projectPatch.Model.YarnIds != null && projectPatch.Model.YarnIds.Keys.Count != 0)
+        {
+            if (project.ProjectInventoryIds != null && project.ProjectInventoryIds.Count > 0)
+                _projectYarnService.DeleteYarnInventory(project.ProjectInventoryIds, userToken);
+
+            yarnInventory = _projectYarnService.CreateYarnInventory(projectPatch.Model.YarnIds, projectId, userToken);
+            yarnIds = projectPatch.Model.YarnIds.Keys.ToList();
+        }
+
+        projectPatch.Model.YarnIds = null;
+        
+        projectPatch.ApplyToT(project);
+        project.YarnIds = yarnIds;
+        project.ProjectInventoryIds = yarnInventory;
+
+        _context.SaveChanges();
+
+        if (projectPatch.Model.Status == Enums.ProjectStatus.Completed)
+            CompleteProject(userToken, projectId);
+
+        var updatedEntity = _context.Projects.Where(p => p.ProjectId == projectId && p.UserId == tokenResult.UserId);
+        return true;
     }
 
     public bool DeleteProject(Guid projectId, string userToken)

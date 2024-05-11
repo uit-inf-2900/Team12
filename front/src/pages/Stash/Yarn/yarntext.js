@@ -51,7 +51,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
             Length: parseInt(yarnData.Length, 10),
             Gauge: yarnData.Gauge,
             Notes: yarnData.Notes,
-            NumItems: parseInt(yarnData.Amount,10)
+            NumItem: parseInt(yarnData.Amount,10)
         };
 
         const response = await fetch('http://localhost:5002/api/inventory/addyarn', {

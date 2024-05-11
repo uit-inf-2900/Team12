@@ -72,6 +72,18 @@ const Projects = () => {
         
         
     };
+    const handleCompleted = async (ProjectId) => {
+
+        try{
+            const response = await axios.post(`http://localhost:5002/api/projects/complete?userToken=${sessionStorage.getItem('token')}&projectId=${ProjectId}`)
+        }
+        catch (error) {
+            console.error('Error setting Project to complete:', error);
+    
+    
+          }
+
+    };
 
      // Hardcoded projects to see if the filtering works
     const projects = [
@@ -132,12 +144,8 @@ const Projects = () => {
                         <Card
                             key={project.projectId}
                             title={project.projectName}
-                        
                             yarns={project.yarns}
                             needles={project.needles}
-                            
-                            
-                            
                             onClick={() => handleProjectClick(project)} //pass project to openProject
                         />
                         
@@ -164,6 +172,10 @@ const Projects = () => {
                     project={selectedProject}
                     handleClose={handleCloseModal}
                     onDelete={()=> deleteProject(selectedProject.projectId)}
+                    onComplete={()=>handleCompleted(selectedProject.projectId)}
+                    onUpdate={selectedProject.projectId}
+                    
+                    
                     
                 />
                     

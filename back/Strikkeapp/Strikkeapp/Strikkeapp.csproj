@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
