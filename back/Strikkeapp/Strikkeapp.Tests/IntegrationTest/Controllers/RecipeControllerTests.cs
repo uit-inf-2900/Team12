@@ -1,5 +1,7 @@
 using Moq;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -11,8 +13,7 @@ using Strikkeapp.Services;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using Strikkeapp.Recipes.Models;
 
 
 
@@ -212,5 +213,39 @@ public class RecipeControllerTests : IDisposable
         var response = Assert.IsType<ObjectResult>(result);
         Assert.Equal(422, response.StatusCode);
     }
+
+    [Fact]
+    public void GetRecipes_Ok()
+    {
+        // Call controller and verify success
+        var result = _controller.GetRecipes("userToken");
+        var okRes = Assert.IsType<OkObjectResult>(result);
+
+        // Verify response
+        var recipes = Assert.IsType<List<RecipeInfo>>(okRes.Value);
+        Assert.Single(recipes);
+        Assert.Equal("Test Recipe", recipes.First().RecipeName);
+    }
+
+    [Fact]
+    public void FakeTokenGetRecipes_Fails()
+    {
+        // Call controller and verify failure
+        var result = _controller.GetRecipes("fakeToken");
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public void GetRecipePDF_Ok()
+    {
+        // Call controller and verify success
+        var result = _controller.GetRecipePDF("userToken", testRecipeId);
+        var fileRes = Assert.IsType<FileContentResult>(result);
+
+        // Verify response
+        Assert.Equal("application/pdf", fileRes.ContentType);
+        Assert.True(fileRes.FileContents.Length > 0);
+    }
+
 
 }
