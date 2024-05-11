@@ -50,7 +50,7 @@ const Dashboard = ({ toggleView }) => {
                 const recipesResponse = await fetch(`${API_BASE_URL}/api/recipe/getallrecipes?userToken=${usersToken}`, fetchOptions);
                 setRecipesData(await recipesResponse.json());
 
-                const inventoryResponse = await fetch(`${API_BASE_URL}/api/inventory/get_inventory?userToken=${usersToken}`, fetchOptions);
+                const inventoryResponse = await fetch(`${API_BASE_URL}/api/inventory/getAll?userToken=${usersToken}`, fetchOptions);
                 const inventoryData = await inventoryResponse.json();
                 setYarnData(inventoryData.yarnInventory);
                 setNeedleData(inventoryData.needleInventory);
