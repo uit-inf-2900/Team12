@@ -109,7 +109,7 @@ const Dashboard = ({ toggleView }) => {
 
     // Yarn info that is sendt into the card
     const Yarn = [
-        { label: "Total Yarn", value: yarnData.length },
+        { label: "Total Yarn cards", value: yarnData.length },
     ];
 
     // Recipe info that is sendt into the card
