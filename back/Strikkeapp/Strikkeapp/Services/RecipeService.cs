@@ -36,43 +36,48 @@ public class RecipeService : IRecipeService
         {
             return RecipeServiceResult.ForFailure(tokenResult.ErrorMessage);
         }
-
-        try
+        using(var transaction = _context.Database.BeginTransaction())
         {
-            // Create new recipe
-            var knittingRes = new KnittingRecipes
+            var filePath = "";
+            try
             {
-                UserId = tokenResult.UserId,
-                RecipeName = recipeName,
-                NeedleSize = needleSize,
-                KnittingGauge = knittingGauge,
-                Notes = notes
-            };
+                // Create new recipe
+                var knittingRes = new KnittingRecipes
+                {
+                    UserId = tokenResult.UserId,
+                    RecipeName = recipeName,
+                    NeedleSize = needleSize,
+                    KnittingGauge = knittingGauge,
+                    Notes = notes
+                };
 
-            // Save recipe to file
-            var fileName = $"{knittingRes.KnittingRecipeId}.pdf";
-            var filePath = Path.Combine(_storagePath, fileName);
-            Directory.CreateDirectory(_storagePath);
+                // Save recipe to file
+                var fileName = $"{knittingRes.KnittingRecipeId}.pdf";
+                filePath = Path.Combine(_storagePath, fileName);
+                Directory.CreateDirectory(_storagePath);
 
-            // Copy file to storage
-            using (var file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-            {
-                fileStream.CopyTo(file);
+                // Copy file to storage
+                using (var file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    fileStream.CopyTo(file);
+                }
+
+                // Save path to recipe
+                knittingRes.RecipePath = filePath;
+
+                // Save recipe to database
+                _context.KnittingRecipes.Add(knittingRes);
+                _context.SaveChanges();
+
+                return RecipeServiceResult.ForSuccess(filePath);
             }
 
-            // Save path to recipe
-            knittingRes.RecipePath = filePath;
-
-            // Save recipe to database
-            _context.KnittingRecipes.Add(knittingRes);
-            _context.SaveChanges();
-
-            return RecipeServiceResult.ForSuccess(filePath);
-        }
-
-        catch (Exception ex)
-        {
-            return RecipeServiceResult.ForFailure(ex.Message);
+            catch (Exception ex)
+            {
+                File.Delete(filePath);
+                transaction.Rollback();
+                return RecipeServiceResult.ForFailure(ex.Message);
+            }
         }
     }
 
