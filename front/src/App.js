@@ -23,7 +23,7 @@ import Theme from './Components/Theme';
 import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
 import Counter from './pages/counter';
-import IncreaseDecreaseCalculator from './pages/Calculator/IncreaseDecreaseCalculator';
+import Calculators from './pages/Calculator/Calculators';
 import { YarnCalculator } from './pages/Calculator/YarnCalculator';
 
 
@@ -85,7 +85,7 @@ export default function App() {
                   <Route path="/recipes" element={<Recipes />} />
                   <Route path='/projects' element={<Projects/>} />
                   <Route path='/yarncalculator' element={<YarnCalculator/>} />
-                  <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
+                  <Route path='/Calculators' element={<Calculators/>} />
                   <Route path="/profile" element={<Profilepage />} />
                   <Route path='/counter' element={<Counter/>}/> 
                 </>
