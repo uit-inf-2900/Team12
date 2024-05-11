@@ -89,8 +89,25 @@ public class VerificationService : IVerificationService
                 user.UserStatus = "verified";
                 _context.SaveChanges();
 
+                _context.UserVerification.Remove(userVerification);
+                _context.SaveChanges();
+
                 transaction.Commit();
-                return VerificationResult.ForSuccess();
+
+                var userLogin = _context.UserLogIn
+                    .FirstOrDefault(u => u.UserId == userId);
+                var userDetails = _context.UserDetails
+                    .FirstOrDefault(u => u.UserId == userId);
+                
+                if(userLogin == null || userDetails == null) 
+                {
+                    throw new Exception("User not found");
+                }
+                // Generate and return token
+                var token = _tokenService.GenerateJwtToken(userLogin.UserEmail, userLogin.UserId, 
+                    userDetails.IsAdmin, userLogin.UserStatus);
+
+                return VerificationResult.ForSuccess(token);
             }
             catch (Exception ex)
             {

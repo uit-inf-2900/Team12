@@ -39,6 +39,7 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
             if (response.status === 200 ) {
                 console.log("Verification successful, updating session storage.");
                 sessionStorage.setItem('isVerified', 'verified');
+                sessionStorage.setItem('token', response.data);
                 alert('User has been verified and token updated');
                 onClose();
                 console.log("Navigating to home page...");

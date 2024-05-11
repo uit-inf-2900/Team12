@@ -253,6 +253,6 @@ public class UsersController : ControllerBase
             return StatusCode(500, res.ErrorMessage);
         }
 
-        return Ok("User has been verified");
+        return Ok(res.VerificationCode);
     }
 }
