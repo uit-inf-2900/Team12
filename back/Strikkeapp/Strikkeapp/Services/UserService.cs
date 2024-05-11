@@ -151,6 +151,19 @@ public class UserService : IUserService
         {
             try
             {
+                var userRecipies = _context.KnittingRecipes
+                    .Where(kr => kr.UserId == userId)
+                    .ToList();
+
+                foreach(var recipe in userRecipies)
+                {
+                    if(recipe.RecipePath != null && File.Exists(recipe.RecipePath))
+                    {
+                        File.Delete(recipe.RecipePath);
+                    }
+                    _context.KnittingRecipes.Remove(recipe);
+                }
+
                 var userToDelete = _context.UserLogIn
                    .FirstOrDefault(u => u.UserId == userId);
 
