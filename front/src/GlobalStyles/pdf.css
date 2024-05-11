@@ -1,3 +1,6 @@
+@import url("./colorAndText.css"); 
+
+
 .pdf-viewer {
     display: flex;
     flex-direction: column;
@@ -27,7 +30,7 @@
 
 .navigation button {
     padding: 5px 10px;
-    background-color: #007bff;
+    background-color: var(--button-hover-light);
     color: white;
     border: none;
     border-radius: 4px;
@@ -50,10 +53,10 @@
     height: 100vh; /* Full viewport height */
     width: 100%;
 }
-.close-button, .full-view-button {
+.close-button {
     padding: 5px 10px;
     margin: 10px;
-    background-color: #007bff;
+    background-color: var(#ffffff);
     color: white;
     border: none;
     border-radius: 4px;
@@ -61,5 +64,5 @@
 }
 
 .close-button:hover, .full-view-button:hover {
-    background-color: #0056b3;
+    background-color: var(--button-hover-light);
 }

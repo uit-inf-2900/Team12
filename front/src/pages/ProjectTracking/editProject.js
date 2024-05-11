@@ -101,7 +101,6 @@ const UpdateProject = ({ projectId, onClose }) => {
         fetchRecipes();
         fetchNeedles();
         fetchYarns();
-
         
     }, []);
     

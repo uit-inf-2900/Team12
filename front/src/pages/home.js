@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import StatisticBox from './StatisticBox';
 import { useNavigate } from 'react-router-dom';
+import PDFViewer from '../Components/PDFviewer';
 
 // Import images
 import { getImageByName } from '../images/getImageByName';
@@ -92,6 +93,7 @@ export const Home = () => {
           <img src={getImageByName('huggingYarn')} style={{ alignItems: 'center'}} alt="Pile of sweaters"/>
         </div>
       </div>
+     
 
       <h2  style={{padding: '20px', paddingTop:'30px'}}>Here are some inspiration from Instagram </h2>
       <InstagramFeed accessToken={accessTokenInsta} />
