@@ -23,7 +23,7 @@ public class RecipeService : IRecipeService
 
     public RecipeService(IConfiguration configuration, ITokenService tokenService, StrikkeappDbContext context)
     {
-        _storagePath = configuration["ConnectionStrings:RecipesStorage"];
+        _storagePath = configuration["ConnectionStrings:RecipesStorage"]!;
         if (string.IsNullOrEmpty(_storagePath))
         {
             throw new InvalidOperationException("Storage path must be configured.");
