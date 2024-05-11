@@ -146,7 +146,7 @@ describe('Counter component', () => {
             }
             return Promise.reject(new Error('not found'));
         });
-    
+
         render(<Counter />);
     
         // Wait for "Edit" to be rendered based on fetched data

@@ -1,9 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import TextYarn from '../pages/Stash/Yarn/yarntext';
 import YarnStash from '../pages/Stash/Yarn/Yarn';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 
 describe('TextYarn Component', () => {
     test('submits yarn data correctly', async () => {
@@ -60,11 +59,9 @@ describe('YarnStash component', () => {
         // Wait for the yarns to be rendered based on fetched data
         await waitFor(() => {
             expect(document.querySelector('.card-container')).toBeInTheDocument();
-            expect(document.querySelector('.card-container').children.length).toBe(2); // Assuming each yarn is rendered as a card
+            expect(document.querySelector('.card-container').children.length).toBe(2);
             expect(document.querySelector('.card-container').textContent).toContain('Test Brand 1');
             expect(document.querySelector('.card-container').textContent).toContain('Test Brand 2');
         });
     });
-
-    // Add more tests as needed
 });
