@@ -5,6 +5,7 @@ import "../GlobalStyles/Card.css";
 import IncreaseDecreaseCalculator from '../pages/Calculator/IncreaseDecreaseCalculator';
 import Counter from '../pages/counter';
 import EditProject from '../pages/ProjectTracking/editProject';
+import PDFViewer from './PDFviewer';
 
 const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdate }) => {
 
@@ -12,6 +13,7 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
   const [openCalculator, setOpenCalculator]=useState(false);
   const [openCounter, setOpenCounter]=useState(false);
   const [openEdit, setOpenEdit]=useState(false);
+  const [openRecipe, setOpenRecipe]=useState(false);
 
   const increaseDecrease = () => {
     setOpenCalculator(!openCalculator);
@@ -31,6 +33,14 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
     setOpenCalculator(false);
     setOpenCounter(false);
     
+  };
+
+  const recipe = () => {
+    setOpenRecipe(!openRecipe);
+    setOpenCalculator(false);
+    setOpenCounter(false);
+    setOpenEdit(false);
+
   };
   
 
@@ -100,7 +110,7 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
         {/* Footer */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-            <Button variant="contained" color="primary" sx={{ mr: 1 }}>
+            <Button variant="contained" onClick={()=>recipe()} color="primary" sx={{ mr: 1 }}>
               Recipe
             </Button>
             <Button variant="contained" onClick={()=>increaseDecrease()} color="primary" sx={{ mr: 1 }}>
@@ -135,6 +145,10 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
 
         {openEdit && (
           <EditProject onClose={()=>edit()} projectId={onUpdate}></EditProject>
+        )}
+
+        {openRecipe && (
+          <PDFViewer id={project.recipeId} onClose={()=>recipe()}/>
         )}
 
       </Box>
