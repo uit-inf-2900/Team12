@@ -48,7 +48,7 @@ public class RecipeTests : IDisposable
             {"ConnectionStrings:RecipesStorage", _mockStoragePath}
         };
         _mockConfiguration = new ConfigurationBuilder()
-            .AddInMemoryCollection(inMemorySettings)
+            .AddInMemoryCollection(inMemorySettings!)
             .Build();
 
 
@@ -82,7 +82,6 @@ public class RecipeTests : IDisposable
     {
         // Set up test data
         var mockFileStream = new Mock<Stream>();
-
         var recipeName = "New Recipe";
         var needleSize = 5;
         var knittingGauge = "20 stitches = 4 inches";
@@ -95,5 +94,41 @@ public class RecipeTests : IDisposable
         // Check that the recipe is stored in the database
         var recipe = _context.KnittingRecipes.FirstOrDefault(k => k.RecipeName == recipeName && k.UserId == testUserId);
         Assert.NotNull(recipe);
+    }
+
+    [Fact]
+    public void WrongConfigStore_Fails()
+    {
+        // Set up the mock configuration for storage path
+        var inMemorySettings = new Dictionary<string, string> 
+        {
+            {"ConnectionStrings:RecipesStorage", ""}
+        };
+        var mockConfiguration = new ConfigurationBuilder()
+            .AddInMemoryCollection(inMemorySettings!)
+            .Build();
+
+        // Run service with wrong configuration and verify failure
+        var exception = Assert.Throws<InvalidOperationException>(() => 
+            new RecipeService(mockConfiguration, _mockTokenService.Object, _context));
+        Assert.Equal("Storage path must be configured.", exception.Message);
+    }
+
+    [Fact]
+    public void FakeTokenStore_Fails()
+    {
+        // Set up test data
+        var mockFileStream = new Mock<Stream>();
+        var recipeName = "New Recipe";
+        var needleSize = 5;
+        var knittingGauge = "20 stitches = 4 inches";
+        var notes = "Some notes here";
+
+
+
+        // Run servicewith fake token and verify failure
+        var result = _recipeService.StoreRecipe(mockFileStream.Object, "fakeToken", recipeName, needleSize, knittingGauge, notes);
+        Assert.False(result.Success);
+        Assert.Equal("Unauthorized", result.ErrorMesssage);
     }
 }
