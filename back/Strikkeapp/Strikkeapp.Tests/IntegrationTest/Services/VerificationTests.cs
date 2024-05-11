@@ -60,6 +60,13 @@ public class VerificationTests : IDisposable
         };
         _context.UserLogIn.Add(loginEntry);
 
+        _context.UserDetails.Add(new UserDetails
+        {
+            UserId = testUserGuid,
+            UserFullName = "Test User",
+        });
+
+
         _context.SaveChanges();
     }
 
