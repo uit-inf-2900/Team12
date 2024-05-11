@@ -69,6 +69,8 @@ public class RecipeTests : IDisposable
             KnittingGauge = "10x10",
             Notes = "Test notes"
         });
+
+        _context.SaveChanges();
     }
 
     public void Dispose()
@@ -128,5 +130,16 @@ public class RecipeTests : IDisposable
         var result = _recipeService.StoreRecipe(mockFileStream.Object, "fakeToken", recipeName, needleSize, knittingGauge, notes);
         Assert.False(result.Success);
         Assert.Equal("Unauthorized", result.ErrorMesssage);
+    }
+
+    [Fact]
+    public void GetRecipes_Ok()
+    {
+        // Run service and verify success
+        var result = _recipeService.GetRecipes("userToken");
+        Assert.True(result.Success, result.ErrorMessage);
+        Assert.Single(result.Recipes);
+        Assert.Equal("Test Recipe", result.Recipes.First().RecipeName);
+        
     }
 }
