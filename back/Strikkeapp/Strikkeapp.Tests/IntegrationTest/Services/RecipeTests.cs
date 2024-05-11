@@ -257,4 +257,16 @@ public class RecipeTests : IDisposable
         Assert.False(result);
 
     }
+
+    [Fact]
+    public void NonUserDelete_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(x => x.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        // Run service with non-owner token and verify failure
+        var result = _recipeService.DeleteRecipePDF(testRecipeId, "userToken");
+        Assert.False(result);
+    }
 }
