@@ -6,7 +6,7 @@ const PDFViewer = ({ id }) => {
 
     useEffect(() => {
         fetchPDF();
-    }, [id]);
+    }, []);
 
     const fetchPDF = async () => {
         setLoading(true);

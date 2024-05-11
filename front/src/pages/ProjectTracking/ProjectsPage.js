@@ -7,7 +7,7 @@ import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
 import axios from 'axios';
-
+import { useLocation } from "react-router-dom";
 
 
 import '../../GlobalStyles/main.css';
@@ -21,7 +21,10 @@ import { Fab, Modal, Box } from "@mui/material";
 
 
 const Projects = () => {
-    const [activeStatus, setActiveStatus] = useState(1);
+    const location = useLocation(); 
+    const queryParams = new URLSearchParams(location.search); 
+    const defaultTab = queryParams.get('tab')
+    const [activeStatus, setActiveStatus] = useState(defaultTab || 1);
     const [loading, setLoading] = useState(true);
 
     const [uploading, setUploading] = useState(false);
