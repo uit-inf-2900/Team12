@@ -93,7 +93,6 @@ public class RecipeTests : IDisposable
             NeedleSize = 5,
             KnittingGauge = "10x10",
             Notes = "Test notes",
-            RecipePath = "Fake path"
         });
 
         _context.SaveChanges();
@@ -214,6 +213,7 @@ public class RecipeTests : IDisposable
         // Run service with entry with invalid path and verify failure
         var result = _recipeService.GetRecipePDF(test2RecipeId, "userToken");
         Assert.False(result.Success);
+        Assert.Equal("Recipe not found", result.ErrorMessage);
     }
 
     [Fact]
@@ -255,5 +255,6 @@ public class RecipeTests : IDisposable
         // Run service with fake token and verify failure
         var result = _recipeService.DeleteRecipePDF(testRecipeId, "fakeToken");
         Assert.False(result);
+
     }
 }
