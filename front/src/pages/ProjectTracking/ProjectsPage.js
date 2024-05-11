@@ -85,18 +85,6 @@ const Projects = () => {
 
     };
 
-     // Hardcoded projects to see if the filtering works
-    const projects = [
-        { id: 1, title: 'Honey clutch', status: 0, knittingGauge:'10/10' },
-        { id: 2, title: 'Summer scarf', status: 1, knittingGauge:'10/10'  },
-        { id: 3, title: 'Winter hat', status: 2, knittingGauge:'10/10'  },
-
-        // ... flere prosjekter
-    ];
-
-    
-
-
 
     const toggleUpload = () => {
         setUploading(!uploading);
@@ -114,6 +102,7 @@ const Projects = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
+        fetchProjects();
     };
 
 
