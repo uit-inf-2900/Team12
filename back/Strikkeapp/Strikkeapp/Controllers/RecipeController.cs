@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Strikkeapp.Services;
 
-namespace strikkeapp.Controllers;
+namespace strikkeapp.Controller;
 
 [ApiController]
 [Route("api/recipe")]
