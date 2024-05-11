@@ -48,7 +48,7 @@ public class TokenService : ITokenService
 
         }),
             // Set expiration date
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = DateTime.UtcNow.AddHours(8),
             // Set sign in credentials
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             // Add issuer and audience from config
