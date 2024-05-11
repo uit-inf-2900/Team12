@@ -4,7 +4,7 @@ import {IncreaseCalculator} from "./IncreaseCalculator"
 import {DecreaseCalculator} from "./DecreaseCalculator";
 import {YarnCalculator} from "./YarnCalculator";
 
-const IncreaseDecreaseCalculator = () => {
+const Calculators = () => {
     const[activeStatus, setActiveStatus] = useState('increase');
 
     // The components in the switch container
@@ -15,7 +15,7 @@ const IncreaseDecreaseCalculator = () => {
     ];
 
     return (
-        <div className="page-container">
+        <div>
 
             {/* Creates a switch container for the three calculatores */}
             <SwitchContainer
@@ -40,4 +40,4 @@ const IncreaseDecreaseCalculator = () => {
     )
 }
 
-export default IncreaseDecreaseCalculator;
+export default Calculators;

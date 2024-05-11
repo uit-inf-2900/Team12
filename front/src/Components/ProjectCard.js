@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Modal, Box, Typography, Button, Grid, Avatar } from '@mui/material';
 import "../GlobalStyles/Card.css";
-import IncreaseDecreaseCalculator from '../pages/Calculator/IncreaseDecreaseCalculator';
+import Calculators from '../pages/Calculator/Calculators';
 import Counter from '../pages/counter';
 
 const ProjectCard = ({ show, project, handleClose, onDelete }) => {
@@ -106,7 +106,9 @@ const ProjectCard = ({ show, project, handleClose, onDelete }) => {
         </Box>
 
         {openCalculator && (
-          <IncreaseDecreaseCalculator></IncreaseDecreaseCalculator>
+          <div className='page-container'>
+            <Calculators></Calculators>
+          </div>
         )}
 
         {openCounter && (
