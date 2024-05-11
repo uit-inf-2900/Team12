@@ -18,7 +18,7 @@
 
 .label {
     color: #555; /* Dark gray color for the label */
-    font-size: 1rem; /* Font size for the label */
+    font-size: var(--normal-font-size); /* Font size for the label */
     margin-bottom: 0; /* Space between label and value */
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -27,7 +27,7 @@
 
 .value {
     color: #333; /* Dark color for the value */
-    font-size: 2rem; /* Font size for the value */
+    font-size: var(--h1-font-size); /* Font size for the value */
     font-weight: bold; /* Bold font for the value */
     padding: 1rem; /* Padding around value */
     text-shadow: 1px 1px 1px #e3e3e3; /* Text shadow for readability */

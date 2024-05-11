@@ -16,6 +16,7 @@ public interface IUserService
     public DeleteUserResult DeleteUser(string userToken);
     public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin);
     public BanUserResult BanUser(string userToken, Guid bannedUser, bool shouldBan);
+    public GetUsersResult GetAllUsers(string userToken);
 }
 
 public class UserService : IUserService
@@ -273,5 +274,40 @@ public class UserService : IUserService
                 return BanUserResult.ForFailure(ex.Message);
             }
         }
+    }
+
+    public GetUsersResult GetAllUsers(string userToken)
+    {
+        var tokenRes = _tokenService.ExtractUserID(userToken);
+        if(!tokenRes.Success)
+        {
+            return GetUsersResult.ForFailure("Unauthorized");
+        }
+
+        var userId = tokenRes.UserId;
+
+        var isAdmin = _context.UserDetails
+            .Where(u => u.UserId == userId)
+            .Select(u => u.IsAdmin)
+            .FirstOrDefault();
+
+        if(!isAdmin)
+        {
+            return GetUsersResult.ForFailure("Unauthorized");
+        }
+
+        var users = _context.UserLogIn.Join(_context.UserDetails,
+                                            login => login.UserId,
+                                            details => details.UserId,
+                                            (login, details) => new GetUsersDto
+                                            {
+                                                FullName = details.UserFullName,
+                                                Email = login.UserEmail,
+                                                Status = login.UserStatus,
+                                                IsAdmin = details.IsAdmin,
+                                                UserId = login.UserId
+                                            }).ToList();
+
+        return GetUsersResult.ForSuccess(users);
     }
 }

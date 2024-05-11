@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Fab, ThemeProvider, createTheme } from '@mui/material';
+import { Button, Fab, ThemeProvider, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -78,7 +78,7 @@ const CustomButton = ({ children, choosenvar, iconName, themeMode, submit, fullW
  * @param {function} props.onClick - Function to handle click events.
  * @returns {JSX.Element} - The add button component.
  */
-const AddButton = ({ onClick }) => {
+const AddButton = ({ onClick, hoverTitle }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     /** Default styles for the button */
@@ -86,6 +86,13 @@ const AddButton = ({ onClick }) => {
         backgroundColor: '#F6964B', 
         color: 'white',
         transition: 'transform 0.3s ease, background-color 0.3s ease',
+    };
+
+    /** Define custom styles for this specific tooltip that displays a message */
+    const tooltipStyles = { 
+        backgroundColor: '#F6964B', 
+        fontSize: '0.8rem', 
+        font: '"Rigot", sans-serif'
     };
 
 
@@ -96,14 +103,16 @@ const AddButton = ({ onClick }) => {
     };
 
     return (
-        <Fab
-            style={isHovered ? { ...defaultStyle, ...hoverStyle } : defaultStyle}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={onClick}
-        >
-            <AddIcon />
-        </Fab>
+        <Tooltip title="Add a new item" placement="right" componentsProps={{ tooltip: { sx: tooltipStyles } }} > 
+            <Fab
+                style={isHovered ? { ...defaultStyle, ...hoverStyle } : defaultStyle}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onClick={onClick}
+            >
+                <AddIcon />
+            </Fab>
+        </Tooltip>
     );
 };
 

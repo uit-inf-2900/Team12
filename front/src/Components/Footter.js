@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, Box, Grid, Typography, IconButton, Paper, Button, Alert } from '@mui/material';
-import Theme from './Theme';
 import { useForm } from 'react-hook-form';
 
 
@@ -10,8 +9,7 @@ import PinterestIcon from '@mui/icons-material/Pinterest';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ContactInformation from './ContactInformation'; 
 import InputField from './InputField';
-import { CustomButton } from './Button'
-import SendIcon from '@mui/icons-material/Send';
+
 import SetAlert from './Alert';
 
 
@@ -74,16 +72,24 @@ const SomeFooter = () => {
 const Footer = () => {
     const [email, setEmail] = useState('');
     const [open, setOpen] = useState(false);  
-    const [alert, setAlert] = useState({ severity: '', message: '' });
-    const { register, handleSubmit, formState: { errors }, reset } = useForm();
-    const [error, setError] = useState('');
+    const { register, handleSubmit, formState: { errors }, reset, setError, clearErrors } = useForm();
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertSeverity, setAlertSeverity] = useState('info');
+    const [alertMessage, setAlertMessage] = useState('');
 
+
+    const updateAlert = (message, severity) => {
+        setAlertMessage(message);
+        setAlertSeverity(severity);
+        setAlertOpen(true);
+    };
 
     /**
      * Handles subscription form submission.
      * Sends a request to the server to subscribe to the newsletter.
      */
-    const handleSubscribe = async () => {
+    const handleSubscribe = async (data) => {
+        event.preventDefault(); 
         try {
             const response = await fetch(`http://localhost:5002/api/newsletter/addsubscriber?subEmail=${email}`, {
                 method: 'POST',
@@ -93,22 +99,17 @@ const Footer = () => {
                 },
                 body: JSON.stringify({ subEmail: email })
             });
-            
-            // Of the response is ok, reset the form state and display a success message 
             if (response.ok) {
                 reset(); 
-                setAlert({ severity: 'success', message: 'You have successfully subscribed to our newsletter!' })
-                setOpen(true);
-                setError(''); 
+                updateAlert('You have successfully subscribed to our newsletter!', 'success');
                 setEmail(''); 
-
             } else {
                 const errorText = await response.text();
-                setError(errorText);
+                setError('email', { type: 'manual', message: errorText });
             }
         } catch (error) {
             console.error('Network error:', error);
-            setError('Network error, please try again later.');
+            setError('email', { type: 'manual', message: 'Network error, please try again later.' });
         }
     };
 
@@ -122,6 +123,7 @@ const Footer = () => {
                     <Typography variant="h5">
                         Knithub
                     </Typography>
+                    <SetAlert open={alertOpen} setOpen={setAlertOpen} severity={alertSeverity} message={alertMessage} />
 
                     {/* The input field for the user to add its email addrss */}
                     <form >
@@ -137,10 +139,15 @@ const Footer = () => {
                             errors={errors.email}
                             type="send" 
                             value={email}
-                            onChange={(event) => setEmail(event.target.value)}
+                            onChange={(event) => {
+                                setEmail(event.target.value);
+                                clearErrors('email');
+                            }}
                             onSubmit={handleSubmit(handleSubscribe)}
                         />
-                        {error && <div>{error}</div>}
+
+                        {/* Show error messages */}
+                        {errors.email && <div>{errors.email.message}</div>}
                     </form>
 
                     {/* The SOME links are under the subscription input */}
@@ -165,7 +172,6 @@ const Footer = () => {
                     </Typography>
                 </Grid>
             </Grid>
-            <SetAlert open={open} setOpen={setOpen} severity={alert.severity} message={alert.message} />
         </Paper>
     );
 };

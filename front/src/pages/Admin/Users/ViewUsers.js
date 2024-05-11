@@ -24,9 +24,9 @@ import { getStatusLabel } from '../../../Components/UserLable';
  * Function to fetch user data from the server.
  * @returns {Array} Array of user data.
  */
-export const fetchUserData = async () => {
+export const fetchUserData = async (userToken) => {
     try {
-    const response = await fetch('http://localhost:5002/getUsers');
+    const response = await fetch('http://localhost:5002/getUsers?userToken=' + userToken);
     if (!response.ok) {
         throw new Error('Failed to fetch user data');
     }
@@ -68,7 +68,7 @@ const ViewUsers = () => {
     // Fetch user data from the server
     useEffect(() => {
         setLoading(true);
-        fetchUserData().then(data => {
+        fetchUserData(token).then(data => {
             setUsers(data);
             setLoading(false);
         }).catch(error => {
@@ -248,7 +248,7 @@ const ViewUsers = () => {
                                 <TableCell>{user.fullName}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{getStatusLabel(user.status)}</TableCell>
-                                <TableCell>{user.isAdmin ? 'Yes' : 'No'}
+                                <TableCell>
                                     <CustomButton
                                         style={{alignItems: 'right'}}
                                         variant="contained"
@@ -258,19 +258,19 @@ const ViewUsers = () => {
                                             () => toggleAdminStatus(user.userId, user.isAdmin)
                                         )}
                                     >
-                                        {user.isAdmin ? 'Remove Admin' : 'Add Admin'}
+                                        {user.isAdmin ? 'Remove Admin' : 'Add Admin'} {/* change button text based on status */}
                                     </CustomButton>
                                 </TableCell>
-                                <TableCell >{user.status}
+                                <TableCell >
                                 <CustomButton
                                     variant="contained"
-                                    color={user.status === "banned" ? "primary" : "secondary"} // Endre farge basert på status
+                                    color={user.status === "banned" ? "primary" : "secondary"} 
                                     onClick={() => handleActionOpen(
                                         `Are you sure you want to ${user.status === "banned" ? "unban" : "ban"} ${user.fullName} (${user.email})?`,
                                         () => banUser(user.userId, user.status !== "banned")
                                     )}
                                 >
-                                    {user.status === "banned" ? "Unban User" : "Ban User"} {/* Endre knappetekst basert på status */}
+                                    {user.status === "banned" ? "Unban User" : "Ban User"} {/* change button text based on status */}
                                 </CustomButton>
                                 </TableCell>
                             </TableRow>

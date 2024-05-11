@@ -9,7 +9,7 @@ function KnittingTermsTable() {
     const [searchText, setSearchText] = useState('');
     const [filteredTerms, setFilteredTerms] = useState(knittingTerms);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     // Filter the knitting terms based on the search text
     useEffect(() => {

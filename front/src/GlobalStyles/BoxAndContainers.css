@@ -56,11 +56,24 @@
     display: flex;                                  /* Use flexbox for layout */
     flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */
     justify-content: center;                        /* Center children horizontally */
+    align-items: stretch;                           /* Stretch children vertically */
+    max-width: 80%;                                 /* Limit max width to 70% of the viewport */
+    margin: 0 auto;                                 /* Center the container in the viewport */
+    height: auto;                                   /* Height adjusts to content */
+    padding-top: 20px;                              /* Added padding at the top */
+    padding-bottom: 20px;                           /* Added padding at the bottom */
+}
+
+.popup-box-container {
+    display: flex;                                  /* Use flexbox for layout */
+    flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */
+    justify-content: center;                        /* Center children horizontally */
     align-items: center;                            /* Center children vertically */
     height: 100vh;                                  /* Full viewport height */
     max-width: 70%;                                 /* Limit max width to 70% of the viewport */
     margin: 0 auto;                                 /* Center the container in the viewport */
 }
+
 
 
 /* information about each background box */
@@ -72,20 +85,25 @@
     align-items: center;             /* Center children horizontally */
     transition: transform 0.5s;      /* Animate position changes smoothly */
     border-radius: var(--box-border-radius);
+    width: 100%;  /* Gir full bredde innenfor 'box-container' */
+    flex: 1 1 auto;  
 }
 
 /* Light purple color */
 .box.light {
     width: 60%; /* Take up half of the container's width */
     background-color: var(--box-color-light); /* Light purple background */
-    height: 50%;
+    height: auto;
+    min-height: 50%;
+    
 }
 
 /* Dark purple color */
 .box.dark {
     width: 40%; /* Take up half of the container's width */
     background-color: var(--box-color-dark); /* Darker purple background */
-    height: 50%;
+    height: auto;
+    min-height: 50%;
     
 }
 
@@ -144,4 +162,6 @@
     object-fit: cover;
     margin-bottom: 10px;
 }
+
+
 

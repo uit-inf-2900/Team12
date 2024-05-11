@@ -26,8 +26,9 @@ public class UserInfoTests
                 .Returns("hashedPassword");
 
         // Set up in memory database
+        string databaseName = Guid.NewGuid().ToString();
         var options = new DbContextOptionsBuilder<StrikkeappDbContext>()
-            .UseInMemoryDatabase(databaseName: "UserServiceDb")
+            .UseInMemoryDatabase(databaseName: databaseName)
             .ConfigureWarnings(war => war.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 

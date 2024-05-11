@@ -7,9 +7,11 @@ namespace Strikkeapp.Services;
 public interface ICounterService 
 {
     public CreateCounterResult CreateCounter(string userToken, string name);
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName);
+    public CounterResult UpdateCounter(string userToken, Guid counterId, string newName);
     public CounterResult DeleteCounter(string userToken, Guid counterId);
     public GetCountersResult GetCounters(string userToken);
+    public CounterResult IncrementCounter(string userToken, Guid counterId);
+    public CounterResult DecrementCounter(string userToken, Guid counterId);
 }
 
 public class CounterService : ICounterService
@@ -75,7 +77,7 @@ public class CounterService : ICounterService
         return GetCountersResult.ForSuccess(counters);
     }
 
-    public CounterResult UpdateCounter(string userToken, Guid counterId, int newNum, string? newName)
+    public CounterResult UpdateCounter(string userToken, Guid counterId, string newName)
     {
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
@@ -89,8 +91,49 @@ public class CounterService : ICounterService
         {
             try
             {
+                // Get counter
                 var getCounter = _context.CounterInventory
                     .Where(uid => uid.UserId == userId)
+                    .FirstOrDefault(cid => cid.CounterId == counterId);
+
+                // Check if counter exists
+                if (getCounter == null)
+                {
+                    // Return not found if counter does not exist
+                    return CounterResult.ForFailure("Not found");
+                }
+
+                // Update counter name
+                getCounter.Name = newName;
+                _context.SaveChanges();
+                
+                // Commit transaction and return success
+                transaction.Commit();
+                return CounterResult.ForSuccess();
+            }
+            catch (Exception ex)
+            {
+                // Handle exception and return failure
+                transaction.Rollback();
+                return CounterResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public CounterResult IncrementCounter(string userToken, Guid counterId)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return CounterResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var getCounter = _context.CounterInventory
+                    .Where(uid => uid.UserId == tokenResult.UserId)
                     .FirstOrDefault(cid => cid.CounterId == counterId);
 
                 if (getCounter == null)
@@ -98,14 +141,43 @@ public class CounterService : ICounterService
                     return CounterResult.ForFailure("Not found");
                 }
 
-                getCounter.RoundNumber = newNum;
+                getCounter.RoundNumber++;
                 _context.SaveChanges();
 
-                if(!string.IsNullOrWhiteSpace(newName))
+                transaction.Commit();
+                return CounterResult.ForSuccess();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return CounterResult.ForFailure(ex.Message);
+            }
+        }
+    }
+
+    public CounterResult DecrementCounter(string userToken, Guid counterId)
+    {
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+        {
+            return CounterResult.ForFailure("Unauthorized");
+        }
+
+        using(var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var getCounter = _context.CounterInventory
+                    .Where(uid => uid.UserId == tokenResult.UserId)
+                    .FirstOrDefault(cid => cid.CounterId == counterId);
+
+                if (getCounter == null)
                 {
-                    getCounter.Name = newName;
-                    _context.SaveChanges();
+                    return CounterResult.ForFailure("Not found");
                 }
+
+                getCounter.RoundNumber--;
+                _context.SaveChanges();
 
                 transaction.Commit();
                 return CounterResult.ForSuccess();

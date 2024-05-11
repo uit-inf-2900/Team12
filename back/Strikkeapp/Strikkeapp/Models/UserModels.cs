@@ -78,3 +78,33 @@ public class BanUserResult
         ErrorMessage = message
     };
 }
+
+public class GetUsersDto
+{
+    public string FullName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public bool IsAdmin { get; set; }
+    public Guid UserId { get; set; }
+}
+
+public class GetUsersResult
+{
+    public bool Success { get; set; }
+    public List<GetUsersDto> Users { get; set; } = new List<GetUsersDto>();
+    public string ErrorMessage { get; set; } = string.Empty;
+
+    public static GetUsersResult ForSuccess(List<GetUsersDto> users) => new GetUsersResult
+    {
+        Success = true,
+        Users = users
+    };
+
+    public static GetUsersResult ForFailure(string message) => new GetUsersResult
+    {
+        Success = false,
+        ErrorMessage = message
+    };
+}
+
+    

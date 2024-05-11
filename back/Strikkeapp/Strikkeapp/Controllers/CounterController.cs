@@ -69,7 +69,7 @@ public class CounterController : ControllerBase
             return BadRequest();
         }
 
-        var res = _counterService.UpdateCounter(request.userToken, request.counterId, request.newNum, request.newName);
+        var res = _counterService.UpdateCounter(request.userToken, request.counterId, request.newName);
 
         if (!res.Success)
         {
@@ -83,6 +83,50 @@ public class CounterController : ControllerBase
             }
 
             return StatusCode(500, res.ErrorMessage);
+        }
+
+        return Ok();
+    }
+
+    [HttpPatch]
+    [Route("incrementcounter")]
+    public IActionResult IncrementCounter([FromQuery] string userToken, Guid counterId)
+    {
+        var result = _counterService.IncrementCounter(userToken, counterId);
+
+        if (!result.Success)
+        {
+            if (result.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+            if (result.ErrorMessage == "Not found")
+            {
+                return NotFound("Could not find counter");
+            }
+
+            return StatusCode(500, result.ErrorMessage);
+        }
+
+        return Ok();
+    }
+
+    [HttpPatch]
+    [Route("decrementcounter")]
+    public IActionResult DecrementCounter([FromQuery] string userToken, Guid counterId)
+    {
+        var result = _counterService.DecrementCounter(userToken, counterId);
+
+        if (!result.Success)
+        {
+            if (result.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized();
+            }
+            if (result.ErrorMessage == "Not found")
+            {
+                return NotFound("Could not find counter");
+            }
         }
 
         return Ok();

@@ -18,7 +18,7 @@
   cursor: pointer;  /* Change the mouse cursor to indicate it's clickable */
   border: 2px dashed var(--link-color); /* Dashed border */
   background-color: var(--box-color-light); /* Light background color */
-  font-size: 1rem;  /* Text size */
+  font-size: var(--normal-font-size);  /* Text size */
   color: var(--box-text-colour);  /* Text color */
 }
 
@@ -53,7 +53,7 @@
 }
 
 .counter-info {
-  font-size: 1.7rem;  /* Slightly larger text */
+  font-size: var(--h2-font-size);  /* Slightly larger text */
   color: var(--box-text-colour);  /* Text color */
 }
 
@@ -67,7 +67,7 @@
   border-radius: 5px; /* Soft rounded corners for the buttons */
   margin: 0 5px;  /* Space around buttons for separation */
   cursor: pointer;  /* Indicate buttons are clickable */
-  font-size: 1rem;  /* Readable font size for button text */
+  font-size: var(--normal-font-size);  /* Readable font size for button text */
   background-color: var(--button-bg-colo-light); 
   color:  var(--button-text-color-dark); 
 }

@@ -54,50 +54,50 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-    <Router>
-      <ScrollToTop/>
-      {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
-      <div className="page-container">          
-        <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
-        <div className="content-container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/resources" element={<Resources />} />
-
-            {/* If you have admin privileges and is admin change the contact us page with the asminpage  */}
-            {isLoggedIn && isAdmin ? (
-                <Route path="/adminpage" element={<AdminPage />} />
-            ) : (
+      <Router>
+        <ScrollToTop/>
+        {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
+        <div className="page-container">          
+          <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
+          <div className="content-container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
               <Route path="/contactus" element={<ContactUs />} />
-            )}
+              <Route path="/resources" element={<Resources />} />
 
-            {/* If you are not logged in shou login and signup, if not show all personal options */}
-            {!isLoggedIn ? (
-              <>
-                <Route path="/login" element={<LogIn />} />
-                <Route path="/signup" element={<SignUp />} />
-              </>
-            ) : (
-              <>
-                <Route path="/stash" element={<Stash />} />
-                <Route path="/recipes" element={<Recipes />} />
-                <Route path='/projects' element={<Projects/>} />
-                <Route path='/yarncalculator' element={<YarnCalculator/>} />
-                <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
-                <Route path="/profile" element={<Profilepage />} />
-                <Route path='/counter' element={<Counter/>}/> 
-              </>
-            )}
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="*" element={<NotFound />} />
+              {/* If you have admin privileges and is admin change the contact us page with the asminpage  */}
+              {isLoggedIn && isAdmin ? (
+                  <Route path="/adminpage" element={<AdminPage />} />
+              ) : (
+                <Route path="/contactus" element={<ContactUs />} />
+              )}
 
-          </Routes>
+              {/* If you are not logged in shou login and signup, if not show all personal options */}
+              {!isLoggedIn ? (
+                <>
+                  <Route path="/login" element={<LogIn />} />
+                  <Route path="/signup" element={<SignUp />} />
+                </>
+              ) : (
+                <>
+                  <Route path="/stash" element={<Stash />} />
+                  <Route path="/recipes" element={<Recipes />} />
+                  <Route path='/projects' element={<Projects/>} />
+                  <Route path='/yarncalculator' element={<YarnCalculator/>} />
+                  <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
+                  <Route path="/profile" element={<Profilepage />} />
+                  <Route path='/counter' element={<Counter/>}/> 
+                </>
+              )}
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="*" element={<NotFound />} />
+
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
     </ThemeProvider>
   );
 }

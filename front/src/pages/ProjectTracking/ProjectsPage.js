@@ -6,9 +6,13 @@ import UploadProjects from "./addProject";
 import Card from "../../Components/Card";
 import { useParams } from 'react-router-dom';
 import SwitchContainer from "../../Components/SwitchContainer";
+<<<<<<< HEAD
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 
+=======
+import { useLocation } from "react-router-dom";
+>>>>>>> 3389269f89c6469e3ce54f7b1864c4d75b953c56
 
 import '../../GlobalStyles/main.css';
 import "../../GlobalStyles/Card.css"
@@ -24,8 +28,13 @@ const Projects = () => {
     const location = useLocation(); 
     const queryParams = new URLSearchParams(location.search); 
     const defaultTab = queryParams.get('tab')
+<<<<<<< HEAD
     const [activeStatus, setActiveStatus] = useState(defaultTab || 1);
     const [loading, setLoading] = useState(true);
+=======
+    const [activeStatus, setActiveStatus] = useState(defaultTab ? parseInt(defaultTab) : 1); // Convert defaultTab to an integer or default to 1
+    const [isOpenModal, setIsOpenModal] = useState(false);
+>>>>>>> 3389269f89c6469e3ce54f7b1864c4d75b953c56
 
     const [uploading, setUploading] = useState(false);
    
@@ -47,6 +56,7 @@ const Projects = () => {
             setLoading(false);
         }
     };
+<<<<<<< HEAD
     useEffect(() => {
         fetchProjects();
     }, []);
@@ -67,6 +77,16 @@ const Projects = () => {
         
     };
 
+=======
+     // Hardcoded projects to see if the filtering works
+    const projects = [
+        { id: 1, title: 'Honey clutch', status: 0, knittingGauge:'10/10' },
+        { id: 2, title: 'Summer scarf', status: 1, knittingGauge:'10/10'  },
+        { id: 3, title: 'Winter hat', status: 2, knittingGauge:'10/10'  },
+
+        // ... flere prosjekter
+    ];
+>>>>>>> 3389269f89c6469e3ce54f7b1864c4d75b953c56
 
     
 
@@ -92,11 +112,18 @@ const Projects = () => {
 
 
     const options = [
+<<<<<<< HEAD
         
+=======
+>>>>>>> 3389269f89c6469e3ce54f7b1864c4d75b953c56
         { id: 0, label: 'Planned' },
         { id: 1, label: 'In Progress' },
         { id: 2, label: 'Completed' }
     ];
+<<<<<<< HEAD
+=======
+    const filteredProjects = projects.filter(project => project.status === activeStatus);
+>>>>>>> 3389269f89c6469e3ce54f7b1864c4d75b953c56
 
     const filteredProjects = allProjects.filter(project => project.status === activeStatus);
     console.log(allProjects);

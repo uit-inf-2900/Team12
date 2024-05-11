@@ -1,35 +1,35 @@
-import React, { useState, useMemo } from "react";
-import ProjectCard from "../../Components/ProjectCard";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import SwitchContainer from "../../Components/SwitchContainer";
 import '../../GlobalStyles/main.css';
 import NeedleStash from "./Needle/Needles";
-import ModalContent from "../../Components/ModualContent";
 import YarnStash from "./Yarn/Yarn";
 
+
+/**
+ * Stash Component
+ * Displays and manages the stash inventory, either needles or yarn.
+ * Users can switch between 'Needles' and 'Yarn' views via a tab switcher.
+ */
 const Stash = () => {
-    const [activeStatus, setActiveStatus] = useState('yarn');
+    const location = useLocation();                             // Accessing URL location
+    const queryParams = new URLSearchParams(location.search);   // Parsing query parameters from URL
+    const defaultTab = queryParams.get('tab');                  // Extract 'tab' query parameter to set the default view
+
+    // State to track the active tab status, defaulting to 'yarn' or a URL query parameter
+    const [activeStatus, setActiveStatus] = useState(defaultTab || 'yarn');
+
+    // State to track the needle and yarn types for filtering the stash inventory
     const [needleTypes, setNeedleTypes] = useState(['All']);
     const [yarnTypes, setYarnTypes] = useState(['All']);
-    const [yarnEntries, setYarnEntries] = useState([]);
-    const [editingIndex, setEditingIndex] = useState(null);
 
+    // Effect hook to update activeStatus based on the defaultTab query parameter
+    useEffect(() => {
+        if (defaultTab) {
+            setActiveStatus(defaultTab);
+        }
+    }, [defaultTab]);
 
-    const addYarnEntry = (entry) => {
-        setYarnEntries(prevEntries => [...prevEntries, entry]);
-    };
-
-    const handleEditYarnEntry = (index) => {
-        setEditingIndex(index); // Set the index of the entry to edit
-        // Additionally, you would set up any state or actions needed to show the editing form here.
-    };
-
-    const handleUpdateYarnEntry = (index, updatedEntry) => {
-        setYarnEntries(prevEntries => {
-            const newEntries = [...prevEntries];
-            newEntries[index] = updatedEntry;
-            return newEntries;
-        });
-    };
     
     return (
         <div className="page-container">

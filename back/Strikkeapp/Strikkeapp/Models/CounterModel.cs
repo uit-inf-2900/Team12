@@ -75,8 +75,7 @@ public class UpdateCounterRequest
 {
     public string userToken { get; set; } = string.Empty;
     public Guid counterId { get; set; }
-    public int newNum { get; set; }
-    public string? newName { get; set; } = string.Empty;
+    public string newName { get; set; } = string.Empty;
 
     public bool IsOk()
     {

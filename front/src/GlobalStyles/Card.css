@@ -33,6 +33,7 @@
     box-shadow: 5px 5px 8px var(--shadow-color);
     color: var(----box-color-dark);
     margin-bottom: 20px;
+    font-family: "Syne", sans-serif; 
   }
   
   .card-image {      
@@ -73,22 +74,22 @@
   }
   
   .card-title {
-    font-size: 1em;
+    font-size: var(--normal-font-size);
     margin: 0 0 .1em;
     color: var(--main-color);
   }
   
   
   .card-status {
-    font-size: .8em;
+    font-size: var(--small-font-size);
     color: #D7BDCA;
   }
   
   .card-description {
-    padding: 0 2em 2em;
+    padding: 0 0.5em 0.5em;
     margin: 0;
     color: var(--text-color);
-    font-family: "MockFlowFont";   
+    /* font-family: var(--main-font);    */
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
@@ -127,9 +128,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2em;
+  font-size:  var(--h3-font-size);
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+  font-family: var(--main-font);
 }
 
 .card-link:hover .hover-message {

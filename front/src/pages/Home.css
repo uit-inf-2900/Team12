@@ -1,0 +1,29 @@
+.home-container {
+    display: flex;
+    flex-wrap: wrap; /* Tillater elementer å wrappe om nødvendig */
+    justify-content: space-between; /* Fordeler rom mellom hovedelementene */
+    align-items: flex-start; /* Linjer opp elementene øverst */
+    padding: 20px;
+    gap: 20px; /* Mellomrom mellom statistikk og kreativt innhold */
+}
+
+.statistics-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    padding: 0px 0;
+    justify-content: space-between; /* Dette sikrer at elementene fordeles jevnt */
+}
+
+.StatisticBox {
+    flex: 1 1 48%; /* Lar hver boks ta nesten halvparten av bredden, slik at to bokser vises per rad */
+    margin-bottom: 20px; /* Gir litt vertikalt rom mellom radene */
+}
+
+.creative-content-container {
+    flex: 1 0 100%; /* Tar full bredde ved smal skjerm, endre til 50% for å teste */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}

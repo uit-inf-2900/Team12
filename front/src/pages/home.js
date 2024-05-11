@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import "../GlobalStyles/main.css";
 import axios from 'axios';
 import StatisticBox from './StatisticBox';
 import { useNavigate } from 'react-router-dom';
-import './StatisticBox.css';
-import InstagramFeed from './KnitHubResources/InstagramFeed'; // Importer InstagramFeed-komponenten
+
 // Import images
-import KnittingImage from "../images/knitting.png";
-import SixImage from "../images/6.png"; // Status of yarn used
-import StashImage from "../images/stash.png"; // Status of needles used
-import PileOfSweatersImage from "../images/pileOfSweaters.png"; // Status of completed projects
-import OpenBookImage from "../images/openBook.png"; // Other status
-import HuggingYarnImage from "../images/huggingYarn.png";
-import CustomButton from '../Components/Button';
+import { getImageByName } from '../images/getImageByName';
+
+// Css styles
+import "../GlobalStyles/main.css";
+import "./about/about.css";
+import './StatisticBox.css';
+import InstagramFeed from './KnitHubResources/InstagramFeed'; 
+
 
 
 export const Home = () => {
@@ -25,6 +24,11 @@ export const Home = () => {
 
   // access to instagram
   const accessTokenInsta = 'IGQWRNYjdRX3BnVHFmdVR0Qm5yR3RDWml0TTgwc3lhV1VRZAmw5U3I2eWZAkUTRKekRzOS1JWEt5REEzZA3JHX0dDSXVfdVpodWlHRXFLbngwdEtSVXhuaXdtYmRSY0dGSzhvR1NVQkhnMmlJSE5JNHFmMFJCMS1IdjAZD';
+  
+  // Function to handle navigation
+  const handleNavigate = (path, tab) => {
+    navigate(`${path}?tab=${tab}`);
+  };
 
 
   useEffect(() => {
@@ -71,26 +75,26 @@ export const Home = () => {
     
 
   return (
-    <div className="page-container">
-      <header className="main-header">
-        <h2>God dag {userProfileState.userFullName || 'Loading...'}!</h2>
-      </header>
-      <div className="content-container">
-        <div className="statistics-container" style={{ flex: '2' }}> {/* Updated */}
-          <h4>Her har du en oversikt over ditt arbeid sålangt:</h4>
-          <StatisticBox icon={KnittingImage} label="yarns in stash" value={yarnInventoryLength.toString()} />
-          <StatisticBox icon={SixImage} label="needles in stash" value={needleInventoryLength.toString()} />
-          <StatisticBox icon={KnittingImage} label="complete projects" value={completeProjects.toString()} />
-          <StatisticBox icon={SixImage} label="ongoing projects" value={ongoingProjects.toString()} />          
-        </div>
-        
-        <div className="creative-content-container" style={{ flex: '3' }}> {/*  */}
-          <h4>I dag er dagen for å være kreativ</h4>
-          <img src={PileOfSweatersImage} className="creative-image" />
+    <div className='page-container'>
+      <h1 style={{padding: '20px'}}>Hello, good to see you {userProfileState.userFullName || ''}!</h1>
+      <div className="home-container" style={{'display': 'flex', padding: '20px', alignItems:'flex-start'}}>
+        <div className="statistics-container" style={{width:'40%', alignSself: 'flex-start'}}>
+          <h3>Here is an overview of your projects and inventory:</h3>
+          <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent:'center' }}> 
+            <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'yarn')}  />
+            <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'needles')} />
+            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completeProjects.toString() } onClick={() => handleNavigate('/projects', 2)}/>
+            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingProjects.toString()} onClick={() => handleNavigate('/projects', 1)}/>
           </div>
+        </div>
+        <div className="creative-content-container" style={{width:'60%', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
+          <h3>Today is the day to be creative! </h3>
+          <img src={getImageByName('huggingYarn')} style={{ alignItems: 'center'}} alt="Pile of sweaters"/>
+        </div>
       </div>
-      <h2>Inspiration from Instagram </h2>
-            <InstagramFeed accessToken={accessTokenInsta} />
+
+      <h2  style={{padding: '20px', paddingTop:'30px'}}>Here are some inspiration from Instagram </h2>
+      <InstagramFeed accessToken={accessTokenInsta} />
     </div>
   );
 };
