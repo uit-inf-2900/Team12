@@ -23,8 +23,12 @@ public class RecipeTests : IDisposable
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
     private readonly string _mockStoragePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
+    // Test names
     private Guid testUserId = Guid.NewGuid();
+    private Guid test2UserId = Guid.NewGuid();
     private Guid testRecipeId = Guid.NewGuid();
+    private Guid test2RecipeId = Guid.NewGuid();
+
     public RecipeTests()
     {
         // Set up mocks
@@ -79,6 +83,17 @@ public class RecipeTests : IDisposable
             KnittingGauge = "10x10",
             Notes = "Test notes",
             RecipePath = recipeFilePath
+        });
+
+        _context.KnittingRecipes.Add(new KnittingRecipes
+        {
+            KnittingRecipeId = test2RecipeId,
+            UserId = test2UserId,
+            RecipeName = "Test Recipe 2",
+            NeedleSize = 5,
+            KnittingGauge = "10x10",
+            Notes = "Test notes",
+            RecipePath = "Fake path"
         });
 
         _context.SaveChanges();
@@ -178,5 +193,67 @@ public class RecipeTests : IDisposable
         Assert.True(result.Success, result.ErrorMessage);
         Assert.NotNull(result.PDFData);
         Assert.True(result.PDFData.Length > 0);
+    }
+
+    [Fact]
+    public void FakeTokenGetPDF_Fails()
+    {
+        // Run service with fake token and verify failure
+        var result = _recipeService.GetRecipePDF(testRecipeId, "fakeToken");
+        Assert.False(result.Success);
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void InvalidPathGetPDF_Fails()
+    {
+        // Set up mock
+        _mockTokenService.Setup(x => x.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(test2UserId));
+
+        // Run service with entry with invalid path and verify failure
+        var result = _recipeService.GetRecipePDF(test2RecipeId, "userToken");
+        Assert.False(result.Success);
+    }
+
+    [Fact]
+    public void NonUserGetPDF_Fails()
+    {
+        _mockTokenService.Setup(x => x.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(Guid.NewGuid()));
+
+        // Run service with non-owner token and verify failure
+        var result = _recipeService.GetRecipePDF(testRecipeId, "userToken");
+        Assert.False(result.Success);
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonRecipeGetPDF_Fails()
+    {
+        // Run service with non-existing recipe and verify failure
+        var result = _recipeService.GetRecipePDF(Guid.NewGuid(), "userToken");
+        Assert.False(result.Success);
+        Assert.Equal("Recipe not found", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void DeleteRecipe_Ok()
+    {
+        // Run service and verify success
+        var result = _recipeService.DeleteRecipePDF(testRecipeId, "userToken");
+        Assert.True(true);
+
+        // Check that the recipe is deleted from the database
+        var recipe = _context.KnittingRecipes.FirstOrDefault(k => k.KnittingRecipeId == testRecipeId);
+        Assert.Null(recipe);
+    }
+
+    [Fact]
+    public void FakeTokenDelete_Fails()
+    {
+        // Run service with fake token and verify failure
+        var result = _recipeService.DeleteRecipePDF(testRecipeId, "fakeToken");
+        Assert.False(result);
     }
 }
