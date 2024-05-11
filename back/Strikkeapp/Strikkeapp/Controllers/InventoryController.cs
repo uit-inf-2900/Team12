@@ -42,6 +42,29 @@ public class InventoryController : ControllerBase
         });
     }
 
+    [HttpGet]
+    [Route("getAll")]
+    public IActionResult GetAll([FromQuery] string userToken)
+    {
+        var res = _inventoryService.GetAllInventory(userToken);
+
+        if(!res.Success)
+        {
+            if(res.ErrorMessage == "Unauthorized")
+            {
+                return Unauthorized("Invalid token");
+            }
+
+            return StatusCode(500, "Could not fetch inventory");
+        }
+
+        return Ok(new
+        {
+            yarnInventory = res.YarnInventories,
+            needleInventory = res.NeedleInventories
+        });
+    }
+
     [HttpPost]
     [Route("addneedle")]
     public IActionResult AddNeedle([FromBody] AddNeedleRequest request)
