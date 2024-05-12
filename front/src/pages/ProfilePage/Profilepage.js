@@ -10,7 +10,7 @@ import { CustomButton } from '../../Components/UI/Button';
 import SetAlert from '../../Components/UI/Alert';
 import { Modal, Box } from '@mui/material';
 import '../../GlobalStyles/BoxAndContainers.css';
-import ConfirmationVerification from '../SignUp_LogIn/ConfirmationVerification';
+import ConfirmationVerification from '../Authentication/ConfirmationVerification';
 
 
 

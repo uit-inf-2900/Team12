@@ -9,9 +9,9 @@ import NavBar from './Components/navigation/NavBar'
 import {About} from './pages/about/about'
 import {Home} from './pages/Home/home'
 import Stash from './pages/Stash/stash'
-import ResetPassword from './pages/SignUp_LogIn/ResetPassword';
-import LogIn from './pages/SignUp_LogIn/LogIn';
-import SignUp from './pages/SignUp_LogIn/SignUp';
+import ResetPassword from './pages/Authentication/ResetPassword';
+import LogIn from './pages/Authentication/LogIn';
+import SignUp from './pages/Authentication/SignUp';
 import Recipes from './pages/RecipeManagement/Recipes';
 import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';

@@ -1,6 +1,6 @@
 import React from "react";
-import KnittingTermsTable from "./KnittingTermsTable";
-import InstagramFeed from './InstagramFeed'; // Importer InstagramFeed-komponenten
+import KnittingTermsTable from "./Terms/KnittingTermsTable";
+import InstagramFeed from '../../Components/UI/InstagramFeed'; 
 import Calculators from './../ProjectTracking/Calculator/Calculators'
 
 function Resources() {

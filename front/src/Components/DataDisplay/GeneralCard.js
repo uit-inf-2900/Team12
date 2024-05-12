@@ -1,4 +1,4 @@
-import exampleImage from '../../../images/reading.png';
+import exampleImage from '../../images/reading.png';
 import React, { useState } from 'react';
 
 const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent, onClick, onDelete, onEdit, hovermessage }) => {

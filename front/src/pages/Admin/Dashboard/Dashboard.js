@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../../../GlobalStyles/main.css";
-import GeneralCard from './Card'; 
+import GeneralCard from '../../../Components/DataDisplay/GeneralCard'; 
 import StatisticsChart from '../../../Components/DataDisplay/ChartData';
 import {getImageByName} from '../../../images/getImageByName';
 import { fetchSubscribers } from '../apiServices';

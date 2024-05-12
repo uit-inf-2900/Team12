@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from "react-router-dom";
 import "../../GlobalStyles/main.css";
-import ConfirmationLogout from '../../pages/SignUp_LogIn/ConfirmationLogout';  // Correct way to import default exports
+import ConfirmationLogout from '../../pages/Authentication/ConfirmationLogout';  // Correct way to import default exports
 import { useFormState } from 'react-hook-form';
 import logoIMG from "../../images/logo/logoStart.svg";
 import Logo from "../../images/logo/logoBlack.svg";

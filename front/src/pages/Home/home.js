@@ -10,7 +10,7 @@ import { getImageByName } from '../../images/getImageByName';
 import "../../GlobalStyles/main.css";
 import "../about/about.css";
 import './StatisticBox.css';
-import InstagramFeed from '../KnitHubResources/InstagramFeed'; 
+import InstagramFeed from '../../Components/UI/InstagramFeed'; 
 
 
 

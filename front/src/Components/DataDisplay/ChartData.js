@@ -21,6 +21,15 @@ import {
   );
   
 
+
+/**
+ * Component for creating a statistics chart.
+ * @param {Object} props - The component props.
+ * @param {string} props.label - The label for the chart.
+ * @param {Array<Object>} props.userStats - An array of user statistics objects.
+ * @param {string} props.chartType - The type of chart to render ('bar', 'pie', 'doughnut').
+ * @returns {JSX.Element} The statistics chart component.
+ */
 const StatisticsChart = ({ label, userStats, chartType }) => {
     // Prepare chart data, excluding the first statistic
     const userChartData = {
