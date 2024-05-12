@@ -1,41 +1,44 @@
-
+/* The statistic box */
 .statistic-box {
-    background-color: #FFF; /* White background */
-    border: 2px solid #E1E1E1; /* Gray border */
-    border-radius: 8px; /* Rounded corners */
-    padding: 20px; /* Padding inside the box */
-    display: flex; /* Using flex to manage layout */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    justify-content: center; /* Space between children */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
-    margin: 20px; /* Margin around the box */
-    text-align: center; /* Center text inside the box */
-    width: 10rem; /* Fixed width */
+    background-color: #FFF;
+    border: 2px solid #E1E1E1;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    text-align: center;
+    width: 10rem;
     margin-top: 20px;
-    height: 14rem; /* Fixed height */
+    height: 14rem;
 }
 
+/* The lable of the box */
 .label {
-    color: #555; /* Dark gray color for the label */
-    font-size: var(--normal-font-size); /* Font size for the label */
-    margin-bottom: 0; /* Space between label and value */
+    color: #555;
+    font-size: var(--normal-font-size);
+    margin-bottom: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 1rem; /* Padding around label */
+    padding: 1rem;
 }
 
+/* The value inside the box */
 .value {
-    color: #333; /* Dark color for the value */
-    font-size: var(--h1-font-size); /* Font size for the value */
-    font-weight: bold; /* Bold font for the value */
-    padding: 1rem; /* Padding around value */
-    text-shadow: 1px 1px 1px #e3e3e3; /* Text shadow for readability */
+    color: #333;
+    font-size: var(--h1-font-size);
+    font-weight: bold;
+    padding: 1rem;
+    text-shadow: 1px 1px 1px #e3e3e3;
     text-overflow: ellipsis;
 }
 
+/* The icon at the bottom of the box */
 .icon {
-    max-width: 80%; /* Limits icon size to 50% of the box width */
-    height: auto; /* Maintain aspect ratio */
-    margin-bottom: 5px; /* Reduced space below the icon */
+    max-width: 80%;
+    height: auto;
+    margin-bottom: 5px;
 }

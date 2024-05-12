@@ -1,13 +1,10 @@
 import React from 'react';
 import './StatisticBox.css';
 
-
-{/* legge inn en funksjon for å hente ut info fra databasen */}
-{/* Hente antall nøster brukt */}
-{/* Hente antall meter garn brukt */}
-{/* Hente antall fullførte prosjekter */}
-{/* Hente antall .... */}
-
+/**
+ * Represents a statistic box with icon, lable, value and opportunity to go to the 
+ * relevant page by click.
+ */
 const StatisticBox = ({ icon, label, value, onClick }) => {
     return (
     <div className="statistic-box" onClick={onClick}>
