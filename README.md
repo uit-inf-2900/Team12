@@ -4,6 +4,9 @@
 2. Install Entity Framework Core Tools by running the following command: `dotnet tool install --global dotnet-ef`
 
 ## For Frontend
+To set up the frontend environment, you will need Node.js and npm installed. You can download them from https://nodejs.org/en/download.
+After installing Node.js, navigate to the "front" directory and run the following commands to install necessary dependencies:
+1. Run `npm install` to install all dependencies listed in `package.json`.
 
 ## For backend tests
 To be able to run the backend tests, you can install the needed dependencies by doing the following:
