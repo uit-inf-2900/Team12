@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import InputField from '../../Components/InputField';
-import CustomButton from '../../Components/Button';
-import SetAlert from '../../Components/Alert';
+import InputField from '../../Components/UI/InputField';
+import CustomButton from '../../Components/UI/Button';
+import SetAlert from '../../Components/UI/Alert';
 
 const UpdateProject = ({ projectId, onClose }) => {
     const token = sessionStorage.getItem('token');

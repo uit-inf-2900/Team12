@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import InputField from '../../../Components/InputField';
-import { CustomButton } from '../../../Components/Button';
-import SetAlert from '../../../Components/Alert';
+import InputField from '../../../Components/UI/InputField';
+import { CustomButton } from '../../../Components/UI/Button';
+import SetAlert from '../../../Components/UI/Alert';
 import { getImageByName } from '../../../images/getImageByName';
 
 /**

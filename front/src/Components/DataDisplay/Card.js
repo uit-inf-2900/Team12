@@ -1,8 +1,6 @@
 import React from 'react';
-import exampleImage from '../images/reading.png'; // Import the PNG image
-import { CustomButton } from './Button';
-
-import "../GlobalStyles/main.css";
+import exampleImage from '../../images/reading.png';
+import "../../GlobalStyles/main.css";
 
 const getCustomLabel = (propName) => {
     const labels = {

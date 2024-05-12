@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import "../../../GlobalStyles/main.css";
 import "../../Counter.css";
-import { CustomButton } from '../../../Components/Button';
-import InputField from '../../../Components/InputField';
+import { CustomButton } from '../../../Components/UI/Button';
+import InputField from '../../../Components/UI/InputField';
 import yarnBasket from '../../../images/yarnSheep.png';
-import SetAlert from '../../../Components/Alert';
+import SetAlert from '../../../Components/UI/Alert';
 
 const TextYarn = ({onClose, fetchYarns}) => {
     // State declarations

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Modal, Box, Typography, Button, Grid, Avatar } from '@mui/material';
-import "../GlobalStyles/Card.css";
-import Calculators from '../pages/Calculator/Calculators';
-import Counter from '../pages/counter';
-import EditProject from '../pages/ProjectTracking/editProject';
-import PDFViewer from './PDFviewer';
+import "../../GlobalStyles/main.css";
+import Calculators from '../../pages/Calculator/Calculators';
+import Counter from '../../pages/counter';
+import EditProject from '../../pages/ProjectTracking/editProject';
+import PDFViewer from '../Utilities/PDFviewer';
 
 const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdate }) => {
 

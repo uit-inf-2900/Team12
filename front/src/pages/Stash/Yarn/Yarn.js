@@ -4,8 +4,8 @@ import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
 import "../../Counter.css";
 import GeneralCard from '../../Admin/Dashboard/Card';
-import InputField from '../../../Components/InputField';
-import { CustomButton, AddButton } from '../../../Components/Button';
+import InputField from '../../../Components/UI/InputField';
+import { CustomButton, AddButton } from '../../../Components/UI/Button';
 import yarnBasket from '../../../images/yarnSheep.png';
 
 const YarnStash = () => {

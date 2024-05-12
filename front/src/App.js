@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {Link,  BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode'
-import ScrollToTop from './Components/scrollToTop';
+import ScrollToTop from './Components/navigation/scrollToTop';
 
 
 // Import our pages
-import NavBar from './Components/NavBar'
+import NavBar from './Components/navigation/NavBar'
 import {About} from './pages/about/about'
 import {Home} from './pages/home'
 import Stash from './pages/Stash/stash'
@@ -18,8 +18,8 @@ import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
 import NotFound from './pages/NotFound';
-import Footer from './Components/Footter';
-import Theme from './Components/Theme';
+import Footer from './Components/navigation/Footter';
+import Theme from './Components/Utilities/Theme';
 import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
 import Counter from './pages/counter';

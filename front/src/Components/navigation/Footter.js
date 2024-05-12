@@ -7,10 +7,10 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import PinterestIcon from '@mui/icons-material/Pinterest';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import ContactInformation from './ContactInformation'; 
-import InputField from './InputField';
+import ContactInformation from '../Forms/ContactInformation'; 
+import InputField from '../UI/InputField';
 
-import SetAlert from './Alert';
+import SetAlert from '../UI/Alert';
 
 
 

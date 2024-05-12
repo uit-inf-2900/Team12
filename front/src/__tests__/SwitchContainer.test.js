@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SwitchContainer from '../Components/SwitchContainer';
+import SwitchContainer from '../Components/Utilities/SwitchContainer';
 
 describe('SwitchContainer', () => {
     const mockSetActiveStatus = jest.fn();

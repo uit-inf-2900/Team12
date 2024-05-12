@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import "../../GlobalStyles/main.css";
 import "./about.css";
-import { CustomButton } from "../../Components/Button";
+import { CustomButton } from "../../Components/UI/Button";
 
 import { getImageByName } from '../../images/getImageByName';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CustomButton } from '../../Components/Button';
+import { CustomButton } from '../../Components/UI/Button';
 import '../../GlobalStyles/BoxAndContainers.css';
 import { Modal, Box } from '@mui/material';
 

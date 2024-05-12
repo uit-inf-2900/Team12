@@ -1,11 +1,11 @@
 // https://legacy.reactjs.org/docs/lists-and-keys.html
 
 import React, {useContext, useEffect, useState} from "react";
-import ProjectCard from "../../Components/ProjectCard";
+import ProjectCard from "../../Components/DataDisplay/ProjectCard";
 import UploadProjects from "./addProject";
-import Card from "../../Components/Card";
+import Card from "../../Components/DataDisplay/Card";
 import { useParams } from 'react-router-dom';
-import SwitchContainer from "../../Components/SwitchContainer";
+import SwitchContainer from "../../Components/Utilities/SwitchContainer";
 
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 import '../../GlobalStyles/main.css';
 import "../../GlobalStyles/Card.css"
 
-import AddButton from "../../Components/AddButton";
+import {AddButton} from "../../Components/UI/Button";
 
 import { Fab, Modal, Box } from "@mui/material";
 

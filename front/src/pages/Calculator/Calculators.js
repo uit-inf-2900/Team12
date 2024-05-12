@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import SwitchContainer from "../../Components/SwitchContainer";
+import SwitchContainer from "../../Components/Utilities/SwitchContainer";
 import {IncreaseCalculator} from "./IncreaseCalculator"
 import {DecreaseCalculator} from "./DecreaseCalculator";
 import {YarnCalculator} from "./YarnCalculator";

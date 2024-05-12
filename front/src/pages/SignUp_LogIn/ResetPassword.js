@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 
 import "../../GlobalStyles/main.css";
-import InputField from '../../Components/InputField';
-import { CustomButton } from '../../Components/Button';
+import InputField from '../../Components/UI/InputField';
+import { CustomButton } from '../../Components/UI/Button';
 
 
 

@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import "../../GlobalStyles/main.css";
-import { CustomButton } from '../../Components/Button';
-import InputField from '../../Components/InputField';
+import { CustomButton } from '../../Components/UI/Button';
+import InputField from '../../Components/UI/InputField';
 import ConfirmationVerification from './ConfirmationVerification';
 
 

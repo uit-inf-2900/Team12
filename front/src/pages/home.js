@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import StatisticBox from './StatisticBox';
 import { useNavigate } from 'react-router-dom';
-import PDFViewer from '../Components/PDFviewer';
 
 // Import images
 import { getImageByName } from '../images/getImageByName';

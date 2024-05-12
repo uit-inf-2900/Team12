@@ -6,12 +6,11 @@ import { Link } from "react-router-dom";
 
 
 import Image from "../../images/6.png";
-import InputField from "../../Components/InputField";
-import SetAlert from "../../Components/Alert";
+import InputField from "../../Components/UI/InputField";
+import SetAlert from "../../Components/UI/Alert";
 import "../../GlobalStyles/main.css";
-import "./ContactUs.css"
-import { CustomButton } from "../../Components/Button";
-import ContactInformation from '../../Components/ContactInformation';
+import { CustomButton } from "../../Components/UI/Button";
+import ContactInformation from '../../Components/Forms/ContactInformation';
 
 const FAQItem = ({ question, answer, isOpen, setIsOpen }) => (
     <div className="faq-item">

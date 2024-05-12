@@ -1,5 +1,5 @@
 import React from 'react';
-import InputField from '../../../Components/InputField';
+import InputField from '../../../Components/UI/InputField'; 
 
 // MessageItem represents a single message in the list and allows selection
 const MessageItem = ({ message, onSelect }) => {

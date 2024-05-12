@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import InputField from "../../../Components/InputField";
+import InputField from '../../../Components/UI/InputField'; 
+"../../../Components/UI/InputField";
 import "../../../GlobalStyles/main.css";
-import { CustomButton } from '../../../Components/Button';
-import SetAlert from '../../../Components/Alert';
+import { CustomButton } from '../../../Components/UI/Button';
+import SetAlert from '../../../Components/UI/Alert';
 
 
 

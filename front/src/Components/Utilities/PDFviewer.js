@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { pdfjs, Document, Page } from 'react-pdf';
-import "../GlobalStyles/pdf.css"; // Assuming styles are here
+import "../../GlobalStyles/main.css"; // Assuming styles are here
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import axios from 'axios';

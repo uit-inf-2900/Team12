@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { IoIosCloudUpload } from "react-icons/io";          // Import the icon component from react icons library
-import InputField from '../../Components/InputField';
+import InputField from '../../Components/UI/InputField';
 import './UpLoad.css';
 import "../../GlobalStyles/main.css";
-import { CustomButton } from '../../Components/Button';
+import { CustomButton } from '../../Components/UI/Button';
 import axios from 'axios';
 
 

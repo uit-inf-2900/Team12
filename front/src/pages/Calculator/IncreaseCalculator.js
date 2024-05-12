@@ -1,7 +1,7 @@
 import React, { useState} from "react";
 import "./Calculator.css";
-import InputField from "../../Components/InputField";
-import { CustomButton } from "../../Components/Button";
+import InputField from "../../Components/UI/InputField";
+import { CustomButton } from "../../Components/UI/Button";
 import Image from "../../images/openBook.png"
 
 export const IncreaseCalculator = () => {

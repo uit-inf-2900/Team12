@@ -10,7 +10,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 
-import Theme from './Theme';
+import Theme from '../Utilities/Theme';
 
 
 /**

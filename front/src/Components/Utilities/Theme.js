@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import './../GlobalStyles/main.css';
+import '../../GlobalStyles/main.css';
 
 const Theme = (mode) => {
     // Ensure mode is either 'light' or 'dark'
