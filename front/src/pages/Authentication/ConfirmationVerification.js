@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Modal, Box, Typography } from '@mui/material';
-import Tooltip from '@mui/material/Tooltip'; // Import Tooltip component
-
-// Styles 
+import Tooltip from '@mui/material/Tooltip';
 import '../../GlobalStyles/BoxAndContainers.css';
-
-// Components 
 import {CustomButton} from "../../Components/UI/Button";
 import InputField from "../../Components/UI/InputField";
 import { useNavigate } from 'react-router-dom'; 
@@ -26,7 +22,6 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
 
     // Avoid rendering the modal if it should not be open
     if (!isOpen) return null;
-
 
     /**
      * Attempts to verify the user with a specified code.
@@ -57,7 +52,6 @@ const ConfirmationVerification = ({ isOpen, onClose, userToken, navigation }) =>
             alert('Verification failed: ' + error.message);
         }
     };
-
     const tooltipStyles = { 
         fontSize: '0.8rem', 
         font: '"Rigot", sans-serif'
