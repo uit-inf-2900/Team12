@@ -25,7 +25,6 @@ const SignUp = () => {
   /**
    * Handles form submission for new user registration.
    * Validates the form data, sends it to the server, and handles the server's response.
-   * @param {Object} data - Contains user input data from the form.
    */
   const onSubmit = (data) => {
     if (data.password !== data.confirmPassword) {

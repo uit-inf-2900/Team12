@@ -1,5 +1,8 @@
 import React from "react";
 
+/**
+ *  Component for rendering a switch container with a set of given options 
+ */
 const SwitchContainer = ({ options, activeStatus, setActiveStatus }) => {
     const switchStyle = {
         fontSize: '1.2em',

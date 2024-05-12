@@ -8,7 +8,9 @@ import { CustomButton } from "../../Components/UI/Button";
 import { getImageByName } from '../../images/getImageByName';
 
 
-// FeatureItem component for the features section of About page
+/**
+ *  FeatureItem component for the features section of About page
+ */
 const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
   return (
@@ -24,7 +26,9 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
   );
 };
 
-// TeamMember component for the team section of About page 
+/**
+ * TeamMember component for the team section of About page 
+ */ 
 const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
   return (
@@ -41,6 +45,10 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
 };
 
 
+
+/**
+ * Returns the about page  
+ */
 export const About = () => {
   // Get the token to see if the user is login 
   const token = sessionStorage.getItem('token');

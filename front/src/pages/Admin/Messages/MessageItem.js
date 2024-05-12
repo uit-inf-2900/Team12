@@ -1,7 +1,9 @@
 import React from 'react';
 import InputField from '../../../Components/UI/InputField'; 
 
-// MessageItem represents a single message in the list and allows selection
+/**
+ *  MessageItem represents a single message in the list and allows selection
+ */ 
 const MessageItem = ({ message, onSelect }) => {
     // Render the message item with click handling for selection
     return (

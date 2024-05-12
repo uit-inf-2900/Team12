@@ -15,8 +15,7 @@ import SetAlert from '../UI/Alert';
 
 
 /**
- * Returns usefull links that is used in the footer 
- * @returns {JSX.Element}  Usefull links.
+ * Returns usefull links to pages for the footer 
  */
 const FooterRouting = () => {
     return (
@@ -35,7 +34,6 @@ const FooterRouting = () => {
 
 /**
  * Returns social media icons that is used in the footer
- * @returns {JSX.Element} Social media icons.
  */ 
 const SomeFooter = () => {
     return (
@@ -67,11 +65,9 @@ const SomeFooter = () => {
 
 /**
  * Component for the footer containing subscription form, social icons, and contact information.
- * @returns {JSX.Element} - Footer UI.
  */
 const Footer = () => {
     const [email, setEmail] = useState('');
-    const [open, setOpen] = useState(false);  
     const { register, handleSubmit, formState: { errors }, reset, setError, clearErrors } = useForm();
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState('info');

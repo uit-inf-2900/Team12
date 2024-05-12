@@ -13,7 +13,6 @@ const API_BASE_URL = 'http://localhost:5002';
  * messages, inventory, recipes, and newsletter subscriptions. Each category is presented
  * in its own card with relevant statistics and visuals.
  * 
- * @param {function} toggleView - Function to change views within the application,
  * allowing navigation to detailed pages for each statistic.
  */
 const Dashboard = ({ toggleView }) => {  

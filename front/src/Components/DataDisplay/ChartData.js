@@ -12,9 +12,9 @@ import {
   } from 'chart.js';
   
   ChartJS.register(
-    ArcElement, // Required for Doughnut
-    Tooltip,    // Enables tooltips
-    Legend,     // Enables legends
+    ArcElement,     // Required for Doughnut
+    Tooltip,        // Enables tooltips
+    Legend,         // Enables legends
     CategoryScale,  // Required for Bar charts
     LinearScale,    // Required for Bar charts
     BarElement      // Required for Bar charts
@@ -24,11 +24,6 @@ import {
 
 /**
  * Component for creating a statistics chart.
- * @param {Object} props - The component props.
- * @param {string} props.label - The label for the chart.
- * @param {Array<Object>} props.userStats - An array of user statistics objects.
- * @param {string} props.chartType - The type of chart to render ('bar', 'pie', 'doughnut').
- * @returns {JSX.Element} The statistics chart component.
  */
 const StatisticsChart = ({ label, userStats, chartType }) => {
     // Prepare chart data, excluding the first statistic

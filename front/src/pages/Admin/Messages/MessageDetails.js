@@ -7,7 +7,9 @@ import { CustomButton } from '../../../Components/UI/Button';
 import SetAlert from '../../../Components/UI/Alert';
 
 
-
+/**
+ * Component for displaying details of a message and allowing replies.
+ */
 const MessageDetails = ({ message, refreshMessages }) => {
     const [reply, setReply] = useState('');
     const [messages, setMessages] = useState([]);

@@ -51,7 +51,6 @@ const LogIn = () => {
     /**
      * Provides error handling for the login process.
      * Sets appropriate error messages based on different failure conditions.
-     * @param {Object} error - The error object received from the login attempt.
      */
     const handleLoginError = (error) => {
         if (error.response.status === 401) {

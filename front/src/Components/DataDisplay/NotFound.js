@@ -3,7 +3,6 @@ import "../../GlobalStyles/main.css";
 
 /**
  * Component for sending a 404 page when a route is not found.
- * @returns {JSX.Element} The 404 page component.
  */
 const NotFound = () => {
     return (

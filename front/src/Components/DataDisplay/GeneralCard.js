@@ -1,6 +1,11 @@
 import exampleImage from '../../images/reading.png';
 import React, { useState } from 'react';
 
+
+
+/**
+ * Component for rendering a general card with optional chart, title, stats, and actions.
+ */
 const GeneralCard = ({ title, stats = [],  image = exampleImage, chartComponent, onClick, onDelete, onEdit, hovermessage }) => {
     // Check if the card is hovered to deside if you should show the message 
     const [isHovered, setIsHovered] = useState(false);

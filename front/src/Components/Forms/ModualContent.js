@@ -9,11 +9,14 @@ const modalStyle = {
 
 
 const contentStyle = {
-    width: '100%', // Make the content take up full width
-    height: '100%', // Make the content take up full height
+    width: '100%',  
+    height: '100%',  
     overflow: 'auto',
 };
 
+/**
+ *  Component for rendering a modal with specified content.
+ */
 const ModalContent = ({ open, handleClose, infobox }) => (
     <Modal
         open={open}

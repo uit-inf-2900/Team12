@@ -1,6 +1,9 @@
 import Chip from '@mui/material/Chip';
 
 
+/**
+ * Function for getting the label component based on status.
+ */
 export const getStatusLabel = (status) => {
     switch (status) {
         case 'verified':

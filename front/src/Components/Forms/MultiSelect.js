@@ -5,7 +5,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
 
-// Function for a multi-select dropdown menu 
+/**
+ * Function for a multi-select dropdown menu 
+ */ 
 const MultiSelect = ({ label, value, handleChange, menuItems }) => {
   return (
     <FormControl fullWidth variant="outlined">

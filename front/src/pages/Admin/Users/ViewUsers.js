@@ -41,7 +41,6 @@ export const fetchUserData = async (userToken) => {
 
 /**
  * React component to view and manage users.
- * @returns {JSX.Element} ViewUsers component JSX.
  */
 const ViewUsers = () => {
     // State declarations

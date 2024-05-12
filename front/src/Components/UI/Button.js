@@ -15,9 +15,9 @@ import Theme from '../Utilities/Theme';
 
 /**
  * Component that selects an icon based on the provided `iconName` prop.
- * @param {string} iconName - Name of the icon to select.
- * @returns {JSX.Element} - The selected icon component.
- */const IconSelector = ({ iconName }) => {
+ */
+
+const IconSelector = ({ iconName }) => {
     const icons = {
         send: <SendIcon />,
         delete: <DeleteIcon />,
@@ -36,15 +36,6 @@ import Theme from '../Utilities/Theme';
 
 /**
  * Custom button component.
- * @param {object} props - Component props.
- * @param {React.ReactNode} props.children - Button content.
- * @param {string} props.choosenvar - Custom variable.
- * @param {string} props.iconName - Name of the icon to display on the button.
- * @param {string} props.themeMode - Theme mode for the button.
- * @param {boolean} props.submit - Indicates if the button is a submit button.
- * @param {boolean} props.fullWidth - Indicates if the button should take full width.
- * @param {function} props.onClick - Function to handle click events.
- * @returns {JSX.Element} - The custom button component.
  */
 const CustomButton = ({ children, choosenvar, iconName, themeMode, submit, fullWidth, onClick, ...props  }) => {
     // Choose a theme based on the themeMode prop, or default to light theme 
@@ -73,10 +64,7 @@ const CustomButton = ({ children, choosenvar, iconName, themeMode, submit, fullW
 
 
 /**
- * Add button component.
- * @param {object} props - Component props.
- * @param {function} props.onClick - Function to handle click events.
- * @returns {JSX.Element} - The add button component.
+ * Add (+) button component.
  */
 const AddButton = ({ onClick, hoverTitle }) => {
     const [isHovered, setIsHovered] = useState(false);

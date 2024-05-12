@@ -6,7 +6,6 @@ import '../../GlobalStyles/main.css';
 
 /**
  * InstagramFeed fetches and displays a grid of Instagram posts using the Instagram Graph API.
- * @param {string} accessToken - Instagram Graph API access token for authentication.
  */
 const InstagramFeed = ({ accessToken }) => {
   const [posts, setPosts] = useState([]);

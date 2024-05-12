@@ -3,6 +3,11 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
+
+
+/**
+ * Component for displaying contact information.
+ */
 const ContactInformation = () => {
     return (
         <div style={{ display: "flex", flexDirection: "column" }}>
