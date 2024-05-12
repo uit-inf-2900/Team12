@@ -7,12 +7,14 @@ import logoIMG from "../images/logo/logoStart.svg";
 import Logo from "../images/logo/logoBlack.svg";
 import allBlackShort from "../images/homepage/allBlackShort.svg";
 import NameLong from "../images/logo/KHorange.svg"
+import Resources from '../pages/KnitHubResources/Resources';
 
 const VisitorView = () => {
   return (
     <>
       <li className="nav-item"><NavLink to="/about" className="nav-link">About</NavLink></li>
       <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>
+      <li className="nav-item"><NavLink to="/resources" className="nav-link">Resources</NavLink></li>
     </>
   );
 }; 
@@ -65,8 +67,6 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
           </NavLink>
           </li>
         
-        
-       
           <li className="nav-items"><NavLink to="/" className="nav-link">Home</NavLink></li>
           {!isLoggedIn && <VisitorView/>}
           {isLoggedIn && <UserView />}
