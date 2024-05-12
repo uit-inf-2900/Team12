@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
-
 import "../../GlobalStyles/main.css";
 import "./about.css";
 import { CustomButton } from "../../Components/UI/Button";
-
 import { getImageByName } from '../../images/getImageByName';
-
 
 // FeatureItem component for the features section of About page
 const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
@@ -26,6 +23,7 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
 
 // TeamMember component for the team section of About page 
 const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
+  // Determine where the image should be positioned
   const imageToLeft = imagePosition === "left";
   return (
     <div className={`feature-item  ${imageToLeft ? "image-left" : "image-right"}`}>
@@ -40,9 +38,11 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
   );
 };
 
-
+/**
+ * Showcasts the features and team-members of KnitHub in the about page.
+ */
 export const About = () => {
-  // Get the token to see if the user is login 
+  // Get the token to see if the user is logged in 
   const token = sessionStorage.getItem('token');
   
   return (
@@ -51,7 +51,7 @@ export const About = () => {
         About KnitHub
       </h1>
 
-      {/* Short intro section  */}
+      {/* Short intro section */}
       <div className="section-container" style={{ textAlign: 'center' }}>
         <p>Welcome to our website, dedicated to all the passionate knitters out there. Our team has created a platform that simplifies the way you manage your knitting projects and also inspires new innovation in handicrafts.</p>
         <p>The team consists of both knitters and developers, and together we have made it as simple as possible for knitters to keep track of their projects and samples all in one place.</p>
@@ -97,7 +97,7 @@ export const About = () => {
       </div>
 
 
-      {/* Button for registration. Should only be there if you are not signed in*/}
+      {/* Button for registration. Should only be there if you are not signed in */}
       {!token && (
         <div  style={{"justify-content":"center", width:'100%'}}>
             <Link to="/signup " className="section-container" style={{'text-decoration': 'none'}}>
