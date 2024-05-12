@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import "../GlobalStyles/main.css";
+import "../../GlobalStyles/main.css";
 
 
 const NotFound = () => {

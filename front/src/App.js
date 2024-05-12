@@ -17,7 +17,7 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
-import NotFound from './pages/NotFound';
+import NotFound from './Components/DataDisplay/NotFound';
 import Footer from './Components/navigation/Footter';
 import Theme from './Components/Utilities/Theme';
 import { ThemeProvider } from '@emotion/react';
