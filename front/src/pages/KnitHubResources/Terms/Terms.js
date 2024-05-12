@@ -1,3 +1,7 @@
+
+/**
+ * Define all the abbreviation and their explenation for the knitting terms 
+ */
 export const knittingTerms = [
   { abbreviation: "BO", english: "Bind Off" },
   { abbreviation: "BOR", english: "Beginning of Round" },

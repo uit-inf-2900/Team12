@@ -14,16 +14,16 @@
 
 
 /* ------------- FAQ section ------------- */
-
+/* The section for the questions */
 .faq-section {
     margin: 20px;
     font-family: var(--body-font);
 }
 
+/* The questions */
 .faq-item {
     margin-bottom: 10px;
 }
-
 
 .faq-question {
     background: none;
@@ -39,6 +39,7 @@
     font-size: var(--h3-font-size);
 }
 
+/* Change the color of the question when open */
 .faq-question.open {
     color:var(--link-color); 
 }

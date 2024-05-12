@@ -40,7 +40,10 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    // Retrive the token from session Storage
     const token = sessionStorage.getItem('token');
+
+    // Checks that the token exsisst and decode it to check if user is admin
     if(token){
       try{
         const decodedToken = jwtDecode(token);
@@ -55,9 +58,10 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        {/* Make sure the page scrolls to top when chanhing pages */}
         <ScrollToTop/>
-        {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
-        <div className="page-container">          
+        <div className="page-container">        
+        {/* If you are not logged in show the login and signup page */}
           <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
           <div className="content-container">
             <Routes>

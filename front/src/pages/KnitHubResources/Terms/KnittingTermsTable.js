@@ -3,7 +3,9 @@ import { TextField, TablePagination } from '@mui/material';
 import {knittingTerms} from './Terms';
 
 
-
+/**
+ * Sets up a table with all the terms 
+ */
 function KnittingTermsTable() {
     // State variables
     const [searchText, setSearchText] = useState('');
