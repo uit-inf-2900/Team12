@@ -6,7 +6,7 @@ using System.Text;
 using Strikkeapp.Services;
 using Microsoft.AspNetCore.Identity;
 using MailerSend.AspNetCore;
-using AutoMapper;
+using Morcatko.AspNetCore.JsonMergePatch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +43,7 @@ if(string.IsNullOrWhiteSpace(jwtKey))
     throw new InvalidOperationException("JWT Key is not correctly configured");
 }
 
+builder.Services.AddMvc().AddNewtonsoftJsonMergePatch();
 
 // Add tokenized log in
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

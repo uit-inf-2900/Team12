@@ -25,6 +25,7 @@ import Resources from './pages/KnitHubResources/Resources';
 import Counter from './pages/counter';
 import Calculators from './pages/Calculator/Calculators';
 import { YarnCalculator } from './pages/Calculator/YarnCalculator';
+import { HomeOut } from './pages/homeOut';
 
 
 export default function App() {
@@ -78,6 +79,7 @@ export default function App() {
                 <>
                   <Route path="/login" element={<LogIn />} />
                   <Route path="/signup" element={<SignUp />} />
+              
                 </>
               ) : (
                 <>

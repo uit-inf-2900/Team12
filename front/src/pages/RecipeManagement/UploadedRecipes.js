@@ -97,13 +97,13 @@ const UploadedRecipes = () => {
                 </div>
                 
             )}
-            {selectedRecipe && 
-                    <Modal open={isModalOpen} onClose={()=>setIsModalOpen(false)}>
+            {selectedRecipe && (
+                    <Modal open={isModalOpen}>
                         <Box>
-                            <PDFwindow id={selectedRecipe.recipeId} onClose={()=>setIsModalOpen(false)}/>
+                            <PDFViewer id={selectedRecipe.recipeId} onClose={()=>setIsModalOpen(false)}/>
                         </Box>   
                     </Modal>
-                } 
+                )} 
             
         </div>
     );

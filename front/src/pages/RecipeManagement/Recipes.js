@@ -20,6 +20,7 @@ const RecipesPage = () => {
 
     // Toggle for applying blur when modal is open
     const pageContainer = uploading ? "page-container blur-background" : "page-container";
+    
 
     return (
         <div>

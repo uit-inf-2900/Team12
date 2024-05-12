@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const PDFViewer = ({ id }) => {
+const PDFwindow = ({ id, onClose}) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -33,4 +33,4 @@ const PDFViewer = ({ id }) => {
     );
 };
 
-export default PDFViewer;
+export default PDFwindow;

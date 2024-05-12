@@ -1,52 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import axios from 'axios';
-
-import "../GlobalStyles/pdf.css";
+import { pdfjs, Document, Page } from 'react-pdf';
+import "../GlobalStyles/pdf.css"; // Assuming styles are here
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
+import axios from 'axios';
+import PDFwindow from './PDFwindow';
 
-// Set the path for the worker file correctly, assuming it's in the public folder
-pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.js`;
-
-const options = {
-    cMapUrl: 'cmaps/',
-    cMapPacked: true,
-    standardFontDataUrl: 'standard_fonts/',
-};
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const PDFViewer = ({ id, onClose }) => {
-    const [pdf, setPDF] = useState(null);
+    const [file, setFile] = useState();
     const [numPages, setNumPages] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [openWindow, setOpenWindow]= useState(false);
 
     useEffect(() => {
-        fetchPDF();
-    }, [id]);  // Add dependencies here if needed
+        const fetchData = async () => {
+            setLoading(true);
+            setError("");
+            try {
+                const response = await axios.get(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${id}`, {
+                    responseType: 'arraybuffer',
+                    cancelToken: new axios.CancelToken((cancel) => {
+                        // Cancel the request if the component unmounts
+                        return () => cancel("Request cancelled due to component unmount");
+                    })
+                });
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                setFile(url);
+            } catch (error) {
+                if (axios.isCancel(error)) {
+                    console.log("Request cancelled:", error.message);
+                } else {
+                    setError('Error fetching PDF: ' + error.message);
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const fetchPDF = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${id}`, {
-                responseType: 'arraybuffer'
-            });
-            const blob = new Blob([response.data], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            setPDF(url);
-        } catch (error) {
-            console.error('Error fetching PDF:', error);
-            setError('Failed to load PDF');
-        } finally {
-            setLoading(false);
-        }
-    };
+        fetchData();
 
-    function onDocumentLoadSuccess({ numPages }) {
+        return () => {
+            // Clean up by revoking the object URL
+            if (file) URL.revokeObjectURL(file);
+        };
+    }, [id]);
+
+    const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
-        setCurrentPage(1); // Reset to first page when a new document is loaded
-    }
+        setCurrentPage(1);
+    };
 
     const goToPrevPage = () => {
         setCurrentPage(currentPage > 1 ? currentPage - 1 : 1);
@@ -56,29 +63,41 @@ const PDFViewer = ({ id, onClose }) => {
         setCurrentPage(currentPage < numPages ? currentPage + 1 : numPages);
     };
 
-    if (loading) {
-        return <div>Loading PDF...</div>;
-    }
+    const handlePDFwindow = () => {
+        setOpenWindow(!openWindow);
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+
+    };
+
+    if (loading) return <div className="loading-indicator">Loading...</div>;
+    if (error) return <div className="error-message">Error: {error}</div>;
 
     return (
         <div className="resume-section">
             <div className="pdf-viewer">
                 <div className="document-container">
-                    <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess} options={options}>
+                    <button onClick={handlePDFwindow}>Open in new page</button>
+                    <Document
+                        file={file}
+                        onLoadSuccess={onDocumentLoadSuccess}
+                        className="d-flex justify-content-center"
+                    >
                         <Page pageNumber={currentPage} />
                     </Document>
-                    {numPages && (
-                        <div>
-                            <button onClick={goToPrevPage} disabled={currentPage === 1}>Previous</button>
-                            <button onClick={goToNextPage} disabled={currentPage === numPages}>Next</button>
-                            <p>Page {currentPage} of {numPages}</p>
-                        </div>
-                    )}
                 </div>
+                <div className="navigation">
+                    <button disabled={currentPage <= 1} onClick={goToPrevPage}>Previous</button>
+                    <span>Page {currentPage} of {numPages}</span>
+                    <button disabled={currentPage >= numPages} onClick={goToNextPage}>Next</button>
+                    <button onClick={onClose} className="close-button">Close</button>
+
+                </div>
+
+                {openWindow &&(
+                    <PDFwindow id={id} onClose={()=> setOpenWindow(false)}>
+                      
+                    </PDFwindow>
+                )}
             </div>
         </div>
     );

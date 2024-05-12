@@ -4,21 +4,42 @@ import { Modal, Box, Typography, Button, Grid, Avatar } from '@mui/material';
 import "../GlobalStyles/Card.css";
 import Calculators from '../pages/Calculator/Calculators';
 import Counter from '../pages/counter';
+import EditProject from '../pages/ProjectTracking/editProject';
+import PDFViewer from './PDFviewer';
 
-const ProjectCard = ({ show, project, handleClose, onDelete }) => {
+const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdate }) => {
 
 
   const [openCalculator, setOpenCalculator]=useState(false);
   const [openCounter, setOpenCounter]=useState(false);
+  const [openEdit, setOpenEdit]=useState(false);
+  const [openRecipe, setOpenRecipe]=useState(false);
 
   const increaseDecrease = () => {
     setOpenCalculator(!openCalculator);
     setOpenCounter(false);
+    setOpenEdit(false);
   };
   
   const counters = () => {
     setOpenCounter(!openCounter);
     setOpenCalculator(false);
+    setOpenEdit(false);
+
+  };
+
+  const edit = () => {
+    setOpenEdit(!openEdit);
+    setOpenCalculator(false);
+    setOpenCounter(false);
+    
+  };
+
+  const recipe = () => {
+    setOpenRecipe(!openRecipe);
+    setOpenCalculator(false);
+    setOpenCounter(false);
+    setOpenEdit(false);
 
   };
   
@@ -89,7 +110,7 @@ const ProjectCard = ({ show, project, handleClose, onDelete }) => {
         {/* Footer */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-            <Button variant="contained" color="primary" sx={{ mr: 1 }}>
+            <Button variant="contained" onClick={()=>recipe()} color="primary" sx={{ mr: 1 }}>
               Recipe
             </Button>
             <Button variant="contained" onClick={()=>increaseDecrease()} color="primary" sx={{ mr: 1 }}>
@@ -97,6 +118,15 @@ const ProjectCard = ({ show, project, handleClose, onDelete }) => {
             </Button>
             <Button variant="contained" onClick={()=> counters()} color="primary" sx={{ mr: 1 }}>
               Counter
+            </Button>
+            
+          </Box>
+          <Box>
+            <Button variant="contained" onClick={onComplete} color="primary" sx={{ mr: 1 }}>
+              Complete project
+            </Button>
+            <Button variant="contained" onClick={()=> edit()} color="primary" sx={{ mr: 1 }}>
+              Update project
             </Button>
             <Button variant="contained" onClick={onDelete} color="primary" sx={{ mr: 1 }}>
               Delete project
@@ -114,6 +144,15 @@ const ProjectCard = ({ show, project, handleClose, onDelete }) => {
         {openCounter && (
           <Counter></Counter>
         )}
+
+        {openEdit && (
+          <EditProject onClose={()=>edit()} projectId={onUpdate}></EditProject>
+        )}
+
+        {openRecipe && (
+          <PDFViewer id={project.recipeId} onClose={()=>recipe()}/>
+        )}
+
       </Box>
     </Modal>
   );

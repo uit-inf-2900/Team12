@@ -143,7 +143,7 @@ const YarnStash = () => {
                 />
             ))}
 
-               
+              
 
             </div>
             <AddButton onClick={() => setOpenYarnModal(!openYarnModal)}/>

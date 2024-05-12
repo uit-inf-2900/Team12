@@ -9,11 +9,12 @@ namespace Strikkeapp.Services;
 public interface IProjectYarnInventoryService
 {
     Guid? CreateYarnInventory(Guid yarnId, Guid projectId, string userToken, int numUse);
+    List<Guid>? CreateYarnInventory(Dictionary<Guid, int> yarnId, Guid projectId, string userToken);
     bool DeleteYarnInventory(Guid projectInventoryId, string userToken);
     bool DeleteYarnInventory(List<Guid> projectInventoryId, string userToken);
     int GetNumInUseByProject(Guid itemId, Guid projectId, string userToken);
-    public bool SetYarnInventoryForCompletedProject(string userToken, Guid itemId, Guid projectId);
-    public bool SetYarnInventoryForCompletedProject(string userToken, List<Guid>? itemId, Guid projectId);
+    bool SetYarnInventoryForCompletedProject(string userToken, Guid itemId, Guid projectId);
+    bool SetYarnInventoryForCompletedProject(string userToken, List<Guid>? itemId, Guid projectId);
 
 }
 
@@ -77,6 +78,62 @@ public class ProjectYarnInventoryService : IProjectYarnInventoryService
 
         if (saveResult >= 1)
             return createdInventory.Entity.ProjectInventoryId;
+
+        return null;
+    }
+
+    public List<Guid>? CreateYarnInventory(Dictionary<Guid, int> yarnId, Guid projectId, string userToken)
+    {
+        // Get and check token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (tokenResult.Success == false)
+        {
+            throw new ArgumentException(tokenResult.ErrorMessage);
+        }
+
+        var inventoryIds = new List<Guid>();
+
+        foreach (var yarn in yarnId)
+        {
+            // validate that amount of yarn is available and exists
+            var yarnInventory = _inventoryService.GetSingleYarnFromInventory(userToken, yarn.Key);
+
+            if (yarnInventory.NumItems - yarnInventory.InUse < yarn.Value)
+                throw new ArgumentException($@"Inventory of this yarn is lower than requested amount. 
+                Number available in inventory is: {yarnInventory.NumItems - yarnInventory.InUse}, 
+                but requested amount is {yarn.Value}.");
+
+            var updateInventoryRequest = new UpdateItemRequest
+            {
+                UserToken = userToken,
+                ItemId = yarn.Key,
+                NewNum = yarnInventory.InUse + (yarn.Value)
+            };
+
+            var updateInventoryResult = _inventoryService.UpdateYarnUsed(updateInventoryRequest);
+
+            if (!updateInventoryResult.Success)
+                throw new Exception("Error updating yarn inventory");
+
+            var projectYarnInventory = new ProjectYarnInventoryEntity
+            {
+                ProjectInventoryId = Guid.NewGuid(),
+                UserId = tokenResult.UserId,
+                ItemId = yarn.Key,
+                ProjectId = projectId,
+                NumberInUse = yarn.Value
+            };
+
+            var createdInventory = _context.ProjectYarnInventory.Add(projectYarnInventory);
+
+            inventoryIds.Add(createdInventory.Entity.ProjectInventoryId);
+        }
+
+
+        var saveResult = _context.SaveChanges();
+
+        if (saveResult >= 1)
+            return inventoryIds;
 
         return null;
     }
