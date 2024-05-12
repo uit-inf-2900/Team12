@@ -1,8 +1,8 @@
 import React, { useState} from "react";
 import "./Calculator.css";
-import InputField from "../../Components/UI/InputField";
-import { CustomButton } from "../../Components/UI/Button";
-import Image from "../../images/openBook.png"
+import InputField from "../../../Components/UI/InputField";
+import { CustomButton } from "../../../Components/UI/Button";
+import Image from "../../../images/openBook.png"
 
 export const IncreaseCalculator = () => {
     const [numberOfStitches, setNumberOfStitches] = useState('');

@@ -1,7 +1,7 @@
 import React from "react";
 import KnittingTermsTable from "./KnittingTermsTable";
 import InstagramFeed from './InstagramFeed'; // Importer InstagramFeed-komponenten
-import Calculators from './../Calculator/Calculators'
+import Calculators from './../ProjectTracking/Calculator/Calculators'
 
 function Resources() {
     const accessTokenInsta = 'IGQWRNYjdRX3BnVHFmdVR0Qm5yR3RDWml0TTgwc3lhV1VRZAmw5U3I2eWZAkUTRKekRzOS1JWEt5REEzZA3JHX0dDSXVfdVpodWlHRXFLbngwdEtSVXhuaXdtYmRSY0dGSzhvR1NVQkhnMmlJSE5JNHFmMFJCMS1IdjAZD';

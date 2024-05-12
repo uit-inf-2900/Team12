@@ -1,8 +1,8 @@
 import React, { useState} from "react";
-import InputField from "../../Components/UI/InputField";
+import InputField from "../../../Components/UI/InputField";
 import "./Calculator.css"
-import Image from "../../images/knitting.png";
-import { CustomButton } from "../../Components/UI/Button";
+import Image from "../../../images/knitting.png";
+import { CustomButton } from "../../../Components/UI/Button";
 
 export const YarnCalculator = () => {
     const [originalLength, setOriginalLength] = useState('');
