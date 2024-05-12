@@ -28,6 +28,7 @@ public class InventoryControllerTests
 
     // Test variables
     private Guid testUserId = Guid.NewGuid();
+    private Guid testAdminId = Guid.NewGuid();
     private Guid testNeedleId = Guid.NewGuid();
     private Guid testYarnId = Guid.NewGuid();
 
@@ -47,6 +48,8 @@ public class InventoryControllerTests
             .Returns(TokenResult.ForSuccess(testUserId));
         _mockTokenService.Setup(e => e.ExtractUserID("fakeToken"))
             .Returns(TokenResult.ForFailure("Unauthorized"));
+        _mockTokenService.Setup(e => e.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
 
         // Set up in memory database
         string databaseName = Guid.NewGuid().ToString();
@@ -81,6 +84,22 @@ public class InventoryControllerTests
             UserFullName = "Test User",
             DateOfBirth = DateTime.Now,
             IsAdmin = false
+        });
+
+        // Add test admin to database
+        _context.UserLogIn.Add(new UserLogIn
+        {
+            UserId = testAdminId,
+            UserEmail = "admin@knithub.no",
+            UserPwd = "hashedPassword",
+            UserStatus = "verified"
+        });
+        _context.UserDetails.Add(new UserDetails
+        {
+            UserId = testAdminId,
+            UserFullName = "Admin User",
+            DateOfBirth = DateTime.Now,
+            IsAdmin = true
         });
 
         _context.NeedleInventory.Add(new NeedleInventory
@@ -134,6 +153,23 @@ public class InventoryControllerTests
     {
         // Run controller and verify response
         var result = _controller.GetInventory("fakeToken");
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void GetAll_Ok()
+    {
+        // Run controller and verify response
+        var result = _controller.GetAll("adminToken");
+        var okRes = Assert.IsType<OkObjectResult>(result);
+        Assert.NotNull(okRes.Value);
+    }
+
+    [Fact]
+    public void FakeTokenGetAll_Fails()
+    {
+        // Run controller and verify response
+        var result = _controller.GetAll("fakeToken");
         Assert.IsType<UnauthorizedObjectResult>(result);
     }
 
