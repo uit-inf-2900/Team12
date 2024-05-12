@@ -4,6 +4,10 @@ import {IncreaseCalculator} from "./IncreaseCalculator"
 import {DecreaseCalculator} from "./DecreaseCalculator";
 import {YarnCalculator} from "./YarnCalculator";
 
+/*
+ * Render the three differnt calculators (Yarn, Increase, Decrease). Users can switch 
+ * between calculators in the switch container.
+ */
 const Calculators = () => {
     const[activeStatus, setActiveStatus] = useState('increase');
 
@@ -16,7 +20,6 @@ const Calculators = () => {
 
     return (
         <div>
-
             {/* Creates a switch container for the three calculatores */}
             <SwitchContainer
                 options={options}

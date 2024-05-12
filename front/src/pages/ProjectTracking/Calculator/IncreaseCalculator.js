@@ -4,6 +4,9 @@ import InputField from "../../../Components/UI/InputField";
 import { CustomButton } from "../../../Components/UI/Button";
 import Image from "../../../images/openBook.png"
 
+/**
+ * Calculates number of increases and set new knitting pattern.
+ */
 export const IncreaseCalculator = () => {
     const [numberOfStitches, setNumberOfStitches] = useState('');
     const [numberOfIncreases, setNumberOfIncreases] = useState('');
@@ -15,20 +18,27 @@ export const IncreaseCalculator = () => {
     const calculateIncrease = () => {
         setError('');
         setNewStitches(null);
+        // Check if the input is only positive numbers
         if (numberOfStitches > 0 && numberOfIncreases > 0) {
+            // Find new stitch count
             const newStitchCount = parseInt(numberOfStitches) + parseInt(numberOfIncreases);
             setNewStitches(newStitchCount);
 
-            // beregner mønsteret for økning
+            // Find new pattern for the increases
             const stitchesBetweenIncreases = Math.floor(numberOfStitches / numberOfIncreases);
             setPattern(`*Knit ${stitchesBetweenIncreases} stitches, increase 1 stitch* ${numberOfIncreases} times`);            
         } else {
             setError('Please fill in all fields with positive numbers');
     }}
+
+    // The increase calculator
     return (
         <div className="custom-box">
+            {/* Header */}
             <h1 style={{color:"#F2E4E1"}}>Increase calculator</h1>
             <h4 style={{color:"#F2E4E1"}}>Calculate how many times you need to increase</h4>
+
+            {/* Calculator increase */}
             <div className="calculator-container">
                     <label htmlFor="stitches">Number of stitches on the needle</label>
                     <InputField

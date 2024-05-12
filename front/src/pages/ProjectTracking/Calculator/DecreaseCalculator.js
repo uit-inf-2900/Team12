@@ -4,6 +4,9 @@ import InputField from "../../../Components/UI/InputField";
 import { CustomButton } from "../../../Components/UI/Button";
 import Image from "../../../images/openBook.png"
 
+/**
+ *  Calculates number of decreases and set new knitting-pattern.
+ */
 export const DecreaseCalculator = () => {
     const [numberOfStitches, setNumberOfStitches] = useState('');
     const [newStitches, setNewStitches] = useState(null);
@@ -15,16 +18,20 @@ export const DecreaseCalculator = () => {
     const calculateDecrease = () => {
         setError('');
         setNewStitches(null);
+        // Check if the input is only positive numbers
         if (numberOfStitches > 0 && numberOfDecreases > 0) {
+            // Find new stitch count
             const newStitchCount = parseInt(numberOfStitches) - parseInt(numberOfDecreases);
             setNewStitches(newStitchCount);
 
-            // 
+            // Find stitches between each decrease
             const stitchesBetweenDecreases = Math.floor(numberOfStitches / numberOfDecreases);
+            // Find any remainding stitches
             const remainder = numberOfStitches % numberOfDecreases;
+            // Set new pattern for the knitting
             let patternString = `*Knit ${stitchesBetweenDecreases - 1} stitches, knit 2 together*`;
 
-            //
+            // Add the remainding stitches to the new pattern, if any
             if (remainder > 0) {
                 patternString += ` Repeat ${numberOfDecreases - 1} times, knit the last ${remainder + stitchesBetweenDecreases - 1} stitches, knit 2 together`;
             } else {
@@ -35,10 +42,15 @@ export const DecreaseCalculator = () => {
             setError('Please fill in all fields with positive numbers');
         }
     }
+
+    // The decrease calculator
     return (
         <div className="custom-box">
+            {/* Header */}
             <h1 style={{color:"#F2E4E1"}}>Decrease calculator</h1>
             <h4 style={{color:"#F2E4E1"}}>Calculate how many decreases you need to make</h4>
+
+            {/* Calculator decrease */}
             <div className="calculator-container">
                 <div className="input-row">
                         <label htmlFor="stitches">Number of stitches on the needle</label>
