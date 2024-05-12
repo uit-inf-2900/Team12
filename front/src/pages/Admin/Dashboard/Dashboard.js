@@ -38,10 +38,10 @@ const Dashboard = ({ toggleView }) => {
                 const usersResponse = await fetch(`${API_BASE_URL}/getUsers?userToken=` + userToken, fetchOptions);
                 setUsersData(await usersResponse.json());
 
-                const activeMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=true&isHandled=false`, fetchOptions);
+                const activeMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=true&isHandled=false&userToken=` + userToken, fetchOptions);
                 setActiveMessages(await activeMessagesResponse.json());
 
-                const inactiveMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=false`, fetchOptions);
+                const inactiveMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=false&userToken=` + userToken, fetchOptions);
                 setInactiveMessages(await inactiveMessagesResponse.json());
 
                 const handledMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=true`, fetchOptions);
