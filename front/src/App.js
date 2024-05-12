@@ -22,7 +22,7 @@ import Footer from './Components/navigation/Footter';
 import Theme from './Components/Utilities/Theme';
 import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
-import Counter from './pages/counter';
+import Counter from './pages/ProjectTracking/Counter/counter';
 import Calculators from './pages/ProjectTracking/Calculator/Calculators';
 import { HomeOut } from './pages/homeOut';
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
-import "../../Counter.css";
+import "../../ProjectTracking/Counter/Counter.css";
 import GeneralCard from '../../Admin/Dashboard/Card';
 import InputField from '../../../Components/UI/InputField';
 import { CustomButton, AddButton } from '../../../Components/UI/Button';

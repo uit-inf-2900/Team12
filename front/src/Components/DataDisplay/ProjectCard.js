@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { Modal, Box, Typography, Button, Grid, Avatar } from '@mui/material';
 import "../../GlobalStyles/main.css";
 import Calculators from '../../pages/ProjectTracking/Calculator/Calculators';
-import Counter from '../../pages/counter';
+import Counter from '../../pages/ProjectTracking/Counter/counter';
 import EditProject from '../../pages/ProjectTracking/editProject';
 import PDFViewer from '../Utilities/PDFviewer';
 

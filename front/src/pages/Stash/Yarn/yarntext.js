@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import "../../../GlobalStyles/main.css";
-import "../../Counter.css";
+import "../../ProjectTracking/Counter/Counter.css";
 import { CustomButton } from '../../../Components/UI/Button';
 import InputField from '../../../Components/UI/InputField';
 import yarnBasket from '../../../images/yarnSheep.png';

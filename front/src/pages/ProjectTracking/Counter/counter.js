@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "../GlobalStyles/main.css";
+import "../../../GlobalStyles/main.css";
 import "./Counter.css";
-import SetAlert from "../Components/UI/Alert";
-import InputField from "../Components/UI/InputField";
+import SetAlert from "../../../Components/UI/Alert";
+import InputField from "../../../Components/UI/InputField";
 import { useCounterStash } from "./counterStash";
 
 export const Counter = () => {
