@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import "../GlobalStyles/main.css";
+import "../../GlobalStyles/main.css";
 import axios from 'axios';
 import StatisticBox from './StatisticBox'; // Sjekk at stien stemmer
 import { useNavigate } from 'react-router-dom';
-import InstagramFeed from './KnitHubResources/InstagramFeed'; 
+import InstagramFeed from '../KnitHubResources/InstagramFeed'; 
 
 
 export const HomeOut = () => {

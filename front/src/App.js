@@ -7,7 +7,7 @@ import ScrollToTop from './Components/navigation/scrollToTop';
 // Import our pages
 import NavBar from './Components/navigation/NavBar'
 import {About} from './pages/about/about'
-import {Home} from './pages/home'
+import {Home} from './pages/Home/home'
 import Stash from './pages/Stash/stash'
 import ResetPassword from './pages/SignUp_LogIn/ResetPassword';
 import LogIn from './pages/SignUp_LogIn/LogIn';
@@ -24,7 +24,7 @@ import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
 import Counter from './pages/ProjectTracking/Counter/counter';
 import Calculators from './pages/ProjectTracking/Calculator/Calculators';
-import { HomeOut } from './pages/homeOut';
+import { HomeOut } from './pages/Home/homeOut';
 
 
 export default function App() {

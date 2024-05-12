@@ -4,13 +4,13 @@ import StatisticBox from './StatisticBox';
 import { useNavigate } from 'react-router-dom';
 
 // Import images
-import { getImageByName } from '../images/getImageByName';
+import { getImageByName } from '../../images/getImageByName';
 
 // Css styles
-import "../GlobalStyles/main.css";
-import "./about/about.css";
+import "../../GlobalStyles/main.css";
+import "../about/about.css";
 import './StatisticBox.css';
-import InstagramFeed from './KnitHubResources/InstagramFeed'; 
+import InstagramFeed from '../KnitHubResources/InstagramFeed'; 
 
 
 
