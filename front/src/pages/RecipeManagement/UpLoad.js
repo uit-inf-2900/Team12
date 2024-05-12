@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { IoIosCloudUpload } from "react-icons/io";          // Import the icon component from react icons library
-import InputField from '../../Components/InputField';
+import InputField from '../../Components/UI/InputField';
 import './UpLoad.css';
 import "../../GlobalStyles/main.css";
-import { CustomButton } from '../../Components/Button';
+import { CustomButton } from '../../Components/UI/Button';
 import axios from 'axios';
 
 
@@ -40,7 +40,6 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
 
     // Handle the file upload
     const uploadFile = () => {
-        // TODO: Implement file upload logic
         const formData = new FormData(); 
 
         formData.append("RecipeFile", file);
@@ -59,6 +58,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
             // Handle error 
             console.error("Upload error:", error);
         })
+       
     };
 
 
@@ -71,7 +71,6 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
-                <button className="close-button" onClick={onClose}>X</button>
                 <div className="upload-flex-container"> 
                     <div className="box light" 
                         style={{"border-radius": "50%", 

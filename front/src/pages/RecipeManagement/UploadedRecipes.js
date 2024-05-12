@@ -6,10 +6,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import MultiSelect from '../../Components/MultiSelect';
-import Card from '../../Components/Card';
-import PDFwindow from '../../Components/PDFwindow';
-import PDFViewer from '../../Components/PDFviewer'; // Import PDFViewer component
+import MultiSelect from '../../Components/Forms/MultiSelect';
+import Card from '../../Components/DataDisplay/Card';
+import PDFwindow from '../../Components/Utilities/PDFwindow';
+import PDFViewer from '../../Components/Utilities/PDFviewer'; // Import PDFViewer component
 import { Fab, Modal, Box, Button } from "@mui/material";
 
 const UploadedRecipes = () => {
@@ -97,13 +97,13 @@ const UploadedRecipes = () => {
                 </div>
                 
             )}
-            {selectedRecipe && 
-                    <Modal open={isModalOpen} onClose={()=>setIsModalOpen(false)}>
+            {selectedRecipe && (
+                    <Modal open={isModalOpen}>
                         <Box>
-                            <PDFwindow id={selectedRecipe.recipeId} onClose={()=>setIsModalOpen(false)}/>
+                            <PDFViewer id={selectedRecipe.recipeId} onClose={()=>setIsModalOpen(false)}/>
                         </Box>   
                     </Modal>
-                } 
+                )} 
             
         </div>
     );

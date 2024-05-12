@@ -1,11 +1,11 @@
 // https://legacy.reactjs.org/docs/lists-and-keys.html
 
 import React, {useContext, useEffect, useState} from "react";
-import ProjectCard from "../../Components/ProjectCard";
+import ProjectCard from "../../Components/DataDisplay/ProjectCard";
 import UploadProjects from "./addProject";
-import Card from "../../Components/Card";
+import Card from "../../Components/DataDisplay/Card";
 import { useParams } from 'react-router-dom';
-import SwitchContainer from "../../Components/SwitchContainer";
+import SwitchContainer from "../../Components/Utilities/SwitchContainer";
 
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 import '../../GlobalStyles/main.css';
 import "../../GlobalStyles/Card.css"
 
-import AddButton from "../../Components/AddButton";
+import {AddButton} from "../../Components/UI/Button";
 
 import { Fab, Modal, Box } from "@mui/material";
 
@@ -72,18 +72,18 @@ const Projects = () => {
         
         
     };
+    const handleCompleted = async (ProjectId) => {
 
-     // Hardcoded projects to see if the filtering works
-    const projects = [
-        { id: 1, title: 'Honey clutch', status: 0, knittingGauge:'10/10' },
-        { id: 2, title: 'Summer scarf', status: 1, knittingGauge:'10/10'  },
-        { id: 3, title: 'Winter hat', status: 2, knittingGauge:'10/10'  },
-
-        // ... flere prosjekter
-    ];
-
+        try{
+            const response = await axios.post(`http://localhost:5002/api/projects/complete?userToken=${sessionStorage.getItem('token')}&projectId=${ProjectId}`)
+        }
+        catch (error) {
+            console.error('Error setting Project to complete:', error);
     
+    
+          }
 
+    };
 
 
     const toggleUpload = () => {
@@ -102,6 +102,7 @@ const Projects = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
+        fetchProjects();
     };
 
 
@@ -132,12 +133,8 @@ const Projects = () => {
                         <Card
                             key={project.projectId}
                             title={project.projectName}
-                        
                             yarns={project.yarns}
                             needles={project.needles}
-                            
-                            
-                            
                             onClick={() => handleProjectClick(project)} //pass project to openProject
                         />
                         
@@ -164,6 +161,10 @@ const Projects = () => {
                     project={selectedProject}
                     handleClose={handleCloseModal}
                     onDelete={()=> deleteProject(selectedProject.projectId)}
+                    onComplete={()=>handleCompleted(selectedProject.projectId)}
+                    onUpdate={selectedProject.projectId}
+                    
+                    
                     
                 />
                     

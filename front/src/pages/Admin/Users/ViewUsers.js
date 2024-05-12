@@ -14,9 +14,9 @@ import {
     TextField,
 } from '@mui/material';
 import axios from 'axios';
-import SetAlert from '../../../Components/Alert';
-import {CustomButton} from '../../../Components/Button';
-import { getStatusLabel } from '../../../Components/UserLable';
+import SetAlert from '../../../Components/UI/Alert';
+import {CustomButton} from '../../../Components/UI/Button';
+import { getStatusLabel } from '../../../Components/DataDisplay/UserLable';
 
 
 
@@ -41,7 +41,6 @@ export const fetchUserData = async (userToken) => {
 
 /**
  * React component to view and manage users.
- * @returns {JSX.Element} ViewUsers component JSX.
  */
 const ViewUsers = () => {
     // State declarations

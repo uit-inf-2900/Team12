@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "@mui/material";
 import "../../../GlobalStyles/main.css";
 import TextYarn from './yarntext';
-import "../../Counter.css";
-import GeneralCard from '../../Admin/Dashboard/Card';
-import InputField from '../../../Components/InputField';
-import { CustomButton, AddButton } from '../../../Components/Button';
+import "../../ProjectTracking/Counter/Counter.css";
+import GeneralCard from '../../../Components/DataDisplay/GeneralCard';
+import InputField from '../../../Components/UI/InputField';
+import { CustomButton, AddButton } from '../../../Components/UI/Button';
 import yarnBasket from '../../../images/yarnSheep.png';
 
 const YarnStash = () => {
@@ -143,7 +143,7 @@ const YarnStash = () => {
                 />
             ))}
 
-               
+              
 
             </div>
             <AddButton onClick={() => setOpenYarnModal(!openYarnModal)}/>
@@ -180,8 +180,6 @@ const YarnStash = () => {
                                     <InputField label="Weight" type= 'number' value={currentYarn.weight || ''} onChange={handleInputChange('weight')} />
                                 </div>
                                 <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
-
-                                        <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number') } />
 
                                     <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number')} />
 

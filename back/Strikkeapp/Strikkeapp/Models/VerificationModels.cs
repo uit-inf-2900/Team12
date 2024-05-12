@@ -22,11 +22,13 @@ public class VerificationResultCreate
 public class VerificationResult
 {
     public bool Success { get; set; }
+    public string VerificationCode { get; set; } = string.Empty;
     public string ErrorMessage { get; set; } = string.Empty;
 
-    public static VerificationResult ForSuccess() => new VerificationResult
+    public static VerificationResult ForSuccess(string code) => new VerificationResult
     {
-        Success = true
+        Success = true,
+        VerificationCode = code
     };
 
     public static VerificationResult ForFailure(string message) => new VerificationResult

@@ -4,13 +4,13 @@ import './Profilepage.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Image from "../../images/6.png";
-import InputField from '../../Components/InputField';
-import ModalContent from '../../Components/ModualContent';
-import { CustomButton } from '../../Components/Button';
-import SetAlert from '../../Components/Alert';
+import InputField from '../../Components/UI/InputField';
+import ModalContent from '../../Components/Forms/ModualContent';
+import { CustomButton } from '../../Components/UI/Button';
+import SetAlert from '../../Components/UI/Alert';
 import { Modal, Box } from '@mui/material';
 import '../../GlobalStyles/BoxAndContainers.css';
-import ConfirmationVerification from '../SignUp_LogIn/ConfirmationVerification';
+import ConfirmationVerification from '../Authentication/ConfirmationVerification';
 
 
 

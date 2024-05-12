@@ -23,7 +23,11 @@ public class RecipeService : IRecipeService
 
     public RecipeService(IConfiguration configuration, ITokenService tokenService, StrikkeappDbContext context)
     {
-        _storagePath = configuration.GetConnectionString("RecipesStorage")!;
+        _storagePath = configuration["ConnectionStrings:RecipesStorage"]!;
+        if (string.IsNullOrEmpty(_storagePath))
+        {
+            throw new InvalidOperationException("Storage path must be configured.");
+        }
         _tokenService = tokenService;
         _context = context;
     }
@@ -73,8 +77,11 @@ public class RecipeService : IRecipeService
             }
 
             catch (Exception ex)
-            {
-                File.Delete(filePath);
+            {   // If an error occurs, delete the file and rollback the transaction
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
                 transaction.Rollback();
                 return RecipeServiceResult.ForFailure(ex.Message);
             }
@@ -87,7 +94,7 @@ public class RecipeService : IRecipeService
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (tokenResult.Success == false)
         {
-            return RecipeServiceResultGet.ForFailure(tokenResult.ErrorMessage);
+            return RecipeServiceResultGet.ForFailure("Unauthorized");
         }
 
         try

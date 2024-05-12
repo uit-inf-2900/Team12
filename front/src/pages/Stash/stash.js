@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import SwitchContainer from "../../Components/SwitchContainer";
+import SwitchContainer from "../../Components/Utilities/SwitchContainer";
 import '../../GlobalStyles/main.css';
 import NeedleStash from "./Needle/Needles";
 import YarnStash from "./Yarn/Yarn";

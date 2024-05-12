@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Fab, Modal, Box } from "@mui/material";
-import MultiSelect from '../../../Components/MultiSelect';
+import MultiSelect from '../../../Components/Forms/MultiSelect';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "../../../GlobalStyles/main.css";
-import { CustomButton } from '../../../Components/Button';
+import { CustomButton } from '../../../Components/UI/Button';
 import NeedleInfo from './needletext';
-import { AddButton } from '../../../Components/Button';
-import SetAlert from '../../../Components/Alert';
+import { AddButton } from '../../../Components/UI/Button';
+import SetAlert from '../../../Components/UI/Alert';
 
 /**
  * Component for managing and displaying a needle stash, including the ability to add and delete needles.
- * @param {function} setNeedleTypes  Function to set the needle types to filter the needle stash.
- * @param {string[]} needleTypes  The needle types to filter the needle stash. 
- * @returns {JSX.Element}  A table displaying the needle stash, with buttons for deleting needles and adding new ones.
  */
 export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     // Set the needle state and the delete modal state

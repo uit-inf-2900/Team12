@@ -36,6 +36,7 @@
     font-family: "Syne", sans-serif; 
   }
   
+  /* How the images on the cards should be */ 
   .card-image {      
     width: 100%;
     height: auto;
@@ -113,10 +114,12 @@
   overflow: hidden;   
 }
 
+/* For the instagram card when hoverd */
 .card-link:hover {
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);  
 }
 
+/* The message that apperar when a card is hoverd  */
 .hover-message {
   position: absolute;
   width: 100%;

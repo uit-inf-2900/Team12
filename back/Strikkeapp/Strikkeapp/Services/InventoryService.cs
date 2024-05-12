@@ -21,6 +21,7 @@ public interface IInventoryService
     public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request);
     public UpdateInventoryResult UpdateYarnUsed(UpdateItemRequest request);
     public DeleteItemResult DeleteYarn(DeleteItemRequest request);
+    public InventoryGetResult GetAllInventory(string jwtToken);
 }
 
 public class InventoryService : IInventoryService
@@ -79,6 +80,61 @@ public class InventoryService : IInventoryService
                     Length = ni.Length,
                     NumItem = ni.NumItem,
                     NumInUse = ni.NumInUse
+                })
+                .ToList();
+
+            return InventoryGetResult.ForSuccess(yarnInvs, needleInvs);
+        }
+
+        catch (Exception ex)
+        {
+            return InventoryGetResult.ForFailure(ex.Message);
+        }
+    }
+
+    public InventoryGetResult GetAllInventory(string jwtToken)
+    {
+        // Get userId from token, and handle error
+        var tokenResult = _tokenService.ExtractUserID(jwtToken);
+        if (!tokenResult.Success)
+        {
+            return InventoryGetResult.ForFailure("Unauthorized");
+        }
+
+        Guid userId = tokenResult.UserId;
+        var isAdmin = _context.UserDetails.FirstOrDefault(a => a.UserId == userId); 
+
+        // So if the user is not an admin return Unauthorized
+        if (!isAdmin!.IsAdmin || isAdmin == null)
+        {
+            return InventoryGetResult.ForFailure("Unauthorized");
+        }
+
+        try
+        {
+            // Fetch all yarn 
+            var yarnInvs = _context.YarnInventory
+                .Select(yi => new YarnInventoryDto
+                {
+                    ItemId = yi.ItemID,
+                    Type = yi.Type,
+                    Manufacturer = yi.Manufacturer,
+                    Batch_Number = yi.Batch_Number,
+                    Color = yi.Color,
+                    Weight = yi.Weight,
+                    Length = yi.Length,
+                    NumItems = yi.NumItems,
+                })
+                .ToList();
+
+            // Fetch all needles
+            var needleInvs = _context.NeedleInventory
+                .Select(ni => new NeedleInventoryDto
+                {
+                    ItemId = ni.ItemID,
+                    Type = ni.Type,
+                    Size = ni.Size,
+                    Length = ni.Length,
                 })
                 .ToList();
 

@@ -118,6 +118,7 @@
     display: flex;
 }
 
+/* Styling for URL */
 ul{
     list-style: none;
 }
@@ -128,6 +129,7 @@ a{
     color: var(--link-color);
 }
 
+/* For styling links when hovered */
 a:hover{
     color: var(--link-hover-color);
     border-bottom: 1px solid;

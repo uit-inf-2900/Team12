@@ -1,10 +1,20 @@
+/**
+ * Imports external CSS file for colors and text styles.
+ */
 @import url('./colorAndText.css');
 
+
+/**
+ * Defines root variables for box padding and border radius.
+ */
 :root{
     --box-padding: 50px; 
     --box-border-radius: 10px; 
 }
 
+/**
+ * Styles for the page container
+ */
 .page-container{
     padding-top: var(--header-height);
     max-width: 1200px; 
@@ -18,13 +28,19 @@
     min-height: 100vh;
 }
 
+
+/**
+ * page content for the admin page 
+ */ 
 .Admin-page-content {
-    flex-grow: 1; /* Lar innholdet ta opp resten av plassen */
-    overflow: hidden; /* Hindrer innholdet i å gå utenfor sin kontainer */
+    flex-grow: 1;
+    overflow: hidden;
     padding: 20px;
 }
 
-/* Applies to all major sections for consistent spacing and alignment */
+/**
+ * Applies to all major sections for consistent spacing and alignment 
+ */
 .section-container 
 {
     margin: 0 auto;
@@ -42,9 +58,12 @@
 }
 
 
+/** 
+ * Container for the content on the page
+ */
 .content-container {
-  padding-top: var(--header-height); /* Use the variable */
-  overflow-y: auto; /* Ensure content is scrollable */
+    padding-top: var(--header-height); 
+    overflow-y: auto;
 }
 
 
@@ -64,6 +83,7 @@
     padding-bottom: 20px;                           /* Added padding at the bottom */
 }
 
+/* container for popup box */
 .popup-box-container {
     display: flex;                                  /* Use flexbox for layout */
     flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */

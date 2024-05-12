@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../../GlobalStyles/main.css";
-import GeneralCard from './Card'; 
-import StatisticsChart from '../../../data/ChartData';
+import GeneralCard from '../../../Components/DataDisplay/GeneralCard'; 
+import StatisticsChart from '../../../Components/DataDisplay/ChartData';
 import {getImageByName} from '../../../images/getImageByName';
 import { fetchSubscribers } from '../apiServices';
 
@@ -13,7 +13,6 @@ const API_BASE_URL = 'http://localhost:5002';
  * messages, inventory, recipes, and newsletter subscriptions. Each category is presented
  * in its own card with relevant statistics and visuals.
  * 
- * @param {function} toggleView - Function to change views within the application,
  * allowing navigation to detailed pages for each statistic.
  */
 const Dashboard = ({ toggleView }) => {  
@@ -38,19 +37,19 @@ const Dashboard = ({ toggleView }) => {
                 const usersResponse = await fetch(`${API_BASE_URL}/getUsers?userToken=` + userToken, fetchOptions);
                 setUsersData(await usersResponse.json());
 
-                const activeMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=true&isHandled=false`, fetchOptions);
+                const activeMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=true&isHandled=false&userToken=` + userToken, fetchOptions);
                 setActiveMessages(await activeMessagesResponse.json());
 
-                const inactiveMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=false`, fetchOptions);
+                const inactiveMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=false&userToken=` + userToken, fetchOptions);
                 setInactiveMessages(await inactiveMessagesResponse.json());
 
-                const handledMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=true`, fetchOptions);
+                const handledMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=true&userToken=` + userToken, fetchOptions);
                 setHandledMessages(await handledMessagesResponse.json());
 
                 const recipesResponse = await fetch(`${API_BASE_URL}/api/recipe/getallrecipes?userToken=${usersToken}`, fetchOptions);
                 setRecipesData(await recipesResponse.json());
 
-                const inventoryResponse = await fetch(`${API_BASE_URL}/api/inventory/get_inventory?userToken=${usersToken}`, fetchOptions);
+                const inventoryResponse = await fetch(`${API_BASE_URL}/api/inventory/getAll?userToken=${usersToken}`, fetchOptions);
                 const inventoryData = await inventoryResponse.json();
                 setYarnData(inventoryData.yarnInventory);
                 setNeedleData(inventoryData.needleInventory);
@@ -109,7 +108,7 @@ const Dashboard = ({ toggleView }) => {
 
     // Yarn info that is sendt into the card
     const Yarn = [
-        { label: "Total Yarn", value: yarnData.length },
+        { label: "Total Yarn cards", value: yarnData.length },
     ];
 
     // Recipe info that is sendt into the card

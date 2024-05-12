@@ -13,36 +13,6 @@ button {
     justify-content: center;
 }
 
-/* ========= DARK BUTTONS  ========== */
-/* .dark-button {
-    background-color: var(--button-bg-colo-dark);   
-    color: var(--button-text-color-light);         
-}
-
-.dark-button.active {
-    background-color: var(--button-hover-dark);   
-    color: var(--button-text-color-light);         
-}
-
-.dark-button:hover {
-    background-color: var(--button-hover-dark); 
-    opacity: 0.8;
-} */
-
-/* ========= LIGHT BUTTONS  ========== */
-/* .light-button {
-    background-color: var(--button-bg-colo-light); 
-    color:  var(--button-text-color-dark); 
-}
-.light-button.active {
-    background-color: var(--button-hover-light); 
-    color:  var(--button-text-color-dark); 
-}
-.light-button:hover {
-    background-color: var(--button-hover-light); 
-    opacity: 0.8; 
-} */
-
 
 /* ========= CLOSE BUTTONS (X)  ========== */
 .close-button {
@@ -55,22 +25,25 @@ button {
 /* ========= SWITCHING BUTTONS  ========== */
 .switch-container {
     display: inline-block;
-    border-radius: 5px; /* Runde hjørner */
-    overflow: hidden; /* Forhindre innhold fra å bryte ut */
-    width: auto; /* Full bredde */
+    border-radius: 5px; 
+    overflow: hidden;  
+    width: auto;  
 }
 
+/* Define all switch-options */ 
 .switch-option {
     display: inline-block;
-    padding: 5px 10px; /* Litt plass rundt tekst */
-    cursor: pointer; /* Endre musepeker til peker */
+    padding: 5px 10px;  
+    cursor: pointer;  
 }
 
+/* Changes on the switch option that is active */ 
 .switch-option.active {
-    background-color: var(--button-hover-dark);; /* Oransje for aktivt valg */
-    color:   var(--button-text-color-light); /* Hvit tekst for bedre lesbarhet */
+    background-color: var(--button-hover-dark);; 
+    color:   var(--button-text-color-light);  
 }
 
+/* Define how the switch option should look when it is inactive */
 .switch-option.inactive {
     background-color:  var(--button-bg-colo-light); /* Hvit for inaktivt valg */
     color:   var(--button-text-color-dark); /* Sort tekst */

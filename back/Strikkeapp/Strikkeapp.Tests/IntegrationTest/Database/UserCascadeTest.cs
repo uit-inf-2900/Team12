@@ -69,7 +69,8 @@ public class UserCascadeTest
             UserId = testUserId,
             RecipeName = "Test Recipe",
             NeedleSize = 10,
-            KnittingGauge = "10/10"
+            KnittingGauge = "10/10",
+            RecipePath = "Test Path",
         };
         _context.KnittingRecipes.Add(Recipe);
 

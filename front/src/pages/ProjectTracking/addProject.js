@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import InputField from '../../Components/InputField';
-import CustomButton from '../../Components/Button';
-import SetAlert from '../../Components/Alert';
+import InputField from '../../Components/UI/InputField';
+import CustomButton from '../../Components/UI/Button';
+import SetAlert from '../../Components/UI/Alert';
 import axios from 'axios';
 
 
@@ -110,12 +110,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     NeedleIds: projectData.needleIds,
     YarnIds: { [projectData.yarnType] : projectData.yarnAmount},
     Notes: projectData.notes
-    
-
-
   };
-
- 
 
   try {
       const response = await axios.post('http://localhost:5002/api/projects'+ '?userToken=' + sessionStorage.getItem('token'),payload,{

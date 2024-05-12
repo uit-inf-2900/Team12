@@ -1,14 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import InputField from '../../../Components/InputField';
-import { CustomButton } from '../../../Components/Button';
-import SetAlert from '../../../Components/Alert';
+import InputField from '../../../Components/UI/InputField';
+import { CustomButton } from '../../../Components/UI/Button';
+import SetAlert from '../../../Components/UI/Alert';
 import { getImageByName } from '../../../images/getImageByName';
 
 /**
  * Component to manage the form for adding new needle information.
- * 
- * @param {function} onClose Function to close the modal form.
- * @param {function} fetchNeedles Function to refresh the needles list after adding.
  */
 const NeedleInfo = ({ onClose, fetchNeedles }) => {
     const [error, setError] = useState({

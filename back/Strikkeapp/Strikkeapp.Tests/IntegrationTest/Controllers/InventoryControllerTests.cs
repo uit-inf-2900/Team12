@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using AutoMapper;
 
 using Strikkeapp.Controllers;
 using Strikkeapp.Services;
@@ -19,6 +20,7 @@ public class InventoryControllerTests
     private readonly InventoryController _controller;
     private readonly InventoryService _inventoryService;
     private readonly StrikkeappDbContext _context;
+    private readonly IMapper _mapper;
 
     // Set up mocks
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
@@ -26,12 +28,19 @@ public class InventoryControllerTests
 
     // Test variables
     private Guid testUserId = Guid.NewGuid();
+    private Guid testAdminId = Guid.NewGuid();
     private Guid testNeedleId = Guid.NewGuid();
     private Guid testYarnId = Guid.NewGuid();
 
 
     public InventoryControllerTests()
     {
+        // Setup AutoMapper configuration
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<AutoMapperProfile>();
+        });
+
         // Set up mock services
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
             .Returns("hashedPassword");
@@ -39,6 +48,8 @@ public class InventoryControllerTests
             .Returns(TokenResult.ForSuccess(testUserId));
         _mockTokenService.Setup(e => e.ExtractUserID("fakeToken"))
             .Returns(TokenResult.ForFailure("Unauthorized"));
+        _mockTokenService.Setup(e => e.ExtractUserID("adminToken"))
+            .Returns(TokenResult.ForSuccess(testAdminId));
 
         // Set up in memory database
         string databaseName = Guid.NewGuid().ToString();
@@ -49,7 +60,8 @@ public class InventoryControllerTests
 
         // Initialize controller and service
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
-        _inventoryService = new InventoryService(_context, _mockTokenService.Object);
+        _mapper = mapperConfig.CreateMapper();
+        _inventoryService = new InventoryService(_context, _mockTokenService.Object, _mapper);
         _controller = new InventoryController(_inventoryService);
 
         // Seed database
@@ -72,6 +84,22 @@ public class InventoryControllerTests
             UserFullName = "Test User",
             DateOfBirth = DateTime.Now,
             IsAdmin = false
+        });
+
+        // Add test admin to database
+        _context.UserLogIn.Add(new UserLogIn
+        {
+            UserId = testAdminId,
+            UserEmail = "admin@knithub.no",
+            UserPwd = "hashedPassword",
+            UserStatus = "verified"
+        });
+        _context.UserDetails.Add(new UserDetails
+        {
+            UserId = testAdminId,
+            UserFullName = "Admin User",
+            DateOfBirth = DateTime.Now,
+            IsAdmin = true
         });
 
         _context.NeedleInventory.Add(new NeedleInventory
@@ -125,6 +153,23 @@ public class InventoryControllerTests
     {
         // Run controller and verify response
         var result = _controller.GetInventory("fakeToken");
+        Assert.IsType<UnauthorizedObjectResult>(result);
+    }
+
+    [Fact]
+    public void GetAll_Ok()
+    {
+        // Run controller and verify response
+        var result = _controller.GetAll("adminToken");
+        var okRes = Assert.IsType<OkObjectResult>(result);
+        Assert.NotNull(okRes.Value);
+    }
+
+    [Fact]
+    public void FakeTokenGetAll_Fails()
+    {
+        // Run controller and verify response
+        var result = _controller.GetAll("fakeToken");
         Assert.IsType<UnauthorizedObjectResult>(result);
     }
 

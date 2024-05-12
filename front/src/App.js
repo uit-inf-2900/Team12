@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import {Link,  BrowserRouter as Router,  Route, Routes } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode'
-import ScrollToTop from './Components/scrollToTop';
+import ScrollToTop from './Components/navigation/scrollToTop';
 
 
 // Import our pages
-import NavBar from './Components/NavBar'
+import NavBar from './Components/navigation/NavBar'
 import {About} from './pages/about/about'
-import {Home} from './pages/home'
+import {Home} from './pages/Home/home'
 import Stash from './pages/Stash/stash'
-import ResetPassword from './pages/SignUp_LogIn/ResetPassword';
-import LogIn from './pages/SignUp_LogIn/LogIn';
-import SignUp from './pages/SignUp_LogIn/SignUp';
+import ResetPassword from './pages/Authentication/ResetPassword';
+import LogIn from './pages/Authentication/LogIn';
+import SignUp from './pages/Authentication/SignUp';
 import Recipes from './pages/RecipeManagement/Recipes';
 import ContactUs from './pages/ContactUs/ContactUs';
 import Profilepage from './pages/ProfilePage/Profilepage';
 import Projects from './pages/ProjectTracking/ProjectsPage';
 import AdminPage from './pages/Admin/AdminPage';
-import NotFound from './pages/NotFound';
-import Footer from './Components/Footter';
-import Theme from './Components/Theme';
+import NotFound from './Components/DataDisplay/NotFound';
+import Footer from './Components/navigation/Footter';
+import Theme from './Components/Utilities/Theme';
 import { ThemeProvider } from '@emotion/react';
 import Resources from './pages/KnitHubResources/Resources';
-import Counter from './pages/counter';
-import IncreaseDecreaseCalculator from './pages/Calculator/IncreaseDecreaseCalculator';
-import { YarnCalculator } from './pages/Calculator/YarnCalculator';
+import Counter from './pages/ProjectTracking/Counter/counter';
+import Calculators from './pages/ProjectTracking/Calculator/Calculators';
+import { HomeOut } from './pages/Home/homeOut';
 
 
 export default function App() {
@@ -40,7 +40,10 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    // Retrive the token from session Storage
     const token = sessionStorage.getItem('token');
+
+    // Checks that the token exsisst and decode it to check if user is admin
     if(token){
       try{
         const decodedToken = jwtDecode(token);
@@ -55,9 +58,10 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        {/* Make sure the page scrolls to top when chanhing pages */}
         <ScrollToTop/>
-        {/* NB: sto orginalt app-container, kan være vi må endre tilbake??? */}
-        <div className="page-container">          
+        <div className="page-container">        
+        {/* If you are not logged in show the login and signup page */}
           <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
           <div className="content-container">
             <Routes>
@@ -78,14 +82,14 @@ export default function App() {
                 <>
                   <Route path="/login" element={<LogIn />} />
                   <Route path="/signup" element={<SignUp />} />
+              
                 </>
               ) : (
                 <>
                   <Route path="/stash" element={<Stash />} />
                   <Route path="/recipes" element={<Recipes />} />
                   <Route path='/projects' element={<Projects/>} />
-                  <Route path='/yarncalculator' element={<YarnCalculator/>} />
-                  <Route path='/increasedecreasecalculator' element={<IncreaseDecreaseCalculator/>} />
+                  <Route path='/Calculators' element={<Calculators/>} />
                   <Route path="/profile" element={<Profilepage />} />
                   <Route path='/counter' element={<Counter/>}/> 
                 </>

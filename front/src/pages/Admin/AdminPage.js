@@ -9,7 +9,6 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 /**
  * Component for the admin page, displaying different views based on user interaction.
- * @returns {JSX.Element} - AdminPage UI.
  */
 const AdminPage = () => {
     // State to manage active view

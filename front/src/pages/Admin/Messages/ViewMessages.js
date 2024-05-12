@@ -7,7 +7,7 @@ import "../../../GlobalStyles/main.css";
 import MessageItem from './MessageItem';
 import MessageDetails from './MessageDetails';
 import {  TablePagination } from '@mui/material';
-import InputField from '../../../Components/InputField';
+import InputField from '../../../Components/UI/InputField'; 
 
 
 /**

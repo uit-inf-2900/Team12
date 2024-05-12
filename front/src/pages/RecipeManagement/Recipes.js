@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from '@mui/material/Box'; // Import Box from MUI
 
-import ModalContent from "../../Components/ModualContent";
+import ModalContent from "../../Components/Forms/ModualContent";
 
 
 
@@ -20,6 +20,7 @@ const RecipesPage = () => {
 
     // Toggle for applying blur when modal is open
     const pageContainer = uploading ? "page-container blur-background" : "page-container";
+    
 
     return (
         <div>

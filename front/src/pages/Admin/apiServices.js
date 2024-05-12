@@ -5,6 +5,9 @@ const API_URL = 'http://localhost:5002';
 
 const getToken = () => sessionStorage.getItem('token');
 
+/**
+ * Function to fetch subscribers from the server.
+ */
 export const fetchSubscribers = async () => {
     try {
         const response = await axios.get(`${API_URL}/api/newsletter/getsunscribers`, {
@@ -23,7 +26,6 @@ export const fetchSubscribers = async () => {
 
 /**
  * Function to fetch all the users from the database
- * @returns {JSX.Element} ViewUsers UI.
  */
 export const fetchUserData = async () => {
     try {

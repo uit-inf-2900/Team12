@@ -6,13 +6,15 @@ import { Link } from "react-router-dom";
 
 
 import Image from "../../images/6.png";
-import InputField from "../../Components/InputField";
-import SetAlert from "../../Components/Alert";
+import InputField from "../../Components/UI/InputField";
+import SetAlert from "../../Components/UI/Alert";
 import "../../GlobalStyles/main.css";
-import "./ContactUs.css"
-import { CustomButton } from "../../Components/Button";
-import ContactInformation from '../../Components/ContactInformation';
+import { CustomButton } from "../../Components/UI/Button";
+import ContactInformation from '../../Components/Forms/ContactInformation';
 
+/**
+ *  Represents one idividual FAQ item with a question and its corresponding answer.
+ */
 const FAQItem = ({ question, answer, isOpen, setIsOpen }) => (
     <div className="faq-item">
         <button className={`faq-question ${isOpen ? 'open' : ''}`} onClick={setIsOpen}>
@@ -24,7 +26,9 @@ const FAQItem = ({ question, answer, isOpen, setIsOpen }) => (
 );
 
 
-
+/**
+ * Represents a section containing FAQs.
+ */
 const FAQSection = () => {
     const [openFAQ, setOpenFAQ] = useState(null);
 
@@ -107,6 +111,9 @@ const FAQSection = () => {
 };
 
 
+/**
+ *  Represents the contact details section where info about us can be found 
+ */
 const ContactDetails = () => (
     <div className="infoText" style={{"textAlign":"left"}}>
         {/* The following details should be styled according to your ContactUs.css */}
@@ -115,6 +122,10 @@ const ContactDetails = () => (
     </div>
 );
 
+
+/**
+ * Represents the Contact Us page, allowing users to send messages that can be responded to by admins.
+ */
 const ContactUs = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [alertInfo, setAlertInfo] = useState({open: false, severity: 'info', message: ''});

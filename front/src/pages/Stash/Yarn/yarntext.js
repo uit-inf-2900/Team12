@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import "../../../GlobalStyles/main.css";
-import "../../Counter.css";
-import { CustomButton } from '../../../Components/Button';
-import InputField from '../../../Components/InputField';
+import "../../ProjectTracking/Counter/Counter.css";
+import { CustomButton } from '../../../Components/UI/Button';
+import InputField from '../../../Components/UI/InputField';
 import yarnBasket from '../../../images/yarnSheep.png';
-import SetAlert from '../../../Components/Alert';
+import SetAlert from '../../../Components/UI/Alert';
 
 const TextYarn = ({onClose, fetchYarns}) => {
     // State declarations
@@ -51,7 +51,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
             Length: parseInt(yarnData.Length, 10),
             Gauge: yarnData.Gauge,
             Notes: yarnData.Notes,
-            NumItems: parseInt(yarnData.Amount,10)
+            NumItem: parseInt(yarnData.Amount,10)
         };
 
         const response = await fetch('http://localhost:5002/api/inventory/addyarn', {

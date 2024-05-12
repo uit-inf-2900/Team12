@@ -3,13 +3,12 @@ import { TableContainer, TablePagination, Table, TableHead, TableBody, TableRow,
 import axios from 'axios';
 
 import { fetchSubscribers } from './apiServices';
-import SetAlert from '../../Components/Alert';
-import { CustomButton } from '../../Components/Button';
+import SetAlert from '../../Components/UI/Alert';
+import { CustomButton } from '../../Components/UI/Button';
 
 
 /**
  * Component for viewing and managing newsletter subscribers.
- * @returns {JSX.Element} - ViewSubscribers component.
  */
 const ViewSubscribers = () => {
     // State variables 
