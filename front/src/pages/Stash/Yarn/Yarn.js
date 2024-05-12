@@ -181,8 +181,6 @@ const YarnStash = () => {
                                 </div>
                                 <div className="input-wrapper" style={{ width: 'calc(50% + 100px)'}}>
 
-                                        <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number') } />
-
                                     <InputField label="Batch number" type= 'text' value={currentYarn.batch_Number || ''} onChange={handleInputChange('batch_Number')} />
 
                                 </div>
