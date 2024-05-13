@@ -24,7 +24,7 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
 /**
  * TeamMember component for the team section of About page 
  */ 
-const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
+const TeamMember = ({ imageSrc, name, role, background, imagePosition, mail }) => {
   // Determine where the image should be positioned
   const imageToLeft = imagePosition === "left";
   return (
@@ -34,6 +34,7 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
         <h3>{name}</h3>
         <p>Role: {role}</p>
         <p>Background: {background}</p>
+        <p>Mail me: <a href={`mailto:${mail}`}>{mail}</a></p>
       </div>
       {!imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
     </div>
@@ -118,6 +119,7 @@ export const About = () => {
           role="Full Stack Developer"
           background="Eline is a third-year Medical Informatics student at UiT in Tromsø, specializing in the intersection of healthcare and technology. With experience in both frontend and backend development"
           imageSrc={getImageByName('yarnSheep')}
+          mail='eline.w.devito@knithub.no'
         />
         <TeamMember
           imagePosition = "left"
@@ -125,12 +127,14 @@ export const About = () => {
           role="Full Stack Developer"
           background="Emilie is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
           imageSrc={getImageByName('yarnSheep')}
+          mail='emilie.steen@knithub.no'
         />
         <TeamMember
           imageSrc={getImageByName('huggingYarn')}
           name="Marie"
           role="Full Stack Developer"
           background="Marie is a third-year Informatics student at UiT in Tromsø,  with experience in both frontend and backend development."
+          mail='marie.stenhaug@knithub.no'
         />
         <TeamMember
           imagePosition = "left"
@@ -138,12 +142,14 @@ export const About = () => {
           name="Sera"
           role="Full Stack Developer"
           background="Sera is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
+          mail='sera.m.elstad@knithub.no'
         />
         <TeamMember
           imageSrc={getImageByName('yarnSheep')}
           name="Skjalg"
           role="Full Stack Developer"
           background="Skjalg is a third-year Cybersecurity student at UiT in Tromsø, with experience in mainly backend development."
+          mail='skjlag.a.slubowski@knithub.no'
         />
       </div>
     </div>
