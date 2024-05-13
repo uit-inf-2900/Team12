@@ -41,6 +41,12 @@ const FAQSection = () => {
         <div className="faq-section">
             <h2>Frequently Asked Questions (FAQ)</h2>
             <FAQItem 
+                question="How do I change my password if I have forgotten it?" 
+                answer = "If you have forgotten your password, please contact us at post@knithub.no."
+                isOpen={openFAQ === 0}
+                setIsOpen={() => handleFAQClick(0)}
+            />
+            <FAQItem 
                 question="How do I start a new project?" 
                 answer="To start a new project, go to your project planner, click on the + button, and fill out the information." 
                 isOpen={openFAQ === 1}
