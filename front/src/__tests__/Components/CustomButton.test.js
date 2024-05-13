@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect'; 
 
-import { CustomButton, AddButton } from '../Components/UI/Button';
+import { CustomButton, AddButton } from '../../Components/UI/Button';
 
 describe('CustomButton component', () => {
     test('renders button with children', () => {

@@ -6,7 +6,7 @@ import { CustomButton } from "../../Components/UI/Button";
 import { getImageByName } from '../../images/getImageByName';
 
 // FeatureItem component for the features section of About page
-const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
+export const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
   return (
     // Check if you want the image to be on the left or right side of the text
@@ -24,7 +24,7 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
 /**
  * TeamMember component for the team section of About page 
  */ 
-const TeamMember = ({ imageSrc, name, role, background, imagePosition, mail }) => {
+export const TeamMember = ({ imageSrc, name, role, background, imagePosition, mail }) => {
   // Determine where the image should be positioned
   const imageToLeft = imagePosition === "left";
   return (

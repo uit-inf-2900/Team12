@@ -99,6 +99,4 @@ describe('LogIn Component', () => {
         // Check if the validation message for empty email is displayed
         expect(await screen.findByText(/email is required/i)).toBeInTheDocument();
     }); 
-
-
 });

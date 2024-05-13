@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import NavBar from '../Components/navigation/NavBar'; 
+import NavBar from '../../Components/navigation/NavBar'; 
 
 
 // Tests for the NavBar component
@@ -39,4 +39,19 @@ describe('NavBar Component', () => {
         expect(screen.getByText('Stash').getAttribute('href')).toBe('/stash');
     });
 
+
+    /* ============================== ADMIN NAVBAR TESTS ============================== */
+
+    // Admin-specific tests
+    test('does not show admin page for non-admins', () => {
+        renderWithRouter(<NavBar isLoggedIn={true} isAdmin={false} />);
+        const adminLink = screen.queryByText('Admin');
+        expect(adminLink).not.toBeInTheDocument();
+    });
+
+    test('renders admin page for admins', () => {
+        renderWithRouter(<NavBar isLoggedIn={true} isAdmin={true} />);
+        const adminLink = screen.getByText('Admin').getAttribute('href');
+        expect(adminLink).toBe('/adminpage');
+    });
 });

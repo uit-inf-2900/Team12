@@ -2,25 +2,32 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'; // Import jest-dom for custom matchers
 import { BrowserRouter as Router } from 'react-router-dom';
-import NotFound from '../Components/DataDisplay/NotFound';
+import NotFound from '../../Components/DataDisplay/NotFound';
 
 describe('NotFound Component', () => {
-    test('renders NotFound correctly', () => {
+    // Before each test, render the NotFound component
+    beforeEach(() => {
         render(
             <Router>
                 <NotFound />
             </Router>
         );
+    });
 
-        // Check for the 404 error message
+    // Test if the component renders a heading with "404 - Page Not Found"
+    test('displays the heading with the 404 error message', () => {
         const heading = screen.getByRole('heading', { name: /404 - page not found/i });
         expect(heading).toBeInTheDocument();
+    });
 
-        // Check for the error explanation
+    // Test if the component renders an explanation of the error
+    test('displays an error explanation', () => {
         const explanation = screen.getByText(/sorry, the page you are looking for could not be found\./i);
         expect(explanation).toBeInTheDocument();
+    });
 
-        // Check that the link to the home page is present and correct
+    // Test if the component contains a link back to the home page
+    test('contains a link to the home page', () => {
         const link = screen.getByRole('link', { name: /home page/i });
         expect(link).toBeInTheDocument();
         expect(link).toHaveAttribute('href', '/');

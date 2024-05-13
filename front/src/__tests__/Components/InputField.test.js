@@ -3,7 +3,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect'; 
 
-import InputField from '../Components/UI/InputField';
+import InputField from '../../Components/UI/InputField';
 
 
 describe('InputField component', () => {
@@ -24,7 +24,7 @@ describe('InputField component', () => {
         expect(passwordInput.type).toBe('password');
         fireEvent.click(visibilityButton);
         expect(passwordInput.type).toBe('text');
-      });    
+    });    
 
     test('displays error message', () => {
         const { getByText } = render(<InputField label="Username" errors={{ message: 'Required' }} />);

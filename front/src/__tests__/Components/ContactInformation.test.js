@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect'; 
-import ContactInformation from '../Components/Forms/ContactInformation';
+import ContactInformation from '../../Components/Forms/ContactInformation';
 
 describe('ContactInformation component', () => {
     test('renders contact information', () => {
