@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import NavBar from '../../Components/navigation/NavBar'; 
+import NavBar from '../../../Components/navigation/NavBar'; 
 
 
 // Tests for the NavBar component
