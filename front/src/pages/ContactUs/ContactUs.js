@@ -47,10 +47,16 @@ const FAQSection = () => {
                 setIsOpen={() => handleFAQClick(0)}
             />
             <FAQItem 
-                question="How do I start a new project?" 
-                answer="To start a new project, go to your project planner, click on the + button, and fill out the information." 
+                question="How mutch does it cost to be a member?" 
+                answer="KnitHub is free, so everyone can enjoy it!!" 
                 isOpen={openFAQ === 1}
                 setIsOpen={() => handleFAQClick(1)}
+            />
+            <FAQItem 
+                question="How do i add needles to my stash?" 
+                answer="To add needles, go to your stash page and choose needle. Then click on the + button, and fill out the information."
+                isOpen={openFAQ === 2}
+                setIsOpen={() => handleFAQClick(2)}
             />
             <FAQItem 
                 question="How do i add needles to my stash?" 
@@ -65,8 +71,8 @@ const FAQSection = () => {
                 setIsOpen={() => handleFAQClick(4)}
             />
             <FAQItem 
-                question="How do i add a pattern to my stash?" 
-                answer="To add a pattern, go to your stash page and choose pattern. Then click on the + button, and fill out the information."
+                question="How do i add a recipies to my account?" 
+                answer="To add a recipies, go to your recipe page and click on the upload recipe button. Then choose what file to upload from your computer, and fill out the information."
                 isOpen={openFAQ === 5}
                 setIsOpen={() => handleFAQClick(5)}
             /> 
@@ -78,7 +84,7 @@ const FAQSection = () => {
             />
             <FAQItem 
                 question="How can I find knitting inspiration on Knithub?"
-                answer="Check out the 'Resource Page' on Knithub for a variety of knitting abbreviations, tips, and links to inspirational Instagram images. This page is continuously updated to provide you with fresh ideas and innovative techniques to enhance your knitting projects."
+                answer="Check out the 'Resource Page' on Knithub for a variety of knitting abbreviations, calculators, and links to inspirational Instagram images. This page is continuously updated to provide you with fresh ideas and innovative techniques to enhance your knitting projects."
                 isOpen={openFAQ === 8}
                 setIsOpen={() => handleFAQClick(8)}
             />
