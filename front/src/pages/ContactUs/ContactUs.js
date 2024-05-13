@@ -53,12 +53,6 @@ const FAQSection = () => {
                 setIsOpen={() => handleFAQClick(1)}
             />
             <FAQItem 
-                question="What do I do if I forget my password?" 
-                answer="Click on 'Forgot password?' on the login page to reset your password." 
-                isOpen={openFAQ === 2}
-                setIsOpen={() => handleFAQClick(2)}
-            />
-            <FAQItem 
                 question="How do i add needles to my stash?" 
                 answer="To add needles, go to your stash page and choose needle. Then click on the + button, and fill out the information."
                 isOpen={openFAQ === 3}
@@ -83,12 +77,6 @@ const FAQSection = () => {
                 setIsOpen={() => handleFAQClick(6)}
             />
             <FAQItem 
-                question="Is there a way to track the time spent on each knitting project?"
-                answer="While Knithub currently does not automatically track the time spent on projects, you can manually add time logs in the project details section. This helps in understanding the effort involved and planning future projects more effectively."
-                isOpen={openFAQ === 7}
-                setIsOpen={() => handleFAQClick(7)}
-            />
-            <FAQItem 
                 question="How can I find knitting inspiration on Knithub?"
                 answer="Check out the 'Resource Page' on Knithub for a variety of knitting abbreviations, tips, and links to inspirational Instagram images. This page is continuously updated to provide you with fresh ideas and innovative techniques to enhance your knitting projects."
                 isOpen={openFAQ === 8}
@@ -96,7 +84,7 @@ const FAQSection = () => {
             />
             <FAQItem 
                 question="How can I use the yarn calculators on Knithub?"
-                answer="Knithub offers various yarn calculators, including decrease and increase calculators, as well as a calculator to estimate how much yarn you need if you're substituting the original yarn in a pattern. You can find these tools under the 'Projects' section of your dashboard. They help you adjust your knitting projects according to your yarn choices effectively."
+                answer="Knithub offers various yarn calculators, including decrease and increase calculators, as well as a calculator to estimate how much yarn you need if you're substituting the original yarn in a pattern. You can find these tools under the 'Projects' section of your dashboard, or on the resource page. They help you adjust your knitting projects according to your yarn choices effectively."
                 isOpen={openFAQ === 9}
                 setIsOpen={() => handleFAQClick(9)}
             />
