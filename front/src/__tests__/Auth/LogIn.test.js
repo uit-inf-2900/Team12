@@ -1,6 +1,6 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import LogIn from '../../pages/SignUp_LogIn/LogIn'
+import LogIn from '../../pages/Authentication/LogIn'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import axiosMock from 'axios'; 

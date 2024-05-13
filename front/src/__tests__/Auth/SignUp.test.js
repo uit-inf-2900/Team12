@@ -1,6 +1,6 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom'
-import SignUp from '../../pages/SignUp_LogIn/SignUp'
+import SignUp from '../../pages/Authentication/SignUp'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 
