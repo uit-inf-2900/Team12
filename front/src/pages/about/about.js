@@ -149,7 +149,7 @@ export const About = () => {
           name="Skjalg"
           role="Full Stack Developer"
           background="Skjalg is a third-year Cybersecurity student at UiT in Tromsø, with experience in mainly backend development."
-          mail='skjlag.a.slubowski@knithub.no'
+          mail='skjalg.a.slubowski@knithub.no'
         />
       </div>
     </div>
