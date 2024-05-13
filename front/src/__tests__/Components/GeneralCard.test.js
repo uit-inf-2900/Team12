@@ -57,4 +57,23 @@ describe('GeneralCard Component', () => {
         expect(onDelete).toHaveBeenCalled();
     });
     
+    test('See if edit and delete buttons are there based on props', () => {
+        render(
+            <GeneralCard
+                title={title}
+                onEdit={onEdit}
+                onDelete={onDelete}
+            />
+        );
+    
+        // Using getAllByText and checking the number of elements
+        const editButtons = screen.getAllByText('Edit');
+        expect(editButtons.length).toBe(2);
+        expect(editButtons[0]).toBeInTheDocument();
+    
+        const deleteButtons = screen.getAllByText('Delete');
+        expect(deleteButtons.length).toBe(2);
+        expect(deleteButtons[0]).toBeInTheDocument();
+    });
+    
 });
