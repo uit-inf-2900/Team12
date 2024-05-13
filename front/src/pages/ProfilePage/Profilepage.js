@@ -155,10 +155,10 @@ const ProfilePage = () => {
     };
 
     // Handle delete account click
-    const handleDeleteClick = () => {
+    const handleDeleteClick = async () => {
         if (token) {
             try {
-                axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
+                await axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
                 sessionStorage.removeItem('token');
                 setAlertInfo({
                     open: true,
@@ -167,7 +167,7 @@ const ProfilePage = () => {
                 });
                 setTimeout(() => {
                 // Redirect to login page
-                window.location.href = '/login';
+                window.location.href = '/home';
                 }, 500);
             } catch (error) {
                 console.error("Error fetching profile data: ", error);
