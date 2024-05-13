@@ -32,9 +32,9 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition, mail }) =
       {imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
       <div className="section-container"  style={{display:'block'}}>
         <h3>{name}</h3>
-        <p>Role: {role}</p>
-        <p>Background: {background}</p>
-        <p>Mail me: <a href={`mailto:${mail}`}>{mail}</a></p>
+        <p> <strong> Role:</strong> {role}</p>
+        <p><strong>Background: </strong>{background}</p>
+        <p><strong>Mail me: </strong><a href={`mailto:${mail}`}>{mail}</a></p>
       </div>
       {!imageToLeft && <img src={imageSrc} alt={name} className="team-member-image" />}
     </div>
