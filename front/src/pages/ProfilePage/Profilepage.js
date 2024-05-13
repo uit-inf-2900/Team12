@@ -12,12 +12,10 @@ import { Modal, Box } from '@mui/material';
 import '../../GlobalStyles/BoxAndContainers.css';
 import ConfirmationVerification from '../Authentication/ConfirmationVerification';
 
-
-
 const ProfilePage = () => {
     // State to toggle between edit and view mode
     const [isEditing, setIsEditing] = useState(false);
-    const [showVerificationModal, setShowVerificationModal] = useState(false);  // State to control visibility of the verification modal
+    const [showVerificationModal, setShowVerificationModal] = useState(false);
 
     // State to store user profile data
     const [userProfileState, setUserProfileState] = useState({
@@ -26,7 +24,6 @@ const ProfilePage = () => {
     });
 
     // State to store edit form data. 
-    // This is separate from userProfileState to avoid updating the state on every keystroke
     const [editState, setEditState] = useState({
         userFullName: '',
         userEmail: '',
@@ -38,11 +35,6 @@ const ProfilePage = () => {
     // State to store error message, show modal and modal message
     const [profileFetchError, setProfileFetchError] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [showConfirmationModal, setShowConfirmationModal] = useState(true);
-
-    const handleCloseConfirmationModal = () => {
-        setShowConfirmationModal(false);
-    };
 
     // For the user to see alert messages 
     const [alertInfo, setAlertInfo] = useState({
@@ -51,7 +43,6 @@ const ProfilePage = () => {
         message: ''
     });
     
-
     // Fetch user profile data on page load
     const isVerified = sessionStorage.getItem('isVerified');
     const token = sessionStorage.getItem('token');
@@ -80,7 +71,6 @@ const ProfilePage = () => {
         }
     }, []);
 
-
     // Toggle between edit and view mode
     const handleEditToggle = () => {
         setIsEditing(!isEditing);
@@ -97,7 +87,6 @@ const ProfilePage = () => {
             });
             return;
         }
-    
         // Handle password update logic
         let newPasswordToSend = editState.newPassword;
         if (editState.newPassword === '') {
@@ -156,9 +145,6 @@ const ProfilePage = () => {
         }
     };
     
-    
-
-
     // Handle input field changes and update the state
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -173,14 +159,14 @@ const ProfilePage = () => {
         if (token) {
             try {
                 axios.delete(`http://localhost:5002/Users/deleteuser?userToken=${token}`);
-                sessionStorage.removeItem('token');  // Assuming you're using session storage for token management
+                sessionStorage.removeItem('token');
                 setAlertInfo({
                     open: true,
                     severity: 'success',
                     message: 'Your account has been successfully deleted.'
                 });
                 setTimeout(() => {
-                // Redirect to login or home
+                // Redirect to login page
                 window.location.href = '/login';
                 }, 500);
             } catch (error) {
@@ -195,7 +181,6 @@ const ProfilePage = () => {
         }
         setShowModal(false);
     };
-
 
     // Modal content for delete account 
     const deleteAccountContent = () => (
@@ -252,7 +237,6 @@ const ProfilePage = () => {
                             />
                     </>
                     )}
-
                     <div style={{flexGrow: 2}}></div>
                     <div className='infoText-small'>
                         <Link to="/contactus" style={{color: "black", borderBottom: '1px solid'}}>Contact Us</Link>
