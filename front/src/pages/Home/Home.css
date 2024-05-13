@@ -1,27 +1,30 @@
+/* Container that holds content of home page */
 .home-container {
     display: flex;
-    flex-wrap: wrap; /* Tillater elementer å wrappe om nødvendig */
-    justify-content: space-between; /* Fordeler rom mellom hovedelementene */
-    align-items: flex-start; /* Linjer opp elementene øverst */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
     padding: 20px;
-    gap: 20px; /* Mellomrom mellom statistikk og kreativt innhold */
+    gap: 20px;
 }
 
+/* Container for statistic boxes and header, left side */
 .statistics-container {
     display: flex;
     flex-wrap: wrap;
-
     padding: 0px 0;
-    justify-content: space-between; /* Dette sikrer at elementene fordeles jevnt */
+    justify-content: space-between;
 }
 
+/* Box that holds the statistic boxes */
 .StatisticBox {
-    flex: 1 1 48%; /* Lar hver boks ta nesten halvparten av bredden, slik at to bokser vises per rad */
-    margin-bottom: 20px; /* Gir litt vertikalt rom mellom radene */
+    flex: 1 1 48%;
+    margin-bottom: 20px;
 }
 
+/* Container for the right side of home page */
 .creative-content-container {
-    flex: 1 0 100%; /* Tar full bredde ved smal skjerm, endre til 50% for å teste */
+    flex: 1 0 100%;
     display: flex;
     flex-direction: column;
     align-items: center;

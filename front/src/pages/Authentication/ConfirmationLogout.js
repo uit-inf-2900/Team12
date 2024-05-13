@@ -3,6 +3,9 @@ import { CustomButton } from '../../Components/UI/Button';
 import '../../GlobalStyles/BoxAndContainers.css';
 import { Modal, Box } from '@mui/material';
 
+/**
+ * Display a box for users to confirm their logout.
+ */
 const ConfirmationLogout = ({ isOpen, onClose, onConfirm, message }) => {
     if (!isOpen) return null;
 

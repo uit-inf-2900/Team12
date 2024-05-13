@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; 
-
 import "../../GlobalStyles/main.css";
 import "./about.css";
 import { CustomButton } from "../../Components/UI/Button";
-
 import { getImageByName } from '../../images/getImageByName';
 
-
-/**
- *  FeatureItem component for the features section of About page
- */
+// FeatureItem component for the features section of About page
 const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
   const imageToLeft = imagePosition === "left";
   return (
@@ -30,6 +25,7 @@ const FeatureItem = ({ imageSrc, title, description, imagePosition }) => {
  * TeamMember component for the team section of About page 
  */ 
 const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
+  // Determine where the image should be positioned
   const imageToLeft = imagePosition === "left";
   return (
     <div className={`feature-item  ${imageToLeft ? "image-left" : "image-right"}`}>
@@ -44,13 +40,11 @@ const TeamMember = ({ imageSrc, name, role, background, imagePosition }) => {
   );
 };
 
-
-
 /**
- * Returns the about page  
+ * Showcasts the features and team-members of KnitHub in the about page.
  */
 export const About = () => {
-  // Get the token to see if the user is login 
+  // Get the token to see if the user is logged in 
   const token = sessionStorage.getItem('token');
   
   return (
@@ -59,7 +53,7 @@ export const About = () => {
         About KnitHub
       </h1>
 
-      {/* Short intro section  */}
+      {/* Short intro section */}
       <div className="section-container" style={{ textAlign: 'center' }}>
         <p>Welcome to our website, dedicated to all the passionate knitters out there. Our team has created a platform that simplifies the way you manage your knitting projects and also inspires new innovation in handicrafts.</p>
         <p>The team consists of both knitters and developers, and together we have made it as simple as possible for knitters to keep track of their projects and samples all in one place.</p>
@@ -73,7 +67,7 @@ export const About = () => {
           imagePosition = "left"
           imageSrc={getImageByName('stash')}
           title="Resources page"
-          description="Knithub do also provide a resource page where you can look up a lot of different qbbreviations, and look at some instagram images to get some inspiration for your next project."
+          description="Knithub do also provide a resource page where you can look up a lot of different abbreviations, use the calculators, and look at some instagram images to get some inspiration for your next project."
         />
         <FeatureItem
           imageSrc={getImageByName('yarnSheep')}
@@ -89,23 +83,23 @@ export const About = () => {
         <FeatureItem
           imageSrc={getImageByName('books')}
           title="Pattern Organization"
-          description="Knithub allows users to upload, organize, and annotate your digital knitting patterns in one central location. This feature simplifies tracking of modifications and personal touches to each pattern."
+          description="Knithub allows users to upload, and annotate your digital knitting patterns in one central location. This feature simplifies tracking of modifications and personal touches to each pattern."
         />
         <FeatureItem
           imagePosition = "left"
           imageSrc={getImageByName('reading')}
           title="Project Tracking"
-          description=" With Knithub's project dashboard, users can easily monitor their knitting progress. The platform displays completed projects, ongoing work, and upcoming tasks, facilitating better planning and organization."
+          description="With Knithub's project dashboard, users can easily monitor their knitting progress. The platform displays completed projects, ongoing work, and upcoming tasks, facilitating better planning and organization."
         />
         <FeatureItem
           imageSrc={getImageByName('openBook')}
-          title="Notater"
-          description="Ta notater som du får tilgang på til alle oppskriftene dine."
+          title="Other features"
+          description="Knithub has a yarn-, increase- and decrease-calculator so knitters easily can do the necessary calculations for a project. With the Counter, you can hold track on how far you've come in the recipe."
         />
       </div>
 
 
-      {/* Button for registration. Should only be there if you are not signed in*/}
+      {/* Button for registration. Should only be there if you are not signed in */}
       {!token && (
         <div  style={{"justify-content":"center", width:'100%'}}>
             <Link to="/signup " className="section-container" style={{'text-decoration': 'none'}}>
