@@ -54,6 +54,8 @@ describe('About Page', () => {
                 imagePosition="left"
                 />
             );
+
+            // See if the Team-member info is displayed 
             expect(screen.getByText('John Doe')).toBeInTheDocument();
             expect(screen.getByText('Developer')).toBeInTheDocument();
             expect(screen.getByText('Background info')).toBeInTheDocument();

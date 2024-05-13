@@ -15,7 +15,7 @@ import ContactInformation from '../../Components/Forms/ContactInformation';
 /**
  *  Represents one idividual FAQ item with a question and its corresponding answer.
  */
-const FAQItem = ({ question, answer, isOpen, setIsOpen }) => (
+export const FAQItem = ({ question, answer, isOpen, setIsOpen }) => (
     <div className="faq-item">
         <button className={`faq-question ${isOpen ? 'open' : ''}`} onClick={setIsOpen}>
             <span>{question}</span>
@@ -29,7 +29,7 @@ const FAQItem = ({ question, answer, isOpen, setIsOpen }) => (
 /**
  * Represents a section containing FAQs.
  */
-const FAQSection = () => {
+export const FAQSection = () => {
     const [openFAQ, setOpenFAQ] = useState(null);
 
     const handleFAQClick = (index) => {
@@ -114,7 +114,7 @@ const FAQSection = () => {
 /**
  *  Represents the contact details section where info about us can be found 
  */
-const ContactDetails = () => (
+export const ContactDetails = () => (
     <div className="infoText" style={{"textAlign":"left"}}>
         {/* The following details should be styled according to your ContactUs.css */}
         <ContactInformation />
