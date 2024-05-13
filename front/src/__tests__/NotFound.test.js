@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'; // Import jest-dom for custom matchers
 import { BrowserRouter as Router } from 'react-router-dom';
-import NotFound from '../pages/NotFound';
+import NotFound from '../Components/DataDisplay/NotFound';
 
 describe('NotFound Component', () => {
     test('renders NotFound correctly', () => {

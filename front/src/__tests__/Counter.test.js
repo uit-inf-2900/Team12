@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Counter from '../pages/counter';
+import Counter from '../pages/ProjectTracking/Counter/counter'; 
 
 describe('Counter component', () => {
     // Reset and restore the mock for fetch before and after each test
