@@ -65,7 +65,7 @@ export const About = () => {
           imagePosition = "left"
           imageSrc={getImageByName('stash')}
           title="Resources page"
-          description="Knithub do also provide a resource page where you can look up a lot of different qbbreviations, and look at some instagram images to get some inspiration for your next project."
+          description="Knithub do also provide a resource page where you can look up a lot of different abbreviations, use the calculators, and look at some instagram images to get some inspiration for your next project."
         />
         <FeatureItem
           imageSrc={getImageByName('yarnSheep')}
@@ -81,18 +81,18 @@ export const About = () => {
         <FeatureItem
           imageSrc={getImageByName('books')}
           title="Pattern Organization"
-          description="Knithub allows users to upload, organize, and annotate your digital knitting patterns in one central location. This feature simplifies tracking of modifications and personal touches to each pattern."
+          description="Knithub allows users to upload, and annotate your digital knitting patterns in one central location. This feature simplifies tracking of modifications and personal touches to each pattern."
         />
         <FeatureItem
           imagePosition = "left"
           imageSrc={getImageByName('reading')}
           title="Project Tracking"
-          description=" With Knithub's project dashboard, users can easily monitor their knitting progress. The platform displays completed projects, ongoing work, and upcoming tasks, facilitating better planning and organization."
+          description="With Knithub's project dashboard, users can easily monitor their knitting progress. The platform displays completed projects, ongoing work, and upcoming tasks, facilitating better planning and organization."
         />
         <FeatureItem
           imageSrc={getImageByName('openBook')}
-          title="Notater"
-          description="Ta notater som du får tilgang på til alle oppskriftene dine."
+          title="Other features"
+          description="Knithub has a yarn-, increase- and decrease-calculator so knitters easily can do the necessary calculations for a project. With the Counter, you can hold track on how far you've come in the recipe."
         />
       </div>
 
