@@ -17,7 +17,7 @@ import SetAlert from '../UI/Alert';
 /**
  * Returns usefull links to pages for the footer 
  */
-const FooterRouting = () => {
+export const FooterRouting = () => {
     return (
         <div>
             <Typography variant="h5" >
@@ -35,7 +35,7 @@ const FooterRouting = () => {
 /**
  * Returns social media icons that is used in the footer
  */ 
-const SomeFooter = () => {
+export const SomeFooter = () => {
     return (
         <Box>
             <a href="https://www.facebook.com/" >

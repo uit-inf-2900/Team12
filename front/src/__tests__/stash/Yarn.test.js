@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import TextYarn from '../pages/Stash/Yarn/yarntext';
-import YarnStash from '../pages/Stash/Yarn/Yarn';
+import TextYarn from '../../pages/Stash/Yarn/yarntext';
+import YarnStash from '../../pages/Stash/Yarn/Yarn';
 import '@testing-library/jest-dom';
 
 describe('TextYarn Component', () => {

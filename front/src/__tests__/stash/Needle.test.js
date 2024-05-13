@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import NeedleStash from '../pages/Stash/Needle/Needles';
-import NeedleInfo from '../pages/Stash/Needle/needletext';
+import NeedleStash from '../../pages/Stash/Needle/Needles';
+import NeedleInfo from '../../pages/Stash/Needle/needletext';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
