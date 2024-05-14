@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../ProfilePage/Profilepage.css'
 
 import "../../GlobalStyles/main.css";
 import { CustomButton } from '../../Components/UI/Button';
@@ -75,72 +76,74 @@ const SignUp = () => {
   };
 
   return (
-    <div className='box-container' style={{paddingTop:'50px', paddingBottom:'50px'}}>
-      <div className="box dark">
-        <h2>Hello, Knitter!</h2>
-        <p>Already have an account?</p>
-        <CustomButton themeMode="dark" onClick={() => navigate('/login')}>Log in</CustomButton>
+    <div className='profile-page-container'>
+      <div className='box-container' style={{flex: '1', maxWidth: '900px', minWidth: '300px'}}>
+        <div className="box dark">
+          <h2>Hello, Knitter!</h2>
+          <p>Already have an account?</p>
+          <CustomButton themeMode="dark" onClick={() => navigate('/login')}>Log in</CustomButton>
+        </div>
+        <div className="box light">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <h2>Sign Up!</h2>
+            <InputField 
+              label="Full name" 
+              type="text" 
+              register={register("Name", { required: "Name is required." })} 
+              errors={errors.Name} 
+            />
+            <InputField 
+              label="Email" 
+              type="email" 
+              data-testid="email-input" 
+              register={register("email", {
+                required: "Email is required.",
+                pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, 
+                message: "Email is not valid." }
+              })} 
+              errors={errors.email} />
+            <InputField 
+              label="Birthday" 
+              type="date" 
+              data-testid="Birthday-input" 
+              register={register("birthday", {
+                required: "Birthday is required (YYYY-MM-DD).",
+                validate: value => /^\d{4}-\d{2}-\d{2}$/.test(value) || "Invalid date format (YYYY-MM-DD)"
+              })} errors={errors.birthday} 
+              InputLabelProps={{ shrink: true }} 
+            />
+            <InputField 
+              label="Password" 
+              type="password" 
+              data-testid="password-input" 
+              register={register("password", {
+                required: "Password is required.",
+                minLength: { value: 6, message: "Password should be at least 6 characters." },
+                pattern: { value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, 
+                message: "Password must include uppercase, lowercase, digits, and special characters." }
+              })} errors={errors.password} 
+            />
+            <InputField 
+              label="Confirm Password" 
+              type="password" 
+              data-testid="confirm-password-input" 
+              register={register("confirmPassword", {
+                required: "Please confirm your password.",
+                validate: value => value === watch('password') || "Passwords do not match"
+              })} errors={errors.confirmPassword} 
+            />
+            {error && <div className="errorMsg">{error}</div>}
+            <CustomButton themeMode="light" submit={true}>Sign up</CustomButton>
+          </form>
+        </div>
+        {showVerificationModal && (
+          <ConfirmationVerification
+            isOpen={showVerificationModal}
+            onClose={closeHandler}
+            userToken={sessionStorage.getItem('token')}
+          />
+        )}
       </div>
-      <div className="box light">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h2>Sign Up!</h2>
-          <InputField 
-            label="Full name" 
-            type="text" 
-            register={register("Name", { required: "Name is required." })} 
-            errors={errors.Name} 
-          />
-          <InputField 
-            label="Email" 
-            type="email" 
-            data-testid="email-input" 
-            register={register("email", {
-              required: "Email is required.",
-              pattern: { value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/, 
-              message: "Email is not valid." }
-            })} 
-            errors={errors.email} />
-          <InputField 
-            label="Birthday" 
-            type="date" 
-            data-testid="Birthday-input" 
-            register={register("birthday", {
-              required: "Birthday is required (YYYY-MM-DD).",
-              validate: value => /^\d{4}-\d{2}-\d{2}$/.test(value) || "Invalid date format (YYYY-MM-DD)"
-            })} errors={errors.birthday} 
-            InputLabelProps={{ shrink: true }} 
-          />
-          <InputField 
-            label="Password" 
-            type="password" 
-            data-testid="password-input" 
-            register={register("password", {
-              required: "Password is required.",
-              minLength: { value: 6, message: "Password should be at least 6 characters." },
-              pattern: { value: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, 
-              message: "Password must include uppercase, lowercase, digits, and special characters." }
-            })} errors={errors.password} 
-          />
-          <InputField 
-            label="Confirm Password" 
-            type="password" 
-            data-testid="confirm-password-input" 
-            register={register("confirmPassword", {
-              required: "Please confirm your password.",
-              validate: value => value === watch('password') || "Passwords do not match"
-            })} errors={errors.confirmPassword} 
-          />
-          {error && <div className="errorMsg">{error}</div>}
-          <CustomButton themeMode="light" submit={true}>Sign up</CustomButton>
-        </form>
-      </div>
-      {showVerificationModal && (
-        <ConfirmationVerification
-          isOpen={showVerificationModal}
-          onClose={closeHandler}
-          userToken={sessionStorage.getItem('token')}
-        />
-      )}
     </div>
   );
 };

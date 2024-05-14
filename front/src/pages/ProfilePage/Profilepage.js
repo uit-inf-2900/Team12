@@ -211,7 +211,7 @@ const ProfilePage = () => {
     return (
         <div className="profile-page-container">
             {/* The left side of the profile page */}
-            <div className='box-container' style={{height:'50%', width:'90%'}}>
+            <div className='box-container' style={{flex: '1', maxWidth: '800px', minWidth: '300px', minHeight: '400px'}}>
 
                 <div className="box dark">
                     <div className="profile-image-container">
