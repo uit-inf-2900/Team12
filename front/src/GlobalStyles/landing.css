@@ -1,0 +1,116 @@
+/* ============= HOME SECTION ============= */
+
+.home-section {
+	position: relative;
+	z-index: 1;
+	background-position: top center;
+	background-repeat: no-repeat;
+	padding-bottom: 30px !important;
+	padding-top: 10px !important;
+    
+}
+
+.home-header {
+	padding-top: 20px !important;
+    padding: 9rem 0 1rem !important;
+}
+
+.home-content {
+	padding: 2rem 0 1rem !important;
+	text-align: left;
+
+}
+
+.heading {
+	font-size: 3.4em !important;
+	padding-left: 50px !important;
+}
+
+
+.heading-name {
+	font-size: 4.5em !important;
+	padding-left: 45px !important;
+}
+
+.main-name {
+	color: var(--color-text-navbar);
+}
+.landing-img {
+    align-items: right;
+    padding: 9rem 0 1rem !important;
+
+}
+
+
+.wave {
+	animation-name: wave-animation; /* Refers to the name of your @keyframes element below */
+	animation-duration: 2.1s; /* Change to speed up or slow down */
+	animation-iteration-count: infinite; /* Never stop waving :) */
+	transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+	display: inline-block;
+}
+
+@keyframes wave-animation {
+	0% {
+		transform: rotate(0deg);
+	}
+	10% {
+		transform: rotate(14deg);
+	} /* The following five values can be played with to make the waving more or less extreme */
+	20% {
+		transform: rotate(-8deg);
+	}
+	30% {
+		transform: rotate(14deg);
+	}
+	40% {
+		transform: rotate(-4deg);
+	}
+	50% {
+		transform: rotate(10deg);
+	}
+	60% {
+		transform: rotate(0deg);
+	} /* Reset for the last half to pause */
+	100% {
+		transform: rotate(0deg);
+	}
+}
+/* ============= ABOUT US  ============= */
+
+
+.About-us-section{
+    background: linear-gradient( 45deg, #f3c7bb,#fff4f1 35%);
+}
+
+.home-about-section {
+    position: relative;
+    padding-bottom: 70px !important;
+    padding-top: 70px !important;
+  }
+  
+.home-about-description {
+    
+    padding-top: 100px !important;
+    padding-bottom: 20px !important;
+    text-align: center;
+  }
+.bold-text{
+    color: var(--color-text-navbar);
+  }
+  
+.home-about-body {
+    padding-top: 50px;
+    padding-bottom: 80px;
+    font-size: 1.2em !important;
+    text-align: left;
+}
+
+
+/* ============= INTRODUCTION  ============= */
+
+
+
+
+
+/* ============= INSPIRATION  ============= */

@@ -64,7 +64,7 @@ export default function App() {
           <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} isAdmin={isAdmin} />
           <div className="content-container">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<HomeOut />} />
               <Route path="/about" element={<About />} />
               <Route path="/contactus" element={<ContactUs />} />
               <Route path="/resources" element={<Resources />} />
