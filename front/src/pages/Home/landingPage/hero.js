@@ -1,27 +1,47 @@
-import '../../..GlobalStyles/landing.css';
-import heroIMG from '../../../images/homepage/inspiration.svg';
 import {React} from 'react';
+import heroImg from '../../../images/logo/logoOrange.svg'
+// import Container from 'react-bootstrap/Container';
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
+import { Container, Grid } from '@mui/material';
+
+
+import '../../../GlobalStyles/landing.css';
 
 
 
 
-
-
-const Hero = () => {
-
-
+const Hero = ({}) => {
 
     return(
-        <div className='page-container'>
-        <div className="home-container" style={{'display': 'flex', padding: '20px', alignItems:'flex-start'}}>
-        {/* Show image on the right side of home page */}
-            <div className="creative-content-container" style={{width:'60%', alignItems: 'center', justifyContent: 'left', display: 'flex', flexDirection: 'column'}}>
-            <h3>Today is the day to be creative! </h3>
-            <img src={heroIMG} style={{ alignItems: 'center'}} alt="Pile of sweaters"/>
-            </div>
-      </div>
-    </div>
+
+        <section>
+            <Container fluid className="home-section">
+                <Container className="home-content">
+                    <Grid container spacing={2}>
+                        <Grid item md={5} className="home-header">
+                            <h1 style={{ paddingBottom: 15 }} className="heading">
+                                Hi There!
+                                <span className="wave" role="img" aria-labelledby="wave">
+                                    👋🏻
+                                </span>
+                            </h1>
+                            <h1 className="heading-name">
+                                Welcome to
+                                <strong className="main-name"> KnitHub</strong>
+                            </h1>
+                        </Grid>
+                        <Grid item md={7} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <img src={heroImg} style={{ width: 500 }} />
+                        </Grid>
+                    </Grid>
+                </Container>
+            </Container>
+        </section>
+
+
     );
+
 }
 
 
