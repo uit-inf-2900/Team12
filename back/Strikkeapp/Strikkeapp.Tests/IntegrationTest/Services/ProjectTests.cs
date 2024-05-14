@@ -1,41 +1,36 @@
-using Moq;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-using AutoMapper;
-using Morcatko.AspNetCore.JsonMergePatch;
+using Moq;
 
-using Strikkeapp.Controllers;
-using Strikkeapp.Services;
 using Strikkeapp.Data.Context;
-using Strikkeapp.Models;
 using Strikkeapp.Data.Entities;
+using Strikkeapp.Models;
+using Strikkeapp.Services;
 using Strikkeapp.Enums;
 
-namespace Strikkeapp.Services;
+namespace Strikkeapp.Tests.Services;
 
-public class ProjectControllerTests
+public class ProjectTests : IDisposable
 {
-    private readonly ProjectController _controller;
+    // Set up db and services
+    private readonly StrikkeappDbContext _context;
     private readonly ProjectService _projectService;
     private readonly ProjectYarnInventoryService _projectYarnInventoryService;
     private readonly InventoryService _inventoryService;
-    private readonly StrikkeappDbContext _context;
     private readonly IMapper _mapper;
 
-        // Set up mocks
-    private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
+    // Create mock service
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
-
+    private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
 
     private readonly Guid testUserId = Guid.NewGuid();
     private readonly Guid testProjectId = Guid.NewGuid();
     private readonly Guid testYarnId = Guid.NewGuid();
     private readonly Guid testNeedleId = Guid.NewGuid();
 
-    public ProjectControllerTests()
+    public ProjectTests()
     {
         // Setup AutoMapper configuration
         var mapperConfig = new MapperConfiguration(cfg =>
@@ -45,13 +40,12 @@ public class ProjectControllerTests
 
         // Set up mock services
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
-            .Returns("hashedPassword");
+                .Returns("hashedPassword");
         _mockTokenService.Setup(e => e.ExtractUserID(It.IsAny<string>()))
-            .Returns(TokenResult.ForSuccess(testUserId));
-        _mockTokenService.Setup(e => e.ExtractUserID("userToken"))
             .Returns(TokenResult.ForSuccess(testUserId));
         _mockTokenService.Setup(e => e.ExtractUserID("fakeToken"))
             .Returns(TokenResult.ForFailure("Unauthorized"));
+        
 
         // Set up in memory database
         string databaseName = Guid.NewGuid().ToString();
@@ -60,15 +54,12 @@ public class ProjectControllerTests
             .ConfigureWarnings(war => war.Ignore(InMemoryEventId.TransactionIgnoredWarning))
             .Options;
 
-        // Set up context and mapper
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
         _mapper = mapperConfig.CreateMapper();
-        // Set up services
         _inventoryService = new InventoryService(_context, _mockTokenService.Object, _mapper);
         _projectYarnInventoryService = new ProjectYarnInventoryService(_context, _inventoryService, _mockTokenService.Object, _mapper);
         _projectService = new ProjectService(_mockTokenService.Object, _context, _projectYarnInventoryService, _inventoryService, _mapper);
-        // Set up controller
-        _controller = new ProjectController(_projectService);
+
 
         // Seed database
         SeedDatabase();
@@ -76,7 +67,7 @@ public class ProjectControllerTests
 
     private void SeedDatabase()
     {
-        // Add stash for user
+                // Add stash for user
         _context.NeedleInventory.Add(new NeedleInventory
         {
             ItemID = testNeedleId,
@@ -119,67 +110,116 @@ public class ProjectControllerTests
         });
 
         _context.SaveChanges();
+
     }
 
-    [Fact]
-    public void GetProjects_Ok()
+    public void Dispose()
     {
-        // Run controller
-        var result = _controller.GetProjects("userToken");
-        Assert.IsType<List<ProjectModel>>(result);
-        Assert.Single(result);
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 
     [Fact]
-    public void FakeTokenGetProjects_Fail()
+    public void FakeTokenGetProject_Fails()
     {
-        // Run controller and verify exception
-        Assert.Throws<ArgumentException>(() => _controller.GetProjects("fakeToken"));
+        // Verify that the fake token fails
+        Assert.Throws<ArgumentException>(() => _projectService.GetProject("fakeToken", testProjectId));
     }
 
     [Fact]
-    public void GetSingleProject_Ok()
+    public void NonProjectGet_Fails()
     {
-        // Run controller
-        var result = _controller.GetProject(testProjectId, "userToken");
-        Assert.IsType<ProjectModel>(result);
-        Assert.Equal(testProjectId, result.ProjectId);
+        Guid fakeId = Guid.NewGuid();
+
+        // Verify that the fake project id fails
+        Assert.Throws<ArgumentException>(() => _projectService.GetProject("userToken", fakeId));
     }
 
     [Fact]
-    public void PostProject_Ok()
+    public void FakeTokenCreate_Fails()
+    {
+        // Verify that the fake token fails
+        Assert.Throws<ArgumentException>(() => _projectService.CreateProject("fakeToken", new ProjectCreateModel()));
+    }
+
+    [Fact]
+    public void CreateProjectCompleted_Fails()
+    {
+        // Create new project
+        var project = new ProjectCreateModel
+        {
+            ProjectName = "NewProject",
+            Status = ProjectStatus.Completed,
+        };
+
+        // Verify that the project creation fails
+        Assert.Throws<Exception>(() => _projectService.CreateProject("userToken", project));
+    }
+
+    [Fact]
+    public void CreateProject_Ok()
     {
         // Create new project
         var project = new ProjectCreateModel
         {
             ProjectName = "NewProject",
             Status = ProjectStatus.Ongoing,
+            NeedleIds = new List<Guid> { testNeedleId },
+            YarnIds = new Dictionary<Guid, int> { { testYarnId, 2 } }
         };
 
-        // Run controller
-        var result = _controller.PostProject("userToken", project);
-        Assert.True(result);
-
-        // Verify project was added
-        var projectEntity = _context.Projects.Where(p => p.ProjectName == "NewProject")
-            .FirstOrDefault();
-        Assert.NotNull(projectEntity);
-    }
-
-    [Fact]
-    public void CompleteProject_Ok()
-    {
-        // Run controller and verify success
-        var result = _controller.CompleteProject("userToken", testProjectId);
+        // Run service
+        var result = _projectService.CreateProject("userToken", project);
         Assert.True(result);
     }
 
     [Fact]
-    public void DeleteProject_Ok()
+    public void CreateProjectNonYarn_Fails()
     {
-        // Run controller and verify success
-        var result = _controller.DeleteProject("userToken", testProjectId);
-        Assert.True(result);
+        // Create new project
+        var project = new ProjectCreateModel
+        {
+            ProjectName = "NewProject",
+            Status = ProjectStatus.Ongoing,
+            NeedleIds = new List<Guid> { testNeedleId },
+            YarnIds = new Dictionary<Guid, int> { { Guid.NewGuid(), 2 } }
+        };
+
+        // Verify that the project creation fails
+        Assert.Throws<Exception>(() => _projectService.CreateProject("userToken", project));
     }
 
+    [Fact]
+    public void OverInventoryYanCreateProject_Fails()
+    {
+        // Create new project
+        var project = new ProjectCreateModel
+        {
+            ProjectName = "NewProject",
+            Status = ProjectStatus.Ongoing,
+            NeedleIds = new List<Guid> { testNeedleId },
+            YarnIds = new Dictionary<Guid, int> { { testYarnId, 100 } }
+        };
+
+        // Verify that the project creation fails
+        Assert.Throws<ArgumentException>(() => _projectService.CreateProject("userToken", project));
+    }
+
+    [Fact]
+    public void FakeTokenDeleteProject_Fails()
+    {
+        // Verify that the fake token fails
+        Assert.Throws<ArgumentException>(() => _projectService.DeleteProject(testProjectId, "fakeToken"));
+    }   
+
+    [Fact]
+    public void NonProjectDelete_Fails()
+    {
+        Guid fakeId = Guid.NewGuid();
+
+        // Verify that the fake project id fails
+        Assert.Throws<ArgumentException>(() => _projectService.DeleteProject(fakeId, "userToken"));
+    }
+
+        
 }
