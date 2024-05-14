@@ -38,5 +38,41 @@ describe('InputField component', () => {
         expect(handleSubmit).toHaveBeenCalled();
     });
     
-    
+    test('renders as read-only', () => {
+        const { getByLabelText } = render(<InputField label="ReadOnly" readOnly />);
+        const input = getByLabelText('ReadOnly');
+        expect(input).toHaveAttribute('readonly');
+    });
+
+    test('renders select options', () => {
+        const options = [
+            { value: 'option1', label: 'Option 1' },
+            { value: 'option2', label: 'Option 2' }
+        ];
+        const { getByLabelText, getByText } = render(<InputField label="Select" type="select" options={options} />);
+        fireEvent.mouseDown(getByLabelText('Select'));
+        expect(getByText('Option 1')).toBeInTheDocument();
+        expect(getByText('Option 2')).toBeInTheDocument();
+    });
+
+    test('calls onChange handler', () => {
+        const handleChange = jest.fn();
+        const { getByLabelText } = render(<InputField label="Change" onChange={handleChange} />);
+        const input = getByLabelText('Change');
+        fireEvent.change(input, { target: { value: 'new value' } });
+        expect(handleChange).toHaveBeenCalled();
+    });
+
+    test('handles missing onSubmit gracefully', () => {
+        const { getByRole } = render(<InputField type="send" />);
+        fireEvent.click(getByRole('button'));
+        expect(true).toBe(true);  // Test passes if no error is thrown
+    });
+
+    test('handles missing onChange gracefully', () => {
+        const { getByLabelText } = render(<InputField label="NoChange" />);
+        const input = getByLabelText('NoChange');
+        fireEvent.change(input, { target: { value: 'new value' } });
+        expect(true).toBe(true);  // Test passes if no error is thrown
+    });
 }); 
