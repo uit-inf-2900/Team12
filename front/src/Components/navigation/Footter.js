@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Link, Box, Grid, Typography, IconButton, Paper, Button, Alert } from '@mui/material';
+import { Link, Box, Grid, Typography, IconButton, Paper } from '@mui/material';
 import { useForm } from 'react-hook-form';
-
+import heroImg from '../../images/homepage/nameLong.svg';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -12,35 +12,32 @@ import InputField from '../UI/InputField';
 
 import SetAlert from '../UI/Alert';
 
-
-
 /**
- * Returns usefull links to pages for the footer 
+ * Returns useful links to pages for the footer 
  */
 export const FooterRouting = () => {
     return (
         <div>
-            <Typography variant="h5" >
+            <Typography variant="h5">
                 Useful Links
             </Typography>
             <Link color='#000000' href="/"> Home </Link><br />
             <Link color='#000000' href="/about"> About </Link><br />
-            <Link color='#000000' href="/contactus" > Contact us </Link><br />
-            <Link color='#000000' href="/resources" > Resources </Link><br />
+            <Link color='#000000' href="/contactus"> Contact us </Link><br />
+            <Link color='#000000' href="/resources"> Resources </Link><br />
         </div>
     ); 
 };
 
-
 /**
- * Returns social media icons that is used in the footer
+ * Returns social media icons that are used in the footer
  */ 
 export const SomeFooter = () => {
     return (
         <Box>
             <a href="https://www.facebook.com/" >
                 <IconButton>
-                        <FacebookIcon />
+                    <FacebookIcon />
                 </IconButton>
             </a>
             <a href="https://www.instagram.com/team12.2900/" target="_blank" rel="noopener noreferrer">
@@ -62,7 +59,6 @@ export const SomeFooter = () => {
     ); 
 };
 
-
 /**
  * Component for the footer containing subscription form, social icons, and contact information.
  */
@@ -72,7 +68,6 @@ const Footer = () => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertSeverity, setAlertSeverity] = useState('info');
     const [alertMessage, setAlertMessage] = useState('');
-
 
     const updateAlert = (message, severity) => {
         setAlertMessage(message);
@@ -109,20 +104,19 @@ const Footer = () => {
         }
     };
 
-
     return (
         // Use paper for the color (can be changed in Theme)
-        // Set the with to 100% and add some padding 
-        <Paper sx={{ width: '100%', py: 4}}> 
+        // Set the width to 100% and add some padding 
+        <Paper sx={{ width: '100%', py: 4 }}> 
             <Grid container spacing={3} justifyContent="center" alignItems="start">
                 <Grid item xs={12} sm={4}>
-                    <Typography variant="h5">
-                        Knithub
-                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <img src={heroImg} style={{ width: 250,  marginBottom: -100, marginTop: -110 }} alt="Hero" />
+                    </Box>
                     <SetAlert open={alertOpen} setOpen={setAlertOpen} severity={alertSeverity} message={alertMessage} />
 
-                    {/* The input field for the user to add its email addrss */}
-                    <form >
+                    {/* The input field for the user to add its email address */}
+                    <form>
                         <InputField
                             label="Subscribe to our newsletter"
                             register={register('email', {
@@ -146,7 +140,7 @@ const Footer = () => {
                         {errors.email && <div>{errors.email.message}</div>}
                     </form>
 
-                    {/* The SOME links are under the subscription input */}
+                    {/* The social media links are under the subscription input */}
                     <SomeFooter />
                 </Grid>
 
@@ -171,7 +165,5 @@ const Footer = () => {
         </Paper>
     );
 };
-
-
 
 export default Footer;
