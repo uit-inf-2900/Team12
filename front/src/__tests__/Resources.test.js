@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Resources from '../pages/KnitHubResources/Resources'; 
-
+import Resources from '../pages/KnitHubResources/Resources';
 
 describe('Resources Component', () => {
     beforeEach(() => {
@@ -14,5 +13,19 @@ describe('Resources Component', () => {
         expect(screen.getByText('Knitting Abbreviations')).toBeInTheDocument();
         expect(screen.getByText('Calculators')).toBeInTheDocument();
         expect(screen.getByText('Inspiration from Instagram')).toBeInTheDocument();
+    });
+
+    test('Verify the presence of introductory text', () => {
+        expect(screen.getByText(/Welcome to the resource page!/)).toBeInTheDocument();
+        expect(screen.getByText(/all the necessary measurements for your knitting projects/)).toBeInTheDocument();
+        expect(screen.getByText(/Whether you're a beginner or an experienced knitter/)).toBeInTheDocument();
+    });
+
+    test('Check that the KnittingTermsTable component renders correctly', () => {
+        expect(screen.getByRole('table')).toBeInTheDocument();
+    });
+
+    test('Check that the InstagramFeed component renders correctly with the correct access token', () => {
+        expect(screen.getByText(/Instagram/)).toBeInTheDocument();
     });
 });
