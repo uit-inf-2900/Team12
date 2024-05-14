@@ -37,6 +37,9 @@ Credentials:
 - Password: KnithubAdminUser!
 
 # Running and viewing the tests
+## Frontend tests
+Locate the frontend folder. 
+Run all the tests by writing  `npm test a` in your terminal. You can also chosse to run some specific tests by writing `npm test {file_name}`
 
 ## Backend tests
 The test result will open in a new browser window after running the following command:
