@@ -1,4 +1,4 @@
-import './landing.css';
+import '../../..GlobalStyles/landing.css';
 import heroIMG from '../../../images/homepage/inspiration.svg';
 import {React} from 'react';
 
