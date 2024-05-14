@@ -6,7 +6,7 @@ import { About, FeatureItem, TeamMember } from '../pages/about/about';
 
 describe('About Page', () => {
     describe('General Display', () => {
-        test('renders About page content', () => {
+        test('test About page content', () => {
             sessionStorage.setItem('token', '');  // simulate not logged in
             render(<About />, { wrapper: BrowserRouter });
             expect(screen.getByText('About KnitHub')).toBeInTheDocument();
@@ -34,21 +34,21 @@ describe('About Page', () => {
     });
 
     describe('FeatureItem Component', () => {
-        test('renders with the image on the left', () => {
+        test('test with the image on the left', () => {
             render(<FeatureItem imageSrc="test-image.jpg" title="Test Feature" description="A great feature" imagePosition="left" />);
             const image = screen.getByRole('img');
             expect(image).toHaveClass('feature-image');
             expect(image.parentElement).toHaveClass('image-left');
         });
 
-        test('renders with the image on the right', () => {
+        test('test with the image on the right', () => {
             render(<FeatureItem imageSrc="test-image.jpg" title="Test Feature" description="A great feature" imagePosition="right" />);
             const image = screen.getByRole('img');
             expect(image).toHaveClass('feature-image');
             expect(image.parentElement).toHaveClass('image-right');
         });
 
-        test('renders feature item content correctly', () => {
+        test('test feature item content is displeyed correctly', () => {
             render(<FeatureItem imageSrc="test-image.jpg" title="Test Feature" description="A great feature" imagePosition="left" />);
             expect(screen.getByText('Test Feature')).toBeInTheDocument();
             expect(screen.getByText('A great feature')).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('About Page', () => {
     });
 
     describe('TeamMember Component', () => {
-        test('renders team member details correctly', () => {
+        test('test that team member details is displeyed correctly', () => {
             render(
                 <TeamMember 
                 name="John Doe" 
