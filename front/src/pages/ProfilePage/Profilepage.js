@@ -167,7 +167,7 @@ const ProfilePage = () => {
                 });
                 setTimeout(() => {
                 // Redirect to home page
-                window.location.href = '/homeOut';
+                window.location.href = '/';
                 }, 500);
             } catch (error) {
                 console.error("Error fetching profile data: ", error);
