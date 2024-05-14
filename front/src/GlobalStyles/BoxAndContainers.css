@@ -17,7 +17,7 @@
  */
 .page-container{
     padding-top: var(--header-height);
-    max-width: 3000px; 
+    max-width: auto; 
     margin: auto;
     padding: 20px; 
     text-align: center; 

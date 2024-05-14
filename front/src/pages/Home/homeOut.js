@@ -5,7 +5,7 @@ import StatisticBox from './StatisticBox'; // Sjekk at stien stemmer
 import { useNavigate } from 'react-router-dom';
 import InstagramFeed from '../../Components/UI/InstagramFeed'; 
 import Hero from './landingPage/hero';
-import AboutLanding from './landingPage/aboutUs';
+import AboutLanding from './landingPage/AboutUs';
 import Inspiration from './landingPage/inspiration';
 import Introduction from './landingPage/intro';
 
@@ -25,8 +25,8 @@ export const HomeOut = () => {
     return (
         <div>
             <Hero></Hero>
-            <AboutLanding></AboutLanding>
             <Introduction></Introduction>
+            <AboutLanding></AboutLanding>
             <Inspiration></Inspiration>
             <InstagramFeed accessToken={accessTokenInsta} />
         </div>

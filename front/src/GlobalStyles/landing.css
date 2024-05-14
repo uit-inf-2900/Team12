@@ -1,3 +1,10 @@
+/* =============  BACKGROUND ============= */
+
+.light-background{
+    background-color: var(--second-background-color);
+    
+}
+
 /* ============= HOME SECTION ============= */
 
 .home-section {
@@ -11,12 +18,12 @@
 }
 
 .home-header {
-	padding-top: 20px !important;
+	padding-top: 30px !important;
     padding: 9rem 0 1rem !important;
 }
 
 .home-content {
-	padding: 2rem 0 1rem !important;
+	padding: 8rem 0 8rem !important;
 	text-align: left;
 
 }
@@ -102,15 +109,25 @@
 .home-about-body {
     padding-top: 50px;
     padding-bottom: 80px;
-    font-size: 1.2em !important;
-    text-align: left;
+    font-size: 1.4em !important;
+    text-align: center;
 }
 
 
 /* ============= INTRODUCTION  ============= */
 
+.intro-header{
+    padding-top: 20px !important;
+    padding: 5rem 0 1rem !important;
+}
 
 
+.intro-content{
+    padding-top: 10rem !important;
+    padding-bottom: 10rem !important;
+    text-align: center;
+
+}
 
 
 /* ============= INSPIRATION  ============= */
