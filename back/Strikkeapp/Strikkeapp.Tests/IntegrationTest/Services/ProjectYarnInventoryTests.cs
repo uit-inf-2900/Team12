@@ -27,7 +27,9 @@ public class ProjectYarnInventoryTests : IDisposable
     private readonly Guid testUserId = Guid.NewGuid();
     private readonly Guid testProjectId = Guid.NewGuid();
     private readonly Guid testProjectYarnInventoryId = Guid.NewGuid();
+    private readonly Guid testProjectYarnInventory2Id = Guid.NewGuid();
     private readonly Guid testYarnId = Guid.NewGuid();
+    private readonly Guid testYarn2Id = Guid.NewGuid();
     private readonly Guid testNeedleId = Guid.NewGuid();
 
     public ProjectYarnInventoryTests()
@@ -85,7 +87,16 @@ public class ProjectYarnInventoryTests : IDisposable
             Color = "Red",
             NumItems = 5,
             InUse = 2,
-
+        });
+        _context.YarnInventory.Add(new YarnInventory
+        {
+            ItemID = testYarn2Id,
+            UserId = testUserId,
+            Type = "Linen",
+            Manufacturer = "SomeBrand",
+            Color = "Blue",
+            NumItems = 5,
+            InUse = 2,
         });
 
         // Add project for user
@@ -105,6 +116,14 @@ public class ProjectYarnInventoryTests : IDisposable
             ProjectInventoryId = testProjectYarnInventoryId, 
             ProjectId = testProjectId,
             ItemId = testYarnId,
+            NumberInUse = 2,
+            UserId = testUserId
+        });
+        _context.ProjectYarnInventory.Add(new ProjectYarnInventoryEntity
+        {
+            ProjectInventoryId = testProjectYarnInventory2Id, 
+            ProjectId = testProjectId,
+            ItemId = testYarn2Id,
             NumberInUse = 2,
             UserId = testUserId
         });
@@ -149,6 +168,14 @@ public class ProjectYarnInventoryTests : IDisposable
     }
 
     [Fact]
+    public void MultipoleYarnDelte_Ok()
+    {
+        // Run service
+        var result = _service.DeleteYarnInventory(new List<Guid> { testProjectYarnInventoryId, testProjectYarnInventory2Id }, "userToken");
+        Assert.True(result);
+    }
+
+    [Fact]
     public void SingleNonProjectDelete_Fails()
     {
         // Run service and verify assertion
@@ -168,5 +195,72 @@ public class ProjectYarnInventoryTests : IDisposable
     {
         // Run service and verify assertion
         Assert.Throws<ArgumentException>(() => _service.DeleteYarnInventory(new List<Guid> { testProjectId }, "fakeToken"));
+    }
+
+    [Fact]
+    public void SetYarnInventorySingle_Ok()
+    {
+        // Run service
+        var result = _service.SetYarnInventoryForCompletedProject("userToken", testYarnId, testProjectId);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void FakeTokenSetSingle_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<ArgumentException>(() => _service.SetYarnInventoryForCompletedProject("fakeToken", testYarnId, testProjectId));
+    }
+
+    [Fact]
+    public void FakeTokenSetMultiple_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<ArgumentException>(() => _service.SetYarnInventoryForCompletedProject("fakeToken", new List<Guid> { testYarnId }, testProjectId));
+    }
+
+    [Fact]
+    public void CreateYarnInventory_DictOk()
+    {
+        Dictionary<Guid, int> yarns = new Dictionary<Guid, int>
+        {
+            { testYarnId, 2 }
+        };
+
+        // Run service
+        var result = _service.CreateYarnInventory(yarns, testProjectId, "userToken");
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public void FakeTokenCreate_DictFails()
+    {
+        Dictionary<Guid, int> yarns = new Dictionary<Guid, int>
+        {
+            { testYarnId, 2 }
+        };
+
+        // Run service and verify assertion
+        Assert.Throws<ArgumentException>(() => _service.CreateYarnInventory(yarns, testProjectId, "fakeToken"));
+    }
+
+    [Fact]
+    public void TooManyCreate_DictFails()
+    {
+        // Create dictionary with too many yarns
+        Dictionary<Guid, int> yarns = new Dictionary<Guid, int>
+        {
+            { testYarnId, 100}   
+        };
+
+        // Run service and verify assertion
+        Assert.Throws<ArgumentException>(() => _service.CreateYarnInventory(yarns, testProjectId, "userToken"));
+    }
+
+    [Fact]
+    public void FakeTokenGetInUse_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<ArgumentException>(() => _service.GetNumInUseByProject(testYarnId, testProjectId, "fakeToken"));
     }
 }
