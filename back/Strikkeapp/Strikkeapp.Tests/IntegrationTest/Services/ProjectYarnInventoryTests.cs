@@ -26,6 +26,7 @@ public class ProjectYarnInventoryTests : IDisposable
     // Test variables
     private readonly Guid testUserId = Guid.NewGuid();
     private readonly Guid testProjectId = Guid.NewGuid();
+    private readonly Guid testProjectYarnInventoryId = Guid.NewGuid();
     private readonly Guid testYarnId = Guid.NewGuid();
     private readonly Guid testNeedleId = Guid.NewGuid();
 
@@ -41,6 +42,8 @@ public class ProjectYarnInventoryTests : IDisposable
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
                 .Returns("hashedPassword");
         _mockTokenService.Setup(e => e.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserId));
+        _mockTokenService.Setup(e => e.ExtractUserID("userToken"))
             .Returns(TokenResult.ForSuccess(testUserId));
         _mockTokenService.Setup(e => e.ExtractUserID("fakeToken"))
             .Returns(TokenResult.ForFailure("Unauthorized"));
@@ -92,9 +95,18 @@ public class ProjectYarnInventoryTests : IDisposable
             Status = ProjectStatus.Ongoing,
             NeedleIds = new List<Guid> { testNeedleId },
             YarnIds = new List<Guid> { testYarnId },
-            ProjectInventoryIds = new List<Guid> { testYarnId },
+            //ProjectInventoryIds = new List<Guid> { testYarnId },
             UserId = testUserId,
             ProjectName = "TestProject"
+        });
+
+        _context.ProjectYarnInventory.Add(new ProjectYarnInventoryEntity
+        {
+            ProjectInventoryId = testProjectYarnInventoryId, 
+            ProjectId = testProjectId,
+            ItemId = testYarnId,
+            NumberInUse = 2,
+            UserId = testUserId
         });
 
         _context.SaveChanges();
@@ -109,7 +121,52 @@ public class ProjectYarnInventoryTests : IDisposable
 
     [Fact]
     public void FakeTokenCreateYarnInv_Fails()
-    {
+    {   
+        // Run service and verify assertion
         Assert.Throws<ArgumentException>(() =>_service.CreateYarnInventory(testYarnId, testProjectId, "fakeToken", 1));
+    }
+
+    [Fact]
+    public void FakeIdCreateYarnInvs_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<Exception>(() => _service.CreateYarnInventory(Guid.NewGuid(), Guid.NewGuid(), "userToken", 1));
+    }
+
+    [Fact]
+    public void FakeTokenDeleteSingleYarn_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<ArgumentException>(() => _service.DeleteYarnInventory(testProjectId, "fakeToken"));
+    }
+
+    [Fact]
+    public void SingleYarnDelete_Ok()
+    {
+        // Run service
+        var result =_service.DeleteYarnInventory(testProjectYarnInventoryId, "userToken");
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void SingleNonProjectDelete_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<Exception>(() => _service.DeleteYarnInventory(Guid.NewGuid(), "userToken"));
+    }
+
+    [Fact]
+    public void NonProjectDeleteSingle_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<Exception>(() => _service.DeleteYarnInventory(Guid.NewGuid(), "userToken"));
+
+    }
+
+    [Fact]
+    public void FakeTokenDeleteMultipleYarn_Fails()
+    {
+        // Run service and verify assertion
+        Assert.Throws<ArgumentException>(() => _service.DeleteYarnInventory(new List<Guid> { testProjectId }, "fakeToken"));
     }
 }
