@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import validator from 'validator';
 import axios from 'axios';
+import '../ProfilePage/Profilepage.css'
 
 import "../../GlobalStyles/main.css";
 import { CustomButton } from '../../Components/UI/Button';
@@ -71,46 +72,48 @@ const LogIn = () => {
     };
 
     return (
-        <div className="box-container" style={{paddingTop:'50px', paddingBottom:'50px'}}>
-            <div className="box light">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <h2>Welcome back!</h2>
-                    <InputField
-                        label="Email"
-                        type="email"
-                        register={register("email", {
-                            required: "Email is required",
-                            validate: (input) => validator.isEmail(input) || "Invalid email address"
-                        })}
-                        errors={errors.email}
-                        aria-label="Email"
-                        data-testid="email-input"
-                    />
-                    <InputField
-                        label="Password"
-                        type="password"
-                        register={register("password", { required: "Password is required" })}
-                        errors={errors.password}
-                        aria-label="Password"
-                        data-testid="password-input"
-                    />
-                    <CustomButton themeMode="light" iconName="login" submit={true}>Log In</CustomButton>
-                    {error && <div className="errorMsg">{error}</div>}
-                </form>
-            </div>
+        <div className='profile-page-container'>
+            <div className="box-container" style={{flex: '1', maxWidth: '900px', minWidth: '300px', minHeight: '400px'}}>
+                <div className="box light">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <h2>Welcome back!</h2>
+                        <InputField
+                            label="Email"
+                            type="email"
+                            register={register("email", {
+                                required: "Email is required",
+                                validate: (input) => validator.isEmail(input) || "Invalid email address"
+                            })}
+                            errors={errors.email}
+                            aria-label="Email"
+                            data-testid="email-input"
+                        />
+                        <InputField
+                            label="Password"
+                            type="password"
+                            register={register("password", { required: "Password is required" })}
+                            errors={errors.password}
+                            aria-label="Password"
+                            data-testid="password-input"
+                        />
+                        <CustomButton themeMode="light" iconName="login" submit={true}>Log In</CustomButton>
+                        {error && <div className="errorMsg">{error}</div>}
+                    </form>
+                </div>
 
-            <div className="box dark">
-                <h2>Hello, Knitter!</h2>
-                <p>Enter your personal details and start journey with us</p>
-                <CustomButton themeMode="dark" onClick={() => navigate('/signup')}>Don't have an account? Sign Up</CustomButton>
+                <div className="box dark">
+                    <h2>Hello, Knitter!</h2>
+                    <p>Enter your personal details and start journey with us</p>
+                    <CustomButton themeMode="dark" onClick={() => navigate('/signup')}>Don't have an account? Sign Up</CustomButton>
+                </div>
+                {isVerified !== 'verified' && (
+                    <ConfirmationVerification
+                        isOpen={onSubmit}
+                        onClose={closeHandler}
+                        userToken={sessionStorage.getItem('token')}
+                    />
+                )}
             </div>
-            {isVerified !== 'verified' && (
-                <ConfirmationVerification
-                    isOpen={onSubmit}
-                    onClose={closeHandler}
-                    userToken={sessionStorage.getItem('token')}
-                />
-            )}
         </div>
     );
 };

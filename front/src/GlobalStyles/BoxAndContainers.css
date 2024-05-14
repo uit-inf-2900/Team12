@@ -78,9 +78,6 @@
     align-items: stretch;                           /* Stretch children vertically */
     max-width: 50%;                                 /* Limit max width to 70% of the viewport */
     margin: 0 auto;                                 /* Center the container in the viewport */
-    height: auto;                                   /* Height adjusts to content */
-    padding-top: 20px;                              /* Added padding at the top */
-    padding-bottom: 20px;                           /* Added padding at the bottom */
 }
 
 /* container for popup box */
