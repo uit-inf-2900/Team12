@@ -12,7 +12,6 @@ describe('Resources Component', () => {
         expect(screen.getByText('Resources')).toBeInTheDocument();
         expect(screen.getByText('Knitting Abbreviations')).toBeInTheDocument();
         expect(screen.getByText('Calculators')).toBeInTheDocument();
-        expect(screen.getByText('Inspiration from Instagram')).toBeInTheDocument();
     });
 
     test('Verify the presence of introductory text', () => {
@@ -25,7 +24,8 @@ describe('Resources Component', () => {
         expect(screen.getByRole('table')).toBeInTheDocument();
     });
 
-    test('Check that the InstagramFeed component renders correctly with the correct access token', () => {
-        expect(screen.getByText(/Instagram/)).toBeInTheDocument();
+    test('Check that the Calculators component renders correctly', () => {
+        expect(screen.getByText('Calculators')).toBeInTheDocument();
     });
+
 });

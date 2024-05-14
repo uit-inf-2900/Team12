@@ -145,7 +145,11 @@ describe('Home Component', () => {
         );
 
         await waitFor(() => {
-            expect(screen.getByText(/Here are some inspiration from Instagram/i)).toBeInTheDocument();
+            expect(screen.getByText(/Here is an overview of your projects and inventory:/i)).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText(/Today is the day to be creative!/i)).toBeInTheDocument();
         });
 
         Storage.prototype.getItem.mockRestore();
