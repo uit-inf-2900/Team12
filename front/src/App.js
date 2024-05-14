@@ -97,6 +97,8 @@ export default function App() {
 
             </Routes>
           </div>
+        </div>
+        <div style={{textAlign: 'center'}}>
           <Footer />
         </div>
       </Router>

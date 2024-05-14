@@ -17,7 +17,7 @@
  */
 .page-container{
     padding-top: var(--header-height);
-    max-width: 3000px; 
+    max-width: auto; 
     margin: auto;
     padding: 20px; 
     text-align: center; 
@@ -76,7 +76,7 @@
     flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */
     justify-content: center;                        /* Center children horizontally */
     align-items: stretch;                           /* Stretch children vertically */
-    max-width: 80%;                                 /* Limit max width to 70% of the viewport */
+    max-width: 50%;                                 /* Limit max width to 70% of the viewport */
     margin: 0 auto;                                 /* Center the container in the viewport */
     height: auto;                                   /* Height adjusts to content */
     padding-top: 20px;                              /* Added padding at the top */
@@ -182,6 +182,3 @@
     object-fit: cover;
     margin-bottom: 10px;
 }
-
-
-
