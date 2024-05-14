@@ -20,6 +20,12 @@ export const DecreaseCalculator = () => {
         setNewStitches(null);
         // Check if the input is only positive numbers
         if (numberOfStitches > 0 && numberOfDecreases > 0) {
+            // Check if there are enough stitches to make the decreases
+            if (parseInt(numberOfStitches) < parseInt(numberOfDecreases)) {
+                setError("You do not have enough stitches to make that many decreases.");
+                return;
+            }
+
             // Find new stitch count
             const newStitchCount = parseInt(numberOfStitches) - parseInt(numberOfDecreases);
             setNewStitches(newStitchCount);
