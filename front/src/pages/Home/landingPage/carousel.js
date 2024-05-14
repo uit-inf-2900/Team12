@@ -12,12 +12,14 @@ const Carousel = () =>{
         {
           name: `Sera Elstad`,
           img: Impimg,
-          review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+          title: "Full Stack Developer",
+          review: "Sera is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
         },
         {
           name: `Skjalg Slubowski`,
           img: Impimg,
-          review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+          title: "Full Stack Developer",
+          review: "Skjalg is a third-year Cybersecurity student at UiT in Tromsø, with experience in mainly backend development."
         },
         {
           name: `Emilie Steen`,
@@ -28,7 +30,8 @@ const Carousel = () =>{
         {
           name: `Marie Alette Stenhaug`,
           img: Impimg,
-          review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+          title: "Full Stack Developer",
+          review: "Marie is a third-year Informatics student at UiT in Tromsø,  with experience in both frontend and backend development."
         },
         {
           name: `Eline D Wito`,
@@ -57,8 +60,8 @@ const Carousel = () =>{
                   <img src={d.img} />
                 </div>
     
-                <div className="flex flex-col items-center justify-center gap-4 p-4">
-                  <h3 className="text-xl font-bold">{d.name}</h3>
+                <div className="flex flex-col items-center justify-center gap-10 p-6">
+                  <h3 className="text-xl font-semibold">{d.name}</h3>
                   <h4> {d.title}</h4>
                   <p className="text-center">{d.review}</p>
 
