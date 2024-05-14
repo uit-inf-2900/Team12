@@ -58,6 +58,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
             // Handle error 
             console.error("Upload error:", error);
         })
+        fetchRecipes;
        
     };
 
@@ -93,6 +94,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
                     
                     {/* Skjema for oppskriftsinformasjon */}
                     <div className="input">
+                        <CustomButton themeMode="light" onClick={onClose}> Close </CustomButton>
                         <InputField label="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
                         <InputField label="Author" name="author"  type="text" onChange={handleInputChange} />
                         <InputField label="Needle Size" name="needleSize"  type="number" onChange={handleInputChange} />

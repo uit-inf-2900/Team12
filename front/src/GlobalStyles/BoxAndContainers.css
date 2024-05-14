@@ -19,7 +19,6 @@
     padding-top: var(--header-height);
     max-width: auto; 
     margin: auto;
-    padding: 20px; 
     text-align: center; 
     flex-grow: 1; 
     overflow: auto; 
