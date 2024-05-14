@@ -7,6 +7,9 @@ import "../../GlobalStyles/main.css";
 import "../about/about.css";
 import './StatisticBox.css';
 import InstagramFeed from '../../Components/UI/InstagramFeed'; 
+import heroImg from '../../images/logo/logoOrange.svg'
+import Inspiration from './landingPage/inspiration';
+
 
 /**
  * The home page with inventory statistics, project states and instragramfeed.
@@ -19,9 +22,6 @@ export const Home = () => {
   const [completeProjects, setCompleteProjects] = useState(0);
   const [ongoingProjects, setOngoingProjects] = useState(0);
 
-  // Access token to instagram
-  const accessTokenInsta = 'IGQWRNYjdRX3BnVHFmdVR0Qm5yR3RDWml0TTgwc3lhV1VRZAmw5U3I2eWZAkUTRKekRzOS1JWEt5REEzZA3JHX0dDSXVfdVpodWlHRXFLbngwdEtSVXhuaXdtYmRSY0dGSzhvR1NVQkhnMmlJSE5JNHFmMFJCMS1IdjAZD';
-  
   // Function to handle navigation
   const handleNavigate = (path, tab) => {
     navigate(`${path}?tab=${tab}`);
@@ -90,12 +90,11 @@ export const Home = () => {
         {/* Show image on the right side of home page */}
         <div className="creative-content-container" style={{width:'60%', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
           <h3>Today is the day to be creative! </h3>
-          <img src={getImageByName('huggingYarn')} style={{ alignItems: 'center'}} alt="Pile of sweaters"/>
+          <img src={heroImg} style={{ width: 400, paddingTop:50}} alt="Hero" />
         </div>
       </div>
       {/* Show instagram feed */}
-      <h2  style={{padding: '20px', paddingTop:'30px'}}>Here are some inspiration from Instagram </h2>
-      <InstagramFeed accessToken={accessTokenInsta} />
+      <Inspiration /> 
     </div>
   );
 };

@@ -9,7 +9,6 @@ import Inspiration from "../Home/landingPage/inspiration";
  * Represents the Resources, with a table of terms, the calculators, and the instagram view 
  */
 function Resources() {
-    const accessTokenInsta = 'IGQWRNYjdRX3BnVHFmdVR0Qm5yR3RDWml0TTgwc3lhV1VRZAmw5U3I2eWZAkUTRKekRzOS1JWEt5REEzZA3JHX0dDSXVfdVpodWlHRXFLbngwdEtSVXhuaXdtYmRSY0dGSzhvR1NVQkhnMmlJSE5JNHFmMFJCMS1IdjAZD';
 
     return (
         <div style={{maxWidth:'70%', margin: '0 auto', textAlign: 'center' }}>
@@ -28,7 +27,6 @@ function Resources() {
             <Calculators />
 
             <Inspiration /> 
-            <InstagramFeed accessToken={accessTokenInsta} />
         </div>
     );
 }

@@ -2,9 +2,11 @@ import '../../../GlobalStyles/landing.css';
 import {React} from 'react';
 import { Container, Grid } from '@mui/material';
 import INSPimg from '../../../images/homepage/inspiration.svg'
+import InstagramFeed from '../../../Components/UI/InstagramFeed';
 
 
 
+const accessTokenInsta = 'IGQWRNYjdRX3BnVHFmdVR0Qm5yR3RDWml0TTgwc3lhV1VRZAmw5U3I2eWZAkUTRKekRzOS1JWEt5REEzZA3JHX0dDSXVfdVpodWlHRXFLbngwdEtSVXhuaXdtYmRSY0dGSzhvR1NVQkhnMmlJSE5JNHFmMFJCMS1IdjAZD';
 
 
 const Inspiration = () => {
@@ -27,6 +29,8 @@ const Inspiration = () => {
                     </Grid>
                 </Container>
             </Container>
+
+            <InstagramFeed accessToken={accessTokenInsta} />
         </section>
 
     );
