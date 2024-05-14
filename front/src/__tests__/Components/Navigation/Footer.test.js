@@ -12,10 +12,18 @@ describe('Footer', () => {
     });
 
     test('renders all the useful links correctly', () => {
-        const links = screen.getAllByRole('link');
         expect(screen.getByText('Home').closest('a')).toHaveAttribute('href', '/');
         expect(screen.getByText('About').closest('a')).toHaveAttribute('href', '/about');
         expect(screen.getByText('Contact us').closest('a')).toHaveAttribute('href', '/contactus');
         expect(screen.getByText('Resources').closest('a')).toHaveAttribute('href', '/resources');
+    });
+
+    test('renders contact information section', () => {
+        expect(screen.getByText('Contact Us')).toBeInTheDocument();
+    });
+
+    test('renders copyright notice with current year', () => {
+        const currentYear = new Date().getFullYear();
+        expect(screen.getByText(`© ${currentYear} Knithub. All rights reserved.`)).toBeInTheDocument();
     });
 });
