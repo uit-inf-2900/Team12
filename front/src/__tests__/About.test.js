@@ -24,6 +24,13 @@ describe('About Page', () => {
             render(<About />, { wrapper: BrowserRouter });
             expect(screen.queryByText('Sign up')).toBeNull();
         });
+
+        test('displays the introductory text', () => {
+            render(<About />, { wrapper: BrowserRouter });
+            expect(screen.getByText(/Welcome to our website, dedicated to all the passionate knitters out there/)).toBeInTheDocument();
+            expect(screen.getByText(/The team consists of both knitters and developers/)).toBeInTheDocument();
+            expect(screen.getByText(/The idea of Knithub came from Sera/)).toBeInTheDocument();
+        });
     });
 
     describe('FeatureItem Component', () => {
@@ -39,6 +46,12 @@ describe('About Page', () => {
             const image = screen.getByRole('img');
             expect(image).toHaveClass('feature-image');
             expect(image.parentElement).toHaveClass('image-right');
+        });
+
+        test('renders feature item content correctly', () => {
+            render(<FeatureItem imageSrc="test-image.jpg" title="Test Feature" description="A great feature" imagePosition="left" />);
+            expect(screen.getByText('Test Feature')).toBeInTheDocument();
+            expect(screen.getByText('A great feature')).toBeInTheDocument();
         });
     });
 
@@ -60,6 +73,22 @@ describe('About Page', () => {
             expect(screen.getByText('Developer')).toBeInTheDocument();
             expect(screen.getByText('Background info')).toBeInTheDocument();
             expect(screen.getByText('john.doe@example.com')).toBeInTheDocument();
+        });
+        
+        test('renders with the image on the left', () => {
+            render(
+                <TeamMember 
+                    name="John Doe" 
+                    role="Developer" 
+                    background="Background info" 
+                    imageSrc="test-image.jpg" 
+                    mail="john.doe@example.com" 
+                    imagePosition="left"
+                />
+            );
+            const image = screen.getByRole('img');
+            expect(image).toHaveClass('team-member-image');
+            expect(image.parentElement).toHaveClass('image-left');
         });
     });
 });
