@@ -4,6 +4,12 @@ import axios from 'axios';
 import StatisticBox from './StatisticBox'; // Sjekk at stien stemmer
 import { useNavigate } from 'react-router-dom';
 import InstagramFeed from './KnitHubResources/InstagramFeed'; 
+import Hero from './landingpage/hero';
+import AboutLanding from './landingpage/aboutUs';
+import Inspiration from './landingpage/inspiration';
+// access to instagram
+const accessTokenInsta = 'IGQWRNYjdRX3BnVHFmdVR0Qm5yR3RDWml0TTgwc3lhV1VRZAmw5U3I2eWZAkUTRKekRzOS1JWEt5REEzZA3JHX0dDSXVfdVpodWlHRXFLbngwdEtSVXhuaXdtYmRSY0dGSzhvR1NVQkhnMmlJSE5JNHFmMFJCMS1IdjAZD';
+  
 
 
 export const HomeOut = () => {
@@ -13,10 +19,12 @@ export const HomeOut = () => {
 
 
     return (
-        <div className='page-container'>
+        <div>
 
-
-        <h2  style={{padding: '20px', paddingTop:'30px'}}>Here are some inspiration from Instagram </h2>
+            
+            <Hero></Hero>
+            <AboutLanding></AboutLanding>
+            <Inspiration></Inspiration>
             <InstagramFeed accessToken={accessTokenInsta} />
 
 

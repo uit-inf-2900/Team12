@@ -7,7 +7,9 @@
 
 .page-container{
     padding-top: var(--header-height);
-    max-width: 1200px; 
+    background: linear-gradient( #fff4f1,#f3c7bb);
+   
+    max-width: 3000px; 
     margin: auto;
     padding: 20px; 
     text-align: center; 
