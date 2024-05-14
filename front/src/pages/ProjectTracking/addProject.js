@@ -195,8 +195,8 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
   return (
     <div className="box-container">
       <div className='box dark'>
-        <h3>Hei,</h3>
-        <p>Start et nytt prosjekt her!</p>
+        <h3>Hello,</h3>
+        <p>Start a new project here!</p>
         
         <InputField label="Name the project" value={projectData.projectName} name="projectName" type="text" onChange={handleInputChange('projectName')} />
         <InputField 
