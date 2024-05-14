@@ -76,4 +76,9 @@ describe('GeneralCard Component', () => {
         expect(deleteButtons[0]).toBeInTheDocument();
     });
     
+    test('displays the correct stats', () => {
+        const statElements = screen.getAllByText('Yarn: 1000');
+        expect(statElements.length).toBeGreaterThan(0);
+    });
+
 });
