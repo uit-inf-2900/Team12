@@ -42,7 +42,7 @@ describe('ViewUsers', () => {
 
     
 
-    test('renders without crashing and displays users', async () => {
+    test('Test view user component, and see if the users is showing on the screen', async () => {
         await act(async () => {
             root = renderComponent();
         });
@@ -57,14 +57,14 @@ describe('ViewUsers', () => {
         });
 
         // Simulating admin status change
-        const adminButton = screen.getByText('Add Admin'); // Assuming this is the button text for changing admin status
+        const adminButton = screen.getByText('Add Admin'); 
         act(() => {
             adminButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         });
 
         // Ensure that the API call was made and the UI updates accordingly
-        expect(fetch).toHaveBeenCalledTimes(1); // Assuming one fetch for initial load and one for admin status change
-        expect(screen.getByText('Remove Admin')).toBeInTheDocument(); // Assuming the admin status toggle was successful
+        expect(fetch).toHaveBeenCalledTimes(1); 
+        expect(screen.getByText('Remove Admin')).toBeInTheDocument(); 
     });
 
     
@@ -80,12 +80,13 @@ describe('ViewUsers', () => {
         expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
     });
     
-    test('renders the search user text field', () => {
+    test('Test the search user text field', () => {
         render(<ViewUsers />);
         const searchField = screen.getByRole('textbox');
         expect(searchField).toBeInTheDocument();
     });
-    test('handles search input', () => {
+
+    test('handles the search input', () => {
         render(<ViewUsers />);
         const searchField = screen.getByLabelText(/Search Users/i);
         fireEvent.change(searchField, { target: { value: 'john' } });

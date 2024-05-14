@@ -35,7 +35,7 @@ describe('LogIn Component', () => {
     /**
      * Test to check if the login form is rendered properly.
      */
-    test('renders the login form', () => {
+    test('test the login form', () => {
         const { getByText } = renderWithRouter(<LogIn isLoggedIn={false} />);
         expect(getByText(/log in/i)).toBeInTheDocument();
     });
@@ -43,7 +43,7 @@ describe('LogIn Component', () => {
     /**
      * Test to check for display of validation messages when the form is submitted empty.
      */
-    test('displays validation messages for empty form submission', async () => {
+    test('displays error/info messages for empty form submission', async () => {
         // Render the LogIn component
         renderWithRouter(<LogIn isLoggedIn={false}/>);
 
@@ -76,7 +76,7 @@ describe('LogIn Component', () => {
         });
     
 
-    test('displays validation message for empty password', async () => {
+    test('displays error message for empty password', async () => {
         // Render the LogIn component
         renderWithRouter(<LogIn isLoggedIn={false}/>);
 
@@ -88,7 +88,7 @@ describe('LogIn Component', () => {
         expect(await screen.findByText(/password is required/i)).toBeInTheDocument();
     });
 
-    test('displays validation message for empty email', async () => {
+    test('displays error message for empty email', async () => {
         // Render the LogIn component
         renderWithRouter(<LogIn isLoggedIn={false}/>);
 

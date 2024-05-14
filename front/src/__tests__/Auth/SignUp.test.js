@@ -19,10 +19,6 @@ describe('Signup Component', () => {
     /**
      * Utility function to render components with a router context.
      * This allows us to simulate routing.
-     *
-     * @param {JSX.Element} ui - Component to be rendered.
-     * @param {Object} options - Options including the initial route.
-     * @returns Rendered user interface within the router context.
      */
     const renderWithRouter = (ui, { route = '/' } = {}) => {
         window.history.pushState({}, 'Test page', route);       
@@ -33,7 +29,7 @@ describe('Signup Component', () => {
     /**
      * Test to ensure validation messages appear for an empty submission on the signup form.
      */
-    test('displays validation messages for empty form submission', async () => {
+    test('displays error messages for empty form submission', async () => {
         renderWithRouter(<SignUp isLoggedIn={false}/>);
         
         const submitButton = screen.getByRole('button', { name: /sign up/i });
@@ -48,7 +44,7 @@ describe('Signup Component', () => {
     /**
      * Test to verify that entering an invalid email format triggers an appropriate validation message.
      */
-    test('displays validation messages for invalid email', async () => {      
+    test('displays error messages for invalid email', async () => {      
         renderWithRouter(<SignUp isLoggedIn={false}/>);
         
         const emailInput = screen.getByTestId('email-input');

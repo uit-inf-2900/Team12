@@ -11,12 +11,12 @@ describe('InputField component', () => {
         render(<InputField />);
     });
 
-    test('renders correct label', () => {
+    test('see if the  label is correct', () => {
         const { getByLabelText } = render(<InputField label="Username" />);
         expect(getByLabelText('Username')).toBeInTheDocument();
     });
 
-    test('toggles password visibility', () => {
+    test('toggle password visibility', () => {
         const { getByLabelText, getByRole } = render(<InputField label="Password" type="password" />);
         const passwordInput = getByLabelText('Password');
         const visibilityButton = getByRole('button', { name: /toggle password visibility/i }); 
@@ -38,13 +38,13 @@ describe('InputField component', () => {
         expect(handleSubmit).toHaveBeenCalled();
     });
     
-    test('renders as read-only', () => {
+    test('test the read-only option', () => {
         const { getByLabelText } = render(<InputField label="ReadOnly" readOnly />);
         const input = getByLabelText('ReadOnly');
         expect(input).toHaveAttribute('readonly');
     });
 
-    test('renders select options', () => {
+    test('test select options', () => {
         const options = [
             { value: 'option1', label: 'Option 1' },
             { value: 'option2', label: 'Option 2' }
@@ -63,13 +63,13 @@ describe('InputField component', () => {
         expect(handleChange).toHaveBeenCalled();
     });
 
-    test('handles missing onSubmit gracefully', () => {
+    test('handles missing onSubmit', () => {
         const { getByRole } = render(<InputField type="send" />);
         fireEvent.click(getByRole('button'));
         expect(true).toBe(true);  // Test passes if no error is thrown
     });
 
-    test('handles missing onChange gracefully', () => {
+    test('handles missing onChange', () => {
         const { getByLabelText } = render(<InputField label="NoChange" />);
         const input = getByLabelText('NoChange');
         fireEvent.change(input, { target: { value: 'new value' } });

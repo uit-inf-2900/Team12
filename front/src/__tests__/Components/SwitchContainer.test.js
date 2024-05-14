@@ -14,7 +14,7 @@ describe('SwitchContainer', () => {
     ];
 
     // Test that the component renders
-    test('Render all options', () => {
+    test('test all options', () => {
         render(<SwitchContainer options={options} activeStatus='planned' setActiveStatus={mockSetActiveStatus} />);
         options.forEach(option => {
             expect(screen.getByText(option.label)).toBeInTheDocument();

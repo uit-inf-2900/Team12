@@ -8,7 +8,7 @@ import {fetchSubscribers} from '../../pages/Admin/apiServices'
 
 
 describe('ViewSubscribers', () => {
-    test('renders the ViewSubscribers component', () => {
+    test('test ViewSubscribers component', () => {
         render(<ViewSubscribers />);
         expect(screen.getByText(/View Subscribers/i)).toBeInTheDocument();
     });

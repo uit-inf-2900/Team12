@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import ContactInformation from '../../Components/Forms/ContactInformation';
 
 describe('ContactInformation component', () => {
-    test('renders contact information', () => {
+    test('test contact information', () => {
         const root = document.createElement('div');
         createRoot(root).render(<ContactInformation />);
         const { getByTestId } = render(<ContactInformation />, { container: root });

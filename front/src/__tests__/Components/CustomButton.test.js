@@ -5,18 +5,18 @@ import '@testing-library/jest-dom/extend-expect';
 import { CustomButton, AddButton } from '../../Components/UI/Button';
 
 describe('CustomButton component', () => {
-    test('renders button with children', () => {
+    test('test button with children', () => {
         const { getByText } = render(<CustomButton>Click Me</CustomButton>);
         expect(getByText('Click Me')).toBeInTheDocument();
     });
 
-    test('renders button with specified icon', () => {
+    test('test button with specified icon', () => {
         const { container } = render(<CustomButton iconName="send" />);
         const icon = container.querySelector('svg');
         expect(icon).toBeInTheDocument();
     });
 
-    test('calls onClick prop when button is clicked', () => {
+    test('calls onClick when button is clicked', () => {
         const onClickMock = jest.fn();
         const { getByText } = render(<CustomButton onClick={onClickMock}>Click Me</CustomButton>);
         const button = getByText('Click Me');
@@ -28,13 +28,13 @@ describe('CustomButton component', () => {
         expect(onClickMock).toHaveBeenCalledTimes(1);
     });
 
-    test('renders button as full width if fullWidth prop is true', () => {
+    test('test if button has full width if fullWidth prop is true', () => {
         const { getByRole } = render(<CustomButton fullWidth>Click Me</CustomButton>);
         const button = getByRole('button');
         expect(button).toHaveStyle('width: 100%');
     });
 
-    test('renders button as type submit if submit prop is true', () => {
+    test('test button as type submit if submit is set', () => {
         const { getByRole } = render(<CustomButton submit>Submit</CustomButton>);
         const button = getByRole('button');
         expect(button).toHaveAttribute('type', 'submit');
@@ -45,7 +45,7 @@ describe('CustomButton component', () => {
 
 
 describe('AddButton component', () => {
-    test('renders button with default styles', () => {
+    test('test button with default styles', () => {
         const { getByRole } = render(<AddButton />);
         const button = getByRole('button');
 
@@ -57,7 +57,7 @@ describe('AddButton component', () => {
         `);
     });
 
-    test('button scales up when hovered', () => {
+    test('test if button scales up when hovered', () => {
         const { getByRole } = render(<AddButton />);
         const button = getByRole('button');
 
@@ -81,7 +81,7 @@ describe('AddButton component', () => {
         `);
     });
 
-    test('calls onClick prop when button is clicked', () => {
+    test('test that onClick is called when button is clicked', () => {
         const onClickMock = jest.fn();
         const { getByRole } = render(<AddButton onClick={onClickMock} />);
         const button = getByRole('button');
