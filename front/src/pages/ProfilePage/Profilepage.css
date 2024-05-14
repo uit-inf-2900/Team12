@@ -1,42 +1,46 @@
 @import url('../../GlobalStyles/navbar.css');
 
+/* Container for the profile page with flexible layout and central alignment */
 .profile-page-container {
-    display: flex;                                  /* Use flexbox for layout */
-    flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */
-    justify-content: center;                        /* Center children horizontally */
-    align-items: center;                            /* Center children vertically */
-    height: 100vh;                                  /* Full viewport height */
-    max-width: 70%;                                 /* Limit max width to 70% of the viewport */
-    margin: 0 auto;                                 /* Center the container in the viewport */
+    display: flex;                         
+    flex-wrap: wrap;                             
+    justify-content: center;                     
+    align-items: center;                       
+    height: 100vh;                                  
+    max-width: 70%;                                 
+    margin: 0 auto;                                 
 }
 
-
-/* information about each background box */
+/* Styles for individual profile page sections with centered content */
 .profile-page {
     padding: var(--box-padding);                
-    display: flex;                   /* Use flexbox for layout */
-    flex-direction: column;          /* Stack child elements vertically */
-    justify-content: center;         /* Center children vertically */
-    align-items: center;             /* Center children horizontally */
-    transition: transform 0.5s;      /* Animate position changes smoothly */
+    display: flex;                 
+    flex-direction: column;     
+    justify-content: center;        
+    align-items: center;         
+    transition: transform 0.5s;    
     border-radius: var(--box-border-radius);
 }
 
-/* Light purple color */
+/* Light-themed profile box with specific width and background color */
 .profile-page.light {
     width: 60%;  
     background-color: var(--box-color-light);  
     height: 50%;
 }
 
+/* Styling for profile information text */
 .profile-info {
     font-size: var(--normal-font-size);  
-    margin: 5px 0; /* Gives a little space above and below each line */
+    margin: 5px 0; 
 }
+
+/* Styling for profile options text, similar to profile-info */
 .profile-options {
     font-size: var(--normal-font-size); 
 }
 
+/* Dark-themed profile box with column layout and space management */
 .profile-page.dark {
     width: 40%; 
     background-color: var(--box-color-dark);  
@@ -47,10 +51,12 @@
     align-items: center; 
 }
 
+/* Styling the first paragraph in any dark box to have top margin */
 .box.dark p:first-child {
-    margin-top: 20px; /* Adjust this value to control the space above *name* */
+    margin-top: 20px;
 }
 
+/* Styling for profile images to be circular and fit the container */
 .profile-image-container img {
     width: 70px; 
     height: 70px;  
@@ -58,6 +64,7 @@
     object-fit: cover;  
 }
 
+/* Styling for profile name text, centered and with specific margin and font size */
 .profile-name {
     text-align: center;
     margin-top: 10px;  

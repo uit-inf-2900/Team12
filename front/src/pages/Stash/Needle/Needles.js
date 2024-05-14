@@ -8,9 +8,6 @@ import NeedleInfo from './needletext';
 import { AddButton } from '../../../Components/UI/Button';
 import SetAlert from '../../../Components/UI/Alert';
 
-/**
- * Component for managing and displaying a needle stash, including the ability to add and delete needles.
- */
 export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     // Set the needle state and the delete modal state
     const [needles, setNeedles] = useState([]);
@@ -26,6 +23,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     const toggleNeedleModal = () => {
         setOpenNeedleModal(!openNeedleModal);
     };
+
     // Open and closing Modal for deleting needles 
     const handleOpenDeleteModal = (needle) => {
         setNeedleToDelete(needle);
@@ -102,9 +100,9 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     // Define the predefined needle types 
     const predefinedTypes = ['Interchangeble', 'DoublePointed', 'Circular', ];
 
-    // useMemo hook to memoize the needles options for the MultiSelect component, avoiding recalculation on every render.
+    // useMemo hook to memoize the needles options for the MultiSelect component
     const NeedlesOptions = useMemo(() => {
-        // Extract the types from the needle stash to create filter options
+        // Extract the types from the needle to create filter options
         const uniqueTypes = Array.from(new Set(needles.map(needle => needle.type)));
         // Set the unique types into an array of options for the MultiSelect. Includes 'Other' for non-predefined types.
 

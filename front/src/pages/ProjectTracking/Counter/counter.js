@@ -93,7 +93,6 @@ export const Counter = () => {
             } catch (error) {
                 console.error("Decrement failed:", error);
             }
-        // denna kan fjernes om det ikke er vits/ønskelig
         } else {
             alert("Counter cannot go below zero.");
         }

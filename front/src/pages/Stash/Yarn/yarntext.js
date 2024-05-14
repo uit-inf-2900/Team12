@@ -73,6 +73,7 @@ const TextYarn = ({onClose, fetchYarns}) => {
             });
             // Close the modal and fetch updated yarns
             onClose();
+            // Update the yarns
             fetchYarns();
         } else {
             const errorResult = await response.json();
