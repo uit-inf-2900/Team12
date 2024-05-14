@@ -32,4 +32,33 @@ describe('Calculators', () => {
         expect(screen.getByText('Decrease')).toHaveClass('active');
         expect(screen.getByText('Calculate how many decreases you need to make')).toBeInTheDocument();
     })
+
+    test('display IncreaseCalculator by default', () => {
+        expect(screen.getByText('Calculate how many times you need to increase')).toBeInTheDocument();
+    });
+
+
+    test('only one calculator component is displayed at a time', () => {
+        fireEvent.click(screen.getByText('Yarn'));
+        expect(screen.getByText('Calculate how many skeins your project requires')).toBeInTheDocument();
+        expect(screen.queryByText('Calculate how many times you need to increase')).not.toBeInTheDocument();
+        expect(screen.queryByText('Calculate how many decreases you need to make')).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByText('Decrease'));
+        expect(screen.getByText('Calculate how many decreases you need to make')).toBeInTheDocument();
+        expect(screen.queryByText('Calculate how many skeins your project requires')).not.toBeInTheDocument();
+        expect(screen.queryByText('Calculate how many times you need to increase')).not.toBeInTheDocument();
+    });
+
+    test('correctly applies active class to the selected option', () => {
+        fireEvent.click(screen.getByText('Yarn'));
+        expect(screen.getByText('Yarn')).toHaveClass('active');
+        expect(screen.getByText('Increase')).not.toHaveClass('active');
+        expect(screen.getByText('Decrease')).not.toHaveClass('active');
+
+        fireEvent.click(screen.getByText('Decrease'));
+        expect(screen.getByText('Decrease')).toHaveClass('active');
+        expect(screen.getByText('Yarn')).not.toHaveClass('active');
+        expect(screen.getByText('Increase')).not.toHaveClass('active');
+    });
 })
