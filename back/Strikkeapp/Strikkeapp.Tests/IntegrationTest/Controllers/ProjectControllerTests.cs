@@ -46,6 +46,8 @@ public class ProjectControllerTests
         // Set up mock services
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
             .Returns("hashedPassword");
+        _mockTokenService.Setup(e => e.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserId));
         _mockTokenService.Setup(e => e.ExtractUserID("userToken"))
             .Returns(TokenResult.ForSuccess(testUserId));
         _mockTokenService.Setup(e => e.ExtractUserID("fakeToken"))
@@ -162,6 +164,22 @@ public class ProjectControllerTests
         var projectEntity = _context.Projects.Where(p => p.ProjectName == "NewProject")
             .FirstOrDefault();
         Assert.NotNull(projectEntity);
+    }
+
+    [Fact]
+    public void CompleteProject_Ok()
+    {
+        // Run controller and verify success
+        var result = _controller.CompleteProject("userToken", testProjectId);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void DeleteProject_Ok()
+    {
+        // Run controller and verify success
+        var result = _controller.DeleteProject("userToken", testProjectId);
+        Assert.True(result);
     }
 
 }
