@@ -1,4 +1,4 @@
-
+/* ============= HOME SECTION ============= */
 
 .home-section {
 	position: relative;
@@ -8,10 +8,7 @@
 	padding-bottom: 30px !important;
 	padding-top: 10px !important;
     
-
 }
-
-
 
 .home-header {
 	padding-top: 20px !important;
@@ -44,28 +41,6 @@
 
 }
 
-.home-about-section {
-    position: relative;
-    padding-bottom: 70px !important;
-    padding-top: 70px !important;
-  }
-  
-.home-about-description {
-    
-    padding-top: 100px !important;
-    padding-bottom: 20px !important;
-    text-align: center;
-  }
-.bold-text{
-    color: var(--color-text-navbar);
-  }
-  
-.home-about-body {
-    padding-top: 50px;
-    padding-bottom: 80px;
-    font-size: 1.2em !important;
-    text-align: left;
-}
 
 .wave {
 	animation-name: wave-animation; /* Refers to the name of your @keyframes element below */
@@ -101,9 +76,41 @@
 		transform: rotate(0deg);
 	}
 }
-
+/* ============= ABOUT US  ============= */
 
 
 .About-us-section{
     background: linear-gradient( 45deg, #f3c7bb,#fff4f1 35%);
 }
+
+.home-about-section {
+    position: relative;
+    padding-bottom: 70px !important;
+    padding-top: 70px !important;
+  }
+  
+.home-about-description {
+    
+    padding-top: 100px !important;
+    padding-bottom: 20px !important;
+    text-align: center;
+  }
+.bold-text{
+    color: var(--color-text-navbar);
+  }
+  
+.home-about-body {
+    padding-top: 50px;
+    padding-bottom: 80px;
+    font-size: 1.2em !important;
+    text-align: left;
+}
+
+
+/* ============= INTRODUCTION  ============= */
+
+
+
+
+
+/* ============= INSPIRATION  ============= */
