@@ -49,7 +49,7 @@ export const About = () => {
   const token = sessionStorage.getItem('token');
   
   return (
-    <div className="page-container">
+    <div className="page-container" style={{paddingTop: '6rem'}}>
       <h1>
         About KnitHub
       </h1>
