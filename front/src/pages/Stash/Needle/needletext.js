@@ -4,9 +4,6 @@ import { CustomButton } from '../../../Components/UI/Button';
 import SetAlert from '../../../Components/UI/Alert';
 import { getImageByName } from '../../../images/getImageByName';
 
-/**
- * Component to manage the form for adding new needle information.
- */
 const NeedleInfo = ({ onClose, fetchNeedles }) => {
     const [error, setError] = useState({
         alertInfo: { open: false, severity: 'info', message: 'Test message' },
@@ -30,7 +27,7 @@ const NeedleInfo = ({ onClose, fetchNeedles }) => {
         }));
     }, []);
 
-    // Specialized change handler for the needle type field, handles conditional fields.
+    // Specialized change handler for the needle type field
     const handleTypeChange = useCallback((event) => {
         const { value } = event.target;
         setError(prev => ({
@@ -55,7 +52,7 @@ const NeedleInfo = ({ onClose, fetchNeedles }) => {
         return errors;
     }, [error.needleData]);
 
-    // Handle form submission with field validation and server request.
+    // Handle form submission with validation and server request.
     const handleSubmit = async (event) => {
         event.preventDefault();
         const errors = validateFields();

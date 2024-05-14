@@ -23,7 +23,7 @@ const ProfilePage = () => {
         userEmail: '',
     });
 
-    // State to store edit form data. 
+    // State to store edit data. 
     const [editState, setEditState] = useState({
         userFullName: '',
         userEmail: '',
@@ -32,7 +32,7 @@ const ProfilePage = () => {
         confirmNewPassword: ''
     });
 
-    // State to store error message, show modal and modal message
+    // State to store error message, show modal
     const [profileFetchError, setProfileFetchError] = useState('');
     const [showModal, setShowModal] = useState(false);
 
@@ -154,7 +154,7 @@ const ProfilePage = () => {
         }));
     };
 
-    // Handle delete account click
+    // Handle delete account
     const handleDeleteClick = async () => {
         if (token) {
             try {
@@ -166,8 +166,8 @@ const ProfilePage = () => {
                     message: 'Your account has been successfully deleted.'
                 });
                 setTimeout(() => {
-                // Redirect to login page
-                window.location.href = '/home';
+                // Redirect to home page
+                window.location.href = '/homeOut';
                 }, 500);
             } catch (error) {
                 console.error("Error fetching profile data: ", error);

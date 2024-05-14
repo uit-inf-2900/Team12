@@ -49,22 +49,12 @@ const YarnStash = () => {
         setEditYarnModalOpen(true);
     };
 
-
-    const closeEditModal = () => {
-        setEditYarnModalOpen(false);
-        fetchYarns();
-    };
-
-
     // Function to handle input change for yarn attributes
-
     const handleInputChange = (prop) => (event) => {
         setCurrentYarn({ ...currentYarn, [prop]: event.target.value });
-
     };
 
     // Handling saving updated yarn
-
     const handleSaveUpdatedYarn = async () => {
         const url = `http://localhost:5002/api/inventory/updateyarn`;
         const payload = {
@@ -82,9 +72,6 @@ const YarnStash = () => {
             if (response.ok) {
                 // If update successful, update yarns state with updated yarn
                 setYarns(currentYarns => currentYarns.map(yarn => yarn.itemId === currentYarn.itemId ? {...yarn, ...currentYarn} : yarn));
-                closeEditModal();
-                
-
                 setEditYarnModalOpen(false);
             } else {
                 console.error("Failed to update the yarn", await response.text());
@@ -121,29 +108,22 @@ const YarnStash = () => {
         <div>
             {/* Displaying yarn cards */}
             <div className="card-container" style={{justifyContent: 'flex-start', justifyContent: 'center'}}>
-
             {yarns.map(yarn => (
                 <GeneralCard
                     key={yarn.itemId}
                     ItemId={yarn.ItemID}
-                    title={yarn.type}
+                    title={`${yarn.manufacturer}, ${yarn.type}`}
                     stats={[
-                        { label: "Brand type", value: yarn.type},
-                        { label: "Brand", value: yarn.manufacturer},
                         { label: "Color", value: yarn.color},
                         { label: "Weight", value: yarn.weight},
                         { label: "Length", value: yarn.length },
                         { label: "Gauge", value: yarn.gauge},
                         { label: "Amount in storage", value: yarn.numItems },
                         { label: "Amount in use", value: yarn.inUse },
-                        { label: "Notes", value: yarn.notes}
-                        
                     ]}
                     onClick={() => handleEditYarn(yarn)}
                 />
             ))}
-
-              
 
             </div>
             <AddButton onClick={() => setOpenYarnModal(!openYarnModal)}/>
