@@ -20,7 +20,6 @@ const Inspiration = () => {
                             <img src={INSPimg} style={{ width: 600 }} />
                         </Grid>
                         <Grid item md={4} >
-
                         </Grid>
                         
                     </Grid>

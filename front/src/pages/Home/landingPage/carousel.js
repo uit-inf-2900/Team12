@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Impimg from '../../../images/huggingYarn.png';
+import { getImageByName } from "../../../images/getImageByName";
 
 
 
@@ -11,31 +11,31 @@ const Carousel = () =>{
     const data = [
         {
           name: `Sera Elstad`,
-          img: Impimg,
+          img: getImageByName('knitting'),
           title: "Full Stack Developer",
           review: "Sera is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
         },
         {
           name: `Skjalg Slubowski`,
-          img: Impimg,
+          img: getImageByName('huggingYarn'),
           title: "Full Stack Developer",
           review: "Skjalg is a third-year Cybersecurity student at UiT in Tromsø, with experience in mainly backend development."
         },
         {
           name: `Emilie Steen`,
-          img: Impimg,
+          img: getImageByName('reading'),
           title: "Full Stack Developer",
           review: "Emilie is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
         },
         {
           name: `Marie Alette Stenhaug`,
-          img: Impimg,
+          img: getImageByName('stash'),
           title: "Full Stack Developer",
           review: "Marie is a third-year Informatics student at UiT in Tromsø,  with experience in both frontend and backend development."
         },
         {
           name: `Eline D Wito`,
-          img: Impimg,
+          img: getImageByName('img6'),
           title: 'Full Stack Developer',
           review: 'Eline is a third-year Medical Informatics student at UiT in Tromsø, specializing in the intersection of healthcare and technology. With experience in both frontend and backend development'
         },
