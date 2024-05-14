@@ -57,7 +57,7 @@ const RecipesPage = () => {
             <ModalContent 
                 open={uploading}
                 handleClose={() => setUploading(false)} 
-                infobox={<Upload onClose={() => setUploading(false)} />} 
+                infobox={<Upload onClose={() => setUploading(false)} fetchRecipes={()=>fetchRecipes()} />} 
             />
         </div>
     );
