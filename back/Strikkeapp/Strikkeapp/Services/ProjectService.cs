@@ -182,6 +182,7 @@ public class ProjectService : IProjectService
 
         List<Guid>? yarnInventory = project.ProjectInventoryIds;
         List<Guid>? yarnIds = project.YarnIds;
+        List<Guid>? needleIds = project.NeedleIds;
 
         // if the patch contains yarns, patch the yarns in the project inventory
         if (projectPatch.Model.YarnIds != null && projectPatch.Model.YarnIds.Keys.Count != 0)
@@ -193,16 +194,29 @@ public class ProjectService : IProjectService
             yarnIds = projectPatch.Model.YarnIds.Keys.ToList();
         }
 
+        if (projectPatch.Model.NeedleIds != null)
+            needleIds = projectPatch.Model.NeedleIds;
+
         var projectModel = _mapper.Map<ProjectModel>(project);
 
-        var opToRemove = projectPatch.Operations.Where(x => x.path.Contains("yarnIds")).ToList();
+        var yarnOpToRemove = projectPatch.Operations.Where(x => x.path.Contains("yarnIds")).ToList();
 
-        if (opToRemove != null)
+        if (yarnOpToRemove != null)
         {
-            foreach (var op in opToRemove)
+            foreach (var op in yarnOpToRemove)
                 projectPatch.Operations.Remove(op);
             
             projectPatch.Model.YarnIds = null;
+        }
+
+        var needleOpToRemove = projectPatch.Operations.Where(x => x.path.Contains("needle")).ToList();
+
+        if (needleOpToRemove != null)
+        {
+            foreach (var op in needleOpToRemove)
+                projectPatch.Operations.Remove(op);
+
+            projectPatch.Model.NeedleIds = null;
         }
 
         projectPatch.ApplyToT(projectModel);
@@ -211,6 +225,7 @@ public class ProjectService : IProjectService
         projectMap.YarnIds = yarnIds;
         projectMap.ProjectInventoryIds = yarnInventory;
         projectMap.UserId = tokenResult.UserId;
+        projectMap.NeedleIds = needleIds;
 
         _context.Entry<ProjectEntity>(project).CurrentValues.SetValues(projectMap);
 
