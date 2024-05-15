@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Strikkeapp.Services;
+using Morcatko.AspNetCore.JsonMergePatch;
+using Strikkeapp.Recipes.Models;
 
 namespace Strikkeapp.Controllers;
 
@@ -93,6 +95,14 @@ public class RecipeController : ControllerBase
         }
 
         return File(result.PDFData, "application/pdf");
+    }
+
+    [HttpPatch("{recipeId:guid}")]
+    [Consumes(JsonMergePatchDocument.ContentType)]
+    public RecipeInfo PatchRecipe(Guid recipeId, [FromQuery] string userToken, [FromBody] JsonMergePatchDocument<RecipePatch> patch)
+    {
+        var result = _recipeService.PatchRecipe(userToken, recipeId, patch);
+        return result;
     }
 
     [HttpDelete]
