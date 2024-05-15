@@ -23,9 +23,10 @@ public class RecipeService : IRecipeService
     private readonly string _storagePath;
     private readonly StrikkeappDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IRecipeRatingService _ratingService;
 
 
-    public RecipeService(IConfiguration configuration, ITokenService tokenService, StrikkeappDbContext context, IMapper mapper)
+    public RecipeService(IConfiguration configuration, ITokenService tokenService, StrikkeappDbContext context, IMapper mapper, IRecipeRatingService ratingService)
     {
         _storagePath = configuration["ConnectionStrings:RecipesStorage"]!;
         if (string.IsNullOrEmpty(_storagePath))
@@ -35,6 +36,7 @@ public class RecipeService : IRecipeService
         _tokenService = tokenService;
         _context = context;
         _mapper = mapper;
+        _ratingService = ratingService;
     }
 
     public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge, string notes)
@@ -135,7 +137,8 @@ public class RecipeService : IRecipeService
                     RecipeName = r.RecipeName,
                     NeedleSize = r.NeedleSize,
                     KnittingGauge = r.KnittingGauge,
-                    Notes = r.Notes
+                    Notes = r.Notes,
+                    Rating = _ratingService.GetRating(r.KnittingRecipeId, tokenResult.UserId)
                 })
                 .ToList();
 
