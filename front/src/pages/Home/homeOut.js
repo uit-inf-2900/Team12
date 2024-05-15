@@ -28,7 +28,7 @@ export const HomeOut = () => {
             <Introduction></Introduction>
             <AboutLanding></AboutLanding>
             <Inspiration></Inspiration>
-            <InstagramFeed accessToken={accessTokenInsta} />
+            
         </div>
     );
 };
