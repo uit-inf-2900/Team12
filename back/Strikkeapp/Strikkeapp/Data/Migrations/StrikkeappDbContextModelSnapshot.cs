@@ -48,7 +48,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ContactRequests");
+                    b.ToTable("ContactRequests", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.Counter", b =>
@@ -71,7 +71,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CounterInventory");
+                    b.ToTable("CounterInventory", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
@@ -105,7 +105,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("KnittingRecipes");
+                    b.ToTable("KnittingRecipes", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.NeedleInventory", b =>
@@ -137,7 +137,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("NeedleInventory");
+                    b.ToTable("NeedleInventory", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.Newsletter", b =>
@@ -147,7 +147,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasKey("email");
 
-                    b.ToTable("Newsletter");
+                    b.ToTable("Newsletter", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectEntity", b =>
@@ -184,7 +184,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectTracking", b =>
@@ -227,7 +227,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectTracking");
+                    b.ToTable("ProjectTracking", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectYarnInventoryEntity", b =>
@@ -252,7 +252,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectYarnInventory");
+                    b.ToTable("ProjectYarnInventory", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.UserDetails", b =>
@@ -272,7 +272,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserDetails");
+                    b.ToTable("UserDetails", (string)null);
 
                     b.HasData(
                         new
@@ -310,7 +310,7 @@ namespace Strikkeapp.Data.Migrations
                     b.HasIndex("UserEmail")
                         .IsUnique();
 
-                    b.ToTable("UserLogIn");
+                    b.ToTable("UserLogIn", (string)null);
 
                     b.HasData(
                         new
@@ -335,7 +335,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserVerification");
+                    b.ToTable("UserVerification", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.YarnInventory", b =>
@@ -384,7 +384,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("YarnInventory");
+                    b.ToTable("YarnInventory", (string)null);
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ContactRequest", b =>

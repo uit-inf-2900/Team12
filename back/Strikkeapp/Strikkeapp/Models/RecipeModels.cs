@@ -1,3 +1,5 @@
+using Strikkeapp.Models;
+
 namespace Strikkeapp.Recipes.Models;
 
 public class RecipeInfo
@@ -24,7 +26,7 @@ public class RecipeInfo
                 _notes = value;
         }
     }
-
+    public RecipeRatingModel? Rating { get; set; }
 }
 
 public class RecipePatch
