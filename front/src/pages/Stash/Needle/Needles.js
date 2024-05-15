@@ -148,7 +148,6 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
                             <th>Type</th>
                             <th>Size</th>
                             <th>Length</th>
-                            <th>In Use</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
