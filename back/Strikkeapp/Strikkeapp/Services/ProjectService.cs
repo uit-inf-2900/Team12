@@ -214,7 +214,7 @@ public class ProjectService : IProjectService
 
         _context.Entry<ProjectEntity>(project).CurrentValues.SetValues(projectMap);
 
-        var test = _context.SaveChanges();
+        _context.SaveChanges();
 
         if (projectPatch.Model.Status == Enums.ProjectStatus.Completed)
             CompleteProject(userToken, projectId);
