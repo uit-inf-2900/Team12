@@ -51,12 +51,12 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
 
 
     return (
-        <div className="page-container">
+        <div className="page-container" >
             <h1>My Recipes</h1>
            
             
             {/* {loading ? <p>Loading recipes...</p> : ( */}
-                <div className='card-container' >
+                <div className='card-container' style={{justifyContent: 'flex-start', justifyContent: 'center'}}>
                     {recipes.map((recipe, index) => (
                         <Card
                         key={recipe.recipeId}

@@ -99,7 +99,7 @@ const Projects = () => {
                 setActiveStatus={setActiveStatus}
             />
 
-            <div className="card-container">
+            <div className="card-container" style={{justifyContent: 'flex-start', justifyContent: 'center'}}>
                 {filteredProjects.map(project => (
                     <Card
                         key={project.projectId}
