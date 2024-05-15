@@ -63,6 +63,14 @@ public class ContactTests : IDisposable
             UserStatus = "verified"
         };
         _context.UserLogIn.Add(login);
+        
+        _context.UserDetails.Add(new UserDetails
+        {
+            UserId = testUserId,
+            UserFullName = "Test User",
+            DateOfBirth = DateTime.Now,
+            IsAdmin = false
+        });
 
         // Set up admin user
         var loginAdmin = new UserLogIn
@@ -243,5 +251,30 @@ public class ContactTests : IDisposable
             UserName = ""
         };
         Assert.Throws<ArgumentException>(() => _contactService.CreateContactRequest(nonName));
+    }
+
+    [Fact]
+    public void NonAdminUpdate_Fails()
+    {
+        var result = _contactService.UpdateIsActiveStatus(testRequestId, true, "testToken");
+        Assert.False(result);
+
+        var result2 = _contactService.UpdateIsHandledStatus(testRequestId, true, "testToken");
+        Assert.False(result2);
+    }
+
+    [Fact]
+    public void GetRequest_FailTests()
+    {
+        // Set up mock to return invalid token
+        _mockTokenService.Setup(x => x.ExtractUserID("fakeToken"))
+            .Returns(TokenResult.ForFailure("Unauthorized"));
+
+        // Run test with invalid token
+        var tokenRes = _contactService.GetContactRequests(false, false, "fakeToken");
+        Assert.Empty(tokenRes);
+
+        var nonAdmin = _contactService.GetContactRequests(false, false, "testToken");
+        Assert.Empty(nonAdmin);
     }
 }

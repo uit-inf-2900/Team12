@@ -66,7 +66,7 @@ public class ContactService : IContactService
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
-            return null!;
+            return Enumerable.Empty<ContactRequestDto>();
         }
 
         var isAdmin = _context.UserDetails
@@ -76,7 +76,7 @@ public class ContactService : IContactService
 
         if (!isAdmin)
         {
-            return null!;
+            return Enumerable.Empty<ContactRequestDto>();
         }
 
         // Get alle the contact requests
