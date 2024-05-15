@@ -53,8 +53,8 @@ public class UsersController : ControllerBase
         }
 
         var mailRes = _mailService.SendVerification(result.Token);
-        /*
-        if(!mailRes.Succes)
+        
+        if(!mailRes.Success)
         {
             if(mailRes.ErrorMessage == "Unauthorized")
             {
@@ -67,7 +67,7 @@ public class UsersController : ControllerBase
             }
 
             return StatusCode(500, "Cannot process request");
-        }*/
+        }
 
         var res = new UserResultDto
         {
