@@ -46,9 +46,6 @@ const Dashboard = ({ toggleView }) => {
                 const handledMessagesResponse = await fetch(`${API_BASE_URL}/api/Contact?isActive=false&isHandled=true&userToken=` + userToken, fetchOptions);
                 setHandledMessages(await handledMessagesResponse.json());
 
-                const recipesResponse = await fetch(`${API_BASE_URL}/api/recipe/getallrecipes?userToken=${usersToken}`, fetchOptions);
-                setRecipesData(await recipesResponse.json());
-
                 const inventoryResponse = await fetch(`${API_BASE_URL}/api/inventory/getAll?userToken=${usersToken}`, fetchOptions);
                 const inventoryData = await inventoryResponse.json();
                 setYarnData(inventoryData.yarnInventory);
@@ -111,10 +108,6 @@ const Dashboard = ({ toggleView }) => {
         { label: "Total Yarn cards", value: yarnData.length },
     ];
 
-    // Recipe info that is sendt into the card
-    const Recipes = [
-        { label: "Total Recipes", value: recipesData.length },
-    ];
 
     // Newsletter info that is sendt into the card
     const Newsletter = [
@@ -157,16 +150,14 @@ const Dashboard = ({ toggleView }) => {
                 />
 
                 <GeneralCard
+                    
+                />
+                <GeneralCard
                     title={`Needle: ${needleData.length} `}
                     stats={Needles}
                     chartComponent={renderContent(Needles, "Needle Statistics", "yarnBasket")}
                 />
 
-                <GeneralCard
-                    title="Recipes Statistics"
-                    stats={Recipes}
-                    chartComponent={renderContent(0, "Recipes Statistics", "books")}
-                />
 
             </div>
         </div>
