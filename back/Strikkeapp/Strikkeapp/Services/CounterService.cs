@@ -27,6 +27,7 @@ public class CounterService : ICounterService
 
     public CreateCounterResult CreateCounter(string userToken, string name)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
@@ -39,6 +40,7 @@ public class CounterService : ICounterService
         {
             try
             {
+                // Create new counter
                 var newCounter = new Counter
                 {
                     RoundNumber = 0,
@@ -46,6 +48,7 @@ public class CounterService : ICounterService
                     Name = name
                 };
 
+                // Add counter to database and save changes
                 _context.CounterInventory.Add(newCounter);
                 _context.SaveChanges();
 
@@ -54,6 +57,7 @@ public class CounterService : ICounterService
             }
             catch (Exception ex)
             {
+                // Handle exception and return failure
                 transaction.Rollback();
                 return CreateCounterResult.ForFailure(ex.Message);
             }
@@ -62,6 +66,7 @@ public class CounterService : ICounterService
 
     public GetCountersResult GetCounters(string userToken)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
@@ -70,6 +75,7 @@ public class CounterService : ICounterService
 
         var userId = tokenResult.UserId;
 
+        // Get all counters for user
         var counters = _context.CounterInventory
             .Where(uid => uid.UserId == userId)
             .ToList();
@@ -79,6 +85,7 @@ public class CounterService : ICounterService
 
     public CounterResult UpdateCounter(string userToken, Guid counterId, string newName)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
@@ -122,6 +129,7 @@ public class CounterService : ICounterService
 
     public CounterResult IncrementCounter(string userToken, Guid counterId)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
@@ -132,15 +140,18 @@ public class CounterService : ICounterService
         {
             try
             {
+                // Get counter
                 var getCounter = _context.CounterInventory
                     .Where(uid => uid.UserId == tokenResult.UserId)
                     .FirstOrDefault(cid => cid.CounterId == counterId);
 
+                // Fail if counter does not exist
                 if (getCounter == null)
                 {
                     return CounterResult.ForFailure("Not found");
                 }
 
+                // Increment counter and save changes
                 getCounter.RoundNumber++;
                 _context.SaveChanges();
 
@@ -157,6 +168,7 @@ public class CounterService : ICounterService
 
     public CounterResult DecrementCounter(string userToken, Guid counterId)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
@@ -167,15 +179,18 @@ public class CounterService : ICounterService
         {
             try
             {
+                // Get counter
                 var getCounter = _context.CounterInventory
                     .Where(uid => uid.UserId == tokenResult.UserId)
                     .FirstOrDefault(cid => cid.CounterId == counterId);
 
+                // Fail if counter does not exist
                 if (getCounter == null)
                 {
                     return CounterResult.ForFailure("Not found");
                 }
 
+                // Decrement counter and save changes
                 getCounter.RoundNumber--;
                 _context.SaveChanges();
 
@@ -192,6 +207,7 @@ public class CounterService : ICounterService
 
     public CounterResult DeleteCounter(string userToken, Guid counterId)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
@@ -202,15 +218,18 @@ public class CounterService : ICounterService
         {
             try
             {
+                // Get counter
                 var getCounter = _context.CounterInventory
                     .Where(uid => uid.UserId == tokenResult.UserId)
                     .FirstOrDefault(cid => cid.CounterId == counterId);
 
+                // Fail if counter does not exist
                 if (getCounter == null)
                 {
                     return CounterResult.ForFailure("Not found");
                 }
 
+                // Remove counter and save changes
                 _context.CounterInventory.Remove(getCounter);
                 _context.SaveChanges();
 
