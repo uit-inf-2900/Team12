@@ -30,6 +30,7 @@ public class StrikkeappDbContext : DbContext
     public virtual DbSet<Newsletter> Newsletter { get; set; }
     public virtual DbSet<ProjectEntity> Projects { get; set; }
     public virtual DbSet<ProjectYarnInventoryEntity> ProjectYarnInventory { get; set; }
+    public virtual DbSet<RecipeRatingEntity> RecipeRatings { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -139,6 +140,13 @@ public class StrikkeappDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<ProjectYarnInventoryEntity>()
+            .HasOne<UserLogIn>()
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RecipeRatingEntity>()
             .HasOne<UserLogIn>()
             .WithMany()
             .HasForeignKey(c => c.UserId)
