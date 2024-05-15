@@ -124,7 +124,7 @@ const Dashboard = ({ toggleView }) => {
 
     return (
         <div>
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
+            <div className='dashboard-grid' style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
                 {/* Generate alle the card for the admin view  */}
                 <GeneralCard
                     title={`User Statistics: ${usersData.length} users`}
