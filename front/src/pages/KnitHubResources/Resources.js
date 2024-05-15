@@ -12,7 +12,7 @@ function Resources() {
 
     return (
         <div >
-            <div style={{maxWidth:'70%', margin: '0 auto', textAlign: 'center' }}>
+            <div style={{maxWidth:'70%', margin: '0 auto', textAlign: 'center', paddingTop:'50px'}}>
                 <h1>Resources</h1>
                 <p>
                     Welcome to the resource page! Here you can find all the necessary measurements for your knitting 

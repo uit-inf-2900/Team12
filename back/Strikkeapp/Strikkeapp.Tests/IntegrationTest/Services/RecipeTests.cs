@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using AutoMapper;
 
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
@@ -17,6 +18,8 @@ public class RecipeTests : IDisposable
     private readonly StrikkeappDbContext _context;
     private readonly IRecipeService _recipeService;
     private readonly IConfiguration _mockConfiguration;
+    private readonly IMapper _mapper;
+    private readonly IRecipeRatingService _ratingService;
 
     // Create mock services
     private readonly Mock<ITokenService> _mockTokenService = new Mock<ITokenService>();
@@ -31,6 +34,12 @@ public class RecipeTests : IDisposable
 
     public RecipeTests()
     {
+        // Setup AutoMapper configuration
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<AutoMapperProfile>();
+        });
+
         // Set up mocks
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
                 .Returns("hashedPassword");
@@ -57,7 +66,9 @@ public class RecipeTests : IDisposable
 
 
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
-        _recipeService = new RecipeService(_mockConfiguration, _mockTokenService.Object, _context);
+        _mapper = mapperConfig.CreateMapper();
+        _ratingService = new RecipeRatingService(_context, _mapper);
+        _recipeService = new RecipeService(_mockConfiguration, _mockTokenService.Object, _context, _mapper, _ratingService);
 
         SeedTestData();
     }
@@ -144,7 +155,7 @@ public class RecipeTests : IDisposable
 
         // Run service with wrong configuration and verify failure
         var exception = Assert.Throws<InvalidOperationException>(() => 
-            new RecipeService(mockConfiguration, _mockTokenService.Object, _context));
+        new RecipeService(mockConfiguration, _mockTokenService.Object, _context, _mapper, _ratingService));
         Assert.Equal("Storage path must be configured.", exception.Message);
     }
 

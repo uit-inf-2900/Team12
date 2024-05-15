@@ -14,9 +14,7 @@ const RecipesPage = () => {
 
     const fetchRecipes = async () => {
         try {
-            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes', {
-                params: { userToken: sessionStorage.getItem('token') }
-            });
+            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes?userToken='+ sessionStorage.getItem('token'));
             setRecipes(response.data || []);
         } catch (error) {
             console.error('Error fetching recipes:', error);

@@ -9,6 +9,8 @@ import allBlackShort from "../../images/homepage/allBlackShort.svg";
 import NameLong from "../../images/logo/KHorange.svg"
 import Resources from '../../pages/KnitHubResources/Resources';
 
+import MenuIcon from '@mui/icons-material/Menu';
+
 
 const VisitorView = () => {
   return (
@@ -43,6 +45,10 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showNav, setShowNav]= useState(false);
 
+  const handleShowNavbar = () => {
+    setShowNav(!showNav)
+  }
+
   const handleLogoutClick = (e) => {
     e.preventDefault();
     setShowLogoutConfirm(true);
@@ -66,6 +72,7 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
             <img src={allBlackShort} className='nav-logo-img'></img>
           </NavLink>
           </li>
+
         
           <li className="nav-items" style={{fontSize:'1.5rem'}} ><NavLink to="/" className="nav-link">Home</NavLink></li>
           {!isLoggedIn && <VisitorView/>}

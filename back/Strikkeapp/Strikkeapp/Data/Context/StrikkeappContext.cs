@@ -115,20 +115,20 @@ public class StrikkeappDbContext : DbContext
         modelBuilder.Entity<ProjectEntity>()
             .Property(p => p.NeedleIds)
             .HasConversion(
-                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
+                v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null!),
                     new ValueComparer<List<Guid>>(
-                    (c1, c2) => c1.SequenceEqual(c2),
+                    (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                     c => c.ToList()));
 
         modelBuilder.Entity<ProjectEntity>()
             .Property(p => p.YarnIds)
             .HasConversion(
-                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
+                v => JsonSerializer.Deserialize<List<Guid>>(v, (JsonSerializerOptions)null!),
                     new ValueComparer<List<Guid>>(
-                    (c1, c2) => c1.SequenceEqual(c2),
+                    (c1, c2) => c1!.SequenceEqual(c2!),
                     c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                     c => c.ToList()));
 

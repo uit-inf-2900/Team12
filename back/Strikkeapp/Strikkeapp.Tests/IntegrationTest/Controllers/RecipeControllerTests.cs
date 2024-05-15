@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using AutoMapper;
 
 
 using Strikkeapp.Controllers;
@@ -14,6 +15,7 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 using Strikkeapp.Recipes.Models;
+using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 
 
 
@@ -26,6 +28,8 @@ public class RecipeControllerTests : IDisposable
     private readonly RecipeService _recipeService;
     private readonly StrikkeappDbContext _context;
     private readonly IConfiguration _mockConfiguration;
+    private readonly IMapper _mapper;
+    private readonly IRecipeRatingService _ratingService;
 
     // Set up mocks
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
@@ -39,6 +43,12 @@ public class RecipeControllerTests : IDisposable
 
     public RecipeControllerTests()
     {
+        // Setup AutoMapper configuration
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<AutoMapperProfile>();
+        });
+
         // Set up mock services
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
             .Returns("hashedPassword");
@@ -68,7 +78,9 @@ public class RecipeControllerTests : IDisposable
 
         // Set up context, service and controller
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
-        _recipeService = new RecipeService(_mockConfiguration, _mockTokenService.Object, _context);
+        _mapper = mapperConfig.CreateMapper();
+        _ratingService = new RecipeRatingService(_context, _mapper);
+        _recipeService = new RecipeService(_mockConfiguration, _mockTokenService.Object, _context, _mapper, _ratingService);
         _controller = new RecipeController(_recipeService);
 
         // Seed database
@@ -283,5 +295,26 @@ public class RecipeControllerTests : IDisposable
         Assert.IsType<NotFoundResult>(result);
     }
 
+    [Fact]
+    public void PatchRecipe_Ok()
+    {
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\", \"NeedleSize\": 6, \"KnittingGauge\": \"20x20\" }");
+        var result = _controller.PatchRecipe(testRecipeId, "userToken", patch);
+        Assert.NotNull(result);
+    }
 
+    [Fact]
+    public void FakeTokenPatch_Fails()
+    {   // Run service with fake token and verify failure
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        Assert.Throws<UnauthorizedAccessException>(() => _controller.PatchRecipe(testRecipeId, "fakeToken", patch));
+    }
+
+    [Fact]
+    public void NonRecipePatch_Fails()
+    {
+        // Run service with non-existing recipe and verify failure
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        Assert.Throws<ArgumentException>(() => _controller.PatchRecipe(Guid.NewGuid(), "userToken", patch));
+    }
 }
