@@ -20,11 +20,14 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
         notes: ''
     });
 
+    // Select files from computer
     const handleFileSelection = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
     };
 
+
+    // test that input is valid
     const validateInput = () => {
         let errors = {};
         if (!file) errors.file = 'A file is required.';
@@ -36,6 +39,8 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
         return Object.keys(errors).length === 0;
     };
 
+
+    // upload the file
     const uploadFile = () => {
         if (!validateInput()) {
             return;
@@ -66,6 +71,7 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
+                {/* Place for uploading file */}
                 <div className="box light" onClick={() => fileInputRef.current.click()}>
                     <IoIosCloudUpload size={50} />
                     <input
@@ -76,6 +82,7 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
                         style={{ display: 'none' }}
                     />
                     <p>{file ? file.name : formErrors.file && <span style={{ color: 'red' }}>{formErrors.file}</span>}</p>                </div>
+                {/* Input fields for filling out info */}
                 <div className="input">
                     <TextField
                         error={!!formErrors.recipeName}
@@ -109,6 +116,7 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
                 ref={input => input && !file && input.setCustomValidity(formErrors.file || '')}
             />
                 </div>
+                {/* Buttons for closing, canceling, and uploading */}
                 <CustomButton themeMode="light" onClick={onClose}>Close</CustomButton>
                 {file && <CustomButton themeMode="dark" onClick={() => setFile(null)}>Cancel</CustomButton>}
                 {file && <CustomButton themeMode="light" onClick={uploadFile}>Upload</CustomButton>}

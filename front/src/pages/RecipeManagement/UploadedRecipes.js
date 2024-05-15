@@ -21,18 +21,20 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false); // State for controlling modal open/close
     
-    
+    // Open modual when clicked on
     const handleProjectClick = (recipe) => {
         setSelectedRecipe(recipe);
         setIsModalOpen(true); // Open modal
     };
 
+
+    // Close modual
     const handleClose = () => {
         setIsModalOpen(false);
         fetchRecipes();
     };
 
-    
+    // Handle deletion of code 
     const handleRecipeDelete = async (recipeId) => {
         try {
             const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${recipeId}`);
@@ -56,19 +58,12 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
         (knitDensityFilter ? recipe.knittingGauge === knitDensityFilter : true)
     );
 
-    const sortMenuItems = [
-        { value: '', name: 'Select' },
-        { value: 'author', name: 'Author' },
-        { value: 'needleSize', name: 'Needle Size' },
-        { value: 'type', name: 'Type' },
-        { value: 'gauge', name: 'Gauge' }
-    ];
-
 
     return (
         <div className="page-container" style={{ width: '80%', margin: '0 auto' }}>
             <h1>My Recipes</h1>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, width:'80%' ,  justifyContent: 'center',  margin: '0 auto'}}>
+                {/* Search field for sercing for recipes */}
                 <TextField
                     label="Search Recipes by Name"
                     variant="outlined"
@@ -76,6 +71,7 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
                     onChange={(e) => setSearchText(e.target.value)}
                     style={{ flexGrow: 2, marginRight: 10, width: '100%' }}
                 />
+                {/* Dropdown for sorting recipes by needle size*/}
                 <FormControl style={{ minWidth: 150, marginRight: 10 }}>
                     <InputLabel>Needle Size</InputLabel>
                     <Select
@@ -89,6 +85,7 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
                         ))}
                     </Select>
                 </FormControl>
+                {/* Dropdown for sorting recipes by Knitting Gauge*/}
                 <FormControl style={{ minWidth: 150 }}>
                     <InputLabel>Knitting Gauge</InputLabel>
                     <Select
