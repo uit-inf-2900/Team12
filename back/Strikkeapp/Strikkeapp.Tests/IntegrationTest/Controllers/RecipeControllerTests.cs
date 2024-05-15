@@ -298,7 +298,7 @@ public class RecipeControllerTests : IDisposable
     [Fact]
     public void PatchRecipe_Ok()
     {
-        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\", \"NeedleSize\": 6, \"KnittingGauge\": \"20x20\" }");
         var result = _controller.PatchRecipe(testRecipeId, "userToken", patch);
         Assert.NotNull(result);
     }
