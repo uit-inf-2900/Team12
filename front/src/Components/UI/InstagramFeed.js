@@ -29,7 +29,7 @@ const InstagramFeed = ({ accessToken }) => {
         
         // Parse the response as JSON and shuffel the posts
         const data = await response.json();
-        const shuffledPosts = data.data.sort(() => 0.5 - Math.random()).slice(0, 16);
+        const shuffledPosts = data.data.sort(() => 0.5 - Math.random()).slice(0, 20);
         setPosts(shuffledPosts);
 
       // Catch any errors and set the error state
@@ -62,7 +62,7 @@ const InstagramFeed = ({ accessToken }) => {
 
   return (
     // Display the Instagram posts in a grid with 4 columns and a gap of 10px between the posts 
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', 'border-radius': '15px' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', borderRadius: '15px', padding: '0 50px 50px 50px' }}>
       {posts.map(post => (
 
         // Display the Instagram post as a link with the image as a background
