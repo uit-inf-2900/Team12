@@ -10,6 +10,7 @@ public interface IInventoryService
 {
     public InventoryGetResult GetInventory(string jwtToken);
     public YarnInventoryDto GetSingleYarnFromInventory(string userToken, Guid itemId);
+    NeedleInventoryDto GetNeedle(string userToken, Guid itemId);
     public IEnumerable<NeedleInventoryDto> GetNeedles(string userToken, IEnumerable<Guid>? needleIds);
     public IEnumerable<YarnInventoryDto> GetYarns(string userToken, IEnumerable<Guid>? yarnIds);
     public InventoryResult AddNeedle(AddNeedleRequest request);
@@ -161,6 +162,21 @@ public class InventoryService : IInventoryService
             throw new Exception("This yarn does not exist in user´s inventory");
 
         return _mapper.Map<YarnInventoryDto>(yarnInventory);
+    }
+
+    public NeedleInventoryDto GetNeedle(string userToken, Guid itemId)
+    {
+        // Check for valid token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (!tokenResult.Success)
+            throw new UnauthorizedAccessException();
+
+        var needle = _context.NeedleInventory.Where(n => n.ItemID == itemId && n.UserId == tokenResult.UserId).FirstOrDefault();
+
+        if (needle == null)
+            throw new Exception("This needle does not exist in user´s inventory");
+
+        return _mapper.Map<NeedleInventoryDto>(needle);
     }
 
     public IEnumerable<NeedleInventoryDto> GetNeedles(string userToken, IEnumerable<Guid>? needleIds)
