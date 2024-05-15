@@ -98,7 +98,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     }, []);
 
     // Define the predefined needle types 
-    const predefinedTypes = ['Interchangeable', 'DoublePointed', 'Circular', ];
+    const predefinedTypes = ['Interchangeble', 'DoublePointed', 'Circular', ];
 
     // useMemo hook to memoize the needles options for the MultiSelect component
     const NeedlesOptions = useMemo(() => {
@@ -148,6 +148,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
                             <th>Type</th>
                             <th>Size</th>
                             <th>Length</th>
+                            <th>In Use</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
@@ -158,7 +159,9 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
                                 <td>{needle.type}</td>
                                 <td>{needle.size} mm</td>
                                 <td>{needle.length} cm</td>
-                                
+                                <td className={needle.numInUse ? 'in-use' : 'not-in-use'}>
+                                    {needle.numInUse ? 'In Use' : 'Not In Use'}
+                                </td>
                                 <td>
                                     <Fab size="small" onClick={() => handleOpenDeleteModal(needle)}>
                                         <DeleteIcon />
