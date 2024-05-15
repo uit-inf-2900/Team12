@@ -7,17 +7,10 @@ import { CustomButton } from '../../Components/UI/Button';
 import axios from 'axios';
 
 
-// TODO: Implement file upload logic
-// TODO: Implement error handling and feedback to the user
-
-
-const UpLoad = ({ onClose }) => {
-    // State to control the file input and upload status 
-    const [file, setFile] = useState(null);                 
-    const [uploadStatus, setUploadStatus] = useState({ fileName: '' });  
-    const fileInputRef = useRef(null);             
-    
-    // State to control the recipe information input fields
+const UpLoad = ({ onClose, onUploadSuccess }) => {
+    const [file, setFile] = useState(null);
+    const [uploadStatus, setUploadStatus] = useState({ fileName: '' });
+    const fileInputRef = useRef(null);
     const [recipeInfo, setRecipeInfo] = useState({
         recipeName: '',
         author: '',
@@ -26,22 +19,18 @@ const UpLoad = ({ onClose }) => {
         notes: ''
     });
 
-    // Function to handle input change
     const handleInputChange = (e) => {
         setRecipeInfo({ ...recipeInfo, [e.target.name]: e.target.value });
     };
 
-    // Function to handle file selection
     const handleFileSelection = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
         setUploadStatus({ ...uploadStatus, fileName: selectedFile.name });
     };
 
-    // Handle the file upload
     const uploadFile = () => {
-        const formData = new FormData(); 
-
+        const formData = new FormData();
         formData.append("RecipeFile", file);
         formData.append("UserToken", sessionStorage.getItem('token'));
         formData.append("RecipeName", recipeInfo.recipeName);
@@ -53,59 +42,46 @@ const UpLoad = ({ onClose }) => {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(reponse => {
-            console.log("Upload success:", reponse);
+        }).then(response => {
+            console.log("Upload success:", response);
+            onClose();
+            onUploadSuccess(); // Call onUploadSuccess when upload is successful
         }).catch(error => {
-            // Handle error 
             console.error("Upload error:", error);
-        })
-        
-       
+        });
     };
 
-
-    // Function to clear the file 
     const clearFile = () => {
         setFile(null);
         setUploadStatus({ fileName: '' });
-        
     };
 
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
-                <div className="upload-flex-container"> 
-                    <div className="box light" 
-                        style={{"border-radius": "50%", 
-                                "width": "200px", 
-                                "height": "200px", 
-                                "border": "2px dashed #ccc", 
-                                "cursor": "pointer", 
-                                "overflow": "hidden"}} 
-                        onClick={() => fileInputRef.current.click()}>
-                        <IoIosCloudUpload size={50} />   {/* The upload icon */}
-                        <input 
+                <div className="upload-flex-container">
+                    <div className="box light" onClick={() => fileInputRef.current.click()}>
+                        <IoIosCloudUpload size={50} />
+                        <input
                             ref={fileInputRef}
-                            type="file" 
-                            onChange={handleFileSelection} 
-                            accept='.pdf'      // Can only choose pdf 
+                            type="file"
+                            onChange={handleFileSelection}
+                            accept='.pdf'
                             style={{ display: 'none' }}
                         />
                         {uploadStatus.fileName && <p>{uploadStatus.fileName}</p>}
                     </div>
-                    
-                    {/* Skjema for oppskriftsinformasjon */}
+
                     <div className="input">
-                        <CustomButton themeMode="light" onClick={onClose}> Close </CustomButton>
                         <InputField label="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
-                        <InputField label="Author" name="author"  type="text" onChange={handleInputChange} />
-                        <InputField label="Needle Size" name="needleSize"  type="number" onChange={handleInputChange} />
-                        <InputField label="Knitting Gauge" name="knittingGauge"  type="text" onChange={handleInputChange}  />
-                        <InputField label="Notes" name="notes"   type="text"onChange={handleInputChange}  />
+                        <InputField label="Author" name="author" type="text" onChange={handleInputChange} />
+                        <InputField label="Needle Size" name="needleSize" type="number" onChange={handleInputChange} />
+                        <InputField label="Knitting Gauge" name="knittingGauge" type="text" onChange={handleInputChange} />
+                        <InputField label="Notes" name="notes" type="text" onChange={handleInputChange} />
                     </div>
                 </div>
-                {/* Buttons to clear and upload files. Should only be viseble if a file is uploaded */}
-                {file && <CustomButton themeMode="dark" onClick={clearFile}>Cancel</CustomButton>}           
+                <CustomButton themeMode="light" onClick={onClose}> Close </CustomButton>
+                {file && <CustomButton themeMode="dark" onClick={clearFile}>Cancel</CustomButton>}
                 {file && <CustomButton themeMode="light" onClick={uploadFile} iconName="upload"> Upload</CustomButton>}
             </div>
         </div>
