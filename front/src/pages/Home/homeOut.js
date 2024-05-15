@@ -5,7 +5,7 @@ import StatisticBox from './StatisticBox'; // Sjekk at stien stemmer
 import { useNavigate } from 'react-router-dom';
 import InstagramFeed from '../../Components/UI/InstagramFeed'; 
 import Hero from './landingPage/hero';
-import AboutLanding from './landingPage/AboutUs';
+import AboutLanding from './landingPage/aboutUs';
 import Inspiration from './landingPage/inspiration';
 import Introduction from './landingPage/intro';
 
