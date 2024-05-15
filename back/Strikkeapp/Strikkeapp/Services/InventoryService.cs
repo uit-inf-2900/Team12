@@ -239,6 +239,7 @@ public class InventoryService : IInventoryService
 
     public UpdateInventoryResult UpdateNeedle(UpdateItemRequest request)
     {
+        // Check for valid token
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
         {
@@ -251,15 +252,18 @@ public class InventoryService : IInventoryService
         {
             try
             {
+                // Find the needle in the database
                 var needleInventory = _context.NeedleInventory
                     .Where(ni => ni.UserId == userId)
                     .FirstOrDefault(nid => nid.ItemID == request.ItemId);
 
+                // If the needle is not found, return failure
                 if (needleInventory == null)
                 {
                     return UpdateInventoryResult.ForFailure("Item not found");
                 }
 
+                // Update the number of needles
                 needleInventory.NumItem = request.NewNum;
 
                 _context.SaveChanges();
@@ -278,6 +282,7 @@ public class InventoryService : IInventoryService
 
     public UpdateInventoryResult UpdateNeedlesUsed(UpdateItemRequest request)
     {
+        // Check for valid token
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
         {
@@ -290,20 +295,24 @@ public class InventoryService : IInventoryService
         {
             try
             {
+                // Find the needle in the database
                 var needleInventory = _context.NeedleInventory
                     .Where(ni => ni.UserId == userId)
                     .FirstOrDefault(nid => nid.ItemID == request.ItemId);
+
 
                 if (needleInventory == null)
                 {
                     return UpdateInventoryResult.ForFailure("Item not found for user");
                 }
 
+                // Check if the number of needles in use exceeds the inventory
                 if(needleInventory.NumItem < request.NewNum)
                 {
                     return UpdateInventoryResult.ForFailure("Exceeded inventory");
                 }
 
+                // Update the number of needles in use
                 needleInventory.NumInUse = request.NewNum;
                 _context.SaveChanges();
 
@@ -335,15 +344,18 @@ public class InventoryService : IInventoryService
         {
             try
             {
+                // Find the needle in the database
                 var needleToDelte = _context.NeedleInventory
                     .Where(ni => ni.UserId == userId)
                     .FirstOrDefault(nid => nid.ItemID == request.ItemId);
 
+                // If the needle is not found, return failure
                 if (needleToDelte == null)
                 {
                     return DeleteItemResult.ForFailure("Item not found for user");
                 }
 
+                // Remove the needle from the database
                 _context.NeedleInventory.Remove(needleToDelte);
                 _context.SaveChanges();
 
@@ -399,6 +411,7 @@ public class InventoryService : IInventoryService
 
     public UpdateInventoryResult UpdateYarn(UpdateYarnRequest request)
     {
+        // Check for valid token
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
         {
@@ -411,15 +424,18 @@ public class InventoryService : IInventoryService
         {
             try
             {
+                // Find the yarn in the database
                 var yarnInventory = _context.YarnInventory
                     .Where(yi => yi.UserId == userId)
                     .FirstOrDefault(yid => yid.ItemID == request.ItemId);
 
+                // Return failure if yarn is not found
                 if(yarnInventory == null)
                 {
                     return UpdateInventoryResult.ForFailure("Item not found");
                 }
 
+                // Update only fields with input
                 if(request.NewNum != yarnInventory.NumItems && request.NewNum>0)
                 {
                     yarnInventory.NumItems = request.NewNum;
@@ -466,6 +482,7 @@ public class InventoryService : IInventoryService
                     _context.SaveChanges();
                 }
 
+                // Commit transaction and return success
                 transaction.Commit();
                 return UpdateInventoryResult.ForSuccessNum(yarnInventory.ItemID, yarnInventory.NumItems);
             }
@@ -479,6 +496,7 @@ public class InventoryService : IInventoryService
 
     public UpdateInventoryResult UpdateYarnUsed(UpdateItemRequest request)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if (!tokenResult.Success)
         {
@@ -491,20 +509,24 @@ public class InventoryService : IInventoryService
         {
             try
             {
+                // Get yarn inventory
                 var yarnInventory = _context.YarnInventory
                     .Where(yi => yi.UserId == userId && yi.ItemID == request.ItemId)
                     .FirstOrDefault();
 
+                // Check if yarn exists
                 if(yarnInventory == null)
                 {
                     return UpdateInventoryResult.ForFailure("Item not found for user");
                 }
 
+                // Check if the number of yarns in use exceeds the inventory
                 if(yarnInventory.NumItems < request.NewNum)
                 {
                     return UpdateInventoryResult.ForFailure("Exceeded inventory");
                 }
 
+                // Update the number of yarns in use and save changes
                 yarnInventory.InUse = request.NewNum;
 
                 _context.SaveChanges();
@@ -523,6 +545,7 @@ public class InventoryService : IInventoryService
 
     public DeleteItemResult DeleteYarn(DeleteItemRequest request)
     {
+        // Extract user ID from token
         var tokenResult = _tokenService.ExtractUserID(request.UserToken);
         if(!tokenResult.Success)
         {
@@ -535,20 +558,23 @@ public class InventoryService : IInventoryService
         {
             try
             {
+                // Find the yarn in the database
                 var yarnToDelete = _context.YarnInventory
                     .Where(yi => yi.UserId == userId)
                     .FirstOrDefault(yid => yid.ItemID == request.ItemId);
 
-                    if(yarnToDelete == null)
-                    {
-                        return DeleteItemResult.ForFailure("Item not found for user");
-                    }
+                // Return failure if yarn is not found
+                if(yarnToDelete == null)
+                {
+                    return DeleteItemResult.ForFailure("Item not found for user");
+                }
 
-                    _context.YarnInventory.Remove(yarnToDelete);
-                    _context.SaveChanges();
+                // Remove yarn, and save changes
+                _context.YarnInventory.Remove(yarnToDelete);
+                _context.SaveChanges();
 
-                    transaction.Commit();
-                    return DeleteItemResult.ForSuccess(request.ItemId);
+                transaction.Commit();
+                return DeleteItemResult.ForSuccess(request.ItemId);
             }
             catch(Exception ex)
             {
