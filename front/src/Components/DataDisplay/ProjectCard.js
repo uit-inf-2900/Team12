@@ -69,13 +69,12 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
             <Typography variant="body1" gutterBottom>
               {getStatusLabel(project.status)}
             </Typography>
-
             <Typography variant="h6" gutterBottom>
-              Needle
+              Notes
             </Typography>
-            {/* <Typography variant="body1" gutterBottom>
-              {project.needles}
-            </Typography> */}
+            <Typography variant="body1" gutterBottom>
+              {project.notes}
+            </Typography>
           </Grid>
 
           {/* Right Column */}
@@ -95,7 +94,7 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
             </Typography>
             {project.yarns.map((yarn) => (
               <Typography key={yarn.itemId} variant="body1" gutterBottom>
-                {yarn.type} by {yarn.manufacturer}, color: {yarn.color}
+                {yarn.type} by {yarn.manufacturer}, <br></br> color: {yarn.color}<br></br> 
                 Amount in use: {yarn.inUse}
               </Typography>
               
@@ -103,12 +102,7 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
 
 
 
-            <Typography variant="h6" gutterBottom>
-              Notes
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              {project.notes}
-            </Typography>
+            
 
           </Grid>
         </Grid>
@@ -129,14 +123,14 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
           </Box>
           <Box>
             {project.status !== 2 && (
-              <Button variant="contained" onClick={onComplete} color="primary" sx={{ mr: 1 }}>
+              <Button variant="contained" onClick={onComplete} color="primary" sx={{ mr: 1 , width:'100%'}}>
                 Complete project
               </Button>
             )}
-            <Button variant="contained" onClick={()=> edit()} color="primary" sx={{ mr: 1 }}>
+            <Button variant="contained" onClick={()=> edit()} color="primary" sx={{ mr: 1, width:'100%' }}>
               Update project
             </Button>
-            <Button variant="contained" onClick={onDelete} color="primary" sx={{ mr: 1 }}>
+            <Button variant="contained" onClick={onDelete} color="primary" sx={{ mr: 1 , width:'100%' }}>
               Delete project
             </Button>
           </Box>

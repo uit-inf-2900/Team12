@@ -104,7 +104,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     
     const errors = {};
     if (!projectData.projectName) errors.projectName = 'Project name is required';
-    if (!projectData.status) errors.status = 'Status is required';
+    
     // if (!projectData.itemId) errors.itemId = 'Needle is required';
     if (!projectData.yarnType) errors.yarnType = 'Yarn is required';
     if (!projectData.yarnAmount) errors.yarnAmount = 'Amount of yarn is required';
@@ -229,9 +229,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
           value={projectData.status}
           onChange={handleStatusChange}
           options={Options.map(option => ({ value: option.id, label: option.label }))}
-          errors={formErrors.status}
         />   
-          {formErrors.projectName && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.projectName}</p>}
 
         <InputField 
           label="Needles"

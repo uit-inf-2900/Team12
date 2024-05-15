@@ -56,7 +56,7 @@ const UpdateProject = ({ projectId, onClose }) => {
     const fetchRecipes = async () => {
      
         try {
-            const response = await axios.get('http://localhost:5002/api/recipe/' + '?userToken=' + sessionStorage.getItem('token')); // TODO: Replace with the actual backend endpoint
+            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes' + '?userToken=' + sessionStorage.getItem('token')); // TODO: Replace with the actual backend endpoint
             setRecipes(response.data || []); 
         } catch (error) {
             console.error('Error fetching recipes:', error);
@@ -98,7 +98,7 @@ const UpdateProject = ({ projectId, onClose }) => {
         const errors = {};
         if (!projectData.projectName) errors.projectName = 'Project name is required';
         // if (!projectData.status) errors.status = 'Status is required';
-        if (projectData.needleIds.length === 0) errors.needleIds = 'Needles selection is required';
+        if (projectData.needleIds === 0) errors.needleIds = 'Needles selection is required';
         if (!projectData.yarnType) errors.yarnType = 'Yarn type is required';
         // if (!projectData.yarnAmount) errors.yarnAmount = 'Yarn amount is required';
         if (!projectData.recipeId) errors.recipeId = 'Recipe selection is required';
@@ -151,11 +151,7 @@ const UpdateProject = ({ projectId, onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const errors = validateForm();
-        if (Object.keys(errors).length > 0) {
-            setFormErrors(errors);
-            return;
-        }
+        
 
 
         const payLoad ={
@@ -193,7 +189,7 @@ const UpdateProject = ({ projectId, onClose }) => {
             <InputField 
                     label="Status" 
                     type="select"
-                    value={projectData.status }
+                    value={projectData.status}
                     onChange={handleStatusChange}
                     options={Options.map(option => ({ value: option.id, label: option.label }))}
                 />  
@@ -205,7 +201,7 @@ const UpdateProject = ({ projectId, onClose }) => {
                 onChange={handleNeedleChange}
                 options={needles.map(needle=> ({
                 value: needle.itemId,
-                label: `${needle.type} size: ${needle.size} length: ${needle.length}cm`
+                label: `${needle.type} size: ${needle.size}`
                 }))}
             />
             <InputField 

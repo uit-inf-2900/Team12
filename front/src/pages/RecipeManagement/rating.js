@@ -9,6 +9,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const RateRecipe = ({ id }) => {
     const [rating, setRating] = useState(0);
 
+    // Style the rating 
     const StyledRating = styled(Rating)({
         '& .MuiRating-iconFilled': {
           color: '#ff6d75',
@@ -22,6 +23,7 @@ const RateRecipe = ({ id }) => {
         fetchRating();
     }, [id]);
 
+    // Fetch the rating from back 
     const fetchRating = async () => {
         try {
             const response = await axios.get(`http://localhost:5002/api/rating/${id}?userToken=${sessionStorage.getItem('token')}`);
@@ -31,6 +33,7 @@ const RateRecipe = ({ id }) => {
         }
     };
 
+    // Post the rating to the back 
     const postRating = async (newRating) => {
         try {
             await axios.post(`http://localhost:5002/api/rating/${id}?rating=${newRating}&userToken=${sessionStorage.getItem('token')}`);
