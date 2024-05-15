@@ -1,7 +1,6 @@
 ﻿using Azure.Core;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
-using Strikkeapp.Data.Migrations;
 using Strikkeapp.Models;
 using AutoMapper;
 
