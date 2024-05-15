@@ -19,7 +19,7 @@ public class RecipeController : ControllerBase
         public string RecipeName { get; set; } = string.Empty;
         public int NeedleSize { get; set; }
         public string KnittingGauge { get; set; } = string.Empty;
-        public string Notes { get; set; } = string.Empty;
+        public string? Notes { get; set; } = string.Empty;
         public IFormFile? RecipeFile { get; set; }
 
         // Check that request is ok
