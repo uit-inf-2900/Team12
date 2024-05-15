@@ -56,7 +56,7 @@ const UpdateProject = ({ projectId, onClose }) => {
     const fetchRecipes = async () => {
      
         try {
-            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes' + '?userToken=' + sessionStorage.getItem('token')); // TODO: Replace with the actual backend endpoint
+            const response = await axios.get('http://localhost:5002/api/recipe/' + '?userToken=' + sessionStorage.getItem('token')); // TODO: Replace with the actual backend endpoint
             setRecipes(response.data || []); 
         } catch (error) {
             console.error('Error fetching recipes:', error);

@@ -33,7 +33,7 @@ export const Home = () => {
 
     // Fetches the name of the user
     if (token) {
-      const address = 'http://localhost:5002/getprofileinfo?userToken=' + token;
+      const address = `http://localhost:5002/getprofileinfo?userToken=${token}`;
       axios.get(address)
         .then(response => {
           setUserProfileState(response.data);
@@ -58,19 +58,20 @@ export const Home = () => {
           if (data.needleInventory) {
             setNeedleInventoryLength(data.needleInventory.length);
           }
-            
-          const finishedProjectsResponse = await axios.get(`http://localhost:5002/api/projects?userToken=${token}`);
-          setCompleteProjects(finishedProjectsResponse.data);
-          console.log(completeProjects);
-          const amountFinished = completeProjects.filter(project => project.status=== '2');
-          setCompletedCount(amountFinished.length); 
 
+          // Fetch projects data
+          const projectsResponse = await axios.get(`${baseAddress}/api/projects?userToken=${token}`);
+          const projectsData = projectsResponse.data;
 
+          // Filter and set projects
+          const completed = projectsData.filter(project => project.status === '2');
+          const ongoing = projectsData.filter(project => project.status === '1');
 
-          const ongoingProjectsResponse = await axios.get(`${baseAddress}/api/projects?userToken=${token}`);
-          setOngoingProjects(ongoingProjectsResponse.data);
-          const amountOngoing = ongoingProjects.filter(project => project.status=== '1');
-          setOngoingCount(amountOngoing.length); 
+          setCompleteProjects(completed);
+          setCompletedCount(completed.length);
+
+          setOngoingProjects(ongoing);
+          setOngoingCount(ongoing.length);
 
         } catch (error) {
           console.error("Error fetching statistics data: ", error);
@@ -79,8 +80,7 @@ export const Home = () => {
       fetchStatistic();
     }
   }, []);
-  
-  // Home page
+
   return (
     <div className='page-container'>
       <h1 style={{ padding: '20px' }}>Hello, good to see you {userProfileState.userFullName || ''}!</h1>
@@ -91,9 +91,8 @@ export const Home = () => {
           <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}> 
             <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'yarn')}  />
             <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'needles')} />
-
-            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completeProjects.toString()} onClick={() => handleNavigate('/projects', 2)} />
-            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingProjects.toString()} onClick={() => handleNavigate('/projects', 1)} />
+            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completedCount.toString()} onClick={() => handleNavigate('/projects', 2)} />
+            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingCount.toString()} onClick={() => handleNavigate('/projects', 1)} />
           </div>
         </div>
         {/* Show image on the right side of home page */}
