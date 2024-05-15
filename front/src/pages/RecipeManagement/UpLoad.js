@@ -47,6 +47,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
         formData.append("RecipeName", recipeInfo.recipeName);
         formData.append("NeedleSize", parseInt(recipeInfo.needleSize));
         formData.append("KnittingGauge", recipeInfo.knittingGauge);
+        formData.append("Notes", recipeInfo.notes);
 
         axios.post('http://localhost:5002/api/recipe/upload', formData, {
             headers: {
