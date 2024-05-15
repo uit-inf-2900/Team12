@@ -36,6 +36,20 @@ Credentials:
 - Username: admin@knithub.no
 - Password: KnithubAdminUser!
 
+
+### Users that came in the database: 
+We have added some users with yarn, needs, etc. to the database delivered, so one simply can display the features.
+- Username: sofie@gmail.com
+- Password: Sofie123!
+
+- Username: sissel@gmail.com
+- Password: Sissel123!
+
+- Username: sam@gmail.com
+- Password: Sam123!
+
+
+
 # Running and viewing the tests
 ## Frontend tests
 Locate the frontend folder. 
