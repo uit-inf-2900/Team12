@@ -27,6 +27,8 @@ const RecipesPage = () => {
         fetchRecipes();
     }, []);
 
+    
+
     return (
         <div>
             <Box className={uploading ? "page-container blur-background" : "page-container"}>

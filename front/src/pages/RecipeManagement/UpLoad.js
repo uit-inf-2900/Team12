@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import "../../GlobalStyles/main.css";
+import "./UpLoad.css"; 
 import InputField from '../../Components/UI/InputField';
 import { CustomButton } from '../../Components/UI/Button';
 import axios from 'axios';
@@ -46,25 +47,23 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
-                <div className="upload-flex-container">
-                    <div className="box light" onClick={() => fileInputRef.current.click()}>
-                        <IoIosCloudUpload size={50} />
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            onChange={handleFileSelection}
-                            accept='.pdf'
-                            style={{ display: 'none' }}
-                        />
-                        <p>{file && file.name}</p>
-                    </div>
-                    <div className="input">
-                        <InputField label="RecipeName" name="recipeName" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, recipeName: e.target.value})} />
-                        <InputField label="Author" name="author" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, author: e.target.value})} />
-                        <InputField label="Needle Size" name="needleSize" type="number" onChange={(e) => setRecipeInfo({...recipeInfo, needleSize: e.target.value})} />
-                        <InputField label="Knitting Gauge" name="knittingGauge" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, knittingGauge: e.target.value})} />
-                        <InputField label="Notes" name="notes" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, notes: e.target.value})} />
-                    </div>
+                <div className="box light" onClick={() => fileInputRef.current.click()}>
+                    <IoIosCloudUpload size={50} />
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        onChange={handleFileSelection}
+                        accept='.pdf'
+                        style={{ display: 'none' }}
+                    />
+                    <p>{file && file.name}</p>
+                </div>
+                <div className="input">
+                    <InputField label="RecipeName" name="recipeName" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, recipeName: e.target.value})} />
+                    <InputField label="Author" name="author" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, author: e.target.value})} />
+                    <InputField label="Needle Size" name="needleSize" type="number" onChange={(e) => setRecipeInfo({...recipeInfo, needleSize: e.target.value})} />
+                    <InputField label="Knitting Gauge" name="knittingGauge" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, knittingGauge: e.target.value})} />
+                    <InputField label="Notes" name="notes" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, notes: e.target.value})} />
                 </div>
                 <CustomButton themeMode="light" onClick={onClose}>Close</CustomButton>
                 {file && <CustomButton themeMode="dark" onClick={() => setFile(null)}>Cancel</CustomButton>}
