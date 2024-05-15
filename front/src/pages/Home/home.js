@@ -7,9 +7,8 @@ import "../../GlobalStyles/main.css";
 import "../about/about.css";
 import './StatisticBox.css';
 import InstagramFeed from '../../Components/UI/InstagramFeed'; 
-import heroImg from '../../images/logo/logoOrange.svg'
+import heroImg from '../../images/logo/logoOrange.svg';
 import Inspiration from './landingPage/inspiration';
-
 
 /**
  * The home page with inventory statistics, project states and instragramfeed.
@@ -26,7 +25,6 @@ export const Home = () => {
   const handleNavigate = (path, tab) => {
     navigate(`${path}?tab=${tab}`);
   };
-
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -51,11 +49,11 @@ export const Home = () => {
           console.log(data);
 
           // Find yarn inventory
-          if(data.yarnInventory){
+          if (data.yarnInventory) {
             setYarnInventoryLength(data.yarnInventory.length);
           }
           // Find needle inventory
-          if(data.needleInventory){
+          if (data.needleInventory) {
             setNeedleInventoryLength(data.needleInventory.length);
           }
             
@@ -69,28 +67,28 @@ export const Home = () => {
         }
       };
       fetchStatistic();
-      }
+    }
   }, []);
   
   // Home page
   return (
     <div className='page-container'>
-      <h1 style={{padding: '20px'}}>Hello, good to see you {userProfileState.userFullName || ''}!</h1>
-      <div className="home-container" style={{'display': 'flex', padding: '20px', alignItems:'flex-start'}}>
+      <h1 style={{ padding: '20px' }}>Hello, good to see you {userProfileState.userFullName || ''}!</h1>
+      <div className="home-container" style={{ display: 'flex', padding: '20px', alignItems: 'flex-start' }}>
         {/* Show project and inventory */}
-        <div className="statistics-container" style={{width:'40%', alignSself: 'flex-start'}}>
+        <div className="statistics-container" style={{ width: '40%', margin: '0 auto', maxWidth: '500px', textAlign: 'center' }}>
           <h3>Here is an overview of your projects and inventory:</h3>
-          <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent:'center' }}> 
+          <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}> 
             <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'yarn')}  />
             <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'needles')} />
-            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completeProjects.toString() } onClick={() => handleNavigate('/projects', 2)}/>
-            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingProjects.toString()} onClick={() => handleNavigate('/projects', 1)}/>
+            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completeProjects.toString()} onClick={() => handleNavigate('/projects', 2)} />
+            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingProjects.toString()} onClick={() => handleNavigate('/projects', 1)} />
           </div>
         </div>
         {/* Show image on the right side of home page */}
-        <div className="creative-content-container" style={{width:'60%', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
-          <h3>Today is the day to be creative! </h3>
-          <img src={heroImg} style={{ width: 400, paddingTop:50}} alt="Hero" />
+        <div className="creative-content-container" style={{ width: '60%', alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column' }}>
+          <h3>Today is the day to be creative!</h3>
+          <img src={heroImg} style={{ width: 400, paddingTop: 50 }} alt="Hero" />
         </div>
       </div>
       {/* Show instagram feed */}
@@ -98,3 +96,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;

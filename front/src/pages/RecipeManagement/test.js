@@ -1,30 +1,21 @@
 import React, { useState, useMemo } from 'react';
-import axios from 'axios';
 import "../../GlobalStyles/main.css";
-import "../../GlobalStyles/Card.css"
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MultiSelect from '../../Components/Forms/MultiSelect';
+import "../../GlobalStyles/Card.css";
+import { InputLabel, MenuItem, FormControl, Select, TextField, Modal, Box, Button } from '@mui/material';
 import Card from '../../Components/DataDisplay/Card';
-import PDFwindow from '../../Components/Utilities/PDFwindow';
 import PDFViewer from '../../Components/Utilities/PDFviewer'; // Import PDFViewer component
-import { TextField, Modal, Box, Button } from '@mui/material';
+import axios from 'axios';
 
 const UploadedRecipes = ({ recipes, fetchRecipes }) => {
     const [searchText, setSearchText] = useState('');
-    const [sortBy, setSortBy] = useState('');
-    const [loading, setLoading] = useState(true);
     const [needleSizeFilter, setNeedleSizeFilter] = useState('');
     const [knitDensityFilter, setKnitDensityFilter] = useState('');
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false); // State for controlling modal open/close
-    
-    
+
     const handleProjectClick = (recipe) => {
         setSelectedRecipe(recipe);
-        setIsModalOpen(true); // Open modal
+        setIsModalOpen(true);
     };
 
     const handleClose = () => {
@@ -32,7 +23,6 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
         fetchRecipes();
     };
 
-    
     const handleRecipeDelete = async (recipeId) => {
         try {
             const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${recipeId}`);
@@ -41,7 +31,6 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
             console.error('Error deleting recipe:', error);
         } finally {
             handleClose();
-            
         }
     };
 
@@ -56,17 +45,8 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
         (knitDensityFilter ? recipe.knittingGauge === knitDensityFilter : true)
     );
 
-    const sortMenuItems = [
-        { value: '', name: 'Select' },
-        { value: 'author', name: 'Author' },
-        { value: 'needleSize', name: 'Needle Size' },
-        { value: 'type', name: 'Type' },
-        { value: 'gauge', name: 'Gauge' }
-    ];
-
-
     return (
-        <div className="page-container" style={{ width: '80%', margin: '0 auto' }}>
+        <div className="page-container">
             <h1>My Recipes</h1>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20, width:'80%' ,  justifyContent: 'center',  margin: '0 auto'}}>
                 <TextField
@@ -103,29 +83,25 @@ const UploadedRecipes = ({ recipes, fetchRecipes }) => {
                     </Select>
                 </FormControl>
             </div>
-            {/* {loading ? <p>Loading recipes...</p> : ( */}
-                <div className='card-container' style={{justifyContent: 'flex-start', justifyContent: 'center'}}>
-                    {filteredRecipes.map((recipe, index) => (
-                        <Card
+            <div className='card-container'>
+                {filteredRecipes.map((recipe, index) => (
+                    <Card
                         key={recipe.recipeId}
                         title={recipe.recipeName}
                         needleSize={recipe.needleSize}
                         knittingGauge={recipe.knittingGauge}
                         notes={recipe.notes}
                         onClick={() => handleProjectClick(recipe)}
-                        />
-                    ))}
+                    />
+                ))}
             </div>
-                
-            {/* )} */}
             {selectedRecipe && (
-                    <Modal open={isModalOpen}>
-                        <Box>
-                            <PDFViewer id={selectedRecipe.recipeId} onClose={()=>handleClose()} onDelete={()=>handleRecipeDelete(selectedRecipe.recipeId)}/>
-                        </Box>   
-                    </Modal>
-                )} 
-            
+                <Modal open={isModalOpen} onClose={handleClose}>
+                    <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+                        <PDFViewer id={selectedRecipe.recipeId} onClose={handleClose} onDelete={() => handleRecipeDelete(selectedRecipe.recipeId)} />
+                    </Box>
+                </Modal>
+            )}
         </div>
     );
 };
