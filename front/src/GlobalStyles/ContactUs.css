@@ -16,8 +16,14 @@
 /* ------------- FAQ section ------------- */
 /* The section for the questions */
 .faq-section {
-    margin: 20px;
+    width: 100%; /* Makes the section responsive */
+    max-width: 1200px; /* Limits the maximum width */
+    margin: 20px auto; /* Adds margin around the section and centers it horizontally */
     font-family: var(--body-font);
+    padding: 20px; /* Optional: Adds padding for better spacing */
+    box-sizing: border-box; /* Ensures padding and borders are included in the total width and height */
+    border: 1px solid #F6964B;
+    border-radius: 8px;
 }
 
 /* The questions */
@@ -55,3 +61,4 @@
 .icon {
     font-size: 24px; 
 }
+

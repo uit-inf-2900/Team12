@@ -39,7 +39,7 @@ export const FAQSection = () => {
 
     return (
         <div className="faq-section">
-            <h2>Frequently Asked Questions (FAQ)</h2>
+            <h2 style={{color:'#F6964B'}}>Frequently Asked Questions (FAQ)</h2> 
             <FAQItem 
                 question="How do I change my password if I have forgotten it?" 
                 answer = "If you have forgotten your password, please contact us at post@knithub.no."
