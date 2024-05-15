@@ -253,12 +253,15 @@ public class ProjectService : IProjectService
     private IEnumerable<YarnInventoryDto> GetYarnsForProject(string userToken, IEnumerable<Guid>? yarnIds, Guid projectId)
     {
         var yarns = _inventoryService.GetYarns(userToken, yarnIds);
+        var returnYarns = new List<YarnInventoryDto>();
 
         foreach (var yarn in yarns)
         {
             yarn.InUse = _projectYarnService.GetNumInUseByProject(yarn.ItemId, projectId, userToken);
+            returnYarns.Add(yarn);
+
         }
-        return yarns;
+        return returnYarns;
     }
 }
 
