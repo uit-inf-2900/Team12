@@ -110,8 +110,10 @@ const Projects = () => {
                     />
                 ))}
             </div>
-
-            <AddButton onClick={toggleUpload}/>
+            
+            <div>
+                <AddButton onClick={toggleUpload} />
+            </div>
 
             <Modal open={uploading} onClose={toggleUpload}>
                 <UploadProjects onClose={toggleUpload} fetchProjects={fetchProjects} />
