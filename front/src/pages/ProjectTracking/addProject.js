@@ -105,7 +105,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     const errors = {};
     if (!projectData.projectName) errors.projectName = 'Project name is required';
     if (!projectData.status) errors.status = 'Status is required';
-    if (!projectData.itemId) errors.itemId = 'Needle is required';
+    // if (!projectData.itemId) errors.itemId = 'Needle is required';
     if (!projectData.yarnType) errors.yarnType = 'Yarn is required';
     if (!projectData.yarnAmount) errors.yarnAmount = 'Amount of yarn is required';
     // if (!projectData.notes.trim()) errors.notes = 'Notes are required';
@@ -242,9 +242,9 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
             value: needle.itemId,
             label: `${needle.type} size: ${needle.size} length: ${needle.length}cm`
           }))}
-          errors={formErrors.itemId}
+          // errors={formErrors.itemId}
         />
-          {formErrors.itemId && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.itemId}</p>}
+          {/* {formErrors.itemId && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.itemId}</p>} */}
         
         <InputField 
           label="Yarn"
