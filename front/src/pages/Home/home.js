@@ -18,9 +18,9 @@ export const Home = () => {
   const [userProfileState, setUserProfileState] = useState({ userFullName: '', userEmail: '' });
   const [yarnInventoryLength, setYarnInventoryLength] = useState(0);
   const [needleInventoryLength, setNeedleInventoryLength] = useState(0);
-  const [completeProjects, setCompleteProjects] = useState([]);
+  const [completeProjects, setCompleteProjects] = useState(0);
   const [ongoingProjects, setOngoingProjects] = useState([]);
-  const [ongoingCount, setOngoingCount] = useState(0);
+  const [recipeCount, setRecipeCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
 
   // Function to handle navigation
@@ -62,16 +62,12 @@ export const Home = () => {
           // Fetch projects data
           const projectsResponse = await axios.get(`${baseAddress}/api/projects?userToken=${token}`);
           const projectsData = projectsResponse.data;
+          setCompleteProjects(projectsData.length);
 
-          // Filter and set projects
-          const completed = projectsData.filter(project => project.status === '2');
-          const ongoing = projectsData.filter(project => project.status === '1');
-
-          setCompleteProjects(completed);
-          setCompletedCount(completed.length);
-
-          setOngoingProjects(ongoing);
-          setOngoingCount(ongoing.length);
+          const recipesResponse = await axios.get(`${baseAddress}/api/recipe/getallrecipes?userToken=${token}`)
+          const recipesData = recipesResponse.data;
+          setRecipeCount(recipesData.length);
+          
 
         } catch (error) {
           console.error("Error fetching statistics data: ", error);
@@ -91,8 +87,8 @@ export const Home = () => {
           <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}> 
             <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'yarn')}  />
             <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'needles')} />
-            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completedCount.toString()} onClick={() => handleNavigate('/projects', 2)} />
-            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingCount.toString()} onClick={() => handleNavigate('/projects', 1)} />
+            <StatisticBox icon={getImageByName('pileOfSweaters')} label="Number of projects" value={completeProjects.toString()} onClick={() => handleNavigate('/projects', 1)} />
+            <StatisticBox icon={getImageByName('openBook')} label="Number of recipes" value={recipeCount.toString()} onClick={() => handleNavigate('/recipes', 1)} />
           </div>
         </div>
         {/* Show image on the right side of home page */}
