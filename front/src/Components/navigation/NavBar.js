@@ -33,10 +33,8 @@ const UserView = () => {
 const AdminView = ({ isAdmin, isLoggedIn }) => {
   return(
     <>
-      {/* Dont want to show the contact page if you have admin privilages */}
-
       {/* Show the admin page if you have admin prvileges */}
-      {isAdmin && isLoggedIn && <li className="nav-item"><NavLink to="/adminpage" className="nav-link">Admin</NavLink></li>}
+      {isAdmin && isLoggedIn && <li className="nav-item"style={{fontSize:'1.5rem'}}><NavLink to="/adminpage" className="nav-link">Admin</NavLink></li>}
     </>
   ); 
 }; 

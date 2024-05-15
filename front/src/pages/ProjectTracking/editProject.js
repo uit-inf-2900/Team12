@@ -8,6 +8,8 @@ import SetAlert from '../../Components/UI/Alert';
 const UpdateProject = ({ projectId, onClose }) => {
     const token = sessionStorage.getItem('token');
     const [currentProject, setCurrentProject]= useState();
+    const [formErrors, setFormErrors] = useState({});
+    const [alertInfo, setAlertInfo] = useState({ open: false, message: '', severity: 'info' });
 
     const [recipes, setRecipes]=useState([]);
     const [yarns, setYarns]=useState([]);
@@ -28,8 +30,7 @@ const UpdateProject = ({ projectId, onClose }) => {
         
         { id: 0, label: 'Planned' },
         { id: 1, label: 'In Progress' },
-
-      ];
+    ];
 
 
 
@@ -93,7 +94,16 @@ const UpdateProject = ({ projectId, onClose }) => {
         }
     };
 
-
+    const validateForm = () => {
+        const errors = {};
+        if (!projectData.projectName) errors.projectName = 'Project name is required';
+        // if (!projectData.status) errors.status = 'Status is required';
+        if (projectData.needleIds.length === 0) errors.needleIds = 'Needles selection is required';
+        if (!projectData.yarnType) errors.yarnType = 'Yarn type is required';
+        // if (!projectData.yarnAmount) errors.yarnAmount = 'Yarn amount is required';
+        if (!projectData.recipeId) errors.recipeId = 'Recipe selection is required';
+        return errors;
+    };
 
 
     useEffect(() => {
@@ -140,6 +150,13 @@ const UpdateProject = ({ projectId, onClose }) => {
     
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        const errors = validateForm();
+        if (Object.keys(errors).length > 0) {
+            setFormErrors(errors);
+            return;
+        }
+
 
         const payLoad ={
             status: projectData.status,
@@ -148,7 +165,6 @@ const UpdateProject = ({ projectId, onClose }) => {
             needleIds: projectData.needleIds,
             yarnIds: { [projectData.yarnType] : projectData.yarnAmount},
         };
-        e.preventDefault();
 
         try {
         const response = await axios.patch(`http://localhost:5002/api/projects?userToken=${sessionStorage.getItem('token')}&projectId=${projectId}`, payLoad, {
@@ -157,10 +173,12 @@ const UpdateProject = ({ projectId, onClose }) => {
             },
         });
         console.log('Project updated successfully:', response.data);
+        setAlertInfo({ open: true, message: 'Project updated successfully!', severity: 'success' });
         onClose();
     
         } catch (error) {
         console.error('Error updating project:', error);
+        setAlertInfo({ open: true, message: 'Failed to update project.', severity: 'error' });
         }
         
     };
@@ -168,6 +186,7 @@ const UpdateProject = ({ projectId, onClose }) => {
     return (
         <div className="box-container">
         <div className='box dark'>
+            {alertInfo.open && <SetAlert severity={alertInfo.severity}>{alertInfo.message}</SetAlert>}
             <h3>Update Project</h3>
             <InputField label="Name the project" value={projectData.projectName} name="projectName" type="text" onChange={handleChange('projectName')} />
        

@@ -156,6 +156,19 @@
     padding: 20px;
 }
 
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;  
+    padding: 20px;
+    justify-content: center;  
+    max-width: 1200px;  
+    margin: 0 auto;  
+}
+
+.dashboard-grid > div {
+    min-width: 250px;  
+}
 
 
 .messages-list-container {

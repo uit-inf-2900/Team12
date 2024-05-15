@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useForm } from 'react-hook-form';
 import InputField from '../../Components/UI/InputField';
 import CustomButton from '../../Components/UI/Button';
 import SetAlert from '../../Components/UI/Alert';
@@ -14,14 +15,14 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
   const [needles, setNeedles] = useState([]);
   const [yarns, setYarns] = useState([]);
   const [yarnAmount, setYarnAmount]=useState('');
+  const [formErrors, setFormErrors] = useState({});
+
   
 
   const [needleIds, setNeedleIds] = useState([]);
 
 
   const [projectData, setProjectData] = useState({
-
-    
     recipeId: '',
     status: '',
     needleIds: [], 
@@ -31,10 +32,10 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     notes: '',
     projectName: '',
     userToken: token
-    
   });
+
+  // Options for the state of the projects 
   const Options = [
-        
     { id: 0, label: 'Planned' },
     { id: 1, label: 'In Progress' },
     { id: 2, label: 'Completed' }
@@ -64,9 +65,6 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
       needleIds: [value]
     });
 
-    
-
-    //setProjectData({...projectData, needleIds: [value] })
     console.log("NeedleIds after needle selection:", projectData.needleIds);
     console.log("Project Data after needle selection:", projectData);
 
@@ -100,37 +98,54 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+
+    // Emty prev errors 
+    setFormErrors({}); 
     
-  
-  const payload ={
-    userToken: token,
-    ProjectName: projectData.projectName,
-    RecipeId: projectData.recipeId,
-    Status: projectData.status,
-    NeedleIds: projectData.needleIds,
-    YarnIds: { [projectData.yarnType] : projectData.yarnAmount},
-    Notes: projectData.notes
-  };
+    const errors = {};
+    if (!projectData.projectName) errors.projectName = 'Project name is required';
+    if (!projectData.status) errors.status = 'Status is required';
+    // if (!projectData.itemId) errors.itemId = 'Needle is required';
+    if (!projectData.yarnType) errors.yarnType = 'Yarn is required';
+    if (!projectData.yarnAmount) errors.yarnAmount = 'Amount of yarn is required';
+    // if (!projectData.notes.trim()) errors.notes = 'Notes are required';
+    if (!projectData.recipeId) errors.recipeId = 'Recipe is required';
 
-  try {
-      const response = await axios.post('http://localhost:5002/api/projects'+ '?userToken=' + sessionStorage.getItem('token'),payload,{
-        headers: {
-          'Content-Type': 'application/JSON',
-          
-        },
-
-      });
-      if(response.ok){
-        console.log(response.data); // Handle success
-        console.log(payload)
-        ;
-      }
-      
-    } catch (error) {
-      console.error(error); // Handle error
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
     }
-    onClose();
-    fetchProjects();
+  
+
+    const payload ={
+      userToken: token,
+      ProjectName: projectData.projectName,
+      RecipeId: projectData.recipeId,
+      Status: projectData.status,
+      NeedleIds: projectData.needleIds,
+      YarnIds: { [projectData.yarnType] : projectData.yarnAmount},
+      Notes: projectData.notes
+    };
+
+    try {
+        const response = await axios.post('http://localhost:5002/api/projects'+ '?userToken=' + sessionStorage.getItem('token'),payload,{
+          headers: {
+            'Content-Type': 'application/JSON',
+            
+          },
+
+        });
+        if(response.ok){
+          console.log(response.data); // Handle success
+          console.log(payload)
+          ;
+        }
+        
+      } catch (error) {
+        console.error(error); // Handle error
+      }
+      onClose();
+      fetchProjects();
   };
 
 
@@ -151,6 +166,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
   };
  
 
+  // Fetch needles for the user 
   const fetchNeedles = async () => {
     const token = sessionStorage.getItem('token');
     const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
@@ -167,6 +183,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     }
   };
 
+  // Fetch yarn for the user 
   const fetchYarns = async () => {
     const token = sessionStorage.getItem('token');
     const url = `http://localhost:5002/api/inventory/get_inventory?userToken=${token}`;
@@ -184,8 +201,6 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     }
 };
 
-
-
   useEffect(() => {
     fetchRecipes();
     fetchNeedles();
@@ -198,47 +213,77 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
         <h3>Hello,</h3>
         <p>Start a new project here!</p>
         
-        <InputField label="Name the project" value={projectData.projectName} name="projectName" type="text" onChange={handleInputChange('projectName')} />
         <InputField 
-                    label="Status" 
-                    type="select"
-                    value={projectData.status}
-                    onChange={handleStatusChange}
-                    options={Options.map(option => ({ value: option.id, label: option.label }))}
-                />   
-        <InputField 
-        
-                  label="Needles"
-                  type="select"
-                  value={projectData.needleIds}
-                  onChange={handleNeedleChange}
-                  options={needles.map(needle=> ({
-                    value: needle.itemId,
-                    label: `${needle.type} size: ${needle.size} length: ${needle.length}cm`
-                  }))}
+          label="Name the project" 
+          value={projectData.projectName} 
+          name="projectName" 
+          type="text" 
+          onChange={handleInputChange('projectName')} 
+          errors={formErrors.projectName}
         />
-        
+          {formErrors.projectName && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.projectName}</p>}
+
         <InputField 
-        
-                  label="Yarn"
-                  type="select"
-                  value={projectData.yarnType}
-                  onChange={handleYarnChange}
-                  options={yarns.map(yarn=> ({
-                    value: yarn.itemId,
-                    label: `${yarn.type} by ${yarn.manufacturer}`
-                  }))}
+          label="Status" 
+          type="select"
+          value={projectData.status}
+          onChange={handleStatusChange}
+          options={Options.map(option => ({ value: option.id, label: option.label }))}
+          errors={formErrors.status}
+        />   
+          {formErrors.projectName && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.projectName}</p>}
+
+        <InputField 
+          label="Needles"
+          type="select"
+          value={projectData.needleIds}
+          onChange={handleNeedleChange}
+          options={needles.map(needle=> ({
+            value: needle.itemId,
+            label: `${needle.type} size: ${needle.size} length: ${needle.length}cm`
+          }))}
+          // errors={formErrors.itemId}
         />
-        <InputField label="Amount yarn needed"  type="number" value={projectData.yarnAmount} onChange={handleInputChange('yarnAmount')} />    
+          {/* {formErrors.itemId && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.itemId}</p>} */}
         
-        <InputField label="Notes" type="text" value={projectData.notes} onChange={handleInputChange('notes')} /> 
         <InputField 
-                    label="Choose recipe" 
-                    type="select"
-                    value={projectData.recipeId}
-                    onChange={handleRecipeChange}
-                    options={recipes.map(recipe => ({ value: recipe.recipeId, label: recipe.recipeName}))}
+          label="Yarn"
+          type="select"
+          value={projectData.yarnType}
+          onChange={handleYarnChange}
+          options={yarns.map(yarn=> ({
+            value: yarn.itemId,
+            label: `${yarn.type} by ${yarn.manufacturer}`
+          }))}
+          errors={formErrors.yarnType}
+        />
+          {formErrors.yarnType && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.yarnType}</p>}
+
+        <InputField 
+          label="Amount yarn needed"  
+          type="number" 
+          value={projectData.yarnAmount} 
+          onChange={handleInputChange('yarnAmount')} 
+          errors={formErrors.yarnAmount}
+          />    
+          {formErrors.yarnAmount && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.yarnAmount}</p>}
+        
+        <InputField 
+          label="Choose recipe" 
+          type="select"
+          value={projectData.recipeId}
+          onChange={handleRecipeChange}
+          options={recipes.map(recipe => ({ value: recipe.recipeId, label: recipe.recipeName}))}
+          errors={formErrors.recipeId}
                 />
+          {formErrors.recipeId && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.recipeId}</p>}
+        <InputField 
+          label="Notes" 
+          type="text" 
+          value={projectData.notes} 
+          onChange={handleInputChange('notes')} 
+          /> 
+
 
       
 

@@ -44,6 +44,7 @@ public class UserServiceTests
 
     private void SeedTestData()
     {
+        // Add regular user, banned user and admin to database
         var testUserLogIn = new UserLogIn
         {
             UserId = testUserId,
@@ -407,6 +408,20 @@ public class UserServiceTests
             .Returns(TokenResult.ForFailure("Unauthorized"));
 
         var result = _userService.BanUser(testToken, fakeGuid, true);
+
+        Assert.False(result.Success);
+        Assert.Equal("Unauthorized", result.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonAdminGetAll_Fails()
+    {
+        var testToken = "testToken";
+
+        _mockTokenService.Setup(s => s.ExtractUserID(It.IsAny<string>()))
+            .Returns(TokenResult.ForSuccess(testUserId));
+
+        var result = _userService.GetAllUsers(testToken);
 
         Assert.False(result.Success);
         Assert.Equal("Unauthorized", result.ErrorMessage);

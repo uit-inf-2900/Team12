@@ -8,7 +8,7 @@ namespace Strikkeapp.Services;
 
 public interface IRecipeService
 {
-    public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge, string notes);
+    public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge, string? notes);
     public RecipeServiceResultGet GetRecipes(string userToken);
     public RecipePDFResult GetRecipePDF(Guid recipeId, string userToken);
     public bool DeleteRecipePDF(Guid recipeId, string userToken);
@@ -32,7 +32,7 @@ public class RecipeService : IRecipeService
         _context = context;
     }
 
-    public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge, string notes)
+    public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge, string? notes)
     {
         // Get and check token
         var tokenResult = _tokenService.ExtractUserID(jwtToken);
