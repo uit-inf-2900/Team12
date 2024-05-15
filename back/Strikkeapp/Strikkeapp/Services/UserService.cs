@@ -139,6 +139,7 @@ public class UserService : IUserService
 
     public DeleteUserResult DeleteUser(string userToken)
     {
+        // Extract user id from token
         var result = _tokenService.ExtractUserID(userToken);
         if(!result.Success)
         {
@@ -151,10 +152,12 @@ public class UserService : IUserService
         {
             try
             {
+                // Get all recipes for user
                 var userRecipies = _context.KnittingRecipes
                     .Where(kr => kr.UserId == userId)
                     .ToList();
 
+                // Delete all recipes
                 foreach(var recipe in userRecipies)
                 {
                     if(recipe.RecipePath != null && File.Exists(recipe.RecipePath))
@@ -164,12 +167,14 @@ public class UserService : IUserService
                     _context.KnittingRecipes.Remove(recipe);
                 }
 
+                // Delete user details
                 var userToDelete = _context.UserLogIn
                    .FirstOrDefault(u => u.UserId == userId);
 
+                // Check if user exists
                 if(userToDelete == null)
                 {
-                    return DeleteUserResult.ForFailure("Not found");
+                    throw new Exception("User not found");
                 }
 
                 _context.UserLogIn.Remove(userToDelete);
@@ -180,6 +185,7 @@ public class UserService : IUserService
             }
             catch(Exception ex)
             {
+                // Catch any errors and rollback transaction
                 transaction.Rollback();
                 return DeleteUserResult.ForFailure(ex.Message);
             }
@@ -188,12 +194,14 @@ public class UserService : IUserService
 
     public UpdateAdminResult UpdateAdmin(string userToken, Guid updatedUser, bool newAdmin)
     {
+        // Extract user id from token
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if(!tokenResult.Success)
         {
             return UpdateAdminResult.ForFailure("Unauthorized");
         }
 
+        // Check if user is admin
         var userId = tokenResult.UserId;
         var isAdmin = _context.UserDetails
             .Where(u => u.UserId == userId)
@@ -209,12 +217,14 @@ public class UserService : IUserService
         {
             try
             {
+                // Find user and update admin status
                 var user = _context.UserDetails
                     .FirstOrDefault(u => u.UserId == updatedUser);
 
                 if(user == null)
                 {
-                    return UpdateAdminResult.ForFailure("User not found");
+                    throw new Exception("User not found");
+                    //return UpdateAdminResult.ForFailure("User not found");
                 }
 
                 user.IsAdmin = newAdmin;
@@ -225,6 +235,7 @@ public class UserService : IUserService
             }
             catch(Exception ex)
             {
+                // Catch any errors and rollback transaction
                 transaction.Rollback();
                 return UpdateAdminResult.ForFailure(ex.Message);
             }
@@ -233,6 +244,7 @@ public class UserService : IUserService
 
     public BanUserResult BanUser(string userToken, Guid bannedUser, bool shouldBan)
     {
+        // Extract user id from token
         var tokenRes = _tokenService.ExtractUserID(userToken);
         if(!tokenRes.Success)
         {
@@ -241,6 +253,7 @@ public class UserService : IUserService
 
         var userId = tokenRes.UserId;
 
+        // Check if user is admin
         var isAdmin = _context.UserDetails
             .Where(u => u.UserId == userId)
             .Select(u => u.IsAdmin)
@@ -255,6 +268,7 @@ public class UserService : IUserService
         {
             try
             {
+                // Find user and update status
                 var user = _context.UserLogIn
                     .FirstOrDefault(u => u.UserId == bannedUser);
 
@@ -263,6 +277,7 @@ public class UserService : IUserService
                     return BanUserResult.ForFailure("User not found");
                 }
 
+                // Ban if true, unban if false
                 if(shouldBan)
                 {
                     user.UserStatus = "banned";
@@ -287,6 +302,7 @@ public class UserService : IUserService
 
     public GetUsersResult GetAllUsers(string userToken)
     {
+        // Extract user id from token
         var tokenRes = _tokenService.ExtractUserID(userToken);
         if(!tokenRes.Success)
         {
@@ -295,6 +311,7 @@ public class UserService : IUserService
 
         var userId = tokenRes.UserId;
 
+        // Check if user is admin
         var isAdmin = _context.UserDetails
             .Where(u => u.UserId == userId)
             .Select(u => u.IsAdmin)
@@ -305,6 +322,7 @@ public class UserService : IUserService
             return GetUsersResult.ForFailure("Unauthorized");
         }
 
+        // Get all users
         var users = _context.UserLogIn.Join(_context.UserDetails,
                                             login => login.UserId,
                                             details => details.UserId,

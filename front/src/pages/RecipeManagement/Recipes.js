@@ -12,6 +12,7 @@ const RecipesPage = () => {
     const [uploading, setUploading] = useState(false);
     const [recipes, setRecipes] = useState([]);
 
+    // Fetch recipes from back
     const fetchRecipes = async () => {
         try {
             const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes?userToken='+ sessionStorage.getItem('token'));
@@ -31,6 +32,7 @@ const RecipesPage = () => {
         <div>
             <Box className={uploading ? "page-container blur-background" : "page-container"}>
                 <h1>Welcome to the Recipes Page!</h1>
+                {/* Button for uploading recipies */}
                 <Button
                     variant="outlined"
                     color='dark'

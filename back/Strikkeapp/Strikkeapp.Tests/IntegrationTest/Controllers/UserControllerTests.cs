@@ -115,6 +115,10 @@ public class UsersControllerTests
     [Fact]
     public void CreateUser_Ok()
     {
+        // Mock services
+        _mockMailService.Setup(m => m.SendVerification(It.IsAny<string>()))
+            .Returns(MailResult.ForSuccess());
+
         // Create request and call controller
         var request = new CreateUserRequest
         {
@@ -254,7 +258,7 @@ public class UsersControllerTests
         // Run controller, and verify failure
         var result = _controller.DeleteUser("token");
         var foundResult = Assert.IsType<ObjectResult>(result);
-        Assert.Contains("Unable to find user", foundResult.Value!.ToString());
+        Assert.Contains("Unable to delete user", foundResult.Value!.ToString());
     }
 
     [Fact]
@@ -515,6 +519,45 @@ public class UsersControllerTests
 
         var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
         Assert.Contains("Could not find verification", notFoundResult.Value!.ToString());
+    }
+
+    [Fact]
+    public void VerifyUnauthorized_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+        _mockMailService.Setup(m => m.SendVerification(It.IsAny<string>()))
+            .Returns(MailResult.ForFailure("Unauthorized"));
+
+        // Run controller with unauthorized mail service, and verify failure
+        var result = _controller.CreateUser(new CreateUserRequest
+        {
+            UserEmail = "test@example.com",
+            UserDOB = 20240101,
+            UserFullName = "Test User",
+            UserPwd = "Test123!"
+        });
+
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public void NotFoundMail_Fails()
+    {
+        // Set up mock service
+        _mockMailService.Setup(m => m.SendVerification(It.IsAny<string>()))
+            .Returns(MailResult.ForFailure("Not found"));
+
+        // Run controller with mail service failure, and verify failure
+        var result = _controller.CreateUser(new CreateUserRequest
+        {
+            UserEmail = "test@example.com",
+            UserDOB = 20240101,
+            UserFullName = "Test User",
+            UserPwd = "Test123!"
+        });
+        Assert.IsType<NotFoundObjectResult>(result);
     }
 
 }

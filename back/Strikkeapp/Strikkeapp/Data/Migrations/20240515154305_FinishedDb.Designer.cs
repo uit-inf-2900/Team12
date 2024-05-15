@@ -8,11 +8,11 @@ using Strikkeapp.Data.Context;
 
 #nullable disable
 
-namespace Strikkeapp.Data.Migrations
+namespace Strikkeapp.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
-    [Migration("20240506200441_ProjectName")]
-    partial class ProjectName
+    [Migration("20240515154305_FinishedDb")]
+    partial class FinishedDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,6 @@ namespace Strikkeapp.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RecipePath")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -258,6 +257,29 @@ namespace Strikkeapp.Data.Migrations
                     b.ToTable("ProjectYarnInventory");
                 });
 
+            modelBuilder.Entity("Strikkeapp.Data.Entities.RecipeRatingEntity", b =>
+                {
+                    b.Property<Guid>("RecipeRatingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("RecipeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("RecipeRatingId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RecipeRatings");
+                });
+
             modelBuilder.Entity("Strikkeapp.Data.Entities.UserDetails", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -280,8 +302,8 @@ namespace Strikkeapp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("6fbe0ff0-1ac7-4852-ac3a-bb212f19fb61"),
-                            DateOfBirth = new DateTime(2024, 5, 6, 22, 4, 40, 804, DateTimeKind.Local).AddTicks(9100),
+                            UserId = new Guid("bce08d40-f0d0-4144-b51a-7730a5add11f"),
+                            DateOfBirth = new DateTime(2024, 5, 15, 17, 43, 4, 642, DateTimeKind.Local).AddTicks(8612),
                             IsAdmin = true,
                             UserFullName = "Knithub Admin"
                         });
@@ -318,9 +340,9 @@ namespace Strikkeapp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("6fbe0ff0-1ac7-4852-ac3a-bb212f19fb61"),
+                            UserId = new Guid("bce08d40-f0d0-4144-b51a-7730a5add11f"),
                             UserEmail = "admin@knithub.no",
-                            UserPwd = "AQAAAAIAAYagAAAAEIptBNtmjydTTmmse38vtyH+lsr+qFoj5oMxIskybBNwU8Q9qXv2cW13LPXa3AVGLg==",
+                            UserPwd = "AQAAAAIAAYagAAAAELYaM5Ua97rcQ28zgOoEE1mEbCe1WW0DVMcoV2SgJ/upZbR+wO0rvt7BGDULm0Ja+w==",
                             UserStatus = "verified",
                             UserVerificationCode = 999999
                         });
@@ -449,6 +471,15 @@ namespace Strikkeapp.Data.Migrations
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectYarnInventoryEntity", b =>
+                {
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.RecipeRatingEntity", b =>
                 {
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithMany()

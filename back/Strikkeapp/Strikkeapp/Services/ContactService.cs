@@ -6,28 +6,20 @@ using Strikkeapp.Data.Context;
 
 namespace Strikkeapp.Services; 
 
-// REMOVE COMMENT: tenk på det som en H-fil i C
 public interface IContactService
 {
     // Generate a contact request 
     public Guid CreateContactRequest (ContactRequestDto request); 
     // List inncomming contact requests
     public IEnumerable<ContactRequestDto> GetContactRequests(bool IsActive, bool IsHandled, string userToken); 
-
-
-    // svare på mail 
     public bool ResponseMessage(Guid contactRequestId, string responseMessage);
-
-
-
-    // kunne endre status 
     public bool UpdateIsActiveStatus(Guid contactRequestId, bool isActive, string userToken);
     public bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled, string userToken);
 }
 
 public class ContactService : IContactService
 {   
-    // context defines tables
+    // Set the context and token service
     private readonly StrikkeappDbContext _context;
     private readonly ITokenService _tokenService;
 
@@ -98,13 +90,6 @@ public class ContactService : IContactService
         return contactRequestDtos; 
     }
 
-
-    // TODO:  Svar på kontaktforespørsel + endre status til aktiv 
-
-
-    // TODO: stenge kontaktforespørsel (ferdig håndtert)
-
-
     // Validate the contact request by checking that the input is not empty or null
     private static bool ValidateContactRequest(ContactRequestDto request)
     {
@@ -169,6 +154,7 @@ public class ContactService : IContactService
 
     public bool UpdateIsHandledStatus(Guid contactRequestId, bool isHandled, string userToken)
     {
+        // Extract the user id from the token and check if the user is an admin
         var tokenResult = _tokenService.ExtractUserID(userToken);
         if (!tokenResult.Success)
         {
@@ -185,6 +171,7 @@ public class ContactService : IContactService
             return false;
         }
 
+        // Find the contact request and update the is handled status
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
         if (contactRequest == null) return false;
 
@@ -199,8 +186,6 @@ public class ContactService : IContactService
         var contactRequest = _context.ContactRequests.Find(contactRequestId);
         if (contactRequest == null) return false;
 
-
-        // have this '\n new message \n' to see when new message is added
         contactRequest.Message += $"\n new message \n Response: {responseMessage}";
         _context.SaveChanges();
         return true;

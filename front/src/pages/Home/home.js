@@ -18,9 +18,9 @@ export const Home = () => {
   const [userProfileState, setUserProfileState] = useState({ userFullName: '', userEmail: '' });
   const [yarnInventoryLength, setYarnInventoryLength] = useState(0);
   const [needleInventoryLength, setNeedleInventoryLength] = useState(0);
-  const [completeProjects, setCompleteProjects] = useState([]);
+  const [completeProjects, setCompleteProjects] = useState(0);
   const [ongoingProjects, setOngoingProjects] = useState([]);
-  const [ongoingCount, setOngoingCount] = useState(0);
+  const [recipeCount, setRecipeCount] = useState(0);
   const [completedCount, setCompletedCount] = useState(0);
 
   // Function to handle navigation
@@ -33,7 +33,7 @@ export const Home = () => {
 
     // Fetches the name of the user
     if (token) {
-      const address = 'http://localhost:5002/getprofileinfo?userToken=' + token;
+      const address = `http://localhost:5002/getprofileinfo?userToken=${token}`;
       axios.get(address)
         .then(response => {
           setUserProfileState(response.data);
@@ -58,19 +58,16 @@ export const Home = () => {
           if (data.needleInventory) {
             setNeedleInventoryLength(data.needleInventory.length);
           }
-            
-          const finishedProjectsResponse = await axios.get(`http://localhost:5002/api/projects?userToken=${token}`);
-          setCompleteProjects(finishedProjectsResponse.data);
-          console.log(completeProjects);
-          const amountFinished = completeProjects.filter(project => project.status=== '2');
-          setCompletedCount(amountFinished.length); 
 
+          // Fetch projects data
+          const projectsResponse = await axios.get(`${baseAddress}/api/projects?userToken=${token}`);
+          const projectsData = projectsResponse.data;
+          setCompleteProjects(projectsData.length);
 
-
-          const ongoingProjectsResponse = await axios.get(`${baseAddress}/api/projects?userToken=${token}`);
-          setOngoingProjects(ongoingProjectsResponse.data);
-          const amountOngoing = ongoingProjects.filter(project => project.status=== '1');
-          setOngoingCount(amountOngoing.length); 
+          const recipesResponse = await axios.get(`${baseAddress}/api/recipe/getallrecipes?userToken=${token}`)
+          const recipesData = recipesResponse.data;
+          setRecipeCount(recipesData.length);
+          
 
         } catch (error) {
           console.error("Error fetching statistics data: ", error);
@@ -79,8 +76,7 @@ export const Home = () => {
       fetchStatistic();
     }
   }, []);
-  
-  // Home page
+
   return (
     <div className='page-container'>
       <h1 style={{ padding: '20px' }}>Hello, good to see you {userProfileState.userFullName || ''}!</h1>
@@ -91,9 +87,8 @@ export const Home = () => {
           <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}> 
             <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'yarn')}  />
             <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'needles')} />
-
-            <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completeProjects.toString()} onClick={() => handleNavigate('/projects', 2)} />
-            <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingProjects.toString()} onClick={() => handleNavigate('/projects', 1)} />
+            <StatisticBox icon={getImageByName('pileOfSweaters')} label="Number of projects" value={completeProjects.toString()} onClick={() => handleNavigate('/projects', 1)} />
+            <StatisticBox icon={getImageByName('openBook')} label="Number of recipes" value={recipeCount.toString()} onClick={() => handleNavigate('/recipes', 1)} />
           </div>
         </div>
         {/* Show image on the right side of home page */}

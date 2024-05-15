@@ -4,7 +4,6 @@ using Strikkeapp.Models;
 using Strikkeapp.Recipes.Models;
 using Strikkeapp.Data.Entities;
 using AutoMapper;
-using Strikkeapp.Data.Migrations;
 using Morcatko.AspNetCore.JsonMergePatch;
 
 namespace Strikkeapp.Services;

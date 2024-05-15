@@ -7,7 +7,7 @@ using Strikkeapp.Data.Context;
 
 #nullable disable
 
-namespace Strikkeapp.Data.Migrations
+namespace Strikkeapp.Migrations
 {
     [DbContext(typeof(StrikkeappDbContext))]
     partial class StrikkeappDbContextModelSnapshot : ModelSnapshot
@@ -48,7 +48,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ContactRequests", (string)null);
+                    b.ToTable("ContactRequests");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.Counter", b =>
@@ -71,7 +71,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CounterInventory", (string)null);
+                    b.ToTable("CounterInventory");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.KnittingRecipes", b =>
@@ -95,7 +95,6 @@ namespace Strikkeapp.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RecipePath")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
@@ -105,7 +104,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("KnittingRecipes", (string)null);
+                    b.ToTable("KnittingRecipes");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.NeedleInventory", b =>
@@ -137,7 +136,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("NeedleInventory", (string)null);
+                    b.ToTable("NeedleInventory");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.Newsletter", b =>
@@ -147,7 +146,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasKey("email");
 
-                    b.ToTable("Newsletter", (string)null);
+                    b.ToTable("Newsletter");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectEntity", b =>
@@ -184,7 +183,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectTracking", b =>
@@ -227,7 +226,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectTracking", (string)null);
+                    b.ToTable("ProjectTracking");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectYarnInventoryEntity", b =>
@@ -252,7 +251,30 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProjectYarnInventory", (string)null);
+                    b.ToTable("ProjectYarnInventory");
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.RecipeRatingEntity", b =>
+                {
+                    b.Property<Guid>("RecipeRatingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("RecipeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("RecipeRatingId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RecipeRatings");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.UserDetails", b =>
@@ -272,13 +294,13 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserDetails", (string)null);
+                    b.ToTable("UserDetails");
 
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("6fbe0ff0-1ac7-4852-ac3a-bb212f19fb61"),
-                            DateOfBirth = new DateTime(2024, 5, 6, 22, 4, 40, 804, DateTimeKind.Local).AddTicks(9100),
+                            UserId = new Guid("bce08d40-f0d0-4144-b51a-7730a5add11f"),
+                            DateOfBirth = new DateTime(2024, 5, 15, 17, 43, 4, 642, DateTimeKind.Local).AddTicks(8612),
                             IsAdmin = true,
                             UserFullName = "Knithub Admin"
                         });
@@ -310,14 +332,14 @@ namespace Strikkeapp.Data.Migrations
                     b.HasIndex("UserEmail")
                         .IsUnique();
 
-                    b.ToTable("UserLogIn", (string)null);
+                    b.ToTable("UserLogIn");
 
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("6fbe0ff0-1ac7-4852-ac3a-bb212f19fb61"),
+                            UserId = new Guid("bce08d40-f0d0-4144-b51a-7730a5add11f"),
                             UserEmail = "admin@knithub.no",
-                            UserPwd = "AQAAAAIAAYagAAAAEIptBNtmjydTTmmse38vtyH+lsr+qFoj5oMxIskybBNwU8Q9qXv2cW13LPXa3AVGLg==",
+                            UserPwd = "AQAAAAIAAYagAAAAELYaM5Ua97rcQ28zgOoEE1mEbCe1WW0DVMcoV2SgJ/upZbR+wO0rvt7BGDULm0Ja+w==",
                             UserStatus = "verified",
                             UserVerificationCode = 999999
                         });
@@ -335,7 +357,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("UserVerification", (string)null);
+                    b.ToTable("UserVerification");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.YarnInventory", b =>
@@ -384,7 +406,7 @@ namespace Strikkeapp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("YarnInventory", (string)null);
+                    b.ToTable("YarnInventory");
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ContactRequest", b =>
@@ -446,6 +468,15 @@ namespace Strikkeapp.Data.Migrations
                 });
 
             modelBuilder.Entity("Strikkeapp.Data.Entities.ProjectYarnInventoryEntity", b =>
+                {
+                    b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Strikkeapp.Data.Entities.RecipeRatingEntity", b =>
                 {
                     b.HasOne("Strikkeapp.Data.Entities.UserLogIn", null)
                         .WithMany()

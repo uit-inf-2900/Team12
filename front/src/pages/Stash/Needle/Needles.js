@@ -98,7 +98,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     }, []);
 
     // Define the predefined needle types 
-    const predefinedTypes = ['Interchangeble', 'DoublePointed', 'Circular', ];
+    const predefinedTypes = ['Interchangeable', 'DoublePointed', 'Circular', ];
 
     // useMemo hook to memoize the needles options for the MultiSelect component
     const NeedlesOptions = useMemo(() => {
