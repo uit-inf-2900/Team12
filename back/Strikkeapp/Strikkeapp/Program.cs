@@ -34,6 +34,7 @@ builder.Services.AddScoped<INewsletterService, NewsletterService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectYarnInventoryService, ProjectYarnInventoryService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddScoped<IRecipeRatingService, RecipeRatingService>();
 
 builder.Services.AddSingleton<IPasswordHasher<object>, PasswordHasher<object>>();
 

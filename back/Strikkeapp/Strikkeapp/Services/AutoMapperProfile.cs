@@ -2,6 +2,7 @@
 using AutoMapper;
 using Strikkeapp.Models;
 using Strikkeapp.Data.Entities;
+using Strikkeapp.Recipes.Models;
 
 namespace Strikkeapp.Services;
 
@@ -33,6 +34,9 @@ public class AutoMapperProfile : Profile
 			.ForMember(uyr => uyr.NewNum, opt => opt.MapFrom(yid => yid.NumItems))
 			.ForMember(uyr => uyr.UserToken, opt => opt.Ignore());
 
+		CreateMap<KnittingRecipes, RecipeInfo>();
+
+		CreateMap<RecipeRatingEntity, RecipeRatingModel>();
 
 	}
 }

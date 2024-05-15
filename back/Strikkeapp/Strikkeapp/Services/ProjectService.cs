@@ -207,10 +207,12 @@ public class ProjectService : IProjectService
 
         projectPatch.ApplyToT(projectModel);
 
-        project = _mapper.Map<ProjectEntity>(projectModel);
-        project.YarnIds = yarnIds;
-        project.ProjectInventoryIds = yarnInventory;
-        project.UserId = tokenResult.UserId;
+        var projectMap = _mapper.Map<ProjectEntity>(projectModel);
+        projectMap.YarnIds = yarnIds;
+        projectMap.ProjectInventoryIds = yarnInventory;
+        projectMap.UserId = tokenResult.UserId;
+
+        _context.Entry<ProjectEntity>(project).CurrentValues.SetValues(projectMap);
 
         _context.SaveChanges();
 
@@ -251,12 +253,15 @@ public class ProjectService : IProjectService
     private IEnumerable<YarnInventoryDto> GetYarnsForProject(string userToken, IEnumerable<Guid>? yarnIds, Guid projectId)
     {
         var yarns = _inventoryService.GetYarns(userToken, yarnIds);
+        var returnYarns = new List<YarnInventoryDto>();
 
         foreach (var yarn in yarns)
         {
             yarn.InUse = _projectYarnService.GetNumInUseByProject(yarn.ItemId, projectId, userToken);
+            returnYarns.Add(yarn);
+
         }
-        return yarns;
+        return returnYarns;
     }
 }
 

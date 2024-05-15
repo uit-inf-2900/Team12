@@ -5,6 +5,7 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import axios from 'axios';
 import PDFwindow from './PDFwindow';
+import RateRecipe from '../../pages/RecipeManagement/rating';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -93,9 +94,13 @@ const PDFViewer = ({ id, onClose, onDelete }) => {
             <div className="resume-section">
                 <div className="pdf-viewer">
                 <div className='box light' style={{width:'100%'}}>
-                    <div className="document-container">
-                        
+                    <div className='navigation'>
                         <button onClick={handlePDFwindow}>Open in new page</button>
+                        <button onClick={onDelete}> Delete recipe </button> 
+                    </div>
+                    <div className="document-container" style={{ overflowY: 'scroll', height: '80vh'}}>
+                        
+                        
                         <Document
                             file={file}
                             onLoadSuccess={onDocumentLoadSuccess}
@@ -109,9 +114,11 @@ const PDFViewer = ({ id, onClose, onDelete }) => {
                         <span>Page {currentPage} of {numPages}</span>
                         <button disabled={currentPage >= numPages} onClick={goToNextPage}>Next</button>
                         <button onClick={onClose} className="close-button">Close</button>
-                        <button onClick={onDelete}> Delete recipe </button>
-
+                        <RateRecipe id={id} ></RateRecipe>
                     </div>
+                    {/* <div className='navigation'>
+                        <button> Rate recipe ! </button>
+                    </div> */}
 
                     {openWindow &&(
                         <PDFwindow id={id} onClose={()=> setOpenWindow(false)}>

@@ -493,8 +493,8 @@ public class InventoryService : IInventoryService
             try
             {
                 var yarnInventory = _context.YarnInventory
-                    .Where(yi => yi.UserId == userId)
-                    .FirstOrDefault(yid => yid.ItemID == request.ItemId);
+                    .Where(yi => yi.UserId == userId && yi.ItemID == request.ItemId)
+                    .FirstOrDefault();
 
                 if(yarnInventory == null)
                 {
@@ -507,6 +507,7 @@ public class InventoryService : IInventoryService
                 }
 
                 yarnInventory.InUse = request.NewNum;
+
                 _context.SaveChanges();
 
                 transaction.Commit();

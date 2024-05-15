@@ -3,6 +3,8 @@
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Data.Context;
 using Strikkeapp.Recipes.Models;
+using Morcatko.AspNetCore.JsonMergePatch;
+using AutoMapper;
 
 namespace Strikkeapp.Services;
 
@@ -12,6 +14,7 @@ public interface IRecipeService
     public RecipeServiceResultGet GetRecipes(string userToken);
     public RecipePDFResult GetRecipePDF(Guid recipeId, string userToken);
     public bool DeleteRecipePDF(Guid recipeId, string userToken);
+    RecipeInfo PatchRecipe(string userToken, Guid recipeId, JsonMergePatchDocument<RecipePatch> patch);
 }
 
 public class RecipeService : IRecipeService
@@ -19,9 +22,11 @@ public class RecipeService : IRecipeService
     private readonly ITokenService _tokenService;
     private readonly string _storagePath;
     private readonly StrikkeappDbContext _context;
+    private readonly IMapper _mapper;
+    private readonly IRecipeRatingService _ratingService;
 
 
-    public RecipeService(IConfiguration configuration, ITokenService tokenService, StrikkeappDbContext context)
+    public RecipeService(IConfiguration configuration, ITokenService tokenService, StrikkeappDbContext context, IMapper mapper, IRecipeRatingService ratingService)
     {
         _storagePath = configuration["ConnectionStrings:RecipesStorage"]!;
         if (string.IsNullOrEmpty(_storagePath))
@@ -30,6 +35,8 @@ public class RecipeService : IRecipeService
         }
         _tokenService = tokenService;
         _context = context;
+        _mapper = mapper;
+        _ratingService = ratingService;
     }
 
     public RecipeServiceResult StoreRecipe(Stream fileStream, string jwtToken, string recipeName, int needleSize, string knittingGauge, string? notes)
@@ -89,6 +96,27 @@ public class RecipeService : IRecipeService
         }
     }
 
+    public RecipeInfo PatchRecipe(string userToken, Guid recipeId, JsonMergePatchDocument<RecipePatch> patch)
+    {
+        // Get and check token
+        var tokenResult = _tokenService.ExtractUserID(userToken);
+        if (tokenResult.Success == false)
+            throw new UnauthorizedAccessException();
+
+        var recipe = _context.KnittingRecipes.Where(r => r.KnittingRecipeId == recipeId && r.UserId == tokenResult.UserId).FirstOrDefault();
+
+        if (recipe == null)
+            throw new ArgumentException($"recipe with id: {recipeId} does not exist for user with id: {tokenResult.UserId}");
+
+        patch.ApplyToT(recipe);
+
+        _context.SaveChanges();
+
+        var updatedEntity = _context.KnittingRecipes.Where(r => r.KnittingRecipeId == recipeId && r.UserId == tokenResult.UserId).FirstOrDefault();
+        return _mapper.Map<RecipeInfo>(updatedEntity);
+
+    }
+
     public RecipeServiceResultGet GetRecipes(string userToken)
     {
         // Get and check token
@@ -109,7 +137,8 @@ public class RecipeService : IRecipeService
                     RecipeName = r.RecipeName,
                     NeedleSize = r.NeedleSize,
                     KnittingGauge = r.KnittingGauge,
-                    Notes = r.Notes
+                    Notes = r.Notes,
+                    Rating = _ratingService.GetRating(r.KnittingRecipeId, tokenResult.UserId)
                 })
                 .ToList();
 
