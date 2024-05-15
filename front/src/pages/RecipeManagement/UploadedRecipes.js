@@ -34,6 +34,19 @@ const UploadedRecipes = () => {
             setLoading(false);
         }
     };
+    const handleRecipeDelete = async (recipeId) => {
+        try {
+            const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${recipeId}`);
+            setRecipes(response.data || []); 
+        } catch (error) {
+            console.error('Error deleting recipe:', error);
+        } finally {
+            handleClose();
+            
+        }
+
+        
+    };
 
     const handleSortChange = (event) => {
         setSortBy(event.target.value);
@@ -52,16 +65,12 @@ const UploadedRecipes = () => {
         setIsModalOpen(true); // Open modal
     };
 
-    const handleRecipeDelete = async (recipeId) => {
-        try {
-            const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${recipeId}`);
-            setRecipes(response.data || []); 
-        } catch (error) {
-            console.error('Error deleting recipe:', error);
-        } finally {
-            setLoading(false);
-        }
+    const handleClose = () => {
+        setIsModalOpen(false);
+        fetchRecipes();
     };
+
+    
 
     const sortMenuItems = [
         { value: '', name: 'Select' },
@@ -91,7 +100,7 @@ const UploadedRecipes = () => {
                             knittingGauge={recipe.knittingGauge}
                             notes={recipe.notes}
                             onClick={() => handleProjectClick(recipe)}
-                            onDelete={() => handleRecipeDelete(recipe.recipeId)}
+                           
                         />
                     ))}
                 </div>
@@ -100,7 +109,7 @@ const UploadedRecipes = () => {
             {selectedRecipe && (
                     <Modal open={isModalOpen}>
                         <Box>
-                            <PDFViewer id={selectedRecipe.recipeId} onClose={()=>setIsModalOpen(false)}/>
+                            <PDFViewer id={selectedRecipe.recipeId} onClose={()=>handleClose()} onDelete={()=>handleRecipeDelete(selectedRecipe.recipeId)}/>
                         </Box>   
                     </Modal>
                 )} 

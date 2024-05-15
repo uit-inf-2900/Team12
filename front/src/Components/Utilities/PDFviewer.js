@@ -8,7 +8,7 @@ import PDFwindow from './PDFwindow';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const PDFViewer = ({ id, onClose }) => {
+const PDFViewer = ({ id, onClose, onDelete }) => {
     const [file, setFile] = useState();
     const [numPages, setNumPages] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -41,6 +41,7 @@ const PDFViewer = ({ id, onClose }) => {
                 setLoading(false);
             }
         };
+        
 
         fetchData();
 
@@ -49,6 +50,20 @@ const PDFViewer = ({ id, onClose }) => {
             if (file) URL.revokeObjectURL(file);
         };
     }, [id]);
+
+    const handleRecipeDelete = async (recipeId) => {
+        try {
+            const response = await axios.delete(`http://localhost:5002/api/recipe/recipe?userToken=${sessionStorage.getItem('token')}&recipeId=${recipeId}`);
+            setRecipes(response.data || []); 
+        } catch (error) {
+            console.error('Error deleting recipe:', error);
+        } finally {
+            
+        }
+
+        
+    };
+
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -73,33 +88,40 @@ const PDFViewer = ({ id, onClose }) => {
     if (error) return <div className="error-message">Error: {error}</div>;
 
     return (
-        <div className="resume-section">
-            <div className="pdf-viewer">
-                <div className="document-container">
-                    <button onClick={handlePDFwindow}>Open in new page</button>
-                    <Document
-                        file={file}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                        className="d-flex justify-content-center"
-                    >
-                        <Page pageNumber={currentPage} />
-                    </Document>
-                </div>
-                <div className="navigation">
-                    <button disabled={currentPage <= 1} onClick={goToPrevPage}>Previous</button>
-                    <span>Page {currentPage} of {numPages}</span>
-                    <button disabled={currentPage >= numPages} onClick={goToNextPage}>Next</button>
-                    <button onClick={onClose} className="close-button">Close</button>
 
-                </div>
+        
+            <div className="resume-section">
+                <div className="pdf-viewer">
+                <div className='box light' style={{width:'100%'}}>
+                    <div className="document-container">
+                        
+                        <button onClick={handlePDFwindow}>Open in new page</button>
+                        <Document
+                            file={file}
+                            onLoadSuccess={onDocumentLoadSuccess}
+                            className="d-flex justify-content-center"
+                        >
+                            <Page pageNumber={currentPage} />
+                        </Document>
+                    </div>
+                    <div className="navigation">
+                        <button disabled={currentPage <= 1} onClick={goToPrevPage}>Previous</button>
+                        <span>Page {currentPage} of {numPages}</span>
+                        <button disabled={currentPage >= numPages} onClick={goToNextPage}>Next</button>
+                        <button onClick={onClose} className="close-button">Close</button>
+                        <button onClick={onDelete}> Delete recipe </button>
 
-                {openWindow &&(
-                    <PDFwindow id={id} onClose={()=> setOpenWindow(false)}>
-                      
-                    </PDFwindow>
-                )}
+                    </div>
+
+                    {openWindow &&(
+                        <PDFwindow id={id} onClose={()=> setOpenWindow(false)}>
+                        
+                        </PDFwindow>
+                    )}
+                </div>
             </div>
         </div>
+        
     );
 };
 

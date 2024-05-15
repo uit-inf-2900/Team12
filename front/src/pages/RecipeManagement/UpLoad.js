@@ -11,7 +11,7 @@ import axios from 'axios';
 // TODO: Implement error handling and feedback to the user
 
 
-const UpLoad = ({ onClose, fetchRecipes }) => {
+const UpLoad = ({ onClose }) => {
     // State to control the file input and upload status 
     const [file, setFile] = useState(null);                 
     const [uploadStatus, setUploadStatus] = useState({ fileName: '' });  
@@ -59,7 +59,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
             // Handle error 
             console.error("Upload error:", error);
         })
-        fetchRecipes;
+        
        
     };
 
@@ -68,6 +68,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
     const clearFile = () => {
         setFile(null);
         setUploadStatus({ fileName: '' });
+        
     };
 
     return (
