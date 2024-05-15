@@ -207,12 +207,14 @@ public class ProjectService : IProjectService
 
         projectPatch.ApplyToT(projectModel);
 
-        project = _mapper.Map<ProjectEntity>(projectModel);
-        project.YarnIds = yarnIds;
-        project.ProjectInventoryIds = yarnInventory;
-        project.UserId = tokenResult.UserId;
+        var projectMap = _mapper.Map<ProjectEntity>(projectModel);
+        projectMap.YarnIds = yarnIds;
+        projectMap.ProjectInventoryIds = yarnInventory;
+        projectMap.UserId = tokenResult.UserId;
 
-        _context.SaveChanges();
+        _context.Entry<ProjectEntity>(project).CurrentValues.SetValues(projectMap);
+
+        var test = _context.SaveChanges();
 
         if (projectPatch.Model.Status == Enums.ProjectStatus.Completed)
             CompleteProject(userToken, projectId);
