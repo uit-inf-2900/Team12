@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Impimg from '../../../images/huggingYarn.png';
+import { getImageByName } from "../../../images/getImageByName";
 
 
 
@@ -11,28 +11,31 @@ const Carousel = () =>{
     const data = [
         {
           name: `Sera Elstad`,
-          img: Impimg,
-          review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+          img: getImageByName('knitting'),
+          title: "Full Stack Developer",
+          review: "Sera is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
         },
         {
           name: `Skjalg Slubowski`,
-          img: Impimg,
-          review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+          img: getImageByName('huggingYarn'),
+          title: "Full Stack Developer",
+          review: "Skjalg is a third-year Cybersecurity student at UiT in Tromsø, with experience in mainly backend development."
         },
         {
           name: `Emilie Steen`,
-          img: Impimg,
+          img: getImageByName('reading'),
           title: "Full Stack Developer",
           review: "Emilie is a third-year Cybersecurity student at UiT in Tromsø, with experience in both frontend and backend development."
         },
         {
           name: `Marie Alette Stenhaug`,
-          img: Impimg,
-          review: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
+          img: getImageByName('stash'),
+          title: "Full Stack Developer",
+          review: "Marie is a third-year Informatics student at UiT in Tromsø,  with experience in both frontend and backend development."
         },
         {
           name: `Eline D Wito`,
-          img: Impimg,
+          img: getImageByName('img6'),
           title: 'Full Stack Developer',
           review: 'Eline is a third-year Medical Informatics student at UiT in Tromsø, specializing in the intersection of healthcare and technology. With experience in both frontend and backend development'
         },
@@ -57,8 +60,8 @@ const Carousel = () =>{
                   <img src={d.img} />
                 </div>
     
-                <div className="flex flex-col items-center justify-center gap-4 p-4">
-                  <h3 className="text-xl font-bold">{d.name}</h3>
+                <div className="flex flex-col items-center justify-center gap-10 p-6">
+                  <h3 className="text-xl font-semibold">{d.name}</h3>
                   <h4> {d.title}</h4>
                   <p className="text-center">{d.review}</p>
 

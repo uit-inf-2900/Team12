@@ -9,6 +9,7 @@ const images = {
     stash: require('./stash.png'),
     yarnBasket: require('./yarnBasket.png'),
     yarnSheep: require('./yarnSheep.png'),
+    
 
 };
 

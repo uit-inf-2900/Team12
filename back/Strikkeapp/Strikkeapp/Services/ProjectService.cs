@@ -180,8 +180,8 @@ public class ProjectService : IProjectService
         if (project.Status == Enums.ProjectStatus.Completed)
             throw new ArgumentException($"Project with id: {projectId} is already set as completed");
 
-        List<Guid>? yarnInventory = null;
-        List<Guid>? yarnIds = null;
+        List<Guid>? yarnInventory = project.ProjectInventoryIds;
+        List<Guid>? yarnIds = project.YarnIds;
 
         // if the patch contains yarns, patch the yarns in the project inventory
         if (projectPatch.Model.YarnIds != null && projectPatch.Model.YarnIds.Keys.Count != 0)
@@ -193,11 +193,24 @@ public class ProjectService : IProjectService
             yarnIds = projectPatch.Model.YarnIds.Keys.ToList();
         }
 
-        projectPatch.Model.YarnIds = null;
-        
-        projectPatch.ApplyToT(project);
+        var projectModel = _mapper.Map<ProjectModel>(project);
+
+        var opToRemove = projectPatch.Operations.Where(x => x.path.Contains("yarnIds")).ToList();
+
+        if (opToRemove != null)
+        {
+            foreach (var op in opToRemove)
+                projectPatch.Operations.Remove(op);
+            
+            projectPatch.Model.YarnIds = null;
+        }
+
+        projectPatch.ApplyToT(projectModel);
+
+        project = _mapper.Map<ProjectEntity>(projectModel);
         project.YarnIds = yarnIds;
         project.ProjectInventoryIds = yarnInventory;
+        project.UserId = tokenResult.UserId;
 
         _context.SaveChanges();
 

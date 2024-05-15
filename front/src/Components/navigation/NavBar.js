@@ -12,9 +12,9 @@ import Resources from '../../pages/KnitHubResources/Resources';
 const VisitorView = () => {
   return (
     <>
-      <li className="nav-item"><NavLink to="/about" className="nav-link">About</NavLink></li>
-      <li className="nav-item"><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>
-      <li className="nav-item"><NavLink to="/resources" className="nav-link">Resources</NavLink></li>
+      <li className="nav-item" style={{fontSize:'1.5rem'}}><NavLink to="/about" className="nav-link">About</NavLink></li>
+      <li className="nav-item" style={{fontSize:'1.5rem'}}><NavLink to="/contactus" className="nav-link">Contact us</NavLink></li>
+      <li className="nav-item" style={{fontSize:'1.5rem'}}><NavLink to="/resources" className="nav-link">Resources</NavLink></li>
     </>
   );
 }; 
@@ -22,9 +22,9 @@ const VisitorView = () => {
 const UserView = () => {
   return(
     <>
-      <li className="nav-item"><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
-      <li className="nav-item"><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
-      <li className="nav-item"><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
+      <li className="nav-item" style={{fontSize:'1.5rem'}}><NavLink to="/recipes" className="nav-link">Recipes</NavLink></li>
+      <li className="nav-item" style={{fontSize:'1.5rem'}}><NavLink to="/projects" className="nav-link">Projects</NavLink></li>
+      <li className="nav-item"style={{fontSize:'1.5rem'}}><NavLink to="/stash" className="nav-link">Stash</NavLink></li>
     </>
   ); 
 }; 
@@ -67,7 +67,7 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
           </NavLink>
           </li>
         
-          <li className="nav-items"><NavLink to="/" className="nav-link">Home</NavLink></li>
+          <li className="nav-items" style={{fontSize:'1.5rem'}} ><NavLink to="/" className="nav-link">Home</NavLink></li>
           {!isLoggedIn && <VisitorView/>}
           {isLoggedIn && <UserView />}
           <AdminView isAdmin={isAdmin} isLoggedIn={isLoggedIn} />
@@ -75,7 +75,7 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
         
         {isLoggedIn && (
         <>
-          <li className="nav-items">
+          <li className="nav-items" style={{fontSize:'1.5rem'}}>
             <NavLink to="/profile" className="nav-action">Profile</NavLink>
             <NavLink onClick={handleLogoutClick} className="nav-action">Logg Ut</NavLink>
             <ConfirmationLogout 
@@ -89,7 +89,7 @@ const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
         )}
         {!isLoggedIn && (
         <>
-          <li className="nav-items">
+          <li className="nav-items" style={{fontSize:'1.5rem'}}>
             <NavLink to="/signup" className="nav-action">Sign Up</NavLink>
             <NavLink to="/login" className="nav-action">Log In</NavLink>
           </li>

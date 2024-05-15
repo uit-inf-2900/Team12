@@ -11,7 +11,8 @@ public class AutoMapperProfile : Profile
 	{
 		CreateMap<ProjectEntity, ProjectModel>()
 			.ForMember(pm => pm.Needles, opt => opt.Ignore())
-			.ForMember(pm => pm.Yarns, opt => opt.Ignore());
+			.ForMember(pm => pm.Yarns, opt => opt.Ignore())
+			.ReverseMap();
 
 		CreateMap<ProjectCreateModel, ProjectEntity>()
 			.ForMember(pe => pe.YarnIds, opt => opt.MapFrom(pcm => pcm.YarnIds != null ? pcm.YarnIds.Keys.ToList() : null));

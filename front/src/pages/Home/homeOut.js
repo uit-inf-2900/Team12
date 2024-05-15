@@ -25,10 +25,10 @@ export const HomeOut = () => {
     return (
         <div>
             <Hero></Hero>
-            <AboutLanding></AboutLanding>
             <Introduction></Introduction>
+            <AboutLanding></AboutLanding>
             <Inspiration></Inspiration>
-            <InstagramFeed accessToken={accessTokenInsta} />
+            
         </div>
     );
 };

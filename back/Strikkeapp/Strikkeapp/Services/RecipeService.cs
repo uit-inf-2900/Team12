@@ -72,6 +72,7 @@ public class RecipeService : IRecipeService
                 // Save recipe to database
                 _context.KnittingRecipes.Add(knittingRes);
                 _context.SaveChanges();
+                transaction.Commit();
 
                 return RecipeServiceResult.ForSuccess(filePath);
             }

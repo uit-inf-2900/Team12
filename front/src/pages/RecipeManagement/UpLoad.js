@@ -11,7 +11,7 @@ import axios from 'axios';
 // TODO: Implement error handling and feedback to the user
 
 
-const UpLoad = ({ onClose, fetchRecipes }) => {
+const UpLoad = ({ onClose }) => {
     // State to control the file input and upload status 
     const [file, setFile] = useState(null);                 
     const [uploadStatus, setUploadStatus] = useState({ fileName: '' });  
@@ -47,6 +47,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
         formData.append("RecipeName", recipeInfo.recipeName);
         formData.append("NeedleSize", parseInt(recipeInfo.needleSize));
         formData.append("KnittingGauge", recipeInfo.knittingGauge);
+        formData.append("Notes", recipeInfo.notes);
 
         axios.post('http://localhost:5002/api/recipe/upload', formData, {
             headers: {
@@ -58,6 +59,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
             // Handle error 
             console.error("Upload error:", error);
         })
+        
        
     };
 
@@ -66,6 +68,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
     const clearFile = () => {
         setFile(null);
         setUploadStatus({ fileName: '' });
+        
     };
 
     return (
@@ -93,6 +96,7 @@ const UpLoad = ({ onClose, fetchRecipes }) => {
                     
                     {/* Skjema for oppskriftsinformasjon */}
                     <div className="input">
+                        <CustomButton themeMode="light" onClick={onClose}> Close </CustomButton>
                         <InputField label="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
                         <InputField label="Author" name="author"  type="text" onChange={handleInputChange} />
                         <InputField label="Needle Size" name="needleSize"  type="number" onChange={handleInputChange} />
