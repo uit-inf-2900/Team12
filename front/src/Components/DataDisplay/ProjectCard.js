@@ -7,8 +7,6 @@ import EditProject from '../../pages/ProjectTracking/editProject';
 import PDFViewer from '../Utilities/PDFviewer';
 
 const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdate }) => {
-
-
   const [openCalculator, setOpenCalculator]=useState(false);
   const [openCounter, setOpenCounter]=useState(false);
   const [openEdit, setOpenEdit]=useState(false);
@@ -42,6 +40,15 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
 
   };
   
+  // The stuatus lables for the project 
+  const statusLabels = {
+    0: 'Planned',
+    1: 'In Progress',
+    2: 'Completed'
+  };
+
+  const getStatusLabel = (statusId) => statusLabels[statusId] || 'Unknown';
+
 
   return (
     <Modal open={show} onClose={handleClose}>
@@ -60,7 +67,7 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
               Status
             </Typography>
             <Typography variant="body1" gutterBottom>
-              {project.status}
+              {getStatusLabel(project.status)}
             </Typography>
 
             <Typography variant="h6" gutterBottom>
@@ -121,9 +128,11 @@ const ProjectCard = ({ show, project, handleClose, onDelete, onComplete, onUpdat
             
           </Box>
           <Box>
-            <Button variant="contained" onClick={onComplete} color="primary" sx={{ mr: 1 }}>
-              Complete project
-            </Button>
+            {project.status !== 2 && (
+              <Button variant="contained" onClick={onComplete} color="primary" sx={{ mr: 1 }}>
+                Complete project
+              </Button>
+            )}
             <Button variant="contained" onClick={()=> edit()} color="primary" sx={{ mr: 1 }}>
               Update project
             </Button>
