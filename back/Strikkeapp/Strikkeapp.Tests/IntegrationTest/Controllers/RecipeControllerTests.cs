@@ -302,4 +302,19 @@ public class RecipeControllerTests : IDisposable
         var result = _controller.PatchRecipe(testRecipeId, "userToken", patch);
         Assert.NotNull(result);
     }
+
+    [Fact]
+    public void FakeTokenPatch_Fails()
+    {   // Run service with fake token and verify failure
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        Assert.Throws<UnauthorizedAccessException>(() => _controller.PatchRecipe(testRecipeId, "fakeToken", patch));
+    }
+
+    [Fact]
+    public void NonRecipePatch_Fails()
+    {
+        // Run service with non-existing recipe and verify failure
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        Assert.Throws<ArgumentException>(() => _controller.PatchRecipe(Guid.NewGuid(), "userToken", patch));
+    }
 }
