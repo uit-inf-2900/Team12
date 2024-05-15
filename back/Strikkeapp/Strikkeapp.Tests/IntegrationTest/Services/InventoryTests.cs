@@ -52,6 +52,23 @@ public class InventoryTests : IDisposable
 
     private void SeedTestData()
     {
+        // Add regular user
+        _context.UserLogIn.Add(new UserLogIn
+        {
+            UserId = testUserGuid,
+            UserPwd = "testPassword",
+            UserEmail = "test@email.com",
+            UserStatus = "verified"
+        });
+        _context.UserDetails.Add(new UserDetails
+        {
+            UserId = testUserGuid,
+            UserFullName = "Test User",
+            DateOfBirth = DateTime.Now,
+            IsAdmin = false
+        });
+
+        // Add inventory data
         var testNeedleInventory = new NeedleInventory
         {
             ItemID = testNeedleId,
@@ -665,5 +682,23 @@ public class InventoryTests : IDisposable
         // Check that service fails with correct error
         Assert.False(res.Success, "Service should fail with fake item id");
         Assert.Equal("Item not found for user", res.ErrorMessage);
+    }
+
+    [Fact]
+    public void NonAdminGetAll_Fails()
+    {
+        // Set up test data and mock service
+        var testToken = "testToken";
+
+        // Set up mock
+        _mockTokenService.Setup(s => s.ExtractUserID(testToken))
+            .Returns(TokenResult.ForSuccess(testUserGuid));
+
+        // Run test
+        var res = _inventoryService.GetAllInventory(testToken);
+        
+        // Check that service fails with correct error
+        Assert.False(res.Success, "Service should fail with non-admin user");
+        Assert.Equal("Unauthorized", res.ErrorMessage);
     }
 }
