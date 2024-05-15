@@ -1,23 +1,14 @@
 import React, { useState, useRef } from 'react';
-import { IoIosCloudUpload } from "react-icons/io";          // Import the icon component from react icons library
-import InputField from '../../Components/UI/InputField';
-import './UpLoad.css';
 import "../../GlobalStyles/main.css";
+import "./UpLoad.css"; 
+import InputField from '../../Components/UI/InputField';
 import { CustomButton } from '../../Components/UI/Button';
 import axios from 'axios';
+import { IoIosCloudUpload } from "react-icons/io";
 
-
-// TODO: Implement file upload logic
-// TODO: Implement error handling and feedback to the user
-
-
-const UpLoad = ({ onClose }) => {
-    // State to control the file input and upload status 
-    const [file, setFile] = useState(null);                 
-    const [uploadStatus, setUploadStatus] = useState({ fileName: '' });  
-    const fileInputRef = useRef(null);             
-    
-    // State to control the recipe information input fields
+const UpLoad = ({ onClose, onUploadSuccess }) => {
+    const [file, setFile] = useState(null);
+    const fileInputRef = useRef(null);
     const [recipeInfo, setRecipeInfo] = useState({
         recipeName: '',
         author: '',
@@ -26,22 +17,13 @@ const UpLoad = ({ onClose }) => {
         notes: ''
     });
 
-    // Function to handle input change
-    const handleInputChange = (e) => {
-        setRecipeInfo({ ...recipeInfo, [e.target.name]: e.target.value });
-    };
-
-    // Function to handle file selection
     const handleFileSelection = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
-        setUploadStatus({ ...uploadStatus, fileName: selectedFile.name });
     };
 
-    // Handle the file upload
     const uploadFile = () => {
-        const formData = new FormData(); 
-
+        const formData = new FormData();
         formData.append("RecipeFile", file);
         formData.append("UserToken", sessionStorage.getItem('token'));
         formData.append("RecipeName", recipeInfo.recipeName);
@@ -53,60 +35,39 @@ const UpLoad = ({ onClose }) => {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(reponse => {
-            console.log("Upload success:", reponse);
+        }).then(response => {
+            console.log("Upload success:", response);
+            onClose();
+            onUploadSuccess();
         }).catch(error => {
-            // Handle error 
             console.error("Upload error:", error);
-        })
-        
-       
-    };
-
-
-    // Function to clear the file 
-    const clearFile = () => {
-        setFile(null);
-        setUploadStatus({ fileName: '' });
-        
+        });
     };
 
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
-                <div className="upload-flex-container"> 
-                    <div className="box light" 
-                        style={{"border-radius": "50%", 
-                                "width": "200px", 
-                                "height": "200px", 
-                                "border": "2px dashed #ccc", 
-                                "cursor": "pointer", 
-                                "overflow": "hidden"}} 
-                        onClick={() => fileInputRef.current.click()}>
-                        <IoIosCloudUpload size={50} />   {/* The upload icon */}
-                        <input 
-                            ref={fileInputRef}
-                            type="file" 
-                            onChange={handleFileSelection} 
-                            accept='.pdf'      // Can only choose pdf 
-                            style={{ display: 'none' }}
-                        />
-                        {uploadStatus.fileName && <p>{uploadStatus.fileName}</p>}
-                    </div>
-                    
-                    {/* Skjema for oppskriftsinformasjon */}
-                    <div className="input">
-                        <CustomButton themeMode="light" onClick={onClose}> Close </CustomButton>
-                        <InputField label="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
-                        <InputField label="Author" name="author"  type="text" onChange={handleInputChange} />
-                        <InputField label="Needle Size" name="needleSize"  type="number" onChange={handleInputChange} />
-                        <InputField label="Knitting Gauge" name="knittingGauge"  type="text" onChange={handleInputChange}  />
-                        <InputField label="Notes" name="notes"   type="text"onChange={handleInputChange}  />
-                    </div>
+                <div className="box light" onClick={() => fileInputRef.current.click()}>
+                    <IoIosCloudUpload size={50} />
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        onChange={handleFileSelection}
+                        accept='.pdf'
+                        style={{ display: 'none' }}
+                    />
+                    <p>{file && file.name}</p>
                 </div>
-                {/* Buttons to clear and upload files. Should only be viseble if a file is uploaded */}
-                {file && <CustomButton themeMode="dark" onClick={clearFile}>Cancel</CustomButton>}           
-                {file && <CustomButton themeMode="light" onClick={uploadFile} iconName="upload"> Upload</CustomButton>}
+                <div className="input">
+                    <InputField label="RecipeName" name="recipeName" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, recipeName: e.target.value})} />
+                    <InputField label="Author" name="author" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, author: e.target.value})} />
+                    <InputField label="Needle Size" name="needleSize" type="number" onChange={(e) => setRecipeInfo({...recipeInfo, needleSize: e.target.value})} />
+                    <InputField label="Knitting Gauge" name="knittingGauge" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, knittingGauge: e.target.value})} />
+                    <InputField label="Notes" name="notes" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, notes: e.target.value})} />
+                </div>
+                <CustomButton themeMode="light" onClick={onClose}>Close</CustomButton>
+                {file && <CustomButton themeMode="dark" onClick={() => setFile(null)}>Cancel</CustomButton>}
+                {file && <CustomButton themeMode="light" onClick={uploadFile}>Upload</CustomButton>}
             </div>
         </div>
     );
