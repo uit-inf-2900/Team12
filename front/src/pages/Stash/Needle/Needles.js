@@ -159,9 +159,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
                                 <td>{needle.type}</td>
                                 <td>{needle.size} mm</td>
                                 <td>{needle.length} cm</td>
-                                <td className={needle.numInUse ? 'in-use' : 'not-in-use'}>
-                                    {needle.numInUse ? 'In Use' : 'Not In Use'}
-                                </td>
+                                
                                 <td>
                                     <Fab size="small" onClick={() => handleOpenDeleteModal(needle)}>
                                         <DeleteIcon />

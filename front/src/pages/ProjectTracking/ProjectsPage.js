@@ -126,7 +126,7 @@ const Projects = () => {
                     handleClose={handleCloseModal}
                     onDelete={() => deleteProject(selectedProject.projectId)}
                     onComplete={() => handleCompleted(selectedProject.projectId)}
-                    onUpdate={() => updateProjectStatus(selectedProject.projectId, 1)}
+                    onUpdate={selectedProject.projectId}
                 />
             )}
         </div>

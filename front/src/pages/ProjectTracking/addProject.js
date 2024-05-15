@@ -104,7 +104,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
     
     const errors = {};
     if (!projectData.projectName) errors.projectName = 'Project name is required';
-    if (!projectData.status) errors.status = 'Status is required';
+    
     // if (!projectData.itemId) errors.itemId = 'Needle is required';
     if (!projectData.yarnType) errors.yarnType = 'Yarn is required';
     if (!projectData.yarnAmount) errors.yarnAmount = 'Amount of yarn is required';
