@@ -124,7 +124,7 @@ export const NeedleStash = ({ setNeedleTypes, needleTypes }) => {
     });
 
     return (
-        <div>
+        <div style={{width:'80%', alignItems:'center', textAlign: 'center', margin: '0 auto'}}>
             <SetAlert 
                 open={alertOpen} 
                 setOpen={setAlertOpen} 
