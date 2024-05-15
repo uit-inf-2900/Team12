@@ -28,8 +28,7 @@ const UpdateProject = ({ projectId, onClose }) => {
         
         { id: 0, label: 'Planned' },
         { id: 1, label: 'In Progress' },
-
-      ];
+    ];
 
 
 
