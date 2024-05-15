@@ -25,6 +25,8 @@ const Projects = () => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [allProjects, setAllProjects] = useState([]);
 
+
+    // fetch projects
     const fetchProjects = async () => {
         setLoading(true);
         try {
@@ -41,6 +43,8 @@ const Projects = () => {
         fetchProjects();
     }, []);
 
+
+    // Delete projects
     const deleteProject = async (projectId) => {
         try {
             await axios.delete(`http://localhost:5002/api/projects?userToken=${sessionStorage.getItem('token')}&projectId=${projectId}`);
@@ -51,6 +55,8 @@ const Projects = () => {
         }
     };
 
+
+    // Set project to complete
     const handleCompleted = async (projectId) => {
         try {
             await axios.post(`http://localhost:5002/api/projects/complete?userToken=${sessionStorage.getItem('token')}&projectId=${projectId}`);
@@ -60,6 +66,8 @@ const Projects = () => {
         }
     };
 
+
+    // Update project status
     const updateProjectStatus = async (projectId, statusId) => {
         try {
             await axios.put(`http://localhost:5002/api/projects/updateStatus?userToken=${sessionStorage.getItem('token')}&projectId=${projectId}&statusId=${statusId}`);
@@ -83,6 +91,8 @@ const Projects = () => {
         fetchProjects();
     };
 
+
+    // Options with id for filtering on the project page
     const options = [
         { id: 0, label: 'Planned' },
         { id: 1, label: 'In Progress' },
@@ -93,6 +103,7 @@ const Projects = () => {
 
     return (
         <div className="page-container">
+            {/* Switch between options */}
             <SwitchContainer
                 options={options}
                 activeStatus={activeStatus}
