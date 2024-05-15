@@ -258,7 +258,7 @@ public class UsersControllerTests
         // Run controller, and verify failure
         var result = _controller.DeleteUser("token");
         var foundResult = Assert.IsType<ObjectResult>(result);
-        Assert.Contains("Unable to find user", foundResult.Value!.ToString());
+        Assert.Contains("Unable to delete user", foundResult.Value!.ToString());
     }
 
     [Fact]
