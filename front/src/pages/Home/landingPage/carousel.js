@@ -7,7 +7,6 @@ import { getImageByName } from "../../../images/getImageByName";
 
 const Carousel = () =>{
 
-
     const data = [
         {
           name: `Sera Elstad`,
@@ -34,7 +33,7 @@ const Carousel = () =>{
           review: "Marie is a third-year Informatics student at UiT in Tromsø,  with experience in both frontend and backend development."
         },
         {
-          name: `Eline D Wito`,
+          name: `Eline De Vito`,
           img: getImageByName('img6'),
           title: 'Full Stack Developer',
           review: 'Eline is a third-year Medical Informatics student at UiT in Tromsø, specializing in the intersection of healthcare and technology. With experience in both frontend and backend development'
