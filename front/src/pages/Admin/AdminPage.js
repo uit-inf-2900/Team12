@@ -23,7 +23,7 @@ const AdminPage = () => {
     };
 
     return (
-        <div style={{ display: 'flex', margin: 'auto', paddingTop: '20px', overflow: 'auto', position: 'relative', outline: 'solid'}}>
+        <div style={{ display: 'flex', margin: 'auto', paddingTop: '20px', overflow: 'auto', position: 'relative',  width:'80%'}}>
             <div  className='Admin-page-content'>
                 {activeView !== 'dashboard' && (
                     <button data-testid="back-button" style={{ position: 'absolute', right: 20, top: 20 }} onClick={() => toggleView('dashboard')}>

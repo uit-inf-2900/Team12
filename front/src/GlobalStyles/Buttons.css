@@ -2,10 +2,10 @@
 /* ========= BUTTONS  ========== */
 /* Button specifications */
 button {
-    padding: 10px 15px; /* Padding inside buttons */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
+    padding: 10px 15px; 
+    border: none;  
+    border-radius: 5px;  
+    cursor: pointer; 
     margin: 0 auto;
     margin-top: 10px;
     align-items: center;
@@ -45,6 +45,6 @@ button {
 
 /* Define how the switch option should look when it is inactive */
 .switch-option.inactive {
-    background-color:  var(--button-bg-colo-light); /* Hvit for inaktivt valg */
-    color:   var(--button-text-color-dark); /* Sort tekst */
+    background-color:  var(--button-bg-colo-light);  
+    color:   var(--button-text-color-dark); 
 }

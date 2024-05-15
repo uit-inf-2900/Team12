@@ -29,14 +29,7 @@
 }
 
 
-/**
- * page content for the admin page 
- */ 
-.Admin-page-content {
-    flex-grow: 1;
-    overflow: hidden;
-    padding: 20px;
-}
+
 
 /**
  * Applies to all major sections for consistent spacing and alignment 
@@ -72,23 +65,23 @@
 
 /* container for light and dark box */
 .box-container {
-    display: flex;                                  /* Use flexbox for layout */
-    flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */
-    justify-content: center;                        /* Center children horizontally */
-    align-items: stretch;                           /* Stretch children vertically */
-    max-width: 50%;                                 /* Limit max width to 70% of the viewport */
-    margin: 0 auto;                                 /* Center the container in the viewport */
+    display: flex;                                   
+    flex-wrap: wrap;                                 
+    justify-content: center;                          
+    align-items: stretch;                           
+    max-width: 50%;                                   
+    margin: 0 auto;                                   
 }
 
 /* container for popup box */
 .popup-box-container {
-    display: flex;                                  /* Use flexbox for layout */
-    flex-wrap: wrap;                                /* Wrap children to the next line if they don't fit */
-    justify-content: center;                        /* Center children horizontally */
-    align-items: center;                            /* Center children vertically */
-    height: 100vh;                                  /* Full viewport height */
-    max-width: 70%;                                 /* Limit max width to 70% of the viewport */
-    margin: 0 auto;                                 /* Center the container in the viewport */
+    display: flex;                                   
+    flex-wrap: wrap;                                 
+    justify-content: center;                          
+    align-items: center;                              
+    height: 100vh;                                   
+    max-width: 70%;                                   
+    margin: 0 auto;                                    
 }
 
 
@@ -96,20 +89,20 @@
 /* information about each background box */
 .box {
     padding: var(--box-padding);                
-    display: flex;                   /* Use flexbox for layout */
-    flex-direction: column;          /* Stack child elements vertically */
-    justify-content: center;         /* Center children vertically */
-    align-items: center;             /* Center children horizontally */
-    transition: transform 0.5s;      /* Animate position changes smoothly */
+    display: flex;                   
+    flex-direction: column;          
+    justify-content: center;          
+    align-items: center;              
+    transition: transform 0.5s;      
     border-radius: var(--box-border-radius);
-    width: 100%;  /* Gir full bredde innenfor 'box-container' */
+    width: 100%;   
     flex: 1 1 auto;  
 }
 
 /* Light purple color */
 .box.light {
-    width: 60%; /* Take up half of the container's width */
-    background-color: var(--box-color-light); /* Light purple background */
+    width: 60%;  
+    background-color: var(--box-color-light);  
     height: auto;
     min-height: 50%;
     
@@ -117,8 +110,8 @@
 
 /* Dark purple color */
 .box.dark {
-    width: 40%; /* Take up half of the container's width */
-    background-color: var(--box-color-dark); /* Darker purple background */
+    width: 40%;  
+    background-color: var(--box-color-dark);  
     height: auto;
     min-height: 50%;
     
@@ -126,10 +119,10 @@
 
 /* Message box for displaing messages on the admin page*/
 .box.message {
-    width: 100%; /* Take up the full width of the container */
-    background-color: var(--box-color-dark); /* Light purple background */
+    width: 100%;  
+    background-color: var(--box-color-dark);  
     height: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
 }
 
 /*============= DROPDOWN ===================*/
@@ -140,21 +133,31 @@
     border: 1px solid var(--border-color);
     border-radius: 4px; 
     background-color: var(--button-bg-colo-light); 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add a subtle shadow */
-    cursor: pointer; /* Change cursor to pointer */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  
+    cursor: pointer;  
 }
 
 .select-dropdown:hover {
-    background-color: #e9ecef; /* Change background color on hover */
+    background-color: #e9ecef;  
 }
 
 /* Style the options */
 .select-dropdown option {
-    padding: 8px 12px; /* Add some padding */
+    padding: 8px 12px; 
 }
 
 
 /*============= ADMIN PAGE ===================*/
+/**
+ * page content for the admin page 
+ */ 
+ .Admin-page-content {
+    flex-grow: 1;
+    overflow: hidden;
+    padding: 20px;
+}
+
+
 
 .messages-list-container {
     max-height: 500px; 
@@ -162,6 +165,26 @@
     padding: 10px;
     margin-bottom: 20px;
 }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  
+    gap: 20px;  
+    padding: 20px;
+}
+
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);  
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;  
+    }
+}
+
 
 /* ============= IMAGE CONTAINERS (used in calculators)============= */
 .calculator-image-container {

@@ -4,10 +4,10 @@
 
 .card-container {
     display: flex;
-    justify-content: space-between; /* Adjust spacing between cards */
-    align-items: center; /* Align cards vertically */
-    flex-wrap: wrap; /* Allow cards to wrap to the next line if necessary */
-    padding: 20px; /* Add padding for spacing */
+    justify-content: space-between;  
+    align-items: center;  
+    flex-wrap: wrap;  
+    padding: 20px; 
 }
 
 
@@ -90,7 +90,6 @@
     padding: 0 0.5em 0.5em;
     margin: 0;
     color: var(--text-color);
-    /* font-family: var(--main-font);    */
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
