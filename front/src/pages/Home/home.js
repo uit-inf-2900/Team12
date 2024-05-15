@@ -18,8 +18,10 @@ export const Home = () => {
   const [userProfileState, setUserProfileState] = useState({ userFullName: '', userEmail: '' });
   const [yarnInventoryLength, setYarnInventoryLength] = useState(0);
   const [needleInventoryLength, setNeedleInventoryLength] = useState(0);
-  const [completeProjects, setCompleteProjects] = useState(0);
-  const [ongoingProjects, setOngoingProjects] = useState(0);
+  const [completeProjects, setCompleteProjects] = useState([]);
+  const [ongoingProjects, setOngoingProjects] = useState([]);
+  const [ongoingCount, setOngoingCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
 
   // Function to handle navigation
   const handleNavigate = (path, tab) => {
@@ -57,11 +59,19 @@ export const Home = () => {
             setNeedleInventoryLength(data.needleInventory.length);
           }
             
-          const finishedProjectsResponse = await axios.get(`${baseAddress}/getcompleteprojects?userToken=${token}`);
-          setCompleteProjects(finishedProjectsResponse.data.completeProjects);
-    
-          const ongoingProjectsResponse = await axios.get(`${baseAddress}/getongoingprojects?userToken=${token}`);
-          setOngoingProjects(ongoingProjectsResponse.data.ongoingProjects);
+          const finishedProjectsResponse = await axios.get(`http://localhost:5002/api/projects?userToken=${token}`);
+          setCompleteProjects(finishedProjectsResponse.data);
+          console.log(completeProjects);
+          const amountFinished = completeProjects.filter(project => project.status=== '2');
+          setCompletedCount(amountFinished.length); 
+
+
+
+          const ongoingProjectsResponse = await axios.get(`${baseAddress}/api/projects?userToken=${token}`);
+          setOngoingProjects(ongoingProjectsResponse.data);
+          const amountOngoing = ongoingProjects.filter(project => project.status=== '1');
+          setOngoingCount(amountOngoing.length); 
+
         } catch (error) {
           console.error("Error fetching statistics data: ", error);
         }
@@ -81,6 +91,7 @@ export const Home = () => {
           <div className="StatisticBox" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}> 
             <StatisticBox icon={getImageByName('yarnSheep')} label="yarns in stash" value={yarnInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'yarn')}  />
             <StatisticBox icon={getImageByName('yarnBasket')} label="needles in stash" value={needleInventoryLength.toString()} onClick={() => handleNavigate('/stash', 'needles')} />
+
             <StatisticBox icon={getImageByName('pileOfSweaters')} label="complete projects" value={completeProjects.toString()} onClick={() => handleNavigate('/projects', 2)} />
             <StatisticBox icon={getImageByName('openBook')} label="ongoing projects" value={ongoingProjects.toString()} onClick={() => handleNavigate('/projects', 1)} />
           </div>
