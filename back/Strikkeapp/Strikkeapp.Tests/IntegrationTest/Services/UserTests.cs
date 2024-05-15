@@ -44,6 +44,7 @@ public class UserServiceTests
 
     private void SeedTestData()
     {
+        // Add regular user, banned user and admin to database
         var testUserLogIn = new UserLogIn
         {
             UserId = testUserId,
