@@ -9,6 +9,7 @@ import allBlackShort from "../../images/homepage/allBlackShort.svg";
 import NameLong from "../../images/logo/KHorange.svg"
 import Resources from '../../pages/KnitHubResources/Resources';
 
+
 const VisitorView = () => {
   return (
     <>
@@ -42,6 +43,7 @@ const AdminView = ({ isAdmin, isLoggedIn }) => {
 
 const NavBar = ({ isLoggedIn, handleLogout, isAdmin }) => {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showNav, setShowNav]= useState(false);
 
   const handleLogoutClick = (e) => {
     e.preventDefault();
