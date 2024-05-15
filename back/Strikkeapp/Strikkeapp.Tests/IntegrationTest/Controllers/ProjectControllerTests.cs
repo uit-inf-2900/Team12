@@ -187,6 +187,22 @@ public class ProjectControllerTests
     }
 
     [Fact]
+    public void FakeTokenPatch_Fails()
+    {
+        // Run controller and verify exception
+        var patch = PatchBuilder.Build<ProjectCreateModel>("{ \"Notes\": \"Some New Note\" }");
+        Assert.Throws<ArgumentException>(() => _controller.PatchProject("fakeToken", testProjectId, patch));
+    }
+
+    [Fact]
+    public void NonProjectPatch_Fails()
+    {
+        // Run controller and verify exception
+        var patch = PatchBuilder.Build<ProjectCreateModel>("{ \"Notes\": \"Some New Note\" }");
+        Assert.Throws<ArgumentException>(() => _controller.PatchProject("userToken", Guid.NewGuid(), patch));
+    }
+
+    [Fact]
     public void DeleteProject_Ok()
     {
         // Run controller and verify success

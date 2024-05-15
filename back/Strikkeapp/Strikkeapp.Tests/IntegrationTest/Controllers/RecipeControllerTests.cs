@@ -15,6 +15,7 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 using Strikkeapp.Recipes.Models;
+using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 
 
 
@@ -294,5 +295,26 @@ public class RecipeControllerTests : IDisposable
         Assert.IsType<NotFoundResult>(result);
     }
 
+    [Fact]
+    public void PatchRecipe_Ok()
+    {
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\", \"NeedleSize\": 6, \"KnittingGauge\": \"20x20\" }");
+        var result = _controller.PatchRecipe(testRecipeId, "userToken", patch);
+        Assert.NotNull(result);
+    }
 
+    [Fact]
+    public void FakeTokenPatch_Fails()
+    {   // Run service with fake token and verify failure
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        Assert.Throws<UnauthorizedAccessException>(() => _controller.PatchRecipe(testRecipeId, "fakeToken", patch));
+    }
+
+    [Fact]
+    public void NonRecipePatch_Fails()
+    {
+        // Run service with non-existing recipe and verify failure
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        Assert.Throws<ArgumentException>(() => _controller.PatchRecipe(Guid.NewGuid(), "userToken", patch));
+    }
 }
