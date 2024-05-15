@@ -88,7 +88,7 @@ const UpLoad = ({ onClose }) => {
                             ref={fileInputRef}
                             type="file" 
                             onChange={handleFileSelection} 
-                            accept='.pdf, .jpg, .jpeg, .png, .svg'      // Can only choose from these types 
+                            accept='.pdf'      // Can only choose pdf 
                             style={{ display: 'none' }}
                         />
                         {uploadStatus.fileName && <p>{uploadStatus.fileName}</p>}
