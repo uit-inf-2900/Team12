@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using System.Text;
+using AutoMapper;
 
 
 using Strikkeapp.Controllers;
@@ -26,6 +27,8 @@ public class RecipeControllerTests : IDisposable
     private readonly RecipeService _recipeService;
     private readonly StrikkeappDbContext _context;
     private readonly IConfiguration _mockConfiguration;
+    private readonly IMapper _mapper;
+    private readonly IRecipeRatingService _ratingService;
 
     // Set up mocks
     private readonly Mock<IPasswordHasher<object>> _mockPasswordHasher = new Mock<IPasswordHasher<object>>();
@@ -39,6 +42,12 @@ public class RecipeControllerTests : IDisposable
 
     public RecipeControllerTests()
     {
+        // Setup AutoMapper configuration
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<AutoMapperProfile>();
+        });
+
         // Set up mock services
         _mockPasswordHasher.Setup(x => x.HashPassword(It.IsAny<object>(), It.IsAny<string>()))
             .Returns("hashedPassword");
@@ -68,7 +77,9 @@ public class RecipeControllerTests : IDisposable
 
         // Set up context, service and controller
         _context = new StrikkeappDbContext(options, _mockPasswordHasher.Object);
-        _recipeService = new RecipeService(_mockConfiguration, _mockTokenService.Object, _context);
+        _mapper = mapperConfig.CreateMapper();
+        _ratingService = new RecipeRatingService(_context, _mapper);
+        _recipeService = new RecipeService(_mockConfiguration, _mockTokenService.Object, _context, _mapper, _ratingService);
         _controller = new RecipeController(_recipeService);
 
         // Seed database
