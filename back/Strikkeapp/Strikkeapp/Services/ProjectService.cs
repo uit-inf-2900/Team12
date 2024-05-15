@@ -26,15 +26,17 @@ public class ProjectService : IProjectService
     private readonly IProjectYarnInventoryService _projectYarnService;
     private readonly IInventoryService _inventoryService;
     private readonly IMapper _mapper;
+    private readonly IProjectNeedleInventoryService _projectNeedleService;
 
 
-    public ProjectService(ITokenService tokenService, StrikkeappDbContext context, IProjectYarnInventoryService projectYarnInventoryService, IInventoryService inventoryService, IMapper mapper)
+    public ProjectService(ITokenService tokenService, StrikkeappDbContext context, IProjectYarnInventoryService projectYarnInventoryService, IInventoryService inventoryService, IMapper mapper, IProjectNeedleInventoryService needleInventoryService)
 	{
         _tokenService = tokenService;
         _context = context;
         _projectYarnService = projectYarnInventoryService;
         _inventoryService = inventoryService;
         _mapper = mapper;
+        _projectNeedleService = needleInventoryService;
 	}
 
     public List<ProjectModel> GetProjects(string jwtToken)
@@ -111,6 +113,8 @@ public class ProjectService : IProjectService
 
         var result = _context.SaveChanges();
 
+        _projectNeedleService.SetNeedleAsUsed(jwtToken, project.NeedleIds);
+
         if (project.YarnIds != null && project.YarnIds.Count > 0)
         {
             var inventoryIds = new List<Guid>();
@@ -153,7 +157,8 @@ public class ProjectService : IProjectService
         if (project.Status == Enums.ProjectStatus.Completed)
             throw new ArgumentException($"Project with id: {projectId} is already set as completed");
 
-        var updateInventory = _projectYarnService.SetYarnInventoryForCompletedProject(userToken, project.YarnIds, project.ProjectId);
+        _projectYarnService.SetYarnInventoryForCompletedProject(userToken, project.YarnIds, project.ProjectId);
+        _projectNeedleService.SetNeedleAsUnused(userToken, project.NeedleIds);
 
         project.Status = Enums.ProjectStatus.Completed;
 
@@ -193,9 +198,6 @@ public class ProjectService : IProjectService
             yarnIds = projectPatch.Model.YarnIds.Keys.ToList();
         }
 
-        if (projectPatch.Model.NeedleIds != null)
-            needleIds = projectPatch.Model.NeedleIds;
-
         var projectModel = _mapper.Map<ProjectModel>(project);
 
         var yarnOpToRemove = projectPatch.Operations.Where(x => x.path.Contains("yarnIds")).ToList();
@@ -214,6 +216,12 @@ public class ProjectService : IProjectService
         {
             foreach (var op in needleOpToRemove)
                 projectPatch.Operations.Remove(op);
+
+            _projectNeedleService.SetNeedleAsUnused(userToken, needleIds);
+
+            needleIds = projectPatch.Model.NeedleIds;
+
+            _projectNeedleService.SetNeedleAsUsed(userToken, needleIds);
 
             projectPatch.Model.NeedleIds = null;
         }
@@ -253,6 +261,8 @@ public class ProjectService : IProjectService
 
         if (project.ProjectInventoryIds != null && project.ProjectInventoryIds.Count > 0)
             _projectYarnService.DeleteYarnInventory(project.ProjectInventoryIds, userToken);
+
+        _projectNeedleService.SetNeedleAsUnused(userToken, project.NeedleIds);
 
         _context.Projects.Remove(project);
 
