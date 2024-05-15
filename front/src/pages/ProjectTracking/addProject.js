@@ -229,9 +229,7 @@ const UploadProjects = ({ onClose, fetchProjects }) => {
           value={projectData.status}
           onChange={handleStatusChange}
           options={Options.map(option => ({ value: option.id, label: option.label }))}
-          errors={formErrors.status}
         />   
-          {formErrors.projectName && <p className='infoText-small' style={{ color: 'red' }}>{formErrors.projectName}</p>}
 
         <InputField 
           label="Needles"
