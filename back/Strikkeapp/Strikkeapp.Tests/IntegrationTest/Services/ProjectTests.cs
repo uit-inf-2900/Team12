@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Moq;
+using Morcatko.AspNetCore.JsonMergePatch;
+using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
+using Newtonsoft.Json;
 
 using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
@@ -27,6 +30,7 @@ public class ProjectTests : IDisposable
 
     private readonly Guid testUserId = Guid.NewGuid();
     private readonly Guid testProjectId = Guid.NewGuid();
+    private readonly Guid finishedProjectId = Guid.NewGuid();
     private readonly Guid testYarnId = Guid.NewGuid();
     private readonly Guid testNeedleId = Guid.NewGuid();
 
@@ -102,6 +106,17 @@ public class ProjectTests : IDisposable
         {
             ProjectId = testProjectId,
             Status = ProjectStatus.Ongoing,
+            NeedleIds = new List<Guid> { testNeedleId },
+            YarnIds = new List<Guid> { testYarnId },
+            ProjectInventoryIds = new List<Guid> { testYarnId },
+            UserId = testUserId,
+            ProjectName = "TestProject"
+        });
+        // Add finished project for user
+        _context.Projects.Add(new ProjectEntity
+        {
+            ProjectId = finishedProjectId,
+            Status = ProjectStatus.Completed,
             NeedleIds = new List<Guid> { testNeedleId },
             YarnIds = new List<Guid> { testYarnId },
             ProjectInventoryIds = new List<Guid> { testYarnId },
@@ -206,6 +221,23 @@ public class ProjectTests : IDisposable
     }
 
     [Fact]
+    public void FakeYarnCreate_Fails()
+    {
+        // Create new project with fake yarn id
+        var project = new ProjectCreateModel
+        {
+            ProjectName = "NewProject",
+            Status = ProjectStatus.Ongoing,
+            NeedleIds = new List<Guid> { testNeedleId },
+            YarnIds = new Dictionary<Guid, int> { { Guid.NewGuid(), 2 } }
+        };
+
+        // Verify that the fake yarn id fails
+        var asrt = Assert.Throws<Exception>(() => _projectService.CreateProject("userToken", project));
+        Assert.Equal("This yarn does not exist in user´s inventory", asrt.Message);
+    }
+
+    [Fact]
     public void FakeTokenDeleteProject_Fails()
     {
         // Verify that the fake token fails
@@ -219,6 +251,58 @@ public class ProjectTests : IDisposable
 
         // Verify that the fake project id fails
         Assert.Throws<ArgumentException>(() => _projectService.DeleteProject(fakeId, "userToken"));
+    }
+
+    [Fact]
+    public void FakeTokenPatch_Fails()
+    {
+        var patch = PatchBuilder.Build<ProjectCreateModel>("{ \"Notes\": \"Some New Note\" }");
+        // Verify that the fake token fails
+        Assert.Throws<ArgumentException>(() => _projectService.PatchProject(testProjectId, patch, "fakeToken"));
+    }
+
+    [Fact]
+    public void NonProjectPatch_Fails()
+    {
+        Guid fakeId = Guid.NewGuid();
+        var patch = PatchBuilder.Build<ProjectCreateModel>("{ \"Notes\": \"Some New Note\" }");
+
+        // Verify that the fake project id fails
+        Assert.Throws<ArgumentException>(() => _projectService.PatchProject(fakeId, patch, "userToken"));
+    }
+
+    [Fact]
+    public void CompletedPatch_Fails()
+    {
+        var patch = PatchBuilder.Build<ProjectCreateModel>("{ \"Notes\": \"Some New Note\" }");
+
+        // Verify that the project patch fails
+        var asrt = Assert.Throws<ArgumentException>(() => _projectService.PatchProject(finishedProjectId, patch, "userToken"));
+        Assert.Contains("is already set as completed", asrt.Message);
+    }
+
+    [Fact]
+    public void FakeTokenComeplete_Fails()
+    {
+        // Verify that the fake token fails
+        Assert.Throws<ArgumentException>(() => _projectService.CompleteProject("fakeToken", testProjectId));
+    }
+
+    [Fact]
+    public void NonProjectComplete_Fails()
+    {
+        Guid fakeId = Guid.NewGuid();
+
+        // Verify that the fake project id fails
+        Assert.Throws<ArgumentException>(() => _projectService.CompleteProject("userToken", fakeId));
+    }
+
+    [Fact]
+    public void CompletedComplete_Fails()
+    {
+        // Verify that the project patch fails
+        var asrt = Assert.Throws<ArgumentException>(() => _projectService.CompleteProject("userToken", finishedProjectId));
+        Assert.Contains("is already set as completed", asrt.Message);
     }
 
         
