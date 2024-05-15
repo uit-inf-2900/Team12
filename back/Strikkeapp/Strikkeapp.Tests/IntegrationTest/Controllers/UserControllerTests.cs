@@ -115,6 +115,10 @@ public class UsersControllerTests
     [Fact]
     public void CreateUser_Ok()
     {
+        // Mock services
+        _mockMailService.Setup(m => m.SendVerification(It.IsAny<string>()))
+            .Returns(MailResult.ForSuccess());
+
         // Create request and call controller
         var request = new CreateUserRequest
         {
