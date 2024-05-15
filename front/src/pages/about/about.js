@@ -117,7 +117,7 @@ export const About = () => {
         <TeamMember
           name="Eline"
           role="Full Stack Developer"
-          background="Eline is a third-year Medical Informatics student at UiT in Tromsø, specializing in the intersection of healthcare and technology. With experience in both frontend and backend development"
+          background="Eline is a third-year Medical Informatics student at UiT in Tromsø, specializing in the intersection of healthcare and technology. With experience in both frontend and backend development."
           imageSrc={getImageByName('yarnSheep')}
           mail='eline.w.devito@knithub.no'
         />
