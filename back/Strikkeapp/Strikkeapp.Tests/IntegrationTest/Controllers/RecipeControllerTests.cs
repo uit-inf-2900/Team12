@@ -15,6 +15,7 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Models;
 using Strikkeapp.Recipes.Models;
+using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 
 
 
@@ -294,5 +295,11 @@ public class RecipeControllerTests : IDisposable
         Assert.IsType<NotFoundResult>(result);
     }
 
-
+    [Fact]
+    public void PatchRecipe_Ok()
+    {
+        var patch = PatchBuilder.Build<RecipePatch>("{ \"RecipeName\": \"New Name\" }");
+        var result = _controller.PatchRecipe(testRecipeId, "userToken", patch);
+        Assert.NotNull(result);
+    }
 }
