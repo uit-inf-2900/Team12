@@ -112,11 +112,11 @@ public class RecipeRatingTests : IDisposable
     {
         // Run service and verify result
         var result = _recipeRatingService.PostRating(testRecipe2Id, Enums.Rating.Five, testUserId);
-        Assert.NotNull(result.RecipeRatingId.ToString());
+        Assert.NotNull(result);
 
         // Run service for existing rating and verify result
         var result2 = _recipeRatingService.PostRating(testRecipeId, Enums.Rating.One, testUserId);
-        Assert.NotNull(result2.RecipeRatingId.ToString());
+        Assert.NotNull(result2);
     }
 
     [Fact]
@@ -124,7 +124,7 @@ public class RecipeRatingTests : IDisposable
     {
         // Run service and verify result
         var result = _recipeRatingService.GetRating(testRecipeId, testUserId);
-        Assert.NotNull(result.RecipeRatingId.ToString());
+        Assert.NotNull(result);
 
         // Run service for non-existing rating and verify result
         var result2 = _recipeRatingService.GetRating(testRecipe2Id, testUserId);
