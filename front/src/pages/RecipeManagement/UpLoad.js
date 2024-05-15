@@ -5,8 +5,11 @@ import InputField from '../../Components/UI/InputField';
 import { CustomButton } from '../../Components/UI/Button';
 import axios from 'axios';
 import { IoIosCloudUpload } from "react-icons/io";
+import { Button, TextField, Box } from '@mui/material';
+
 
 const UpLoad = ({ onClose, onUploadSuccess }) => {
+    const [formErrors, setFormErrors] = useState({});
     const [file, setFile] = useState(null);
     const fileInputRef = useRef(null);
     const [recipeInfo, setRecipeInfo] = useState({
@@ -22,7 +25,22 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
         setFile(selectedFile);
     };
 
+    const validateInput = () => {
+        let errors = {};
+        if (!file) errors.file = 'A file is required.';
+        if (!recipeInfo.recipeName.trim()) errors.recipeName = 'Recipe name is required.';
+        if (!recipeInfo.needleSize.trim()) errors.needleSize = 'Needle size is required.';
+        if (!recipeInfo.knittingGauge.trim()) errors.knittingGauge = 'Knitting gauge is required.';
+        
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const uploadFile = () => {
+        if (!validateInput()) {
+            return;
+        }
+
         const formData = new FormData();
         formData.append("RecipeFile", file);
         formData.append("UserToken", sessionStorage.getItem('token'));
@@ -44,6 +62,7 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
         });
     };
 
+
     return (
         <div className="UpLoad-backdrop">
             <div className="UpLoad-content">
@@ -56,14 +75,39 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
                         accept='.pdf'
                         style={{ display: 'none' }}
                     />
-                    <p>{file && file.name}</p>
-                </div>
+                    <p>{file ? file.name : formErrors.file && <span style={{ color: 'red' }}>{formErrors.file}</span>}</p>                </div>
                 <div className="input">
-                    <InputField label="RecipeName" name="recipeName" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, recipeName: e.target.value})} />
-                    <InputField label="Author" name="author" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, author: e.target.value})} />
-                    <InputField label="Needle Size" name="needleSize" type="number" onChange={(e) => setRecipeInfo({...recipeInfo, needleSize: e.target.value})} />
-                    <InputField label="Knitting Gauge" name="knittingGauge" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, knittingGauge: e.target.value})} />
-                    <InputField label="Notes" name="notes" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, notes: e.target.value})} />
+                    <TextField
+                        error={!!formErrors.recipeName}
+                        helperText={formErrors.recipeName}
+                        label="Recipe Name"
+                        variant="outlined"
+                        fullWidth
+                        onChange={(e) => setRecipeInfo({ ...recipeInfo, recipeName: e.target.value })}
+                    />
+                    <TextField
+                        error={!!formErrors.needleSize}
+                        helperText={formErrors.needleSize}
+                        label="Needle Size"
+                        variant="outlined"
+                        fullWidth
+                        onChange={(e) => setRecipeInfo({ ...recipeInfo, needleSize: e.target.value })}
+                    />
+                    <TextField
+                        error={!!formErrors.knittingGauge}
+                        helperText={formErrors.knittingGauge}
+                        label="Knitting Gauge"
+                        variant="outlined"
+                        fullWidth
+                        onChange={(e) => setRecipeInfo({ ...recipeInfo, knittingGauge: e.target.value })}
+                    />
+                    <TextField label="Notes" variant="outlined" fullWidth name="notes" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, notes: e.target.value})} />
+                    <input
+                type="file"
+                onChange={handleFileSelection}
+                style={{ display: 'none' }}
+                ref={input => input && !file && input.setCustomValidity(formErrors.file || '')}
+            />
                 </div>
                 <CustomButton themeMode="light" onClick={onClose}>Close</CustomButton>
                 {file && <CustomButton themeMode="dark" onClick={() => setFile(null)}>Cancel</CustomButton>}
