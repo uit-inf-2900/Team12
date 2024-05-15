@@ -36,6 +36,8 @@ public class AutoMapperProfile : Profile
 
 		CreateMap<KnittingRecipes, RecipeInfo>();
 
+		CreateMap<RecipeRatingEntity, RecipeRatingModel>();
+
 	}
 }
 
