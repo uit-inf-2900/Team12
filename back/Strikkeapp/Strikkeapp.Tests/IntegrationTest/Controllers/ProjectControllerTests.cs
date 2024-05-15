@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using AutoMapper;
 using Morcatko.AspNetCore.JsonMergePatch;
+using Newtonsoft.Json;
 
 using Strikkeapp.Controllers;
 using Strikkeapp.Services;
@@ -13,8 +14,9 @@ using Strikkeapp.Data.Context;
 using Strikkeapp.Models;
 using Strikkeapp.Data.Entities;
 using Strikkeapp.Enums;
+using Morcatko.AspNetCore.JsonMergePatch.NewtonsoftJson.Builders;
 
-namespace Strikkeapp.Services;
+namespace Strikkeapp.Tests.Controllers;
 
 public class ProjectControllerTests
 {
@@ -171,6 +173,16 @@ public class ProjectControllerTests
     {
         // Run controller and verify success
         var result = _controller.CompleteProject("userToken", testProjectId);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void PatchProject_Ok()
+    {
+        var patch = PatchBuilder.Build<ProjectCreateModel>("{ \"Notes\": \"Some New Note\" }");
+
+        // Run controller and verify success
+        var result = _controller.PatchProject("userToken", testProjectId, patch);
         Assert.True(result);
     }
 
