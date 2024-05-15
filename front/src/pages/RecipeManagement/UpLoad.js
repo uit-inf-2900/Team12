@@ -1,15 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { IoIosCloudUpload } from "react-icons/io";          // Import the icon component from react icons library
-import InputField from '../../Components/UI/InputField';
-import './UpLoad.css';
 import "../../GlobalStyles/main.css";
+import InputField from '../../Components/UI/InputField';
 import { CustomButton } from '../../Components/UI/Button';
 import axios from 'axios';
-
+import { IoIosCloudUpload } from "react-icons/io";
 
 const UpLoad = ({ onClose, onUploadSuccess }) => {
     const [file, setFile] = useState(null);
-    const [uploadStatus, setUploadStatus] = useState({ fileName: '' });
     const fileInputRef = useRef(null);
     const [recipeInfo, setRecipeInfo] = useState({
         recipeName: '',
@@ -19,14 +16,9 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
         notes: ''
     });
 
-    const handleInputChange = (e) => {
-        setRecipeInfo({ ...recipeInfo, [e.target.name]: e.target.value });
-    };
-
     const handleFileSelection = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
-        setUploadStatus({ ...uploadStatus, fileName: selectedFile.name });
     };
 
     const uploadFile = () => {
@@ -45,15 +37,10 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
         }).then(response => {
             console.log("Upload success:", response);
             onClose();
-            onUploadSuccess(); // Call onUploadSuccess when upload is successful
+            onUploadSuccess();
         }).catch(error => {
             console.error("Upload error:", error);
         });
-    };
-
-    const clearFile = () => {
-        setFile(null);
-        setUploadStatus({ fileName: '' });
     };
 
     return (
@@ -69,20 +56,19 @@ const UpLoad = ({ onClose, onUploadSuccess }) => {
                             accept='.pdf'
                             style={{ display: 'none' }}
                         />
-                        {uploadStatus.fileName && <p>{uploadStatus.fileName}</p>}
+                        <p>{file && file.name}</p>
                     </div>
-
                     <div className="input">
-                        <InputField label="RecipeName" name="recipeName" type="text" onChange={handleInputChange} />
-                        <InputField label="Author" name="author" type="text" onChange={handleInputChange} />
-                        <InputField label="Needle Size" name="needleSize" type="number" onChange={handleInputChange} />
-                        <InputField label="Knitting Gauge" name="knittingGauge" type="text" onChange={handleInputChange} />
-                        <InputField label="Notes" name="notes" type="text" onChange={handleInputChange} />
+                        <InputField label="RecipeName" name="recipeName" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, recipeName: e.target.value})} />
+                        <InputField label="Author" name="author" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, author: e.target.value})} />
+                        <InputField label="Needle Size" name="needleSize" type="number" onChange={(e) => setRecipeInfo({...recipeInfo, needleSize: e.target.value})} />
+                        <InputField label="Knitting Gauge" name="knittingGauge" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, knittingGauge: e.target.value})} />
+                        <InputField label="Notes" name="notes" type="text" onChange={(e) => setRecipeInfo({...recipeInfo, notes: e.target.value})} />
                     </div>
                 </div>
-                <CustomButton themeMode="light" onClick={onClose}> Close </CustomButton>
-                {file && <CustomButton themeMode="dark" onClick={clearFile}>Cancel</CustomButton>}
-                {file && <CustomButton themeMode="light" onClick={uploadFile} iconName="upload"> Upload</CustomButton>}
+                <CustomButton themeMode="light" onClick={onClose}>Close</CustomButton>
+                {file && <CustomButton themeMode="dark" onClick={() => setFile(null)}>Cancel</CustomButton>}
+                {file && <CustomButton themeMode="light" onClick={uploadFile}>Upload</CustomButton>}
             </div>
         </div>
     );

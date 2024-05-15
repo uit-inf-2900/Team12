@@ -1,40 +1,41 @@
-
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Upload from './UpLoad';
-import UploadedRecipes from './UploadedRecipes'; 
+import UploadedRecipes from './UploadedRecipes';
 import "../../GlobalStyles/main.css";
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import Box from '@mui/material/Box'; // Import Box from MUI
-
+import Box from '@mui/material/Box';
 import ModalContent from "../../Components/Forms/ModualContent";
 
-
-
-// Main component for recipe-related functionality
 const RecipesPage = () => {
-    // State to control the display of the upload modal/form and uploaded recipes list.
     const [uploading, setUploading] = useState(false);
+    const [recipes, setRecipes] = useState([]);
 
-    // Toggle for applying blur when modal is open
-    const pageContainer = uploading ? "page-container blur-background" : "page-container";
-    
+    const fetchRecipes = async () => {
+        try {
+            const response = await axios.get('http://localhost:5002/api/recipe/getallrecipes', {
+                params: { userToken: sessionStorage.getItem('token') }
+            });
+            setRecipes(response.data || []);
+        } catch (error) {
+            console.error('Error fetching recipes:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchRecipes();
+    }, []);
 
     return (
         <div>
-            {/* Use Box instead of div to apply the class for blurring */}
-            <Box className={pageContainer}> 
-                <h1> Welcome to the Recipes Page! </h1>
-
-                {/* Upload a recipe using Material-UI Button with custom styles */}
+            <Box className={uploading ? "page-container blur-background" : "page-container"}>
+                <h1>Welcome to the Recipes Page!</h1>
                 <Button
                     variant="outlined"
                     color='dark'
                     startIcon={<CloudUploadIcon style={{ color: 'black' }} />}
                     onClick={() => setUploading(true)}
-                    
                     sx={{
                         color: 'black',
                         backgroundColor: 'white',
@@ -48,16 +49,12 @@ const RecipesPage = () => {
                 >
                     Upload Recipes
                 </Button>
-                
-                {/* Component to display uploaded recipes */}
-                <UploadedRecipes />
+                <UploadedRecipes recipes={recipes} fetchRecipes={fetchRecipes} />
             </Box>
-
-            {/* FileUpload modal - When this is open, the page content is blurred */}
             <ModalContent 
                 open={uploading}
                 handleClose={() => setUploading(false)} 
-                infobox={<Upload onClose={() => setUploading(false)} fetchRecipes={()=>fetchRecipes()} />} 
+                infobox={<Upload onClose={() => setUploading(false)} onUploadSuccess={fetchRecipes} />}
             />
         </div>
     );
