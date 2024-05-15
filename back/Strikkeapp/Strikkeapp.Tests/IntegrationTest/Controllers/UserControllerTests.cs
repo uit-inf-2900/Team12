@@ -521,4 +521,43 @@ public class UsersControllerTests
         Assert.Contains("Could not find verification", notFoundResult.Value!.ToString());
     }
 
+    [Fact]
+    public void VerifyUnauthorized_Fails()
+    {
+        // Set up mock service
+        _mockTokenService.Setup(s => s.ExtractUserID("userToken"))
+            .Returns(TokenResult.ForSuccess(testUserId));
+        _mockMailService.Setup(m => m.SendVerification(It.IsAny<string>()))
+            .Returns(MailResult.ForFailure("Unauthorized"));
+
+        // Run controller with unauthorized mail service, and verify failure
+        var result = _controller.CreateUser(new CreateUserRequest
+        {
+            UserEmail = "test@example.com",
+            UserDOB = 20240101,
+            UserFullName = "Test User",
+            UserPwd = "Test123!"
+        });
+
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public void NotFoundMail_Fails()
+    {
+        // Set up mock service
+        _mockMailService.Setup(m => m.SendVerification(It.IsAny<string>()))
+            .Returns(MailResult.ForFailure("Not found"));
+
+        // Run controller with mail service failure, and verify failure
+        var result = _controller.CreateUser(new CreateUserRequest
+        {
+            UserEmail = "test@example.com",
+            UserDOB = 20240101,
+            UserFullName = "Test User",
+            UserPwd = "Test123!"
+        });
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
+
 }
